@@ -49,7 +49,7 @@ const About = () => {
     {
       name: 'Mohammed Sinan',
       role: 'Co-founder',
-      image: 'https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image: 'https://postimg.cc/Y4WZQmTL=400',
       bio: 'First year Engineering student in P. A. College of Engineering, Mangalore'
     }
   ];
