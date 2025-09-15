@@ -73,14 +73,16 @@ const Home = () => {
             variants={itemVariants}
             className="bg-white rounded-xl p-2 max-w-2xl mx-auto mb-8 shadow-2xl"
           >
-            <div className="flex items-center">
-              <Search className="text-gray-400 ml-4 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search items near you..."
-                className="flex-1 px-4 py-4 text-gray-700 text-lg focus:outline-none"
-              />
-              <button className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+            <div className="flex flex-col sm:flex-row items-stretch gap-2">
+              <div className="flex flex-1 items-center gap-3 px-4 h-12 rounded-lg bg-white">
+                <Search className="text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search items near you..."
+                  className="flex-1 bg-transparent text-gray-700 text-base focus:outline-none"
+                />
+              </div>
+              <button className="h-12 px-6 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors">
                 Search
               </button>
             </div>

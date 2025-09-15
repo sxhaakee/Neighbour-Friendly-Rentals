@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, List, User, Search, Menu, X } from 'lucide-react';
+import { Home, List, User, Search, Menu, X, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
@@ -11,6 +11,7 @@ const Header = () => {
     { path: '/', label: 'Home', icon: Home },
     { path: '/listings', label: 'Browse', icon: List },
     { path: '/dashboard', label: 'Dashboard', icon: User },
+    { path: '/about', label: 'About', icon: Info }
   ];
 
   const isActive = (path: string) => location.pathname === path;

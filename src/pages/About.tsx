@@ -38,13 +38,13 @@ const About = () => {
       name: 'Mohammed Shakeeb',
       role: 'CEO & Founder',
       image: '/shakee.jpg',
-      bio: ' 3rd year Engineering student in P. A. College of Engineering, Mangalore'
+      bio: ' Third year Engineering student in P. A. College of Engineering, Mangalore'
     },
     {
       name: 'Muhammad Haashid',
       role: 'Co-Founder',
       image: '/haash.jpg',
-      bio: '3rd year Engineering student in P. A. College of Engineering, Mangalore'
+      bio: 'Third year Engineering student in P. A. College of Engineering, Mangalore'
     },
     {
       name: 'Mohammed Sinan',
