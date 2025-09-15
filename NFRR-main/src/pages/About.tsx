@@ -37,19 +37,19 @@ const About = () => {
     {
       name: 'Mohammed Shakeeb',
       role: 'CEO & Founder',
-      image: 'https://postimg.cc/grVT2L7S',
+      image: '/shakee.jpg',
       bio: ' 3rd year Engineering student in P. A. College of Engineering, Mangalore'
     },
     {
       name: 'Muhammad Haashid',
       role: 'Co-Founder',
-      image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image: '/haash.jpg',
       bio: '3rd year Engineering student in P. A. College of Engineering, Mangalore'
     },
     {
       name: 'Mohammed Sinan',
       role: 'Co-founder',
-      image: 'https://postimg.cc/Y4WZQmTL=400',
+      image: '/chinnu.jpg',
       bio: 'First year Engineering student in P. A. College of Engineering, Mangalore'
     }
   ];
