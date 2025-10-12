@@ -27,9 +27,9 @@ const About = () => {
   ];
 
   const stats = [
-    { number: '10K+', label: 'Active Users' },
-    { number: '50K+', label: 'Items Shared' },
-    { number: '200+', label: 'Cities' },
+    { number: '100+', label: 'Active Users' },
+    { number: '150+', label: 'Items Shared' },
+    { number: '20+', label: 'Cities' },
     { number: '98%', label: 'Satisfaction Rate' }
   ];
 

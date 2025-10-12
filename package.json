@@ -1,7 +1,8 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "nfrr-rental-marketplace",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A complete multi-vendor rental marketplace platform with Supabase and Razorpay",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,13 +11,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.3.1",
+    "@sentry/react": "^10.19.0",
     "@supabase/supabase-js": "^2.57.4",
+    "browser-image-compression": "^2.0.2",
     "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
+    "jspdf": "^3.0.3",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.9.1"
+    "react-ga4": "^2.1.0",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.9.1",
+    "resend": "^6.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

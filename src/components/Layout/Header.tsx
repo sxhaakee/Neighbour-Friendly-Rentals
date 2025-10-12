@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, List, User, Search, Menu, X, Info } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, profile, signOut, isAdmin } = useAuth();
 
   const navigationItems = [
     { path: '/', label: 'Home', icon: Home },
     { path: '/listings', label: 'Browse', icon: List },
-    { path: '/dashboard', label: 'Dashboard', icon: User },
+    { path: '/messages', label: 'Messages', icon: MessageCircle, authRequired: true },
+    { path: '/dashboard', label: 'Dashboard', icon: User, authRequired: true },
     { path: '/about', label: 'About', icon: Info }
-  ];
+  ].filter(item => !item.authRequired || user);
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignOut = async () => {
+    await signOut();
+    setShowUserMenu(false);
+    navigate('/');
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
@@ -49,12 +60,56 @@ const Header = () => {
                 <span className="font-medium">{label}</span>
               </Link>
             ))}
-            <Link
-              to="/login"
-              className="bg-secondary text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-secondary/80 transition-colors duration-200"
-            >
-              Sign In
-            </Link>
+            
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="font-medium">{profile?.full_name || 'User'}</span>
+                  {isAdmin && <Shield className="w-4 h-4" />}
+                </button>
+                
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      >
+                        <Shield className="w-4 h-4" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setShowUserMenu(false)}
+                      className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      <User className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="bg-secondary text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-secondary/80 transition-colors duration-200"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -92,13 +147,39 @@ const Header = () => {
                   <span className="font-medium">{label}</span>
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="block bg-secondary text-gray-900 px-3 py-3 rounded-lg font-semibold text-center mt-4"
-              >
-                Sign In
-              </Link>
+              
+              {user ? (
+                <>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-primary hover:bg-primary/10"
+                    >
+                      <Shield className="w-4 h-4" />
+                      <span className="font-medium">Admin Panel</span>
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 w-full text-left mt-4"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="font-medium">Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block bg-secondary text-gray-900 px-3 py-3 rounded-lg font-semibold text-center mt-4"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </motion.div>
         )}

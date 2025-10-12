@@ -1,27 +1,67 @@
-# NFRR - Neighbour Friendly Rental Resource
+# NFRR - Neighbour Friendly Rental Resource 🏘️
 
-A modern, full-stack rental platform built with React, TypeScript, and Tailwind CSS that allows neighbors to rent items from each other.
+A complete full-stack multi-vendor rental marketplace platform built with React, TypeScript, Supabase, and Razorpay. Users can list items for rent, rent items from others, and manage everything through an intuitive dashboard. Includes admin approval system and secure payment integration.
 
-## 🚀 Features
+## ✨ Implemented Features
 
-- 🔐 **User Authentication** - Secure user registration and login
-- 📱 **Responsive Design** - Works perfectly on desktop and mobile
-- 🎨 **Modern UI** - Beautiful interface with Framer Motion animations
-- 📦 **Item Management** - Add, edit, and delete rental listings
-- 🔍 **Search & Filter** - Find items by category, price, and location
-- 💬 **User Profiles** - Manage your listings and rental history
-- 📸 **Image Upload** - Upload multiple photos for your listings
-- 🚀 **Real-time Data** - Database integration ready
-- 💰 **Pricing in Rupees** - Indian currency support
+### 🔐 Authentication & Authorization
+- ✅ Email/password authentication with Supabase
+- ✅ Role-based access control (Customer/Admin)
+- ✅ Protected routes and secure sessions
+- ✅ Automatic profile creation on signup
+
+### 📦 Listing Management
+- ✅ Create listings with multiple images
+- ✅ Upload images to Supabase Storage
+- ✅ Edit and delete own listings
+- ✅ Admin approval workflow (pending/approved/rejected)
+- ✅ Category-based organization
+- ✅ Real-time listing status updates
+
+### 🏢 Admin Dashboard
+- ✅ View all listings with filtering
+- ✅ Approve or reject listings with reasons
+- ✅ Platform statistics and analytics
+- ✅ User management capabilities
+
+### 👤 User Dashboard
+- ✅ View and manage own listings
+- ✅ Track listing status (pending/approved/rejected)
+- ✅ View bookings made by user
+- ✅ View incoming rentals (items owned by user)
+- ✅ Profile management
+
+### 🔍 Browse & Search
+- ✅ Browse all approved listings
+- ✅ Search by title and description
+- ✅ Filter by category
+- ✅ Filter by price range
+- ✅ Responsive grid layout
+
+### 💳 Booking & Payments
+- ✅ Date-based booking system
+- ✅ Availability checking
+- ✅ Razorpay payment integration
+- ✅ Booking status tracking
+- ✅ Payment status tracking
+
+### 🎨 UI/UX
+- ✅ Modern, responsive design
+- ✅ Smooth animations with Framer Motion
+- ✅ Mobile-friendly interface
+- ✅ Loading states and error handling
+- ✅ Toast notifications
 
 ## 🛠 Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite
+- **Backend**: Supabase (PostgreSQL, Authentication, Storage)
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Routing**: React Router DOM
-- **Backend Options**: Firebase, Supabase, or any REST API
+- **Routing**: React Router DOM v7
+- **Payments**: Razorpay
+- **State Management**: React Context API
 
 ## �� Installation
 

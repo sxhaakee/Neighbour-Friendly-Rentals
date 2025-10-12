@@ -1,10 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Search, PenTool as Tool, Car, Smartphone, Sofa, Package, Shield, Users, Star, Book } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { listings } from '../data/listings';
+import { listingService } from '../services/listingService';
+import { Database } from '../lib/database.types';
+
+type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [featuredListings, setFeaturedListings] = useState<Listing[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const categories = [
     { name: 'Tools', icon: Tool, color: 'bg-blue-100 text-blue-600' },
     { name: 'Books', icon: Book, color: 'bg-green-100 text-green-600' },
@@ -13,15 +21,30 @@ const Home = () => {
     { name: 'Miscellaneous', icon: Package, color: 'bg-pink-100 text-pink-600' },
   ];
 
-  // Get featured items from the listings data (first 3 items)
-  const featuredItems = listings.slice(0, 3).map(item => ({
-    id: item.id,
-    title: item.title,
-    price: `₹${item.price.toLocaleString()}`,
-    image: item.image,
-    distance: item.distance,
-    rating: item.rating
-  }));
+  useEffect(() => {
+    fetchFeaturedListings();
+  }, []);
+
+  const fetchFeaturedListings = async () => {
+    try {
+      setLoading(true);
+      const data = await listingService.getApprovedListings();
+      // Get first 3 listings as featured
+      setFeaturedListings(data.slice(0, 3));
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/listings?search=${encodeURIComponent(searchQuery)}`);
+    } else {
+      navigate('/listings');
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -79,10 +102,16 @@ const Home = () => {
                 <input
                   type="text"
                   placeholder="Search items near you..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                   className="flex-1 bg-transparent text-gray-700 text-base focus:outline-none"
                 />
               </div>
-              <button className="h-12 px-6 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+              <button 
+                onClick={handleSearch}
+                className="h-12 px-6 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+              >
                 Search
               </button>
             </div>
@@ -154,38 +183,59 @@ const Home = () => {
             <p className="text-xl text-gray-600">Popular rentals in your area</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredItems.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group"
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          ) : featuredListings.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600 text-lg mb-6">No listings available yet. Be the first to list an item!</p>
+              <Link
+                to="/add-item"
+                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg inline-block"
               >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center space-x-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm font-semibold">{item.rating}</span>
+                Add Your First Item
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredListings.map((item: Listing, index: number) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                  onClick={() => navigate(`/item/${item.id}`)}
+                  className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group cursor-pointer"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={item.images[0] || '/placeholder.jpg'}
+                      alt={item.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        {item.category}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-xl text-gray-900 mb-2">{item.title}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-primary">{item.price}<span className="text-sm text-gray-500">/day</span></span>
-                    <span className="text-gray-500">{item.distance}</span>
+                  <div className="p-6">
+                    <h3 className="font-bold text-xl text-gray-900 mb-2 line-clamp-1">{item.title}</h3>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-2xl font-bold text-primary">
+                        ₹{item.price}<span className="text-sm text-gray-500">/day</span>
+                      </span>
+                      <span className="text-gray-500 text-sm">{item.location}</span>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
           <motion.div
             initial={{ opacity: 0 }}

@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Plus, MapPin, Calendar, Tag, DollarSign } from 'lucide-react';
+import { ArrowLeft, Upload, X, Plus, MapPin, Tag, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
+import { listingService } from '../services/listingService';
+import { compressImages, getEstimatedSize } from '../utils/imageCompression';
+import { showToast } from '../utils/toast';
 
 const AddItem = () => {
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -18,6 +23,16 @@ const AddItem = () => {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [compressing, setCompressing] = useState(false);
+  const [error, setError] = useState('');
+  const [estimatedSize, setEstimatedSize] = useState(0);
+
+  useEffect(() => {
+    // Redirect if not logged in
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const categories = ['Tools', 'Vehicles', 'Electronics', 'Furniture', 'Miscellaneous'];
   const conditions = ['Excellent', 'Good', 'Fair', 'Poor'];
@@ -30,14 +45,48 @@ const AddItem = () => {
     }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const newImages = [...images, ...files];
-    setImages(newImages);
+    
+    if (files.length === 0) return;
+    
+    if (images.length + files.length > 10) {
+      showToast.error('Maximum 10 images allowed per listing');
+      return;
+    }
+    
+    setCompressing(true);
+    const toastId = showToast.loading('Compressing images...');
+    
+    try {
+      // Compress images to save storage (100KB max per image)
+      const compressedFiles = await compressImages(files, {
+        maxWidth: 1024,
+        maxHeight: 1024,
+        quality: 0.7,
+        maxSizeMB: 0.1, // 100KB max per image for better storage optimization
+      });
+      
+      const newImages = [...images, ...compressedFiles];
+      setImages(newImages);
+      
+      // Update estimated size
+      const totalSize = getEstimatedSize(newImages);
+      setEstimatedSize(totalSize);
 
-    // Create previews
-    const newPreviews = files.map(file => URL.createObjectURL(file));
-    setImagePreviews(prev => [...prev, ...newPreviews]);
+      // Create previews
+      const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
+      setImagePreviews(prev => [...prev, ...newPreviews]);
+      
+      showToast.dismiss(toastId);
+      showToast.success(`${compressedFiles.length} image(s) compressed successfully! Total: ${totalSize.toFixed(2)}MB`);
+    } catch (error) {
+      console.error('Error compressing images:', error);
+      showToast.dismiss(toastId);
+      showToast.error('Failed to compress images. Please try again.');
+    } finally {
+      setCompressing(false);
+    }
   };
 
   const removeImage = (index: number) => {
@@ -50,21 +99,55 @@ const AddItem = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
 
     try {
-      // Here you would typically upload images to a storage service
-      // and save the item data to your database
-      console.log('Form data:', formData);
-      console.log('Images:', images);
+      if (!user || !profile) {
+        showToast.error('You must be logged in to add an item');
+        setLoading(false);
+        return;
+      }
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      if (images.length === 0) {
+        showToast.error('Please upload at least one image');
+        setLoading(false);
+        return;
+      }
 
-      alert('Item added successfully!');
-      navigate('/listings');
-    } catch (error) {
-      console.error('Error adding item:', error);
-      alert('Failed to add item. Please try again.');
+      const toastId = showToast.loading('Creating listing...');
+
+      // Upload images to Supabase Storage
+      const imageUrls = await listingService.uploadImages(images, user.id);
+
+      // Create listing
+      const listingData = {
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        price: parseInt(formData.price),
+        location: formData.location,
+        condition: formData.condition,
+        contact_info: formData.contactInfo,
+        availability: formData.availability,
+        owner_id: user.id,
+        owner_name: profile.full_name || profile.email,
+        owner_email: profile.email,
+        images: imageUrls,
+        status: 'pending' as const,
+      };
+
+      await listingService.createListing(listingData);
+
+      showToast.dismiss(toastId);
+      showToast.success('Item added successfully! It will be visible after admin approval.');
+      
+      // Navigate after a short delay to show the success message
+      setTimeout(() => navigate('/dashboard'), 1500);
+    } catch (err) {
+      console.error('Error adding item:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add item. Please try again.';
+      showToast.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -87,6 +170,13 @@ const AddItem = () => {
           className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8"
         >
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Basic Information */}
             <div>
               <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-2">
