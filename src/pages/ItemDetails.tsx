@@ -107,6 +107,22 @@ const ItemDetails = () => {
     }
 
     try {
+      // Check if user has actually rented this item
+      const { data: bookings, error: bookingError } = await supabase
+        .from('bookings')
+        .select('id, status')
+        .eq('listing_id', id!)
+        .eq('renter_id', user.id)
+        .in('status', ['confirmed', 'completed']);
+
+      if (bookingError) throw bookingError;
+
+      if (!bookings || bookings.length === 0) {
+        showToast.error('You can only review items you have rented');
+        setShowReviewForm(false);
+        return;
+      }
+
       await reviewService.createReview({
         listing_id: id!,
         user_id: user.id,

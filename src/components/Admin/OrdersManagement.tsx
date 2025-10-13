@@ -202,6 +202,74 @@ export const OrdersManagement = () => {
     }
   };
 
+  const handleCancelOrder = async (booking: Booking) => {
+    if (!confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+      return;
+    }
+
+    const reason = prompt('Enter cancellation reason:');
+    if (!reason) return;
+
+    setProcessing(booking.id);
+    try {
+      const { error } = await supabase
+        .from('bookings')
+        .update({ 
+          status: 'cancelled',
+          rejection_reason: reason,
+          rejected_at: new Date().toISOString()
+        } as any)
+        .eq('id', booking.id);
+
+      if (error) throw error;
+
+      showToast.success('Order cancelled successfully');
+      fetchBookings();
+      setSelectedBooking(null);
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      showToast.error('Failed to cancel order');
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  const handleUpdatePaymentStatus = async (booking: Booking, newStatus: 'pending' | 'completed' | 'failed') => {
+    setProcessing(booking.id);
+    try {
+      console.log('Updating payment status for booking:', booking.id, 'to:', newStatus);
+      
+      const { data, error } = await supabase
+        .from('bookings')
+        .update({ 
+          payment_status: newStatus
+        })
+        .eq('id', booking.id)
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Payment status updated successfully:', data);
+      showToast.success(`Payment status updated to ${newStatus.toUpperCase()}`);
+      
+      // Refresh the bookings list
+      await fetchBookings();
+      
+      // Update the selected booking to show new status
+      if (selectedBooking && selectedBooking.id === booking.id) {
+        setSelectedBooking({ ...selectedBooking, payment_status: newStatus });
+      }
+    } catch (error: any) {
+      console.error('Error updating payment status:', error);
+      showToast.error(error.message || 'Failed to update payment status');
+    } finally {
+      setProcessing(null);
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const styles = {
       pending: 'bg-yellow-100 text-yellow-800',
@@ -540,35 +608,85 @@ export const OrdersManagement = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Payment Status Control */}
+              <div>
+                <h3 className="font-semibold text-lg mb-3">Payment Status</h3>
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-600">Current Status:</span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    selectedBooking.payment_status === 'completed' ? 'bg-green-100 text-green-800' :
+                    selectedBooking.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {selectedBooking.payment_status?.toUpperCase() || 'PENDING'}
+                  </span>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => handleUpdatePaymentStatus(selectedBooking, 'completed')}
+                    disabled={processing === selectedBooking.id || selectedBooking.payment_status === 'completed'}
+                    className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Mark as Paid
+                  </button>
+                  <button
+                    onClick={() => handleUpdatePaymentStatus(selectedBooking, 'pending')}
+                    disabled={processing === selectedBooking.id || selectedBooking.payment_status === 'pending'}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm font-semibold hover:bg-yellow-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Mark as Pending
+                  </button>
+                  <button
+                    onClick={() => handleUpdatePaymentStatus(selectedBooking, 'failed')}
+                    disabled={processing === selectedBooking.id || selectedBooking.payment_status === 'failed'}
+                    className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Mark as Failed
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Actions */}
-            {selectedBooking.status === 'pending' && (
-              <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 flex gap-4">
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 space-y-3">
+              {selectedBooking.status === 'pending' && (
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => handleApprove(selectedBooking)}
+                    disabled={processing === selectedBooking.id}
+                    className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {processing === selectedBooking.id ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    ) : (
+                      <>
+                        <Check className="w-5 h-5" />
+                        Approve & Send Emails
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => handleReject(selectedBooking)}
+                    disabled={processing === selectedBooking.id}
+                    className="flex-1 bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    <X className="w-5 h-5" />
+                    Reject
+                  </button>
+                </div>
+              )}
+              {(selectedBooking.status === 'confirmed' || selectedBooking.status === 'completed') && (
                 <button
-                  onClick={() => handleApprove(selectedBooking)}
+                  onClick={() => handleCancelOrder(selectedBooking)}
                   disabled={processing === selectedBooking.id}
-                  className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  {processing === selectedBooking.id ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  ) : (
-                    <>
-                      <Check className="w-5 h-5" />
-                      Approve & Send Emails
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => handleReject(selectedBooking)}
-                  disabled={processing === selectedBooking.id}
-                  className="flex-1 bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <X className="w-5 h-5" />
-                  Reject
+                  Cancel Order
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </motion.div>
         </div>
       )}

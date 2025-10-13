@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
 import { bookingService } from '../services/bookingService';
+import { supabase } from '../lib/supabase';
+import { showToast } from '../utils/toast';
 import { Database } from '../lib/database.types';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
@@ -19,12 +21,19 @@ type Booking = Database['public']['Tables']['bookings']['Row'] & {
 
 const DashboardNew = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('listings');
   const [myListings, setMyListings] = useState<Listing[]>([]);
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
   const [ownerBookings, setOwnerBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Profile form state
+  const [fullName, setFullName] = useState(profile?.full_name || '');
+  const [phone, setPhone] = useState(profile?.phone || '');
+  const [location, setLocation] = useState(profile?.location || '');
+  const [address, setAddress] = useState(profile?.address || '');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -33,6 +42,16 @@ const DashboardNew = () => {
     }
     fetchData();
   }, [user, navigate]);
+
+  useEffect(() => {
+    // Update form when profile changes
+    if (profile) {
+      setFullName(profile.full_name || '');
+      setPhone(profile.phone || '');
+      setLocation(profile.location || '');
+      setAddress(profile.address || '');
+    }
+  }, [profile]);
 
   const fetchData = async () => {
     if (!user) return;
@@ -297,6 +316,39 @@ const DashboardNew = () => {
     </div>
   );
 
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    
+    try {
+      setSaving(true);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          full_name: fullName,
+          phone: phone,
+          location: location,
+          address: address,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id);
+      
+      if (error) throw error;
+      
+      // Refresh profile in context
+      if (refreshProfile) {
+        await refreshProfile();
+      }
+      
+      showToast.success('Profile updated successfully!');
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      showToast.error(error.message || 'Failed to update profile');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const renderProfile = () => (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
@@ -320,7 +372,8 @@ const DashboardNew = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
             <input
               type="text"
-              defaultValue={profile?.full_name || ''}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
@@ -329,7 +382,7 @@ const DashboardNew = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
             <input
               type="email"
-              defaultValue={profile?.email || ''}
+              value={profile?.email || ''}
               disabled
               className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
             />
@@ -339,8 +392,10 @@ const DashboardNew = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
             <input
               type="tel"
-              defaultValue={profile?.phone || ''}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="Enter your phone number"
             />
           </div>
           
@@ -348,13 +403,30 @@ const DashboardNew = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
             <input
               type="text"
-              defaultValue={profile?.location || ''}
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="Enter your city/location"
             />
           </div>
           
-          <button className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
-            Save Changes
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              placeholder="Enter your full address"
+            />
+          </div>
+          
+          <button 
+            onClick={handleSaveProfile}
+            disabled={saving}
+            className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { useEffect } from 'react';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
+import { ScrollToTop } from './components/ScrollToTop';
 import Home from './pages/Home';
 import Listings from './pages/Listings';
 import ItemDetails from './pages/ItemDetails';
@@ -33,6 +34,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <ScrollToTop />
       <Header />
       <main className="pt-16">
         <Routes>

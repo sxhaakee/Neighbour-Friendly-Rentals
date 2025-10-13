@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, CheckCircle, XCircle, Clock, TrendingUp, Package, Users, DollarSign } from 'lucide-react';
+import { Shield, CheckCircle, XCircle, Clock, TrendingUp, Package, Users, DollarSign, Eye, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
+import { showToast } from '../utils/toast';
 import { Database } from '../lib/database.types';
 import { IDVerificationDashboard } from '../components/Admin/IDVerificationDashboard';
 import { OrdersManagement } from '../components/Admin/OrdersManagement';
@@ -18,6 +19,8 @@ const Admin = () => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
   const [loading, setLoading] = useState(true);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [stats, setStats] = useState({
     pending: 0,
     approved: 0,
@@ -77,10 +80,40 @@ const Admin = () => {
 
     try {
       await listingService.rejectListing(id, reason);
+      showToast.success('Listing rejected');
+      setSelectedListing(null);
       fetchListings();
     } catch (error) {
       console.error('Error rejecting listing:', error);
-      alert('Failed to reject listing');
+      showToast.error('Failed to reject listing');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to permanently delete this listing? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await listingService.deleteListing(id);
+      showToast.success('Listing deleted successfully');
+      setSelectedListing(null);
+      fetchListings();
+    } catch (error) {
+      console.error('Error deleting listing:', error);
+      showToast.error('Failed to delete listing');
+    }
+  };
+
+  const nextImage = () => {
+    if (selectedListing && currentImageIndex < selectedListing.images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
     }
   };
 
@@ -299,24 +332,45 @@ const Admin = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {listing.status === 'pending' && (
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleApprove(listing.id)}
-                              className="text-green-600 hover:text-green-900"
-                            >
-                              <CheckCircle className="w-5 h-5" />
-                            </button>
-                            <button
-                              onClick={() => handleReject(listing.id)}
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              <XCircle className="w-5 h-5" />
-                            </button>
-                          </div>
-                        )}
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedListing(listing);
+                              setCurrentImageIndex(0);
+                            }}
+                            className="text-blue-600 hover:text-blue-900"
+                            title="View Details"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                          {listing.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleApprove(listing.id)}
+                                className="text-green-600 hover:text-green-900"
+                                title="Approve"
+                              >
+                                <CheckCircle className="w-5 h-5" />
+                              </button>
+                              <button
+                                onClick={() => handleReject(listing.id)}
+                                className="text-red-600 hover:text-red-900"
+                                title="Reject"
+                              >
+                                <XCircle className="w-5 h-5" />
+                              </button>
+                            </>
+                          )}
+                          <button
+                            onClick={() => handleDelete(listing.id)}
+                            className="text-red-600 hover:text-red-900"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
                         {listing.status === 'rejected' && listing.rejection_reason && (
-                          <p className="text-xs text-red-600">{listing.rejection_reason}</p>
+                          <p className="text-xs text-red-600 mt-1">{listing.rejection_reason}</p>
                         )}
                       </td>
                     </tr>
@@ -327,6 +381,180 @@ const Admin = () => {
           )}
         </div>
         </>
+        )}
+
+        {/* Listing Details Modal */}
+        {selectedListing && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto my-8"
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10 flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">Listing Details</h2>
+                <button
+                  onClick={() => setSelectedListing(null)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-6">
+                {/* Image Gallery */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Images</h3>
+                  <div className="relative">
+                    <img
+                      src={selectedListing.images[currentImageIndex]}
+                      alt={`${selectedListing.title} - Image ${currentImageIndex + 1}`}
+                      className="w-full h-96 object-contain bg-gray-100 rounded-lg"
+                    />
+                    {selectedListing.images.length > 1 && (
+                      <>
+                        <button
+                          onClick={prevImage}
+                          disabled={currentImageIndex === 0}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ChevronLeft className="w-6 h-6" />
+                        </button>
+                        <button
+                          onClick={nextImage}
+                          disabled={currentImageIndex === selectedListing.images.length - 1}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ChevronRight className="w-6 h-6" />
+                        </button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                          {currentImageIndex + 1} / {selectedListing.images.length}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {/* Thumbnail Strip */}
+                  {selectedListing.images.length > 1 && (
+                    <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                      {selectedListing.images.map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt={`Thumbnail ${idx + 1}`}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
+                            idx === currentImageIndex ? 'border-primary' : 'border-transparent'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Basic Info */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Basic Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Title</p>
+                      <p className="font-semibold">{selectedListing.title}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Category</p>
+                      <p className="font-semibold">{selectedListing.category}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Price</p>
+                      <p className="font-semibold text-primary">₹{selectedListing.price}/day</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Location</p>
+                      <p className="font-semibold">{selectedListing.location}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Status</p>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        selectedListing.status === 'approved'
+                          ? 'bg-green-100 text-green-800'
+                          : selectedListing.status === 'rejected'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {selectedListing.status}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Created</p>
+                      <p className="font-semibold">{new Date(selectedListing.created_at).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Description</h3>
+                  <p className="text-gray-700 whitespace-pre-wrap">{selectedListing.description}</p>
+                </div>
+
+                {/* Owner Info */}
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Owner Information</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Name</p>
+                      <p className="font-semibold">{selectedListing.owner_name}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Email</p>
+                      <p className="font-semibold">{selectedListing.owner_email}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600">Contact</p>
+                      <p className="font-semibold">{selectedListing.contact_info}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {selectedListing.rejection_reason && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-red-800 mb-2">Rejection Reason</h3>
+                    <p className="text-red-700">{selectedListing.rejection_reason}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 flex gap-4">
+                {selectedListing.status === 'pending' && (
+                  <>
+                    <button
+                      onClick={() => handleApprove(selectedListing.id)}
+                      className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <CheckCircle className="w-5 h-5" />
+                      Approve Listing
+                    </button>
+                    <button
+                      onClick={() => handleReject(selectedListing.id)}
+                      className="flex-1 bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <XCircle className="w-5 h-5" />
+                      Reject Listing
+                    </button>
+                  </>
+                )}
+                <button
+                  onClick={() => handleDelete(selectedListing.id)}
+                  className="flex-1 bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-5 h-5" />
+                  Delete Permanently
+                </button>
+              </div>
+            </motion.div>
+          </div>
         )}
       </div>
     </div>

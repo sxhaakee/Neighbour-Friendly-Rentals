@@ -71,7 +71,7 @@ export const compressImage = async (
 };
 
 /**
- * Compress multiple images
+ * Compress multiple images sequentially to avoid memory issues
  * @param files - Array of image files
  * @param options - Compression options
  * @returns Array of compressed images as Files
@@ -80,8 +80,27 @@ export const compressImages = async (
   files: File[],
   options?: CompressionOptions
 ): Promise<File[]> => {
-  const compressionPromises = files.map((file) => compressImage(file, options));
-  return Promise.all(compressionPromises);
+  const compressedFiles: File[] = [];
+  
+  // Process images sequentially to avoid overwhelming the browser
+  for (let i = 0; i < files.length; i++) {
+    try {
+      console.log(`Compressing image ${i + 1} of ${files.length}...`);
+      const compressed = await compressImage(files[i], options);
+      compressedFiles.push(compressed);
+      
+      // Small delay between compressions to prevent browser freezing
+      if (i < files.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    } catch (error) {
+      console.error(`Failed to compress image ${i + 1}:`, error);
+      // Use original file if compression fails
+      compressedFiles.push(files[i]);
+    }
+  }
+  
+  return compressedFiles;
 };
 
 /**
