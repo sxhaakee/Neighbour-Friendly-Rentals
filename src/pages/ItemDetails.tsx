@@ -18,6 +18,7 @@ const ItemDetails = () => {
   const { user, profile, isAdmin } = useAuth();
   const [listing, setListing] = useState<Listing | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [showFullImage, setShowFullImage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -193,20 +194,24 @@ const ItemDetails = () => {
           Back to Listings
         </motion.button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Image Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Image Section - Compact */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-2 space-y-4"
+            className="space-y-3"
           >
-            {/* Main Image */}
-            <div className="aspect-square rounded-2xl overflow-hidden bg-white shadow-lg">
+            {/* Main Image - Smaller */}
+            <div className="relative aspect-square max-w-md rounded-lg overflow-hidden bg-white shadow-md cursor-pointer"
+                 onClick={() => setShowFullImage(true)}>
               <img
                 src={listing.images[selectedImage] || '/placeholder.jpg'}
                 alt={listing.title}
                 className="w-full h-full object-cover"
               />
+              <div className="absolute bottom-2 right-2 bg-black/60 text-white px-2 py-1 rounded text-xs">
+                Click to enlarge
+              </div>
             </div>
 
             {/* Thumbnail Images */}
@@ -216,7 +221,7 @@ const ItemDetails = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${
                       selectedImage === index ? 'border-primary' : 'border-gray-200'
                     }`}
                   >
@@ -231,13 +236,13 @@ const ItemDetails = () => {
             )}
 
             {/* Description */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Description</h2>
-              <p className="text-gray-600 leading-relaxed">{listing.description}</p>
+            <div className="bg-white rounded-lg p-4 shadow-sm">
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Description</h2>
+              <p className="text-sm text-gray-600 leading-relaxed">{listing.description}</p>
             </div>
 
             {/* Reviews Section */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm">
+            <div className="bg-white rounded-lg p-4 shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900">Reviews & Ratings</h2>
                 {reviewCount > 0 && (
@@ -519,6 +524,45 @@ const ItemDetails = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Fullscreen Image Modal */}
+      {showFullImage && (
+        <div 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowFullImage(false)}
+        >
+          <button
+            onClick={() => setShowFullImage(false)}
+            className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <img
+            src={listing.images[selectedImage] || '/placeholder.jpg'}
+            alt={listing.title}
+            className="max-w-full max-h-full object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          {listing.images.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+              {listing.images.map((_, index: number) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedImage(index);
+                  }}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    selectedImage === index ? 'bg-white w-8' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

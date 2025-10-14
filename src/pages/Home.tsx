@@ -36,8 +36,8 @@ const Home = () => {
     try {
       setLoading(true);
       const data = await listingService.getApprovedListings();
-      // Get first 3 listings as featured
-      setFeaturedListings(data.slice(0, 3));
+      // Get first 4 listings as featured
+      setFeaturedListings(data.slice(0, 4));
     } catch (error) {
       console.error('Error fetching listings:', error);
     } finally {
@@ -155,7 +155,7 @@ const Home = () => {
             <p className="text-xl text-gray-600">Find exactly what you need from trusted neighbors</p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
             {categories.map((category, index) => (
               <motion.div
                 key={category.name}
@@ -163,13 +163,14 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer group"
+                whileHover={{ y: -3 }}
+                onClick={() => navigate(`/listings?category=${encodeURIComponent(category.name)}`)}
+                className="bg-white p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
               >
-                <div className={`w-16 h-16 ${category.color} rounded-xl flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform duration-200`}>
-                  <category.icon className="w-8 h-8" />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${category.color} rounded-lg flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform duration-200`}>
+                  <category.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="font-semibold text-center text-gray-900">{category.name}</h3>
+                <h3 className="text-xs sm:text-sm font-semibold text-center text-gray-900 line-clamp-2">{category.name}</h3>
               </motion.div>
             ))}
           </div>
@@ -205,7 +206,7 @@ const Home = () => {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {featuredListings.map((item: Listing, index: number) => (
                 <motion.div
                   key={item.id}
@@ -213,30 +214,32 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -3 }}
                   onClick={() => navigate(`/item/${item.id}`)}
-                  className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group cursor-pointer"
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
                     <img
                       src={item.images[0] || '/placeholder.jpg'}
                       alt={item.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-primary text-white px-2 py-1 rounded text-xs font-semibold">
                         {item.category}
                       </span>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-bold text-xl text-gray-900 mb-2 line-clamp-1">{item.title}</h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-primary">
-                        ₹{item.price}<span className="text-sm text-gray-500">/day</span>
-                      </span>
-                      <span className="text-gray-500 text-sm">{item.location}</span>
+                  <div className="p-3 flex flex-col flex-grow">
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{item.title}</h3>
+                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{item.description}</p>
+                    <div className="mt-auto">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-lg font-bold text-primary">
+                          ₹{item.price}<span className="text-xs text-gray-500">/day</span>
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-500 truncate block">{item.location}</span>
                     </div>
                   </div>
                 </motion.div>

@@ -227,56 +227,63 @@ const Listings = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3"
           >
             {filteredListings.map((item, index) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden group cursor-pointer"
+                transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
+                whileHover={{ y: -3 }}
+                onClick={() => navigate(`/item/${item.id}`)}
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group"
               >
                 <div className="relative overflow-hidden">
                   <img
                     src={item.images[0] || '/placeholder.jpg'}
                     alt={item.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-primary text-white px-2 py-1 rounded-full text-xs font-semibold">
+                  <div className="absolute top-2 left-2">
+                    <span className="bg-primary text-white px-1.5 py-0.5 rounded text-xs font-semibold">
                       {item.category}
                     </span>
                   </div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                      {item.availability}
-                    </span>
-                  </div>
+                  {item.availability === 'Available' && (
+                    <div className="absolute top-2 right-2">
+                      <span className="bg-green-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                        ✓
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
-                <div className="p-6">
-                  <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                <div className="p-2 sm:p-3">
+                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-gray-600 mb-4">by {item.owner_name}</p>
+                  <p className="text-xs text-gray-500 mb-2 truncate">by {item.owner_name}</p>
                   
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-2xl font-bold text-primary">
-                      ₹{item.price}<span className="text-sm text-gray-500">/day</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-base sm:text-lg font-bold text-primary">
+                      ₹{item.price}<span className="text-xs text-gray-500">/day</span>
                     </span>
-                    <div className="flex items-center text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{item.location}</span>
-                    </div>
+                  </div>
+                  
+                  <div className="flex items-center text-gray-500 mb-2">
+                    <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+                    <span className="text-xs truncate">{item.location}</span>
                   </div>
                   
                   <button 
-                    onClick={() => navigate(`/item/${item.id}`)}
-                    className="w-full bg-secondary text-gray-900 py-3 rounded-lg font-semibold hover:bg-secondary/80 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/item/${item.id}`);
+                    }}
+                    className="w-full bg-secondary text-gray-900 py-1.5 sm:py-2 rounded text-xs sm:text-sm font-semibold hover:bg-secondary/80 transition-colors"
                   >
-                    View Details
+                    View
                   </button>
                 </div>
               </motion.div>

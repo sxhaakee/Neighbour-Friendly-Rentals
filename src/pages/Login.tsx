@@ -94,7 +94,7 @@ const Login = () => {
               <Home className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Neighbour<span className="text-primary">Rentals</span>
+              Neighbour<span className="text-primary">Friendly</span>
             </h1>
           </div>
 
