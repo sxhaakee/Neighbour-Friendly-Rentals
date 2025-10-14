@@ -34,7 +34,24 @@ const AddItem = () => {
     }
   }, [user, navigate]);
 
-  const categories = ['Tools', 'Vehicles', 'Electronics', 'Furniture', 'Miscellaneous'];
+  const categories = [
+    'Electronics',
+    'Cameras & Photography',
+    'Tools & Equipment',
+    'Vehicles',
+    'Sports & Fitness',
+    'Musical Instruments',
+    'Furniture',
+    'Appliances',
+    'Books & Media',
+    'Clothing & Accessories',
+    'Party & Events',
+    'Gaming & Consoles',
+    'Outdoor & Camping',
+    'Baby & Kids',
+    'Medical & Health',
+    'Miscellaneous'
+  ];
   const conditions = ['Excellent', 'Good', 'Fair', 'Poor'];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book } from 'lucide-react';
+import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { Database } from '../lib/database.types';
@@ -14,11 +14,18 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
 
   const categories = [
-    { name: 'Tools', icon: Tool, color: 'bg-blue-100 text-blue-600' },
-    { name: 'Books', icon: Book, color: 'bg-green-100 text-green-600' },
     { name: 'Electronics', icon: Smartphone, color: 'bg-purple-100 text-purple-600' },
+    { name: 'Cameras & Photography', icon: Camera, color: 'bg-indigo-100 text-indigo-600' },
+    { name: 'Tools & Equipment', icon: Tool, color: 'bg-blue-100 text-blue-600' },
+    { name: 'Sports & Fitness', icon: Dumbbell, color: 'bg-red-100 text-red-600' },
+    { name: 'Musical Instruments', icon: Music, color: 'bg-pink-100 text-pink-600' },
     { name: 'Furniture', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
-    { name: 'Miscellaneous', icon: Package, color: 'bg-pink-100 text-pink-600' },
+    { name: 'Books & Media', icon: Book, color: 'bg-green-100 text-green-600' },
+    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+    { name: 'Party & Events', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
+    { name: 'Gaming & Consoles', icon: Gamepad2, color: 'bg-violet-100 text-violet-600' },
+    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-emerald-100 text-emerald-600' },
+    { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
   ];
 
   useEffect(() => {

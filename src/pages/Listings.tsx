@@ -19,7 +19,25 @@ const Listings = () => {
   const [userLocation, setUserLocation] = useState<string>('');
   const [sortBy, setSortBy] = useState<'relevance' | 'price-low' | 'price-high' | 'distance'>('relevance');
 
-  const categories = ['All', 'Tools', 'Vehicles', 'Electronics', 'Furniture', 'Miscellaneous'];
+  const categories = [
+    'All',
+    'Electronics',
+    'Cameras & Photography',
+    'Tools & Equipment',
+    'Vehicles',
+    'Sports & Fitness',
+    'Musical Instruments',
+    'Furniture',
+    'Appliances',
+    'Books & Media',
+    'Clothing & Accessories',
+    'Party & Events',
+    'Gaming & Consoles',
+    'Outdoor & Camping',
+    'Baby & Kids',
+    'Medical & Health',
+    'Miscellaneous'
+  ];
 
   useEffect(() => {
     fetchListings();

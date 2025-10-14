@@ -331,10 +331,21 @@ const EditItem = () => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   required
                 >
-                  <option value="Tools">Tools</option>
-                  <option value="Vehicles">Vehicles</option>
                   <option value="Electronics">Electronics</option>
+                  <option value="Cameras & Photography">Cameras & Photography</option>
+                  <option value="Tools & Equipment">Tools & Equipment</option>
+                  <option value="Vehicles">Vehicles</option>
+                  <option value="Sports & Fitness">Sports & Fitness</option>
+                  <option value="Musical Instruments">Musical Instruments</option>
                   <option value="Furniture">Furniture</option>
+                  <option value="Appliances">Appliances</option>
+                  <option value="Books & Media">Books & Media</option>
+                  <option value="Clothing & Accessories">Clothing & Accessories</option>
+                  <option value="Party & Events">Party & Events</option>
+                  <option value="Gaming & Consoles">Gaming & Consoles</option>
+                  <option value="Outdoor & Camping">Outdoor & Camping</option>
+                  <option value="Baby & Kids">Baby & Kids</option>
+                  <option value="Medical & Health">Medical & Health</option>
                   <option value="Miscellaneous">Miscellaneous</option>
                 </select>
               </div>

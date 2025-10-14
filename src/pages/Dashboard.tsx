@@ -105,6 +105,19 @@ const DashboardNew = () => {
     }
   };
 
+  const getPaymentStatusBadge = (paymentStatus: string) => {
+    switch (paymentStatus) {
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'failed':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   const tabs = [
     { id: 'listings', label: 'My Listings', icon: Package },
     { id: 'bookings', label: 'My Bookings', icon: Calendar },
@@ -247,13 +260,15 @@ const DashboardNew = () => {
                     <span className="font-semibold text-primary">₹{booking.total_price}</span>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right space-y-2">
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
                     {booking.status}
                   </span>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Payment: {booking.payment_status}
-                  </p>
+                  <div>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusBadge(booking.payment_status || 'pending')}`}>
+                      {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -300,13 +315,15 @@ const DashboardNew = () => {
                     <span className="font-semibold text-green-600">+₹{booking.total_price}</span>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right space-y-2">
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
                     {booking.status}
                   </span>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Payment: {booking.payment_status}
-                  </p>
+                  <div>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getPaymentStatusBadge(booking.payment_status || 'pending')}`}>
+                      {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
