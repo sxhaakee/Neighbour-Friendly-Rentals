@@ -290,27 +290,27 @@ export const OrdersManagement = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Package className="w-8 h-8 text-primary" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Package className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Orders Management</h2>
-            <p className="text-gray-600">View and manage all bookings</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Orders Management</h2>
+            <p className="text-sm sm:text-base text-gray-600 hidden sm:block">View and manage all bookings</p>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-4">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Filter className="w-5 h-5 text-gray-500" />
+      <div className="bg-white rounded-xl shadow-sm p-3 sm:p-4 overflow-x-auto">
+        <div className="flex items-center gap-2 min-w-max">
+          <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
           {['all', 'pending', 'confirmed', 'completed', 'rejected'].map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status as any)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === status
                   ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -323,7 +323,7 @@ export const OrdersManagement = () => {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-yellow-600" />
@@ -479,27 +479,27 @@ export const OrdersManagement = () => {
 
       {/* Details Modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-white rounded-xl sm:rounded-2xl max-w-3xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-4 sm:p-6 z-10">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">Booking Details</h2>
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Booking Details</h2>
                 <button
                   onClick={() => setSelectedBooking(null)}
-                  className="text-gray-500 hover:text-gray-700"
+                  className="text-gray-500 hover:text-gray-700 p-1"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
               </div>
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               {/* Item Info */}
               <div>
                 <h3 className="font-semibold text-lg mb-3">Item Information</h3>

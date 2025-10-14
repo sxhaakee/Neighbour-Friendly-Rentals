@@ -121,38 +121,38 @@ const Admin = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-md p-6 border border-gray-200"
+      className="bg-white rounded-xl shadow-md p-4 sm:p-6 border border-gray-200"
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-gray-600 text-sm font-medium">{label}</p>
-          <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
+          <p className="text-gray-600 text-xs sm:text-sm font-medium">{label}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">{value}</p>
         </div>
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`p-2 sm:p-3 rounded-lg ${color}`}>
+          <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </div>
       </div>
     </motion.div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Shield className="w-8 h-8 text-primary" />
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           </div>
-          <p className="text-gray-600">Manage listings and monitor platform activity</p>
+          <p className="text-sm sm:text-base text-gray-600">Manage listings and monitor platform activity</p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="bg-white rounded-xl shadow-md p-2 mb-6">
-          <div className="flex gap-2">
+        <div className="bg-white rounded-xl shadow-md p-1 sm:p-2 mb-4 sm:mb-6 overflow-x-auto">
+          <div className="flex gap-1 sm:gap-2 min-w-max sm:min-w-0">
             <button
               onClick={() => setActiveTab('orders')}
-              className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'orders'
                   ? 'bg-primary text-white'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -162,7 +162,7 @@ const Admin = () => {
             </button>
             <button
               onClick={() => setActiveTab('listings')}
-              className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'listings'
                   ? 'bg-primary text-white'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -172,23 +172,23 @@ const Admin = () => {
             </button>
             <button
               onClick={() => setActiveTab('verifications')}
-              className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'verifications'
                   ? 'bg-primary text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              🛡️ ID Verifications
+              🛡️ ID
             </button>
             <button
               onClick={() => setActiveTab('agreements')}
-              className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'agreements'
                   ? 'bg-primary text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              📄 Agreements
+              📄 Docs
             </button>
           </div>
         </div>
@@ -203,7 +203,7 @@ const Admin = () => {
         ) : (
           <>
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
               <StatCard
                 icon={Clock}
                 label="Pending Approval"
@@ -231,13 +231,13 @@ const Admin = () => {
             </div>
 
             {/* Filters */}
-            <div className="bg-white rounded-xl shadow-md p-4 mb-6">
-              <div className="flex flex-wrap gap-2">
+            <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 mb-4 sm:mb-6 overflow-x-auto">
+              <div className="flex gap-2 min-w-max">
                 {['all', 'pending', 'approved', 'rejected'].map((status) => (
                   <button
                     key={status}
                     onClick={() => setFilter(status as any)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                   filter === status
                     ? 'bg-primary text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -262,8 +262,8 @@ const Admin = () => {
                   <p className="text-gray-600">No listings found</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-              <table className="w-full">
+                <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <table className="w-full min-w-[800px]">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
