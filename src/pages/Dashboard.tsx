@@ -334,23 +334,34 @@ const DashboardNew = () => {
   );
 
   const handleSaveProfile = async () => {
-    if (!user) return;
-    
     try {
       setSaving(true);
       
+      // Build update object - only include address if it has a value
+      const updateData: any = {
+        full_name: fullName,
+        phone: phone,
+        location: location,
+        updated_at: new Date().toISOString(),
+      };
+      
+      // Only include address if it's not empty
+      if (address && address.trim()) {
+        updateData.address = address;
+      }
+      
       const { error } = await supabase
         .from('profiles')
-        .update({
-          full_name: fullName,
-          phone: phone,
-          location: location,
-          address: address,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq('id', user.id);
       
-      if (error) throw error;
+      if (error) {
+        // If error is about address column, show helpful message
+        if (error.message.includes('address')) {
+          throw new Error('Please run the database migration to add the address column. Check add-address-column.sql file.');
+        }
+        throw error;
+      }
       
       // Refresh profile in context
       if (refreshProfile) {
