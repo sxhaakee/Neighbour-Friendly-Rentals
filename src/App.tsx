@@ -16,6 +16,7 @@ import Admin from './pages/Admin';
 import BookItem from './pages/BookItem';
 import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
+import AddProperty from './pages/AddProperty';
 import Terms from './pages/Legal/Terms';
 import Privacy from './pages/Legal/Privacy';
 import FAB from './components/Common/FAB';
@@ -46,6 +47,7 @@ function AppContent() {
           <Route path="/book/:id" element={<BookItem />} />
           <Route path="/properties" element={<Properties />} />
           <Route path="/properties/:id" element={<PropertyDetails />} />
+          <Route path="/add-property" element={<AddProperty />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
