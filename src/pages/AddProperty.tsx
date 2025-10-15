@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Home } from 'lucide-react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { propertyService } from '../services/propertyService';
@@ -53,12 +53,32 @@ const AddProperty = () => {
     { value: 'shop', label: 'Shop' },
   ];
 
-  const amenitiesList = [
-    'Parking', 'Lift', 'Power Backup', 'Security', 'Gym', 'Swimming Pool',
-    'Garden', 'Play Area', 'WiFi', 'Water Supply', 'Gas Pipeline'
-  ];
+  // Smart amenities based on property type
+  const getAmenitiesForType = (type: string) => {
+    const residential = ['Parking', 'Lift', 'Power Backup', 'Security', 'Gym', 'Swimming Pool', 'Garden', 'Play Area', 'WiFi', 'Water Supply', 'Gas Pipeline'];
+    const commercial = ['Parking', 'Lift', 'Power Backup', 'Security', 'WiFi', 'Conference Room', 'Cafeteria', 'Reception'];
+    const pg = ['WiFi', 'Power Backup', 'Security', 'Laundry', 'Meals Included', 'AC Rooms', 'Cleaning Service'];
+    
+    if (type === 'office' || type === 'shop' || type === 'commercial') return commercial;
+    if (type === 'pg' || type === 'hostel') return pg;
+    return residential;
+  };
 
-  const tenantPreferences = ['Family', 'Bachelor', 'Students', 'Company', 'Anyone'];
+  const amenitiesList = getAmenitiesForType(formData.type);
+
+  // Smart tenant preferences based on property type
+  const getTenantPreferencesForType = (type: string) => {
+    if (type === 'office' || type === 'shop' || type === 'commercial') return ['Any Business', 'Startup', 'Established Company', 'Retail', 'Service Industry'];
+    if (type === 'pg' || type === 'hostel') return ['Students', 'Working Professionals', 'Male Only', 'Female Only', 'Co-ed'];
+    return ['Family', 'Bachelor', 'Students', 'Company', 'Anyone'];
+  };
+
+  const tenantPreferences = getTenantPreferencesForType(formData.type);
+
+  // Check if property type needs bedrooms/bathrooms
+  const needsBedroomInfo = !['office', 'shop', 'commercial'].includes(formData.type);
+  const needsTenantPreferences = formData.type !== 'office' && formData.type !== 'shop' && formData.type !== 'commercial';
+  const isPG = formData.type === 'pg' || formData.type === 'hostel';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -287,14 +307,20 @@ const AddProperty = () => {
           <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
             <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Property Details</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Bedrooms</label>
-                <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} placeholder="2" min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Bathrooms</label>
-                <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} placeholder="2" min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
-              </div>
+              {needsBedroomInfo && (
+                <>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      {isPG ? 'Rooms Available' : 'Bedrooms'}
+                    </label>
+                    <input type="number" name="bedrooms" value={formData.bedrooms} onChange={handleInputChange} placeholder="2" min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Bathrooms</label>
+                    <input type="number" name="bathrooms" value={formData.bathrooms} onChange={handleInputChange} placeholder="2" min="0" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
+                  </div>
+                </>
+              )}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Area (sqft) *</label>
                 <input type="number" name="area_sqft" value={formData.area_sqft} onChange={handleInputChange} placeholder="1200" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
@@ -323,28 +349,34 @@ const AddProperty = () => {
             </div>
           </div>
 
-          {/* Tenant Preferences */}
-          <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
-            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Tenant Preferences</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4">
-              {tenantPreferences.map((tenant) => (
-                <label key={tenant} className="flex items-center gap-2 p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input type="checkbox" checked={formData.preferred_tenants.includes(tenant)} onChange={() => handleTenantToggle(tenant)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
-                  <span className="text-xs md:text-sm">{tenant}</span>
-                </label>
-              ))}
+          {/* Tenant/Business Preferences */}
+          {needsTenantPreferences && (
+            <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
+              <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+                {formData.type === 'pg' || formData.type === 'hostel' ? 'Occupant Preferences' : 'Tenant Preferences'}
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4">
+                {tenantPreferences.map((tenant) => (
+                  <label key={tenant} className="flex items-center gap-2 p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
+                    <input type="checkbox" checked={formData.preferred_tenants.includes(tenant)} onChange={() => handleTenantToggle(tenant)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <span className="text-xs md:text-sm">{tenant}</span>
+                  </label>
+                ))}
+              </div>
+              {!isPG && (
+                <div className="grid grid-cols-2 gap-4">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="pets_allowed" checked={formData.pets_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <span className="text-sm text-gray-700">Pets Allowed</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="non_veg_allowed" checked={formData.non_veg_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <span className="text-sm text-gray-700">Non-Veg Allowed</span>
+                  </label>
+                </div>
+              )}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" name="pets_allowed" checked={formData.pets_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
-                <span className="text-sm text-gray-700">Pets Allowed</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" name="non_veg_allowed" checked={formData.non_veg_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
-                <span className="text-sm text-gray-700">Non-Veg Allowed</span>
-              </label>
-            </div>
-          </div>
+          )}
 
           {/* Availability */}
           <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">

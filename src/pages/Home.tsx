@@ -134,9 +134,12 @@ const Home = () => {
             >
               Browse Rentals
             </Link>
-            <button className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border border-white/30">
+            <Link
+              to="/add-item"
+              className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border border-white/30"
+            >
               Post an Item
-            </button>
+            </Link>
           </motion.div>
         </motion.div>
       </section>
