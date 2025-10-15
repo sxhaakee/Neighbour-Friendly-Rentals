@@ -14,6 +14,7 @@ import EditItem from './pages/EditItem';
 import VerifyID from './pages/VerifyID';
 import Admin from './pages/Admin';
 import BookItem from './pages/BookItem';
+import Properties from './pages/Properties';
 import Terms from './pages/Legal/Terms';
 import Privacy from './pages/Legal/Privacy';
 import FAB from './components/Common/FAB';
@@ -42,6 +43,7 @@ function AppContent() {
           <Route path="/listings" element={<Listings />} />
           <Route path="/item/:id" element={<ItemDetails />} />
           <Route path="/book/:id" element={<BookItem />} />
+          <Route path="/properties" element={<Properties />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
