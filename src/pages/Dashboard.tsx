@@ -228,6 +228,104 @@ const DashboardNew = () => {
           ))}
         </div>
       )}
+
+      {/* Properties Section */}
+      {myProperties.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">My Properties</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {myProperties.map((property: any) => (
+              <motion.div
+                key={property.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              >
+                <div className="md:flex">
+                  <div className="md:w-48">
+                    <img
+                      src={property.images?.[0] || '/placeholder.jpg'}
+                      alt={property.title}
+                      className="w-full h-48 md:h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6 flex-1">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900">{property.title}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(property.status)}`}>
+                        {property.status}
+                      </span>
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 mb-2">{property.city}, {property.state}</p>
+                    <p className="text-2xl font-bold text-primary mb-3">
+                      ₹{property.monthly_rent || property.price}<span className="text-sm text-gray-500">/month</span>
+                    </p>
+                    
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => navigate(`/properties/${property.id}`)}
+                        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>View</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Services Section */}
+      {myServices.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">My Services</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {myServices.map((service: any) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              >
+                <div className="md:flex">
+                  <div className="md:w-48">
+                    <img
+                      src={service.portfolio_images?.[0] || '/placeholder.jpg'}
+                      alt={service.business_name}
+                      className="w-full h-48 md:h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6 flex-1">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-gray-900">{service.business_name}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(service.status)}`}>
+                        {service.status}
+                      </span>
+                    </div>
+                    
+                    <p className="text-sm text-gray-600 mb-2">{service.category}</p>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{service.tagline || service.description}</p>
+                    
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => navigate(`/services/${service.id}`)}
+                        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>View</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 
