@@ -10,6 +10,7 @@ const FAB = () => {
   const menuItems = [
     { icon: Package, label: 'List Product', path: '/add-item', color: 'bg-blue-500' },
     { icon: Home, label: 'List Property', path: '/add-property', color: 'bg-purple-500' },
+    { icon: Plus, label: 'List Service', path: '/add-service', color: 'bg-orange-500' },
   ];
 
   return (
