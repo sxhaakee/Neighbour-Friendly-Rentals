@@ -74,6 +74,7 @@ export interface ServiceBooking {
 }
 
 export interface ServiceProviderFilters {
+  status?: string;
   category?: string;
   city?: string;
   minPrice?: number;

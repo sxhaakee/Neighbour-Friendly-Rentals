@@ -51,8 +51,12 @@ export interface Property {
 }
 
 export interface PropertyFilters {
+  status?: string;
+  property_type?: string;
   type?: string[];
   city?: string;
+  min_price?: number;
+  max_price?: number;
   minRent?: number;
   maxRent?: number;
   bedrooms?: number;
