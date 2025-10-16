@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle } from 'lucide-react';
+import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle, Home, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
+import { propertyService } from '../services/propertyService';
+import { serviceProviderService } from '../services/serviceProviderService';
 import { bookingService } from '../services/bookingService';
 import { supabase } from '../lib/supabase';
 import { showToast } from '../utils/toast';
 import { Database } from '../lib/database.types';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
+type Property = any; // Property type from propertyService
+type ServiceProvider = any; // ServiceProvider type from serviceProviderService
 type Booking = Database['public']['Tables']['bookings']['Row'] & {
   listings: {
     title: string;
@@ -24,6 +28,8 @@ const DashboardNew = () => {
   const { user, profile, refreshProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('listings');
   const [myListings, setMyListings] = useState<Listing[]>([]);
+  const [myProperties, setMyProperties] = useState<Property[]>([]);
+  const [myServices, setMyServices] = useState<ServiceProvider[]>([]);
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
   const [ownerBookings, setOwnerBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,13 +64,19 @@ const DashboardNew = () => {
     
     try {
       setLoading(true);
-      const [listings, bookings, ownerBkgs] = await Promise.all([
+      
+      // Fetch all user data
+      const [listings, properties, services, bookings, ownerBkgs] = await Promise.all([
         listingService.getUserListings(user.id),
+        propertyService.getOwnerProperties(user.id),
+        serviceProviderService.getOwnerProviders(user.id),
         bookingService.getUserBookings(user.id),
         bookingService.getOwnerBookings(user.id),
       ]);
       
       setMyListings(listings);
+      setMyProperties(properties);
+      setMyServices(services);
       setMyBookings(bookings as Booking[]);
       setOwnerBookings(ownerBkgs as Booking[]);
     } catch (error) {

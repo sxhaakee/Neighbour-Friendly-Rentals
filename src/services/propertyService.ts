@@ -203,24 +203,22 @@ class PropertyService {
   // Increment view count
   async incrementViews(id: string): Promise<void> {
     try {
-      const { error } = await supabase.rpc('increment_property_views', { property_id: id });
-      if (error) {
-        // If RPC doesn't exist, fallback to manual increment
-        const { data: property } = await supabase
-          .from('properties')
-          .select('views_count')
-          .eq('id', id)
-          .single();
+      // Direct update without RPC (simpler and more reliable)
+      const { data: property } = await supabase
+        .from('properties')
+        .select('views_count')
+        .eq('id', id)
+        .single();
 
-        if (property) {
-          await supabase
-            .from('properties')
-            .update({ views_count: (property.views_count || 0) + 1 })
-            .eq('id', id);
-        }
+      if (property) {
+        await supabase
+          .from('properties')
+          .update({ views_count: (property.views_count || 0) + 1 })
+          .eq('id', id);
       }
     } catch (error) {
-      console.error('Error incrementing views:', error);
+      // Silently fail - view count is not critical
+      console.debug('View count update skipped:', error);
     }
   }
 

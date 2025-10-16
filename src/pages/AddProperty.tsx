@@ -132,7 +132,14 @@ const AddProperty = () => {
           .from('listings')
           .upload(filePath, file);
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          console.error('Storage upload error:', uploadError);
+          // If bucket doesn't exist, show helpful message
+          if (uploadError.message?.includes('Bucket not found')) {
+            throw new Error('Storage bucket not configured. Please create "listings" bucket in Supabase Storage.');
+          }
+          throw uploadError;
+        }
 
         const { data: { publicUrl } } = supabase.storage
           .from('listings')
@@ -146,7 +153,7 @@ const AddProperty = () => {
       showToast.success(`${uploadedUrls.length} image(s) uploaded`);
     } catch (error: any) {
       console.error('Error uploading images:', error);
-      showToast.error('Failed to upload images');
+      showToast.error(error.message || 'Failed to upload images. Please check storage configuration.');
     } finally {
       setUploading(false);
     }
