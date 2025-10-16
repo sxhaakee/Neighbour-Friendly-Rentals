@@ -66,6 +66,41 @@ export interface PropertyFilters {
 }
 
 class PropertyService {
+  // Get ALL properties (for admin)
+  async getAllProperties(filters?: PropertyFilters): Promise<Property[]> {
+    try {
+      let query = supabase
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      // Apply filters
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+      if (filters?.property_type) {
+        query = query.eq('property_type', filters.property_type);
+      }
+      if (filters?.city) {
+        query = query.ilike('city', `%${filters.city}%`);
+      }
+      if (filters?.min_price) {
+        query = query.gte('monthly_rent', filters.min_price);
+      }
+      if (filters?.max_price) {
+        query = query.lte('monthly_rent', filters.max_price);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching all properties:', error);
+      return [];
+    }
+  }
+
   // Get all approved properties
   async getApprovedProperties(filters?: PropertyFilters): Promise<Property[]> {
     try {

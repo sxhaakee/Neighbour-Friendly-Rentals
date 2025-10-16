@@ -20,7 +20,8 @@ export const PropertiesManagement = () => {
       if (filter !== 'all') {
         filters.status = filter;
       }
-      const data = await propertyService.getApprovedProperties(filters);
+      // Admin should see ALL properties, not just approved ones
+      const data = await propertyService.getAllProperties(filters);
       setProperties(data);
     } catch (error) {
       console.error('Error fetching properties:', error);

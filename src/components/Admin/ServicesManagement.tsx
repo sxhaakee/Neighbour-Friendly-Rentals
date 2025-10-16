@@ -20,7 +20,8 @@ export const ServicesManagement = () => {
       if (filter !== 'all') {
         filters.status = filter;
       }
-      const data = await serviceProviderService.getApprovedProviders(filters);
+      // Admin should see ALL services, not just approved ones
+      const data = await serviceProviderService.getAllProviders(filters);
       setServices(data);
     } catch (error) {
       console.error('Error fetching services:', error);

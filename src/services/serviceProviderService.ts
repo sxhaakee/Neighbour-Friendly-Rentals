@@ -84,6 +84,38 @@ export interface ServiceProviderFilters {
 }
 
 class ServiceProviderService {
+  // Get ALL service providers (for admin)
+  async getAllProviders(filters?: ServiceProviderFilters): Promise<ServiceProvider[]> {
+    try {
+      let query = supabase
+        .from('service_providers')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      // Apply filters
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+      if (filters?.category) {
+        query = query.eq('category', filters.category);
+      }
+      if (filters?.city) {
+        query = query.ilike('city', `%${filters.city}%`);
+      }
+      if (filters?.verified !== undefined) {
+        query = query.eq('verified', filters.verified);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching all service providers:', error);
+      return [];
+    }
+  }
+
   // Get all approved service providers
   async getApprovedProviders(filters?: ServiceProviderFilters): Promise<ServiceProvider[]> {
     try {
