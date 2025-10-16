@@ -46,7 +46,7 @@ const Services = () => {
       if (filters.minPrice) filterObj.price_range_min = parseInt(filters.minPrice);
       if (filters.maxPrice) filterObj.price_range_max = parseInt(filters.maxPrice);
 
-      const data = await serviceProviderService.getServiceProviders(filterObj);
+      const data = await serviceProviderService.getApprovedProviders(filterObj);
       
       // OLX/JustDial Style: Featured first, then by rating
       const sorted = data.sort((a, b) => {
@@ -80,15 +80,15 @@ const Services = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-orange-500 to-pink-600 text-white py-12 md:py-20 px-4">
+      <div className="bg-gradient-to-br from-orange-500 to-pink-600 text-white py-8 md:py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-8"
+            className="text-center mb-6 md:mb-8"
           >
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Find Perfect Service Providers</h1>
-            <p className="text-lg md:text-xl text-white/90">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4">Find Perfect Service Providers</h1>
+            <p className="text-base md:text-lg lg:text-xl text-white/90">
               DJ, Catering, Photography, Decoration & More
             </p>
           </motion.div>
@@ -96,20 +96,20 @@ const Services = () => {
           {/* Search Bar */}
           <div className="bg-white rounded-xl p-2 max-w-2xl mx-auto shadow-2xl">
             <div className="flex flex-col sm:flex-row gap-2">
-              <div className="flex flex-1 items-center gap-3 px-4 h-12 rounded-lg bg-white">
-                <Search className="text-gray-400 w-5 h-5" />
+              <div className="flex flex-1 items-center gap-2 md:gap-3 px-3 md:px-4 h-10 md:h-12 rounded-lg bg-white">
+                <Search className="text-gray-400 w-4 h-4 md:w-5 md:h-5 flex-shrink-0" />
                 <input
                   type="text"
-                  placeholder="Search by city or service..."
+                  placeholder="Search city or service..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  className="flex-1 bg-transparent text-gray-700 focus:outline-none"
+                  className="flex-1 bg-transparent text-gray-700 focus:outline-none text-sm md:text-base"
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="h-12 px-6 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors"
+                className="h-10 md:h-12 px-4 md:px-6 bg-orange-500 text-white rounded-lg font-semibold hover:bg-orange-600 transition-colors text-sm md:text-base"
               >
                 Search
               </button>

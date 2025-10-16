@@ -248,7 +248,7 @@ const Listings = () => {
                 transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                 whileHover={{ y: -3 }}
                 onClick={() => navigate(`/item/${item.id}`)}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group"
+                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group flex flex-col"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -280,8 +280,8 @@ const Listings = () => {
                   )}
                 </div>
                 
-                <div className="p-2 sm:p-3">
-                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors">
+                <div className="p-2 sm:p-3 flex flex-col h-full">
+                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5rem]">
                     {item.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2 truncate">by {item.owner_name}</p>
@@ -292,7 +292,7 @@ const Listings = () => {
                     </span>
                   </div>
                   
-                  <div className="flex items-center text-gray-500 mb-2">
+                  <div className="flex items-center text-gray-500 mb-3">
                     <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
                     <span className="text-xs truncate">{item.location}</span>
                   </div>
@@ -302,7 +302,7 @@ const Listings = () => {
                       e.stopPropagation();
                       navigate(`/item/${item.id}`);
                     }}
-                    className="w-full bg-secondary text-gray-900 py-1.5 sm:py-2 rounded text-xs sm:text-sm font-semibold hover:bg-secondary/80 transition-colors"
+                    className="w-full bg-secondary text-gray-900 py-1.5 sm:py-2 rounded text-xs sm:text-sm font-semibold hover:bg-secondary/80 transition-colors mt-auto"
                   >
                     View
                   </button>

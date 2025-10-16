@@ -20,7 +20,7 @@ export const PropertiesManagement = () => {
       if (filter !== 'all') {
         filters.status = filter;
       }
-      const data = await propertyService.getProperties(filters);
+      const data = await propertyService.getApprovedProperties(filters);
       setProperties(data);
     } catch (error) {
       console.error('Error fetching properties:', error);

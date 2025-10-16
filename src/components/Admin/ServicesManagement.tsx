@@ -20,7 +20,7 @@ export const ServicesManagement = () => {
       if (filter !== 'all') {
         filters.status = filter;
       }
-      const data = await serviceProviderService.getServiceProviders(filters);
+      const data = await serviceProviderService.getApprovedProviders(filters);
       setServices(data);
     } catch (error) {
       console.error('Error fetching services:', error);
@@ -32,7 +32,7 @@ export const ServicesManagement = () => {
 
   const handleApprove = async (id: string) => {
     try {
-      await serviceProviderService.updateServiceProvider(id, { status: 'approved' });
+      await serviceProviderService.updateProvider(id, { status: 'approved' });
       showToast.success('Service approved');
       fetchServices();
     } catch (error) {
@@ -46,7 +46,7 @@ export const ServicesManagement = () => {
     if (!reason) return;
 
     try {
-      await serviceProviderService.updateServiceProvider(id, { status: 'rejected' });
+      await serviceProviderService.updateProvider(id, { status: 'rejected' });
       showToast.success('Service rejected');
       fetchServices();
     } catch (error) {
@@ -59,7 +59,7 @@ export const ServicesManagement = () => {
     if (!confirm('Are you sure you want to delete this service?')) return;
 
     try {
-      await serviceProviderService.deleteServiceProvider(id);
+      await serviceProviderService.deleteProvider(id);
       showToast.success('Service deleted');
       setSelectedService(null);
       fetchServices();
