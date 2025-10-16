@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home } from 'lucide-react';
+import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home as HomeIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { Database } from '../lib/database.types';
+import { AnimatedBackground } from '../components/AnimatedBackground';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 
@@ -58,42 +59,101 @@ const Home = () => {
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
+        duration: 0.8,
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const titleVariants = {
+    hidden: { y: 50, opacity: 0, scale: 0.9 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      transition: { 
+        duration: 0.8,
+        ease: [0.6, -0.05, 0.01, 0.99]
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5 }
+      transition: { duration: 0.6, ease: "easeOut" }
     }
   };
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4">
+      <section className="relative bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4 overflow-hidden">
+        <AnimatedBackground />
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-4xl mx-auto text-center text-white"
+          className="relative z-10 max-w-4xl mx-auto text-center text-white"
         >
           <motion.h1 
-            variants={itemVariants}
-            className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
+            variants={titleVariants}
+            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
-            Rent Smart.<br />
-            Share Local.<br />
-            <span className="text-secondary">Save Together.</span>
+            <motion.span
+              className="inline-block"
+              animate={{
+                y: [0, -5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              Rent Smart.
+            </motion.span>
+            <br />
+            <motion.span
+              className="inline-block"
+              animate={{
+                y: [0, -5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.3,
+              }}
+            >
+              Share Local.
+            </motion.span>
+            <br />
+            <motion.span 
+              className="inline-block text-secondary"
+              animate={{
+                y: [0, -5, 0],
+                textShadow: [
+                  "0 0 20px rgba(251, 191, 36, 0.5)",
+                  "0 0 40px rgba(251, 191, 36, 0.8)",
+                  "0 0 20px rgba(251, 191, 36, 0.5)",
+                ],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.6,
+              }}
+            >
+              Save Together.
+            </motion.span>
           </motion.h1>
           <motion.p 
             variants={itemVariants}
-            className="text-xl md:text-2xl mb-8 text-teal-100"
+            className="text-xl md:text-2xl mb-8 text-white/90 font-light"
           >
             Connect with your neighbours to share tools, books, electronics, and more.
           </motion.p>
@@ -128,18 +188,28 @@ const Home = () => {
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Link
-              to="/listings"
-              className="bg-secondary text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-secondary/90 transition-colors shadow-lg"
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Browse Rentals
-            </Link>
-            <Link
-              to="/add-item"
-              className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border border-white/30"
+              <Link
+                to="/listings"
+                className="block bg-secondary text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-secondary/90 transition-colors shadow-lg hover:shadow-2xl"
+              >
+                Browse Rentals
+              </Link>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Post an Item
-            </Link>
+              <Link
+                to="/add-item"
+                className="block bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border-2 border-white/30 hover:border-white/50"
+              >
+                Post an Item
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>
@@ -205,7 +275,7 @@ const Home = () => {
               className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Home className="w-8 h-8 text-white" />
+                <HomeIcon className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Find Your Home</h3>
               <p className="text-gray-600 mb-4">
