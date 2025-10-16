@@ -145,20 +145,60 @@ const DashboardNew = () => {
     );
   }
 
+  const handleDeleteProperty = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this property?')) return;
+    
+    try {
+      await propertyService.deleteProperty(id);
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting property:', error);
+      alert('Failed to delete property');
+    }
+  };
+
+  const handleDeleteService = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+    
+    try {
+      await serviceProviderService.deleteProvider(id);
+      fetchData();
+    } catch (error) {
+      console.error('Error deleting service:', error);
+      alert('Failed to delete service');
+    }
+  };
+
   const renderListings = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">My Listings</h2>
-        <button
-          onClick={() => navigate('/add-item')}
-          className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center space-x-2"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Item</span>
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => navigate('/add-item')}
+            className="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Product</span>
+          </button>
+          <button
+            onClick={() => navigate('/add-property')}
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-700 transition-colors flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Property</span>
+          </button>
+          <button
+            onClick={() => navigate('/add-service')}
+            className="bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors flex items-center space-x-2"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Service</span>
+          </button>
+        </div>
       </div>
 
-      {myListings.length === 0 ? (
+      {myListings.length === 0 && myProperties.length === 0 && myServices.length === 0 ? (
         <div className="bg-white rounded-xl shadow-lg p-12 text-center">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No listings yet</h3>
@@ -171,160 +211,163 @@ const DashboardNew = () => {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {myListings.map((listing) => (
-            <motion.div
-              key={listing.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-            >
-              <div className="md:flex">
-                <div className="md:w-48">
-                  <img
-                    src={listing.images[0] || '/placeholder.jpg'}
-                    alt={listing.title}
-                    className="w-full h-48 md:h-full object-cover"
-                  />
-                </div>
-                <div className="p-6 flex-1">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900">{listing.title}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(listing.status)}`}>
-                      {listing.status}
-                    </span>
-                  </div>
-                  
-                  <p className="text-2xl font-bold text-primary mb-3">
-                    ₹{listing.price}<span className="text-sm text-gray-500">/day</span>
-                  </p>
-                  
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{listing.description}</p>
-                  
-                  {listing.status === 'rejected' && listing.rejection_reason && (
-                    <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded-lg text-sm mb-4">
-                      <strong>Rejected:</strong> {listing.rejection_reason}
+        <>
+          {/* Products Section */}
+          {myListings.length > 0 && (
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Package className="w-5 h-5" />
+                Products ({myListings.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {myListings.map((listing) => (
+                  <motion.div
+                    key={listing.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                  >
+                    <img
+                      src={listing.images[0] || '/placeholder.jpg'}
+                      alt={listing.title}
+                      className="w-full h-40 object-cover"
+                    />
+                    <div className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-semibold text-gray-900 text-sm line-clamp-1">{listing.title}</h4>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusColor(listing.status)}`}>
+                          {listing.status}
+                        </span>
+                      </div>
+                      <p className="text-lg font-bold text-primary mb-2">
+                        ₹{listing.price}<span className="text-xs text-gray-500">/day</span>
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/item/${listing.id}`)}
+                          className="flex-1 bg-gray-100 text-gray-700 py-1.5 px-3 rounded text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleDeleteListing(listing.id)}
+                          className="bg-red-100 text-red-700 py-1.5 px-3 rounded hover:bg-red-200 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => navigate(`/item/${listing.id}`)}
-                      className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
-                    >
-                      <Eye className="w-4 h-4" />
-                      <span>View</span>
-                    </button>
-                    <button
-                      onClick={() => handleDeleteListing(listing.id)}
-                      className="bg-red-100 text-red-700 py-2 px-4 rounded-lg hover:bg-red-200 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+                  </motion.div>
+                ))}
               </div>
-            </motion.div>
-          ))}
-        </div>
-      )}
+            </div>
+          )}
 
-      {/* Properties Section */}
-      {myProperties.length > 0 && (
-        <div className="mt-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">My Properties</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {myProperties.map((property: any) => (
-              <motion.div
-                key={property.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <div className="md:flex">
-                  <div className="md:w-48">
+          {/* Properties Section */}
+          {myProperties.length > 0 && (
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Home className="w-5 h-5" />
+                Properties ({myProperties.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {myProperties.map((property: any) => (
+                  <motion.div
+                    key={property.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                  >
                     <img
                       src={property.images?.[0] || '/placeholder.jpg'}
                       alt={property.title}
-                      className="w-full h-48 md:h-full object-cover"
+                      className="w-full h-40 object-cover"
                     />
-                  </div>
-                  <div className="p-6 flex-1">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900">{property.title}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(property.status)}`}>
-                        {property.status}
-                      </span>
+                    <div className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-semibold text-gray-900 text-sm line-clamp-1">{property.title}</h4>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusColor(property.status)}`}>
+                          {property.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600 mb-1">{property.city}, {property.state}</p>
+                      <p className="text-lg font-bold text-primary mb-2">
+                        ₹{property.monthly_rent || property.price}<span className="text-xs text-gray-500">/month</span>
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/properties/${property.id}`)}
+                          className="flex-1 bg-gray-100 text-gray-700 py-1.5 px-3 rounded text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProperty(property.id)}
+                          className="bg-red-100 text-red-700 py-1.5 px-3 rounded hover:bg-red-200 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
-                    
-                    <p className="text-sm text-gray-600 mb-2">{property.city}, {property.state}</p>
-                    <p className="text-2xl font-bold text-primary mb-3">
-                      ₹{property.monthly_rent || property.price}<span className="text-sm text-gray-500">/month</span>
-                    </p>
-                    
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => navigate(`/properties/${property.id}`)}
-                        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>View</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
 
-      {/* Services Section */}
-      {myServices.length > 0 && (
-        <div className="mt-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">My Services</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {myServices.map((service: any) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-              >
-                <div className="md:flex">
-                  <div className="md:w-48">
+          {/* Services Section */}
+          {myServices.length > 0 && (
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <Briefcase className="w-5 h-5" />
+                Services ({myServices.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {myServices.map((service: any) => (
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                  >
                     <img
                       src={service.portfolio_images?.[0] || '/placeholder.jpg'}
                       alt={service.business_name}
-                      className="w-full h-48 md:h-full object-cover"
+                      className="w-full h-40 object-cover"
                     />
-                  </div>
-                  <div className="p-6 flex-1">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900">{service.business_name}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(service.status)}`}>
-                        {service.status}
-                      </span>
+                    <div className="p-4">
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="font-semibold text-gray-900 text-sm line-clamp-1">{service.business_name}</h4>
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${getStatusColor(service.status)}`}>
+                          {service.status}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600 mb-1">{service.category}</p>
+                      <p className="text-xs text-gray-600 mb-2 line-clamp-2">{service.tagline || service.description}</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigate(`/services/${service.id}`)}
+                          className="flex-1 bg-gray-100 text-gray-700 py-1.5 px-3 rounded text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                          View
+                        </button>
+                        <button
+                          onClick={() => handleDeleteService(service.id)}
+                          className="bg-red-100 text-red-700 py-1.5 px-3 rounded hover:bg-red-200 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
-                    
-                    <p className="text-sm text-gray-600 mb-2">{service.category}</p>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{service.tagline || service.description}</p>
-                    
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => navigate(`/services/${service.id}`)}
-                        className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-1"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>View</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
