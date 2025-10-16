@@ -48,10 +48,17 @@ const Services = () => {
 
       const data = await serviceProviderService.getServiceProviders(filterObj);
       
-      // Sort: Featured first, then by rating
+      // OLX/JustDial Style: Featured first, then by rating
       const sorted = data.sort((a, b) => {
+        // Priority 1: Featured items come first
         if (a.featured && !b.featured) return -1;
         if (!a.featured && b.featured) return 1;
+        
+        // Priority 2: Verified providers
+        if (a.verified && !b.verified) return -1;
+        if (!a.verified && b.verified) return 1;
+        
+        // Priority 3: By rating
         return (b.rating || 0) - (a.rating || 0);
       });
       

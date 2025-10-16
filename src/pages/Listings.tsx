@@ -108,18 +108,29 @@ const Listings = () => {
 
     filtered = filtered.filter(item => item.price <= maxPrice);
 
-    // Sort listings
-    if (sortBy === 'price-low') {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortBy === 'price-high') {
-      filtered.sort((a, b) => b.price - a.price);
-    } else if (sortBy === 'distance' && userLocation) {
-      filtered.sort((a, b) => {
+    // Sort listings - OLX/JustDial style: Featured items first!
+    filtered.sort((a, b) => {
+      // First priority: Featured items come first
+      const aFeatured = (a as any).featured || false;
+      const bFeatured = (b as any).featured || false;
+      
+      if (aFeatured && !bFeatured) return -1;
+      if (!aFeatured && bFeatured) return 1;
+      
+      // Second priority: Apply user's selected sort
+      if (sortBy === 'price-low') {
+        return a.price - b.price;
+      } else if (sortBy === 'price-high') {
+        return b.price - a.price;
+      } else if (sortBy === 'distance' && userLocation) {
         const distA = calculateDistance(userLocation, a.location);
         const distB = calculateDistance(userLocation, b.location);
         return distA - distB;
-      });
-    }
+      }
+      
+      // Default: Most recent first
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
 
     setFilteredListings(filtered);
   };
@@ -245,11 +256,21 @@ const Listings = () => {
                     alt={item.title}
                     className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-2 left-2">
-                    <span className="bg-primary text-white px-1.5 py-0.5 rounded text-xs font-semibold">
-                      {item.category}
-                    </span>
-                  </div>
+                  {/* Featured Badge - OLX/JustDial Style */}
+                  {(item as any).featured && (
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg flex items-center gap-1">
+                        ⭐ FEATURED
+                      </span>
+                    </div>
+                  )}
+                  {!(item as any).featured && (
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-primary text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                        {item.category}
+                      </span>
+                    </div>
+                  )}
                   {item.availability === 'Available' && (
                     <div className="absolute top-2 right-2">
                       <span className="bg-green-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">

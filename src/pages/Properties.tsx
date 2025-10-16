@@ -105,6 +105,16 @@ const Properties = () => {
       filtered = filtered.filter((property) => property.furnishing === filters.furnishing);
     }
 
+    // OLX/JustDial Style: Featured properties first!
+    filtered.sort((a, b) => {
+      // Featured items come first
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      
+      // Then by most recent
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+
     setFilteredProperties(filtered);
   };
 
