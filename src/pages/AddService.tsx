@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -13,6 +13,14 @@ const AddService = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+
+  // Require login
+  useEffect(() => {
+    if (!user) {
+      showToast.error('Please login to list a service');
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({
     business_name: '',
@@ -133,7 +141,7 @@ const AddService = () => {
 
     setLoading(true);
     try {
-      await serviceProviderService.createServiceProvider({
+      await serviceProviderService.createProvider({
         business_name: formData.business_name,
         category: formData.category as any,
         description: formData.description,

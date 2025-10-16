@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -13,6 +13,14 @@ const AddProperty = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+
+  // Require login
+  useEffect(() => {
+    if (!user) {
+      showToast.error('Please login to list a property');
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const [formData, setFormData] = useState({
     type: 'flat',
