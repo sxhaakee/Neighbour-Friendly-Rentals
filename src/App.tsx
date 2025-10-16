@@ -28,6 +28,7 @@ import Chat from './pages/Chat';
 import Messages from './pages/Messages';
 import { logPageView } from './utils/analytics';
 import { analyticsService } from './services/analyticsService';
+import { Analytics } from '@vercel/analytics/react';
 
 function AppContent() {
   const location = useLocation();
@@ -71,6 +72,7 @@ function AppContent() {
       <FAB />
       <BookingNotification />
       <ToastContainer />
+      <Analytics />
     </div>
   );
 }

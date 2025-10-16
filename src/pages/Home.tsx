@@ -245,7 +245,8 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group opacity-75"
+              onClick={() => navigate('/services')}
+              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <PartyPopper className="w-8 h-8 text-white" />
@@ -254,9 +255,9 @@ const Home = () => {
               <p className="text-gray-600 mb-4">
                 DJ, catering, decorations, photography and more. Find verified service providers for all your celebrations.
               </p>
-              <div className="flex items-center text-gray-400 font-semibold">
-                Coming Soon
-                <span className="ml-2">🚀</span>
+              <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
+                Browse Services
+                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
               </div>
             </motion.div>
           </div>
