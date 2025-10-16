@@ -9,13 +9,15 @@ import { Database } from '../lib/database.types';
 import { IDVerificationDashboard } from '../components/Admin/IDVerificationDashboard';
 import { OrdersManagement } from '../components/Admin/OrdersManagement';
 import { AgreementsManagement } from '../components/Admin/AgreementsManagement';
+import { PropertiesManagement } from '../components/Admin/PropertiesManagement';
+import { ServicesManagement } from '../components/Admin/ServicesManagement';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState<'listings' | 'verifications' | 'orders' | 'agreements'>('orders');
+  const [activeTab, setActiveTab] = useState<'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements'>('orders');
   const [listings, setListings] = useState<Listing[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
   const [loading, setLoading] = useState(true);
@@ -168,7 +170,27 @@ const Admin = () => {
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
-              📦 Listings
+              📦 Products
+            </button>
+            <button
+              onClick={() => setActiveTab('properties')}
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
+                activeTab === 'properties'
+                  ? 'bg-primary text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              🏠 Properties
+            </button>
+            <button
+              onClick={() => setActiveTab('services')}
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
+                activeTab === 'services'
+                  ? 'bg-primary text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              🎉 Services
             </button>
             <button
               onClick={() => setActiveTab('verifications')}
@@ -196,6 +218,10 @@ const Admin = () => {
         {/* Content based on active tab */}
         {activeTab === 'orders' ? (
           <OrdersManagement />
+        ) : activeTab === 'properties' ? (
+          <PropertiesManagement />
+        ) : activeTab === 'services' ? (
+          <ServicesManagement />
         ) : activeTab === 'verifications' ? (
           <IDVerificationDashboard />
         ) : activeTab === 'agreements' ? (
