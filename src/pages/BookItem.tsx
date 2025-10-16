@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, DollarSign, Clock, CheckCircle, AlertCircle, ArrowLeft, Video, Shield, Truck } from 'lucide-react';
+import { Calendar, DollarSign, Clock, CheckCircle, AlertCircle, ArrowLeft, Video, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -29,7 +29,6 @@ const BookItem = () => {
   const [showAgreement, setShowAgreement] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'upi'>('cash');
   const [isVerified, setIsVerified] = useState(false);
-  const [deliveryOpted, setDeliveryOpted] = useState(false);
   const [videoAcknowledged, setVideoAcknowledged] = useState(false);
   
   // Renter details
@@ -39,7 +38,6 @@ const BookItem = () => {
   // Pricing breakdown
   const [itemPrice, setItemPrice] = useState(0);
   const [serviceCharge, setServiceCharge] = useState(0); // 10% platform fee
-  const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [securityDeposit, setSecurityDeposit] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
 
@@ -58,7 +56,7 @@ const BookItem = () => {
     if (startDate && endDate && listing) {
       calculateCharges();
     }
-  }, [startDate, endDate, deliveryOpted, listing]);
+  }, [startDate, endDate, listing]);
 
   useEffect(() => {
     if (profile) {
@@ -107,22 +105,18 @@ const BookItem = () => {
       const service = itemTotal * 0.10;
       setServiceCharge(service);
       
-      // Delivery & Pickup charge (₹40 for both together)
-      const delivery = deliveryOpted ? 40 : 0;
-      setDeliveryCharge(delivery);
       
       // Security deposit (20% of item price)
       const deposit = itemTotal * 0.20;
       setSecurityDeposit(deposit);
       
       // Grand total (no GST)
-      const total = itemTotal + service + delivery + deposit;
+      const total = itemTotal + service + deposit;
       setGrandTotal(total);
     } else {
       setTotalDays(0);
       setItemPrice(0);
       setServiceCharge(0);
-      setDeliveryCharge(0);
       setSecurityDeposit(0);
       setGrandTotal(0);
     }
@@ -200,11 +194,11 @@ const BookItem = () => {
         item_price: itemPrice,
         platform_commission: serviceCharge,
         service_charge: 0,
-        delivery_charge: deliveryCharge,
+        delivery_charge: 0,
         gst_amount: 0,
         security_deposit: securityDeposit,
-        delivery_opted: deliveryOpted,
-        pickup_opted: deliveryOpted,
+        delivery_opted: false,
+        pickup_opted: false,
         payment_method: paymentMethod,
         status: 'pending',
         payment_status: 'pending',
@@ -265,11 +259,11 @@ const BookItem = () => {
               price_per_day: typedListing.price_per_day,
               item_price: itemPrice,
               service_charge: serviceCharge,
-              delivery_charge: deliveryCharge,
+              delivery_charge: 0,
               security_deposit: securityDeposit,
               total_price: Math.round(grandTotal),
               payment_method: paymentMethod,
-              delivery_opted: deliveryOpted,
+              delivery_opted: false,
             },
             agreed_at: new Date().toISOString(),
           },
@@ -482,43 +476,6 @@ const BookItem = () => {
               </div>
             </motion.div>
 
-            {/* Delivery & Pickup Option */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Truck className="w-5 h-5" />
-                Delivery & Pickup Service
-              </h2>
-              <div className="space-y-3">
-                <label className="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input
-                    type="checkbox"
-                    checked={deliveryOpted}
-                    onChange={(e) => setDeliveryOpted(e.target.checked)}
-                    className="w-4 h-4 text-primary mt-1"
-                  />
-                  <div className="flex-1">
-                    <p className="font-semibold">Delivery & Pickup Service (+₹40)</p>
-                    <p className="text-sm text-gray-600">
-                      We'll deliver the item to your address AND pick it up after the rental period
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      ₹40 includes both delivery and pickup
-                    </p>
-                  </div>
-                </label>
-                {!deliveryOpted && (
-                  <p className="text-sm text-gray-600 italic">
-                    You'll need to arrange pickup and return yourself (meet with the owner)
-                  </p>
-                )}
-              </div>
-            </motion.div>
-
             {/* Video Recording Requirement */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -623,12 +580,6 @@ const BookItem = () => {
                     <span className="text-gray-600">Service charge (10%)</span>
                     <span className="font-semibold">₹{serviceCharge.toFixed(2)}</span>
                   </div>
-                  {deliveryOpted && (
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Delivery & Pickup</span>
-                      <span className="font-semibold">₹{deliveryCharge.toFixed(2)}</span>
-                    </div>
-                  )}
                   <div className="border-t pt-3 flex justify-between text-sm">
                     <span className="text-gray-600 font-semibold">Security Deposit (20%)</span>
                     <span className="font-semibold text-green-600">₹{securityDeposit.toFixed(2)}</span>
