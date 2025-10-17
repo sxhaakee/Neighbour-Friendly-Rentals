@@ -18,6 +18,7 @@ import Properties from './pages/Properties';
 import PropertyDetails from './pages/PropertyDetails';
 import AddProperty from './pages/AddProperty';
 import Services from './pages/Services';
+import ServiceDetails from './pages/ServiceDetails';
 import AddService from './pages/AddService';
 import Terms from './pages/Legal/Terms';
 import Privacy from './pages/Legal/Privacy';
@@ -52,6 +53,7 @@ function AppContent() {
           <Route path="/properties/:id" element={<PropertyDetails />} />
           <Route path="/add-property" element={<AddProperty />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/add-service" element={<AddService />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />

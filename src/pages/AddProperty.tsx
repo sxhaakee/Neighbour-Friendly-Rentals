@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Plus, MapPin, Home } from 'lucide-react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { propertyService } from '../services/propertyService';
 import { showToast } from '../utils/toast';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 import { supabase } from '../lib/supabase';
+import { compressImages } from '../utils/imageCompression';
 
 const AddProperty = () => {
   const navigate = useNavigate();
@@ -125,8 +126,13 @@ const AddProperty = () => {
 
     setUploading(true);
     try {
-      const uploadPromises = Array.from(files).map(async (file) => {
-        const fileExt = file.name.split('.').pop();
+      // COMPRESS IMAGES FIRST
+      const loadingToast = showToast.loading('Compressing images...');
+      const compressedFiles = await compressImages(Array.from(files));
+      showToast.dismiss(loadingToast);
+      
+      const uploadPromises = compressedFiles.map(async (file) => {
+        const fileExt = 'jpg'; // Always use jpg after compression
         const fileName = `${user!.id}-${Date.now()}-${Math.random()}.${fileExt}`;
         const filePath = `properties/${fileName}`;
 
@@ -136,7 +142,6 @@ const AddProperty = () => {
 
         if (uploadError) {
           console.error('Storage upload error:', uploadError);
-          // If bucket doesn't exist, show helpful message
           if (uploadError.message?.includes('Bucket not found')) {
             throw new Error('Storage bucket not configured. Please create "listings" bucket in Supabase Storage.');
           }
@@ -152,10 +157,10 @@ const AddProperty = () => {
 
       const uploadedUrls = await Promise.all(uploadPromises);
       setImages([...images, ...uploadedUrls]);
-      showToast.success(`${uploadedUrls.length} image(s) uploaded`);
+      showToast.success(`${uploadedUrls.length} image(s) uploaded & compressed`);
     } catch (error: any) {
       console.error('Error uploading images:', error);
-      showToast.error(error.message || 'Failed to upload images. Please check storage configuration.');
+      showToast.error(error.message || 'Failed to upload images');
     } finally {
       setUploading(false);
     }

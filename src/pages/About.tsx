@@ -222,51 +222,27 @@ const About = () => {
           </motion.div>
 
           <div className="bg-white rounded-xl shadow-lg p-8">
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="your@email.com"
-                  />
-                </div>
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📧</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Contact Us</h3>
+              <div className="space-y-3 text-lg">
+                <p className="text-gray-700">
+                  <span className="font-semibold">Email:</span>{' '}
+                  <a href="mailto:friendlyrentals.nfr@gmail.com" className="text-primary hover:underline">
+                    friendlyrentals.nfr@gmail.com
+                  </a>
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Phone:</span>{' '}
+                  <a href="tel:+919742374986" className="text-primary hover:underline">
+                    +91 97423 74986
+                  </a>
+                </p>
               </div>
-              
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="What's this about?"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
-                <textarea
-                  rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Tell us more..."
-                ></textarea>
-              </div>
-              
-              <button
-                type="submit"
-                className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+              <p className="text-gray-600 mt-6">
+                We typically respond within 24 hours
+              </p>
+            </div>
           </div>
         </div>
       </section>

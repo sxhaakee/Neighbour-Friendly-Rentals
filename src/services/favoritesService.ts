@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 export interface Favorite {
   id: string;
   user_id: string;
-  item_type: 'item' | 'property' | 'service';
+  type: 'item' | 'property' | 'service';
   item_id: string;
   created_at: string;
 }
@@ -17,7 +17,7 @@ class FavoritesService {
       .from('favorites')
       .insert({
         user_id: user.id,
-        item_type: itemType,
+        type: itemType,
         item_id: itemId,
       });
 
@@ -32,7 +32,7 @@ class FavoritesService {
       .from('favorites')
       .delete()
       .eq('user_id', user.id)
-      .eq('item_type', itemType)
+      .eq('type', itemType)
       .eq('item_id', itemId);
 
     if (error) throw error;
@@ -46,7 +46,7 @@ class FavoritesService {
       .from('favorites')
       .select('id')
       .eq('user_id', user.id)
-      .eq('item_type', itemType)
+      .eq('type', itemType)
       .eq('item_id', itemId)
       .single();
 
@@ -69,7 +69,7 @@ class FavoritesService {
       .from('favorites')
       .select('item_id')
       .eq('user_id', userId)
-      .eq('item_type', itemType);
+      .eq('type', itemType);
 
     if (error) throw error;
     return data?.map(f => f.item_id) || [];

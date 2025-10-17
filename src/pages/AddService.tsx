@@ -7,6 +7,7 @@ import { serviceProviderService } from '../services/serviceProviderService';
 import { showToast } from '../utils/toast';
 import { supabase } from '../lib/supabase';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
+import { compressImages } from '../utils/imageCompression';
 
 const AddService = () => {
   const navigate = useNavigate();
@@ -115,8 +116,13 @@ const AddService = () => {
 
     setUploading(true);
     try {
-      const uploadPromises = Array.from(files).map(async (file) => {
-        const fileExt = file.name.split('.').pop();
+      // COMPRESS IMAGES FIRST
+      const loadingToast = showToast.loading('Compressing images...');
+      const compressedFiles = await compressImages(Array.from(files));
+      showToast.dismiss(loadingToast);
+      
+      const uploadPromises = compressedFiles.map(async (file) => {
+        const fileExt = 'jpg'; // Always use jpg after compression
         const fileName = `${user!.id}-${Date.now()}-${Math.random()}.${fileExt}`;
         const filePath = `services/${fileName}`;
 
@@ -135,7 +141,7 @@ const AddService = () => {
 
       const uploadedUrls = await Promise.all(uploadPromises);
       setImages([...images, ...uploadedUrls]);
-      showToast.success(`${uploadedUrls.length} image(s) uploaded`);
+      showToast.success(`${uploadedUrls.length} image(s) uploaded & compressed`);
     } catch (error: any) {
       console.error('Error uploading images:', error);
       showToast.error('Failed to upload images');
@@ -162,11 +168,6 @@ const AddService = () => {
       return;
     }
 
-    if (formData.services.length === 0) {
-      showToast.error('Please select at least one service');
-      return;
-    }
-
     if (images.length === 0) {
       showToast.error('Please upload at least one image');
       return;
@@ -177,6 +178,7 @@ const AddService = () => {
       await serviceProviderService.createProvider({
         business_name: formData.business_name,
         category: formData.category as any,
+        subcategories: [],
         description: formData.description,
         tagline: formData.tagline || undefined,
         services: formData.services,
@@ -191,8 +193,11 @@ const AddService = () => {
         email: formData.email,
         whatsapp: formData.whatsapp || undefined,
         images,
+        portfolio_images: images,
         years_experience: formData.years_experience ? parseInt(formData.years_experience) : undefined,
         team_size: formData.team_size ? parseInt(formData.team_size) : undefined,
+        equipment_owned: [],
+        certifications: [],
         // Social Media (Optional)
         instagram_url: formData.instagram_url || undefined,
         facebook_url: formData.facebook_url || undefined,

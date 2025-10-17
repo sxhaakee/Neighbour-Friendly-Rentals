@@ -102,11 +102,11 @@ export const PremiumUpgradeModal = ({
 
                 <div className="bg-gradient-to-br from-secondary/10 to-secondary/5 rounded-xl p-6 mb-6">
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold text-gray-900">₹499</span>
+                    <span className="text-5xl font-bold text-gray-900">₹29</span>
                     <span className="text-gray-600">/month</span>
                   </div>
-                  <p className="text-center text-gray-600 text-sm">
-                    or ₹4,999/year (Save 17%)
+                  <p className="text-center text-green-600 text-sm font-semibold">
+                    Limited Time Offer!
                   </p>
                 </div>
 

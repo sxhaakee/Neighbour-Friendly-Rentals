@@ -199,9 +199,9 @@ const Services = () => {
               >
                 {/* Image */}
                 <div className="relative h-48 bg-gradient-to-br from-orange-100 to-pink-100 overflow-hidden">
-                  {service.images && service.images.length > 0 ? (
+                  {(service.portfolio_images?.length > 0 || service.images?.length > 0) ? (
                     <img
-                      src={service.images[0]}
+                      src={service.portfolio_images?.[0] || service.images?.[0]}
                       alt={service.business_name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />

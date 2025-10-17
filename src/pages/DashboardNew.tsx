@@ -116,7 +116,7 @@ const DashboardNew = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-primary via-accent to-secondary text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-teal-500 to-green-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         
@@ -477,18 +477,18 @@ const DashboardNew = () => {
                       {favorites.map((fav) => (
                         <div key={fav.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                           <div className="flex items-center gap-3">
-                            {fav.item_type === 'item' && <Package className="w-5 h-5 text-blue-500" />}
-                            {fav.item_type === 'property' && <Home className="w-5 h-5 text-purple-500" />}
-                            {fav.item_type === 'service' && <Briefcase className="w-5 h-5 text-orange-500" />}
+                            {fav.type === 'item' && <Package className="w-5 h-5 text-blue-500" />}
+                            {fav.type === 'property' && <Home className="w-5 h-5 text-purple-500" />}
+                            {fav.type === 'service' && <Briefcase className="w-5 h-5 text-orange-500" />}
                             <div>
-                              <p className="font-semibold text-gray-900 capitalize">{fav.item_type}</p>
+                              <p className="font-semibold text-gray-900 capitalize">{fav.type}</p>
                               <p className="text-xs text-gray-500">Added {new Date(fav.created_at).toLocaleDateString()}</p>
                             </div>
                           </div>
                           <button
                             onClick={() => {
                               const routes = { item: '/item/', property: '/properties/', service: '/services/' };
-                              navigate(`${routes[fav.item_type as keyof typeof routes]}${fav.item_id}`);
+                              navigate(`${routes[fav.type as keyof typeof routes]}${fav.item_id}`);
                             }}
                             className="text-primary hover:text-primary/80 font-semibold text-sm"
                           >
