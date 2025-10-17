@@ -2,7 +2,7 @@ import { supabase } from '../lib/supabase';
 
 export interface Review {
   id: string;
-  item_id?: string;
+  listing_id?: string;
   property_id?: string;
   service_id?: string;
   user_id: string;
@@ -24,7 +24,7 @@ export interface Review {
 }
 
 export interface ReviewInsert {
-  item_id?: string;
+  listing_id?: string;
   property_id?: string;
   service_id?: string;
   user_id: string;
@@ -42,7 +42,7 @@ export const reviewService = {
         *,
         user:profiles(id, full_name, avatar_url)
       `)
-      .eq('item_id', itemId)
+      .eq('listing_id', itemId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -175,7 +175,7 @@ export const reviewService = {
 
   // Get average rating
   async getAverageRating(type: 'item' | 'property' | 'service', id: string) {
-    const column = type === 'item' ? 'item_id' : type === 'property' ? 'property_id' : 'service_id';
+    const column = type === 'item' ? 'listing_id' : type === 'property' ? 'property_id' : 'service_id';
     
     const { data, error } = await supabase
       .from('reviews')

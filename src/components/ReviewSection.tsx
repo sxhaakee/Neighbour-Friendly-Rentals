@@ -62,7 +62,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
         comment: comment.trim(),
       };
 
-      if (type === 'item') reviewData.item_id = id;
+      if (type === 'item') reviewData.listing_id = id;
       else if (type === 'property') reviewData.property_id = id;
       else reviewData.service_id = id;
 

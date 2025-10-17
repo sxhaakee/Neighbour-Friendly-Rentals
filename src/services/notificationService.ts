@@ -24,27 +24,43 @@ export interface NotificationInsert {
 export const notificationService = {
   // Get user notifications
   async getUserNotifications(userId: string, limit = 50): Promise<Notification[]> {
-    const { data, error } = await supabase
-      .from('notifications')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(limit);
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(limit);
 
-    if (error) throw error;
-    return data || [];
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        return [];
+      }
+      return data || [];
+    } catch (error) {
+      console.error('Error in getUserNotifications:', error);
+      return [];
+    }
   },
 
   // Get unread count
   async getUnreadCount(userId: string): Promise<number> {
-    const { count, error } = await supabase
-      .from('notifications')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('read', false);
+    try {
+      const { count, error } = await supabase
+        .from('notifications')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('read', false);
 
-    if (error) throw error;
-    return count || 0;
+      if (error) {
+        console.error('Error fetching unread count:', error);
+        return 0;
+      }
+      return count || 0;
+    } catch (error) {
+      console.error('Error in getUnreadCount:', error);
+      return 0;
+    }
   },
 
   // Create notification
