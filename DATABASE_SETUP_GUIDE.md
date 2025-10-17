@@ -13,6 +13,17 @@ Run this first to fix the `item_id` → `listing_id` issue:
 -- This fixes the reviews table to use listing_id instead of item_id
 ```
 
+## **STEP 1.5: Fix Bookings Table (IF IT EXISTS)**
+
+If you already have a bookings table with `item_id`, run this:
+
+```sql
+-- File: FIX_BOOKINGS_TABLE.sql
+-- This renames item_id to listing_id in existing bookings table
+```
+
+**Skip this step if:** You're setting up a fresh database
+
 **What it does:**
 - Drops existing reviews table
 - Recreates with `listing_id` column
