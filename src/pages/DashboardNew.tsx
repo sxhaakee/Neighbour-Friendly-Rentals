@@ -73,15 +73,30 @@ const DashboardNew = () => {
     if (!confirm(`Are you sure you want to delete this ${type}?`)) return;
 
     try {
+      // Optimistic UI update - remove from state immediately
+      if (type === 'item') {
+        setMyListings(prev => prev.filter(item => item.id !== id));
+      } else if (type === 'property') {
+        setMyProperties(prev => prev.filter(item => item.id !== id));
+      } else {
+        setMyServices(prev => prev.filter(item => item.id !== id));
+      }
+
+      // Delete from database
       if (type === 'item') await listingService.deleteListing(id);
       else if (type === 'property') await propertyService.deleteProperty(id);
       else await serviceProviderService.deleteProvider(id);
 
       showToast.success(`${type} deleted successfully`);
-      fetchData();
+      
+      // Refresh counts and data
+      await refreshListingCounts();
+      await fetchData();
     } catch (error) {
       console.error(`Error deleting ${type}:`, error);
       showToast.error(`Failed to delete ${type}`);
+      // Revert optimistic update on error
+      await fetchData();
     }
   };
 

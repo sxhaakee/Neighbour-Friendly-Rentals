@@ -3,14 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home as HomeIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
-import { Database } from '../lib/database.types';
 import { AnimatedBackground } from '../components/AnimatedBackground';
-
-type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Home = () => {
   const navigate = useNavigate();
-  const [featuredListings, setFeaturedListings] = useState<Listing[]>([]);
+  const [featuredListings, setFeaturedListings] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -54,115 +51,28 @@ const Home = () => {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.1,
-        when: "beforeChildren"
-      }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { 
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4 overflow-hidden">
         <AnimatedBackground />
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="relative z-10 max-w-4xl mx-auto text-center text-white"
-        >
-          <motion.h1 
-            variants={titleVariants}
-            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
-          >
-            <motion.span
-              className="inline-block"
-              animate={{
-                y: [0, -5, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              Rent Smart.
-            </motion.span>
+        <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            Rent Smart.
             <br />
-            <motion.span
-              className="inline-block"
-              animate={{
-                y: [0, -5, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.3,
-              }}
-            >
-              Share Local.
-            </motion.span>
+            Share Local.
             <br />
-            <motion.span 
-              className="inline-block text-secondary"
-              animate={{
-                y: [0, -5, 0],
-                textShadow: [
-                  "0 0 10px rgba(251, 191, 36, 0.3)",
-                  "0 0 15px rgba(251, 191, 36, 0.4)",
-                  "0 0 10px rgba(251, 191, 36, 0.3)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.6,
-              }}
-            >
+            <span className="text-secondary drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
               Save Together.
-            </motion.span>
-          </motion.h1>
-          <motion.p 
-            variants={itemVariants}
-            className="text-xl md:text-2xl mb-8 text-white/90 font-light"
-          >
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 text-white/90 font-light">
             Connect with your neighbours to share tools, books, electronics, and more.
-          </motion.p>
+          </p>
           
           {/* Search Bar */}
-          <motion.div 
-            variants={itemVariants}
-            className="bg-white rounded-xl p-2 max-w-2xl mx-auto mb-8 shadow-2xl"
-          >
+          <div className="bg-white rounded-xl p-2 max-w-2xl mx-auto mb-8 shadow-2xl">
             <div className="flex flex-col sm:flex-row items-stretch gap-2">
               <div className="flex flex-1 items-center gap-3 px-4 h-12 rounded-lg bg-white">
                 <Search className="text-gray-400 w-5 h-5" />
@@ -182,12 +92,9 @@ const Home = () => {
                 Search
               </button>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-          >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
@@ -210,8 +117,8 @@ const Home = () => {
                 Post an Item
               </Link>
             </motion.div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Categories Section */}
