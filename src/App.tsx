@@ -6,7 +6,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import Home from './pages/Home';
 import Listings from './pages/Listings';
 import ItemDetails from './pages/ItemDetails';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/DashboardNew';
 import About from './pages/About';
 import Login from './pages/Login';
 import AddItem from './pages/AddItem';

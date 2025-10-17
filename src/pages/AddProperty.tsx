@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X } from 'lucide-react';
+import { ArrowLeft, Upload, X, Plus, MapPin, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { propertyService } from '../services/propertyService';
 import { showToast } from '../utils/toast';
+import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 import { supabase } from '../lib/supabase';
 
 const AddProperty = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, canAddListing, listingCounts } = useAuth();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -165,6 +167,11 @@ const AddProperty = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!canAddListing('property')) {
+      setShowPremiumModal(true);
+      return;
+    }
 
     if (!user || !profile) {
       showToast.error('Please login to add a property');
@@ -456,6 +463,17 @@ const AddProperty = () => {
           </div>
         </form>
       </div>
+
+      <PremiumUpgradeModal
+        isOpen={showPremiumModal}
+        onClose={() => {
+          setShowPremiumModal(false);
+          navigate('/dashboard');
+        }}
+        listingType="property"
+        currentCount={listingCounts.properties}
+        limit={2}
+      />
     </div>
   );
 };

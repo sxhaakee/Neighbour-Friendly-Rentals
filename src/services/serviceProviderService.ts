@@ -26,6 +26,13 @@ export interface ServiceProvider {
   logo_url?: string;
   images: string[];
   portfolio_images: string[];
+  // Social Media Links
+  instagram_url?: string;
+  facebook_url?: string;
+  youtube_url?: string;
+  linkedin_url?: string;
+  twitter_url?: string;
+  website_url?: string;
   video_url?: string;
   years_experience?: number;
   team_size?: number;

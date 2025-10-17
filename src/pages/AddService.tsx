@@ -6,11 +6,13 @@ import { useAuth } from '../contexts/AuthContext';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { showToast } from '../utils/toast';
 import { supabase } from '../lib/supabase';
+import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 
 const AddService = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, canAddListing, listingCounts } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
 
@@ -39,6 +41,13 @@ const AddService = () => {
     whatsapp: '',
     years_experience: '',
     team_size: '',
+    // Social Media (Optional)
+    instagram_url: '',
+    facebook_url: '',
+    youtube_url: '',
+    linkedin_url: '',
+    twitter_url: '',
+    website_url: '',
   });
 
   const categories = [
@@ -142,6 +151,11 @@ const AddService = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!canAddListing('service')) {
+      setShowPremiumModal(true);
+      return;
+    }
+
     if (!user || !profile) {
       showToast.error('Please login to add a service');
       navigate('/login');
@@ -179,6 +193,13 @@ const AddService = () => {
         images,
         years_experience: formData.years_experience ? parseInt(formData.years_experience) : undefined,
         team_size: formData.team_size ? parseInt(formData.team_size) : undefined,
+        // Social Media (Optional)
+        instagram_url: formData.instagram_url || undefined,
+        facebook_url: formData.facebook_url || undefined,
+        youtube_url: formData.youtube_url || undefined,
+        linkedin_url: formData.linkedin_url || undefined,
+        twitter_url: formData.twitter_url || undefined,
+        website_url: formData.website_url || undefined,
         status: 'pending',
         verified: false,
         featured: false,
@@ -332,6 +353,43 @@ const AddService = () => {
             </div>
           </div>
 
+          {/* Social Media Links (Optional) */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 md:p-6 shadow-sm border border-purple-100">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-2">Social Media & Online Presence</h2>
+            <p className="text-sm text-gray-600 mb-4">Add your social media links to build trust (Optional)</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Instagram</label>
+                <input type="url" name="instagram_url" value={formData.instagram_url} onChange={handleInputChange} placeholder="https://instagram.com/yourprofile" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Facebook</label>
+                <input type="url" name="facebook_url" value={formData.facebook_url} onChange={handleInputChange} placeholder="https://facebook.com/yourpage" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">YouTube</label>
+                <input type="url" name="youtube_url" value={formData.youtube_url} onChange={handleInputChange} placeholder="https://youtube.com/@yourchannel" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">LinkedIn</label>
+                <input type="url" name="linkedin_url" value={formData.linkedin_url} onChange={handleInputChange} placeholder="https://linkedin.com/in/yourprofile" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Twitter / X</label>
+                <input type="url" name="twitter_url" value={formData.twitter_url} onChange={handleInputChange} placeholder="https://twitter.com/yourhandle" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Website</label>
+                <input type="url" name="website_url" value={formData.website_url} onChange={handleInputChange} placeholder="https://yourwebsite.com" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" />
+              </div>
+            </div>
+          </div>
+
           {/* Images */}
           <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
             <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -371,6 +429,17 @@ const AddService = () => {
           </div>
         </form>
       </div>
+
+      <PremiumUpgradeModal
+        isOpen={showPremiumModal}
+        onClose={() => {
+          setShowPremiumModal(false);
+          navigate('/dashboard');
+        }}
+        listingType="service"
+        currentCount={listingCounts.services}
+        limit={2}
+      />
     </div>
   );
 };
