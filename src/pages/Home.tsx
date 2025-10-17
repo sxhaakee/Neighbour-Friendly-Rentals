@@ -55,7 +55,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-[#1a5557] via-[#2C7A7B] to-[#1a5557] py-20 px-4 overflow-hidden">
         <AnimatedBackground />
         <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
