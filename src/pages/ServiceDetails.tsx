@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Phone, Mail, MapPin, Star, Clock, Users, CheckCircle, Instagram, Facebook, Youtube, Linkedin, Twitter, Globe } from 'lucide-react';
+import { ArrowLeft, Phone, Mail, MapPin, Star, Clock, Users, CheckCircle, Instagram, Facebook, Youtube, Linkedin, Twitter, Globe, X } from 'lucide-react';
 import { serviceProviderService, ServiceProvider } from '../services/serviceProviderService';
 import { showToast } from '../utils/toast';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const ServiceDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [service, setService] = useState<ServiceProvider | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -81,7 +83,8 @@ const ServiceDetails = () => {
                       key={index}
                       src={image}
                       alt={`${service.business_name} ${index + 1}`}
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => setSelectedImage(image)}
                       onError={(e) => {
                         console.error('Image failed to load:', image);
                         e.currentTarget.style.display = 'none';
@@ -91,6 +94,35 @@ const ServiceDetails = () => {
                 </div>
               </div>
             )}
+
+            {/* Image Modal */}
+            <AnimatePresence>
+              {selectedImage && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setSelectedImage(null)}
+                  className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+                >
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                  <motion.img
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.9 }}
+                    src={selectedImage}
+                    alt="Full size"
+                    className="max-w-full max-h-full object-contain"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Business Info */}
             <div className="bg-white rounded-xl shadow-lg p-6">
