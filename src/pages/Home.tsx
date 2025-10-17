@@ -63,7 +63,7 @@ const Home = () => {
             <br />
             Share Local.
             <br />
-            <span className="text-secondary drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
+            <span className="text-secondary">
               Save Together.
             </span>
           </h1>
@@ -271,7 +271,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {featuredListings.map((item: Listing, index: number) => (
+              {featuredListings.map((item: any, index: number) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, y: 20 }}
