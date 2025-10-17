@@ -2,7 +2,7 @@ import { supabase } from '../lib/supabase';
 
 export interface Booking {
   id: string;
-  item_id?: string;
+  listing_id?: string;
   property_id?: string;
   service_id?: string;
   renter_id: string;
@@ -26,7 +26,7 @@ export interface Booking {
 }
 
 export interface BookingInsert {
-  item_id?: string;
+  listing_id?: string;
   property_id?: string;
   service_id?: string;
   renter_id: string;

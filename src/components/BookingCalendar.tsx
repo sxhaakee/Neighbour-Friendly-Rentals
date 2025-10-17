@@ -94,7 +94,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
         special_requests: specialRequests.trim() || undefined,
       };
 
-      if (type === 'item') bookingData.item_id = id;
+      if (type === 'item') bookingData.listing_id = id;
       else if (type === 'property') bookingData.property_id = id;
       else bookingData.service_id = id;
 

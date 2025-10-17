@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 -- 2. CREATE BOOKINGS TABLE
 CREATE TABLE IF NOT EXISTS bookings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  item_id UUID REFERENCES listings(id) ON DELETE CASCADE,
+  listing_id UUID REFERENCES listings(id) ON DELETE CASCADE,
   property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
   service_id UUID REFERENCES service_providers(id) ON DELETE CASCADE,
   renter_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -52,9 +52,9 @@ CREATE TABLE IF NOT EXISTS bookings (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   CONSTRAINT booking_target_check CHECK (
-    (item_id IS NOT NULL AND property_id IS NULL AND service_id IS NULL) OR
-    (item_id IS NULL AND property_id IS NOT NULL AND service_id IS NULL) OR
-    (item_id IS NULL AND property_id IS NULL AND service_id IS NOT NULL)
+    (listing_id IS NOT NULL AND property_id IS NULL AND service_id IS NULL) OR
+    (listing_id IS NULL AND property_id IS NOT NULL AND service_id IS NULL) OR
+    (listing_id IS NULL AND property_id IS NULL AND service_id IS NOT NULL)
   ),
   CONSTRAINT booking_dates_check CHECK (end_date >= start_date)
 );
