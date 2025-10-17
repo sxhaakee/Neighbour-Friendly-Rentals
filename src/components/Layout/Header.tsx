@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import { NotificationCenter } from '../NotificationCenter';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,15 +63,19 @@ const Header = () => {
             ))}
             
             {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
-                >
-                  <User className="w-4 h-4" />
-                  <span className="font-medium">{profile?.full_name || 'User'}</span>
-                  {isAdmin && <Shield className="w-4 h-4" />}
-                </button>
+              <>
+                {/* Notification Center */}
+                <NotificationCenter />
+                
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="font-medium">{profile?.full_name || 'User'}</span>
+                    {isAdmin && <Shield className="w-4 h-4" />}
+                  </button>
                 
                 {showUserMenu && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
@@ -102,6 +107,7 @@ const Header = () => {
                   </div>
                 )}
               </div>
+              </>
             ) : (
               <Link
                 to="/login"

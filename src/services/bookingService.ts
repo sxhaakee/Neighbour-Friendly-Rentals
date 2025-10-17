@@ -1,9 +1,45 @@
 import { supabase } from '../lib/supabase';
-import { Database } from '../lib/database.types';
 
-type Booking = Database['public']['Tables']['bookings']['Row'];
-type BookingInsert = Database['public']['Tables']['bookings']['Insert'];
-type BookingUpdate = Database['public']['Tables']['bookings']['Update'];
+export interface Booking {
+  id: string;
+  item_id?: string;
+  property_id?: string;
+  service_id?: string;
+  renter_id: string;
+  owner_id: string;
+  start_date: string;
+  end_date: string;
+  start_time?: string;
+  end_time?: string;
+  total_price?: number;
+  deposit_amount?: number;
+  notes?: string;
+  special_requests?: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
+  cancellation_reason?: string;
+  cancelled_by?: string;
+  cancelled_at?: string;
+  confirmed_at?: string;
+  completed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookingInsert {
+  item_id?: string;
+  property_id?: string;
+  service_id?: string;
+  renter_id: string;
+  owner_id: string;
+  start_date: string;
+  end_date: string;
+  start_time?: string;
+  end_time?: string;
+  total_price?: number;
+  deposit_amount?: number;
+  notes?: string;
+  special_requests?: string;
+}
 
 export const bookingService = {
   // Create booking
@@ -112,7 +148,7 @@ export const bookingService = {
   },
 
   // Update booking
-  async updateBooking(id: string, updates: BookingUpdate) {
+  async updateBooking(id: string, updates: Partial<Booking>) {
     const { data, error } = await supabase
       .from('bookings')
       .update(updates)
@@ -130,7 +166,7 @@ export const bookingService = {
     paymentStatus: 'paid' | 'refunded',
     razorpayPaymentId?: string
   ) {
-    const updates: BookingUpdate = {
+    const updates: any = {
       payment_status: paymentStatus,
     };
 

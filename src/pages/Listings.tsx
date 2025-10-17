@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, Filter, MapPin, Star, Navigation } from 'lucide-react';
+import { Search, MapPin, Star, Navigation } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { Database } from '../lib/database.types';
+import { SearchFilters, FilterValues } from '../components/SearchFilters';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 
@@ -155,9 +156,9 @@ const Listings = () => {
           transition={{ delay: 0.1 }}
           className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div className="flex items-center gap-4 mb-6">
             {/* Search */}
-            <div className="relative md:col-span-2">
+            <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -168,32 +169,29 @@ const Listings = () => {
               />
             </div>
 
-            {/* Category Filter */}
-            <div>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Sort By */}
-            <div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              >
-                <option value="relevance">Sort: Relevance</option>
-                <option value="distance">Sort: Nearest First</option>
-                <option value="price-low">Sort: Price Low to High</option>
-                <option value="price-high">Sort: Price High to Low</option>
-              </select>
-            </div>
+            {/* Advanced Filters */}
+            <SearchFilters
+              onApplyFilters={(filters: FilterValues) => {
+                if (filters.category) setSelectedCategory(filters.category);
+                if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
+                  setMaxPrice(filters.priceMax || 10000);
+                }
+                if (filters.sortBy) {
+                  const sortMap: Record<string, string> = {
+                    newest: 'relevance',
+                    price_low: 'price-low',
+                    price_high: 'price-high',
+                    popular: 'relevance'
+                  };
+                  setSortBy(sortMap[filters.sortBy] as any);
+                }
+              }}
+              onReset={() => {
+                setSelectedCategory('All');
+                setMaxPrice(10000);
+                setSortBy('relevance');
+              }}
+            />
           </div>
 
           {/* Price Range */}
