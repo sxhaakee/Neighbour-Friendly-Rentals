@@ -6,10 +6,12 @@ import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
 import { compressImages, getEstimatedSize } from '../utils/imageCompression';
 import { showToast } from '../utils/toast';
+import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 
 const AddItem = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, canAddListing, listingCounts } = useAuth();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -31,8 +33,14 @@ const AddItem = () => {
     // Redirect if not logged in
     if (!user) {
       navigate('/login');
+      return;
     }
-  }, [user, navigate]);
+
+    // Check if user can add more items
+    if (!canAddListing('item')) {
+      setShowPremiumModal(true);
+    }
+  }, [user, navigate, canAddListing]);
 
   const categories = [
     'Electronics',
@@ -115,6 +123,13 @@ const AddItem = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check listing limit before proceeding
+    if (!canAddListing('item')) {
+      setShowPremiumModal(true);
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
@@ -422,6 +437,18 @@ const AddItem = () => {
           </form>
         </motion.div>
       </div>
+
+      {/* Premium Upgrade Modal */}
+      <PremiumUpgradeModal
+        isOpen={showPremiumModal}
+        onClose={() => {
+          setShowPremiumModal(false);
+          navigate('/dashboard');
+        }}
+        listingType="item"
+        currentCount={listingCounts.items}
+        limit={3}
+      />
     </div>
   );
 };

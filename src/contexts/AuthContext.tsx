@@ -5,6 +5,12 @@ import { Database } from '../lib/database.types';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
+interface ListingCounts {
+  items: number;
+  properties: number;
+  services: number;
+}
+
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
@@ -16,6 +22,10 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   isAdmin: boolean;
+  isPremium: boolean;
+  listingCounts: ListingCounts;
+  canAddListing: (type: 'item' | 'property' | 'service') => boolean;
+  refreshListingCounts: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,6 +43,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [listingCounts, setListingCounts] = useState<ListingCounts>({
+    items: 0,
+    properties: 0,
+    services: 0,
+  });
 
   useEffect(() => {
     // Get initial session
@@ -73,11 +88,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) throw error;
       setProfile(data);
+      
+      // Fetch listing counts when profile is loaded
+      await refreshListingCounts();
     } catch (error) {
       console.error('Error fetching profile:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const refreshListingCounts = async () => {
+    if (!user) return;
+    
+    try {
+      // Fetch counts for all listing types
+      const [itemsData, propertiesData, servicesData] = await Promise.all([
+        supabase.from('listings').select('id', { count: 'exact', head: true }).eq('owner_id', user.id),
+        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('owner_id', user.id),
+        supabase.from('service_providers').select('id', { count: 'exact', head: true }).eq('owner_id', user.id),
+      ]);
+
+      setListingCounts({
+        items: itemsData.count || 0,
+        properties: propertiesData.count || 0,
+        services: servicesData.count || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching listing counts:', error);
+    }
+  };
+
+  // Check if user is premium
+  const isPremium = profile?.is_premium === true && 
+    (profile?.premium_expires_at === null || new Date(profile.premium_expires_at) > new Date());
+
+  // Check if user can add a listing of specific type
+  const canAddListing = (type: 'item' | 'property' | 'service'): boolean => {
+    if (isPremium) return true; // Premium users have unlimited listings
+    
+    const limits = {
+      item: 3,
+      property: 2,
+      service: 2,
+    };
+
+    const currentCounts = {
+      item: listingCounts.items,
+      property: listingCounts.properties,
+      service: listingCounts.services,
+    };
+
+    return currentCounts[type] < limits[type];
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
@@ -159,6 +221,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signOut,
     refreshProfile,
     isAdmin,
+    isPremium,
+    listingCounts,
+    canAddListing,
+    refreshListingCounts,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
