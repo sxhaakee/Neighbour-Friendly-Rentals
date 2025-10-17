@@ -53,15 +53,34 @@ const AddService = () => {
     { value: 'lighting', label: 'Lighting' },
     { value: 'mehendi', label: 'Mehendi' },
     { value: 'makeup', label: 'Makeup' },
+    // Performers
+    { value: 'singer', label: 'Singer / Vocalist' },
+    { value: 'musician', label: 'Musician / Band' },
+    { value: 'dancer', label: 'Dancer / Choreographer' },
+    { value: 'comedian', label: 'Comedian / Entertainer' },
+    { value: 'sports-coach', label: 'Sports Coach / Player' },
+    { value: 'fitness-trainer', label: 'Fitness Trainer' },
+    { value: 'yoga-instructor', label: 'Yoga Instructor' },
+    { value: 'magician', label: 'Magician' },
+    { value: 'anchor', label: 'Anchor / Emcee' },
   ];
 
-  const servicesList = {
+  const servicesList: Record<string, string[]> = {
     'event-management': ['Wedding Planning', 'Corporate Events', 'Birthday Parties', 'Anniversary', 'Full Event Management'],
     'catering': ['Veg Catering', 'Non-Veg Catering', 'Live Counters', 'Desserts', 'Beverages'],
     'dj': ['Wedding DJ', 'Party DJ', 'Corporate DJ', 'Sound System', 'Lighting'],
     'decoration': ['Flower Decoration', 'Balloon Decoration', 'Stage Decoration', 'Entrance Decoration', 'Theme Decoration'],
     'photography': ['Wedding Photography', 'Pre-Wedding Shoot', 'Candid Photography', 'Traditional Photography', 'Drone Photography'],
     'videography': ['Wedding Video', 'Cinematic Video', 'Highlight Video', 'Traditional Video', 'Drone Video'],
+    'singer': ['Wedding Singer', 'Bollywood Songs', 'Classical Music', 'Ghazals', 'Sufi Music', 'Live Band'],
+    'musician': ['Live Band', 'Solo Performance', 'Instrumental', 'DJ + Live', 'Orchestra'],
+    'dancer': ['Bollywood Dance', 'Classical Dance', 'Contemporary', 'Hip Hop', 'Choreography Services'],
+    'comedian': ['Stand-up Comedy', 'Mimicry', 'Roast Comedy', 'Corporate Entertainment'],
+    'sports-coach': ['Cricket Coaching', 'Football Coaching', 'Badminton', 'Tennis', 'Personal Training'],
+    'fitness-trainer': ['Gym Training', 'Weight Loss', 'Muscle Building', 'Home Training', 'Group Classes'],
+    'yoga-instructor': ['Hatha Yoga', 'Power Yoga', 'Meditation', 'Pranayama', 'Corporate Yoga'],
+    'magician': ['Close-up Magic', 'Stage Magic', 'Kids Magic Show', 'Corporate Events'],
+    'anchor': ['Wedding Anchor', 'Corporate Events', 'Birthday Parties', 'Stage Shows', 'Bilingual'],
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
