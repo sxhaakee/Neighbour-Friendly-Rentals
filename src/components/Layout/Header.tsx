@@ -70,11 +70,11 @@ const Header = () => {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors max-w-[200px]"
                   >
-                    <User className="w-4 h-4" />
-                    <span className="font-medium">{profile?.full_name || 'User'}</span>
-                    {isAdmin && <Shield className="w-4 h-4" />}
+                    <User className="w-4 h-4 flex-shrink-0" />
+                    <span className="font-medium truncate">{profile?.full_name || 'User'}</span>
+                    {isAdmin && <Shield className="w-4 h-4 flex-shrink-0" />}
                   </button>
                 
                 {showUserMenu && (

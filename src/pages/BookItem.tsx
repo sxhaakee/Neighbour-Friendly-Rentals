@@ -17,7 +17,7 @@ type Listing = Database['public']['Tables']['listings']['Row'];
 const BookItem = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user, profile, loading: authLoading } = useAuth();
   
   const [listing, setListing] = useState<Listing | null>(null);
   const [startDate, setStartDate] = useState('');
@@ -42,15 +42,18 @@ const BookItem = () => {
   const [grandTotal, setGrandTotal] = useState(0);
 
   useEffect(() => {
+    // Wait for auth to finish loading before checking
+    if (authLoading) return;
+    
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     checkVerification();
     if (id) {
       fetchListing();
     }
-  }, [user, id, navigate]);
+  }, [user, authLoading, id, navigate]);
 
   useEffect(() => {
     if (startDate && endDate && listing) {

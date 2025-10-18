@@ -2,18 +2,11 @@ import { supabase } from '../lib/supabase';
 
 export interface Review {
   id: string;
-  listing_id?: string;
-  property_id?: string;
-  service_id?: string;
+  listing_id: string;
   user_id: string;
+  user_name: string;
   rating: number;
   comment?: string;
-  photos?: string[];
-  verified_rental: boolean;
-  helpful_count: number;
-  reported: boolean;
-  owner_response?: string;
-  owner_response_date?: string;
   created_at: string;
   updated_at: string;
   user?: {
@@ -24,55 +17,23 @@ export interface Review {
 }
 
 export interface ReviewInsert {
-  listing_id?: string;
-  property_id?: string;
-  service_id?: string;
+  listing_id: string;
   user_id: string;
+  user_name: string;
   rating: number;
   comment?: string;
-  photos?: string[];
 }
 
 export const reviewService = {
-  // Get reviews for an item
-  async getItemReviews(itemId: string): Promise<Review[]> {
+  // Get reviews for a listing
+  async getListingReviews(listingId: string): Promise<Review[]> {
     const { data, error } = await supabase
       .from('reviews')
       .select(`
         *,
         user:profiles(id, full_name, avatar_url)
       `)
-      .eq('listing_id', itemId)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
-  },
-
-  // Get reviews for a property
-  async getPropertyReviews(propertyId: string): Promise<Review[]> {
-    const { data, error } = await supabase
-      .from('reviews')
-      .select(`
-        *,
-        user:profiles(id, full_name, avatar_url)
-      `)
-      .eq('property_id', propertyId)
-      .order('created_at', { ascending: false});
-
-    if (error) throw error;
-    return data || [];
-  },
-
-  // Get reviews for a service
-  async getServiceReviews(serviceId: string): Promise<Review[]> {
-    const { data, error} = await supabase
-      .from('reviews')
-      .select(`
-        *,
-        user:profiles(id, full_name, avatar_url)
-      `)
-      .eq('service_id', serviceId)
+      .eq('listing_id', listingId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;

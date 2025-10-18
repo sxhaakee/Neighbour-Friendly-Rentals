@@ -389,10 +389,12 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- STEP 22.5: Add delivery_charge column to bookings
-ALTER TABLE bookings ADD COLUMN IF NOT EXISTS delivery_charge DECIMAL(10,2) DEFAULT 0;
-ALTER TABLE bookings ADD COLUMN IF NOT EXISTS security_deposit DECIMAL(10,2) DEFAULT 0;
-
-RAISE NOTICE '✅ Added delivery_charge and security_deposit columns to bookings';
+DO $$
+BEGIN
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS delivery_charge DECIMAL(10,2) DEFAULT 0;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS security_deposit DECIMAL(10,2) DEFAULT 0;
+  RAISE NOTICE '✅ Added delivery_charge and security_deposit columns to bookings';
+END $$;
 
 -- STEP 23: Success message
 DO $$
