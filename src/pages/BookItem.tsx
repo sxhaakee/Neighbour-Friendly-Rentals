@@ -110,8 +110,10 @@ const BookItem = () => {
       const deposit = itemTotal * 0.20;
       setSecurityDeposit(deposit);
       
-      // Grand total (no GST)
-      const total = itemTotal + service + deposit;
+      // Grand total = rental + service fee (deposit is NOT added to payment)
+      // Customer pays: rental fee + service fee on pickup
+      // Deposit is just for reference, not charged
+      const total = itemTotal + service;
       setGrandTotal(total);
     } else {
       setTotalDays(0);
@@ -580,19 +582,24 @@ const BookItem = () => {
                     <span className="text-gray-600">Service charge (10%)</span>
                     <span className="font-semibold">₹{serviceCharge.toFixed(2)}</span>
                   </div>
-                  <div className="border-t pt-3 flex justify-between text-sm">
-                    <span className="text-gray-600 font-semibold">Security Deposit (20%)</span>
-                    <span className="font-semibold text-green-600">₹{securityDeposit.toFixed(2)}</span>
-                  </div>
                   <div className="border-t pt-3 flex justify-between">
-                    <span className="font-semibold">Total Amount</span>
+                    <span className="font-semibold">Total Amount to Pay</span>
                     <span className="text-2xl font-bold text-primary">₹{Math.round(grandTotal)}</span>
                   </div>
-                  <p className="text-xs text-gray-500 italic">
-                    *Security deposit will be refunded after item return
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-blue-900 font-semibold">Security Deposit (20%)</span>
+                      <span className="font-semibold text-blue-900">₹{securityDeposit.toFixed(2)}</span>
+                    </div>
+                    <p className="text-xs text-blue-700">
+                      ℹ️ Not charged - For reference only. Deposit is held as trust, not paid.
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-500 italic mt-3">
+                    💰 Payment on pickup: Rental fee + Service charge
                   </p>
                   <p className="text-xs text-gray-500 italic mt-1">
-                    *Service charge is for safe renting and trust
+                    🔒 Service charge (10%) is for safe renting and trust
                   </p>
                 </div>
               ) : (

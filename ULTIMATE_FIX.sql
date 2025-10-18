@@ -366,7 +366,7 @@ RETURNS UUID AS $$
 DECLARE
   v_conversation_id UUID;
 BEGIN
-  -- Try to find existing conversation
+  -- Try to find existing conversation (check both directions)
   SELECT id INTO v_conversation_id
   FROM conversations
   WHERE listing_id = p_listing_id
@@ -382,8 +382,17 @@ BEGIN
   END IF;
   
   RETURN v_conversation_id;
+EXCEPTION
+  WHEN OTHERS THEN
+    RAISE EXCEPTION 'Error creating conversation: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- STEP 22.5: Add delivery_charge column to bookings
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS delivery_charge DECIMAL(10,2) DEFAULT 0;
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS security_deposit DECIMAL(10,2) DEFAULT 0;
+
+RAISE NOTICE '✅ Added delivery_charge and security_deposit columns to bookings';
 
 -- STEP 23: Success message
 DO $$
@@ -403,6 +412,6 @@ BEGIN
   RAISE NOTICE '==============================================';
   RAISE NOTICE '';
   RAISE NOTICE '📝 TO MAKE YOURSELF ADMIN:';
-  RAISE NOTICE 'UPDATE profiles SET role = ''admin'' WHERE email = ''your-email@example.com'';';
+  RAISE NOTICE 'UPDATE profiles SET role = ''admin'' WHERE email = ''friendlyrentals@gmail.com'';';
   RAISE NOTICE '==============================================';
 END $$;
