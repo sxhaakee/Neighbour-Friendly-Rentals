@@ -36,7 +36,7 @@ type Message = {
 };
 
 const Chat = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -47,6 +47,9 @@ const Chat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Wait for auth to finish loading before checking
+    if (authLoading) return;
+    
     if (!user) {
       navigate('/login', { replace: true });
       return;
@@ -58,7 +61,7 @@ const Chat = () => {
     if (listingId) {
       initializeConversationFromListing(listingId);
     }
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   useEffect(() => {
     if (selectedConversation) {
@@ -144,21 +147,43 @@ const Chat = () => {
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !user) return;
 
+    const messageText = newMessage;
+    setNewMessage(''); // Clear input immediately
+
     try {
       // Determine the receiver (the other user in the conversation)
       const receiverId = selectedConversation.user1_id === user.id 
         ? selectedConversation.user2_id 
         : selectedConversation.user1_id;
       
-      await chatService.sendMessage(
+      // Optimistic update - add message to UI immediately
+      const optimisticMessage: Message = {
+        id: `temp-${Date.now()}`,
+        conversation_id: selectedConversation.id,
+        sender_id: user.id,
+        content: messageText,
+        read: false,
+        created_at: new Date().toISOString(),
+      };
+      setMessages(prev => [...prev, optimisticMessage]);
+      
+      // Send to server
+      const sentMessage = await chatService.sendMessage(
         selectedConversation.id,
         user.id,
         receiverId,
-        newMessage
+        messageText
       );
-      setNewMessage('');
+      
+      // Replace optimistic message with real one
+      setMessages(prev => prev.map(msg => 
+        msg.id === optimisticMessage.id ? sentMessage : msg
+      ));
     } catch (error) {
       console.error('Error sending message:', error);
+      // Remove optimistic message on error
+      setMessages(prev => prev.filter(msg => !msg.id.startsWith('temp-')));
+      setNewMessage(messageText); // Restore message text
     }
   };
 
