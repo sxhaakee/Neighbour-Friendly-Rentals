@@ -162,12 +162,13 @@ const AddItem = () => {
         contact_info: formData.contactInfo,
         availability: formData.availability,
         owner_id: user.id,
-        owner_name: profile.full_name || profile.email,
-        owner_email: profile.email,
+        owner_name: profile.full_name || user.email || 'Unknown',
+        owner_email: user.email || profile.email || '',
         images: imageUrls,
         status: 'pending' as const,
       };
 
+      console.log('Creating listing with data:', listingData);
       await listingService.createListing(listingData);
 
       showToast.dismiss(toastId);

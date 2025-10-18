@@ -48,7 +48,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     fetchConversations();

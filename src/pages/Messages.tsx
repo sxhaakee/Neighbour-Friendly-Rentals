@@ -48,7 +48,7 @@ const Messages = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     loadConversations();
