@@ -145,9 +145,15 @@ const Chat = () => {
     if (!newMessage.trim() || !selectedConversation || !user) return;
 
     try {
+      // Determine the receiver (the other user in the conversation)
+      const receiverId = selectedConversation.user1_id === user.id 
+        ? selectedConversation.user2_id 
+        : selectedConversation.user1_id;
+      
       await chatService.sendMessage(
         selectedConversation.id,
         user.id,
+        receiverId,
         newMessage
       );
       setNewMessage('');

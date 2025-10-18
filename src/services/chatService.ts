@@ -140,12 +140,14 @@ export const chatService = {
    * Send a new message
    * @param conversationId - ID of the conversation
    * @param senderId - ID of the sender
+   * @param receiverId - ID of the receiver
    * @param message - Message text
    * @returns The new message object
    */
   async sendMessage(
     conversationId: string,
     senderId: string,
+    receiverId: string,
     message: string
   ): Promise<Message> {
     const { data, error } = await supabase
@@ -153,7 +155,8 @@ export const chatService = {
       .insert({
         conversation_id: conversationId,
         sender_id: senderId,
-        content: message, // Changed from 'message' to 'content'
+        receiver_id: receiverId,
+        content: message,
       })
       .select()
       .single();
