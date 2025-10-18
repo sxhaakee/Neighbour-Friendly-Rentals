@@ -195,9 +195,13 @@ CREATE TABLE referrals (
   UNIQUE(referred_id)
 );
 
--- STEP 7: Add social columns to profiles (if not exists)
+-- STEP 7: Add social columns and role to profiles (if not exists)
 DO $$
 BEGIN
+  -- Add role column for admin access
+  ALTER TABLE profiles ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin'));
+  
+  -- Add social columns
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS followers_count INTEGER DEFAULT 0;
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS following_count INTEGER DEFAULT 0;
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS listings_count INTEGER DEFAULT 0;
@@ -205,11 +209,16 @@ BEGIN
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS reviews_count INTEGER DEFAULT 0;
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS referral_code TEXT UNIQUE;
   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS bio TEXT;
-  RAISE NOTICE '✅ Added social columns to profiles';
+  
+  RAISE NOTICE '✅ Added role and social columns to profiles';
 EXCEPTION
   WHEN duplicate_column THEN
-    RAISE NOTICE 'ℹ️ Social columns already exist';
+    RAISE NOTICE 'ℹ️ Columns already exist';
 END $$;
+
+-- STEP 7.5: Make yourself admin (replace with your email)
+-- Uncomment and update the email below to make a user admin
+-- UPDATE profiles SET role = 'admin' WHERE email = 'your-email@example.com';
 
 -- STEP 8: Create all indexes
 CREATE INDEX IF NOT EXISTS idx_reviews_listing_id ON reviews(listing_id);
@@ -249,7 +258,18 @@ ALTER TABLE user_follows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activity_feed ENABLE ROW LEVEL SECURITY;
 ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
 
--- STEP 10: Create RLS policies
+-- STEP 10: Drop all existing policies first
+DO $$
+DECLARE
+  r RECORD;
+BEGIN
+  FOR r IN (SELECT tablename, policyname FROM pg_policies WHERE schemaname = 'public') LOOP
+    EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON ' || r.tablename;
+  END LOOP;
+  RAISE NOTICE '✅ Dropped all existing RLS policies';
+END $$;
+
+-- STEP 10.5: Create RLS policies
 -- Reviews policies
 CREATE POLICY "Anyone can view reviews" ON reviews FOR SELECT USING (true);
 CREATE POLICY "Users can create reviews" ON reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -290,31 +310,59 @@ CREATE POLICY "Anyone can view follows" ON user_follows FOR SELECT USING (true);
 CREATE POLICY "Users can follow others" ON user_follows FOR INSERT WITH CHECK (auth.uid() = follower_id);
 CREATE POLICY "Users can unfollow" ON user_follows FOR DELETE USING (auth.uid() = follower_id);
 
+-- Activity feed policies - ALLOW ALL INSERTS
 CREATE POLICY "Users can view activity feed" ON activity_feed FOR SELECT USING (true);
-CREATE POLICY "Users can create activities" ON activity_feed FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow all activity inserts" ON activity_feed FOR INSERT WITH CHECK (true);
 
 CREATE POLICY "Users can view their referrals" ON referrals FOR SELECT
   USING (auth.uid() = referrer_id OR auth.uid() = referred_id);
 CREATE POLICY "Users can create referrals" ON referrals FOR INSERT WITH CHECK (auth.uid() = referred_id);
 
--- STEP 11: Create notifications table if it doesn't exist
-CREATE TABLE IF NOT EXISTS notifications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  type TEXT NOT NULL CHECK (type IN ('booking', 'message', 'review', 'payment', 'system', 'reminder')),
-  title TEXT NOT NULL,
-  message TEXT NOT NULL,
-  link TEXT,
-  read BOOLEAN DEFAULT false,
-  data JSONB,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- STEP 11: Create or fix notifications table
+DO $$
+BEGIN
+  -- Check if notifications table exists
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'notifications') THEN
+    -- Add missing columns if they don't exist
+    IF NOT EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'notifications' AND column_name = 'read') THEN
+      ALTER TABLE notifications ADD COLUMN read BOOLEAN DEFAULT false;
+      RAISE NOTICE '✅ Added read column to notifications table';
+    END IF;
+    IF NOT EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'notifications' AND column_name = 'data') THEN
+      ALTER TABLE notifications ADD COLUMN data JSONB;
+      RAISE NOTICE '✅ Added data column to notifications table';
+    END IF;
+    IF NOT EXISTS (SELECT FROM information_schema.columns WHERE table_name = 'notifications' AND column_name = 'link') THEN
+      ALTER TABLE notifications ADD COLUMN link TEXT;
+      RAISE NOTICE '✅ Added link column to notifications table';
+    END IF;
+  ELSE
+    -- Create table if it doesn't exist
+    CREATE TABLE notifications (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+      type TEXT NOT NULL CHECK (type IN ('booking', 'message', 'review', 'payment', 'system', 'reminder')),
+      title TEXT NOT NULL,
+      message TEXT NOT NULL,
+      link TEXT,
+      read BOOLEAN DEFAULT false,
+      data JSONB,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+    RAISE NOTICE '✅ Created notifications table';
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(read);
 
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Users can view their notifications" ON notifications;
+DROP POLICY IF EXISTS "System can create notifications" ON notifications;
+
+-- Create policies
 CREATE POLICY "Users can view their notifications" ON notifications FOR SELECT
   USING (auth.uid() = user_id);
 CREATE POLICY "System can create notifications" ON notifications FOR INSERT
