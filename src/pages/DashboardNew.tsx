@@ -13,7 +13,7 @@ import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 
 const DashboardNew = () => {
   const navigate = useNavigate();
-  const { user, profile, isPremium, listingCounts, canAddListing, refreshListingCounts } = useAuth();
+  const { user, profile, isPremium, listingCounts, canAddListing, refreshListingCounts, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<'items' | 'properties' | 'services' | 'favorites'>('items');
   const [myListings, setMyListings] = useState<any[]>([]);
   const [myProperties, setMyProperties] = useState<any[]>([]);
@@ -24,12 +24,13 @@ const DashboardNew = () => {
   const [premiumModalType, setPremiumModalType] = useState<'item' | 'property' | 'service'>('item');
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     fetchData();
-  }, [user]);
+  }, [user, authLoading, navigate]);
 
   const fetchData = async () => {
     try {

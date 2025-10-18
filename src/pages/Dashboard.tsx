@@ -25,7 +25,7 @@ type Booking = Database['public']['Tables']['bookings']['Row'] & {
 
 const DashboardNew = () => {
   const navigate = useNavigate();
-  const { user, profile, refreshProfile } = useAuth();
+  const { user, profile, loading: authLoading, isAdmin, isPremium, listingCounts, canAddListing, refreshListingCounts } = useAuth();
   const [activeTab, setActiveTab] = useState('listings');
   const [myListings, setMyListings] = useState<Listing[]>([]);
   const [myProperties, setMyProperties] = useState<Property[]>([]);
@@ -42,12 +42,13 @@ const DashboardNew = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     fetchData();
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   useEffect(() => {
     // Update form when profile changes

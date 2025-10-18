@@ -10,7 +10,7 @@ import { showToast } from '../utils/toast';
 const EditItem = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user, profile } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -29,12 +29,13 @@ const EditItem = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     fetchListing();
-  }, [user, id]);
+  }, [id, user, authLoading, navigate]);
 
   const fetchListing = async () => {
     try {

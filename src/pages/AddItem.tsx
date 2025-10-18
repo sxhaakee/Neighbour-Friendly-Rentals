@@ -10,7 +10,7 @@ import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 
 const AddItem = () => {
   const navigate = useNavigate();
-  const { user, profile, canAddListing, listingCounts } = useAuth();
+  const { user, profile, loading: authLoading, canAddListing, listingCounts } = useAuth();
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -31,8 +31,9 @@ const AddItem = () => {
 
   useEffect(() => {
     // Redirect if not logged in
+    if (authLoading) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
 
@@ -40,7 +41,7 @@ const AddItem = () => {
     if (!canAddListing('item')) {
       setShowPremiumModal(true);
     }
-  }, [user, navigate, canAddListing]);
+  }, [user, authLoading, navigate, canAddListing]);
 
   const categories = [
     'Electronics',

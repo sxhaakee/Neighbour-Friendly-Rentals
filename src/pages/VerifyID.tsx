@@ -8,7 +8,7 @@ import { showToast } from '../utils/toast';
 
 const VerifyID = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [documentType, setDocumentType] = useState<'aadhar' | 'pan' | 'passport' | 'driving_license'>('aadhar');
   const [documentNumber, setDocumentNumber] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -18,12 +18,13 @@ const VerifyID = () => {
   const [verificationStatus, setVerificationStatus] = useState<any>(null);
 
   useEffect(() => {
+    if (authLoading) return;
     if (!user) {
-      navigate('/login');
+      navigate('/login', { replace: true });
       return;
     }
     fetchVerificationStatus();
-  }, [user]);
+  }, [user, authLoading, navigate]);
 
   const fetchVerificationStatus = async () => {
     try {

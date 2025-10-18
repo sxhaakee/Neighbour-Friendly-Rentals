@@ -388,12 +388,23 @@ EXCEPTION
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- STEP 22.5: Add delivery_charge column to bookings
+-- STEP 22.5: Add missing columns to bookings table
 DO $$
 BEGIN
+  -- Add all missing columns for bookings
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS item_price DECIMAL(10,2) DEFAULT 0;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS platform_commission DECIMAL(10,2) DEFAULT 0;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS service_charge DECIMAL(10,2) DEFAULT 0;
   ALTER TABLE bookings ADD COLUMN IF NOT EXISTS delivery_charge DECIMAL(10,2) DEFAULT 0;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS gst_amount DECIMAL(10,2) DEFAULT 0;
   ALTER TABLE bookings ADD COLUMN IF NOT EXISTS security_deposit DECIMAL(10,2) DEFAULT 0;
-  RAISE NOTICE '✅ Added delivery_charge and security_deposit columns to bookings';
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS delivery_opted BOOLEAN DEFAULT false;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS pickup_opted BOOLEAN DEFAULT false;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS payment_method TEXT DEFAULT 'cash';
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS renter_phone TEXT;
+  ALTER TABLE bookings ADD COLUMN IF NOT EXISTS renter_address TEXT;
+  
+  RAISE NOTICE '✅ Added all missing columns to bookings table';
 END $$;
 
 -- STEP 23: Success message
