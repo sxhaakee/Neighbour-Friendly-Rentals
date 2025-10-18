@@ -42,6 +42,36 @@ DROP TABLE IF EXISTS user_follows CASCADE;
 DROP TABLE IF EXISTS activity_feed CASCADE;
 DROP TABLE IF EXISTS referrals CASCADE;
 
+-- STEP 2.5: Ensure listings table has user_id column
+DO $$
+BEGIN
+  -- Check if listings table exists
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'listings') THEN
+    -- Check if user_id column exists
+    IF NOT EXISTS (
+      SELECT FROM information_schema.columns 
+      WHERE table_name = 'listings' 
+      AND column_name = 'user_id'
+    ) THEN
+      -- Add user_id column if it doesn't exist
+      ALTER TABLE listings ADD COLUMN user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+      -- Copy owner_id to user_id if owner_id exists
+      IF EXISTS (
+        SELECT FROM information_schema.columns 
+        WHERE table_name = 'listings' 
+        AND column_name = 'owner_id'
+      ) THEN
+        UPDATE listings SET user_id = owner_id WHERE user_id IS NULL;
+      END IF;
+      RAISE NOTICE '✅ Added user_id column to listings table';
+    ELSE
+      RAISE NOTICE 'ℹ️ user_id column already exists in listings table';
+    END IF;
+  ELSE
+    RAISE NOTICE 'ℹ️ listings table does not exist yet';
+  END IF;
+END $$;
+
 -- STEP 3: Create reviews table with listing_id
 CREATE TABLE reviews (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
