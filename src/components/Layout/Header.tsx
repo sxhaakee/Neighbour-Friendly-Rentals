@@ -40,8 +40,7 @@ const Header = () => {
               className="w-12 h-12 object-contain rounded-lg"
             />
             <span className="font-bold text-xl text-gray-900">
-              Neighbour<span className="text-primary">Friendly Rentals</span>
-             
+              Neighbour<span className="text-primary">Friendly</span> Rentals
             </span>
           </Link>
 
