@@ -374,6 +374,7 @@ CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(read);
 
 -- STEP 18: Enable RLS on all tables
+ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE review_helpful_votes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
@@ -403,6 +404,26 @@ CREATE POLICY "Public profiles viewable" ON profiles FOR SELECT USING (true);
 CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
+-- Listings policies
+CREATE POLICY "Anyone can view approved listings" ON listings FOR SELECT
+  USING (
+    status = 'approved' 
+    OR owner_id = auth.uid() 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+CREATE POLICY "Users can create listings" ON listings FOR INSERT
+  WITH CHECK (owner_id = auth.uid());
+CREATE POLICY "Owners can update own listings" ON listings FOR UPDATE
+  USING (
+    owner_id = auth.uid() 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+CREATE POLICY "Owners can delete own listings" ON listings FOR DELETE
+  USING (
+    owner_id = auth.uid() 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
+
 -- Reviews policies
 CREATE POLICY "Anyone can view reviews" ON reviews FOR SELECT USING (true);
 CREATE POLICY "Users can create reviews" ON reviews FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -424,23 +445,43 @@ CREATE POLICY "Users update own bookings" ON bookings FOR UPDATE
 
 -- Service Providers policies
 CREATE POLICY "Anyone can view approved service providers" ON service_providers FOR SELECT
-  USING (status = 'approved' OR auth.uid() = owner_id);
+  USING (
+    status = 'approved' 
+    OR auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 CREATE POLICY "Users can create service providers" ON service_providers FOR INSERT
   WITH CHECK (auth.uid() = owner_id);
 CREATE POLICY "Owners can update own service providers" ON service_providers FOR UPDATE
-  USING (auth.uid() = owner_id);
+  USING (
+    auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 CREATE POLICY "Owners can delete own service providers" ON service_providers FOR DELETE
-  USING (auth.uid() = owner_id);
+  USING (
+    auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- Properties policies
 CREATE POLICY "Anyone can view approved properties" ON properties FOR SELECT
-  USING (status = 'approved' OR auth.uid() = owner_id);
+  USING (
+    status = 'approved' 
+    OR auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 CREATE POLICY "Users can create properties" ON properties FOR INSERT
   WITH CHECK (auth.uid() = owner_id);
 CREATE POLICY "Owners can update own properties" ON properties FOR UPDATE
-  USING (auth.uid() = owner_id);
+  USING (
+    auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 CREATE POLICY "Owners can delete own properties" ON properties FOR DELETE
-  USING (auth.uid() = owner_id);
+  USING (
+    auth.uid() = owner_id 
+    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+  );
 
 -- Conversations policies
 CREATE POLICY "Users view own conversations" ON conversations FOR SELECT

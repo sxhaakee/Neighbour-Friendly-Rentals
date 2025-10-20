@@ -92,6 +92,26 @@ export const listingService = {
 
   // Delete listing
   async deleteListing(id: string) {
+    // First, get the listing to access its images
+    const { data: listing } = await supabase
+      .from('listings')
+      .select('images')
+      .eq('id', id)
+      .single();
+
+    // Delete all images from storage
+    if (listing?.images && listing.images.length > 0) {
+      for (const imageUrl of listing.images) {
+        try {
+          await this.deleteImage(imageUrl);
+        } catch (imgError) {
+          console.error('Error deleting image:', imgError);
+          // Continue even if image deletion fails
+        }
+      }
+    }
+
+    // Delete the listing from database
     const { error } = await supabase
       .from('listings')
       .delete()

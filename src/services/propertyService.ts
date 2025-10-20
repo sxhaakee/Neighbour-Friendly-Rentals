@@ -227,6 +227,30 @@ class PropertyService {
   // Delete property
   async deleteProperty(id: string): Promise<void> {
     try {
+      // First, get the property to access its images
+      const { data: property } = await supabase
+        .from('properties')
+        .select('images')
+        .eq('id', id)
+        .single();
+
+      // Delete all images from storage
+      if (property?.images && property.images.length > 0) {
+        for (const imageUrl of property.images) {
+          try {
+            // Extract path from URL
+            const path = imageUrl.split('/property-images/')[1];
+            if (path) {
+              await supabase.storage.from('property-images').remove([path]);
+            }
+          } catch (imgError) {
+            console.error('Error deleting image:', imgError);
+            // Continue even if image deletion fails
+          }
+        }
+      }
+
+      // Delete the property from database
       const { error } = await supabase
         .from('properties')
         .delete()

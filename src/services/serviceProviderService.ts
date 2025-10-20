@@ -243,6 +243,36 @@ class ServiceProviderService {
   // Delete service provider
   async deleteProvider(id: string): Promise<void> {
     try {
+      // First, get the service provider to access its images
+      const { data: provider } = await supabase
+        .from('service_providers')
+        .select('images, portfolio_images, logo_url')
+        .eq('id', id)
+        .single();
+
+      // Delete all images from storage
+      if (provider) {
+        const allImages = [
+          ...(provider.images || []),
+          ...(provider.portfolio_images || []),
+          ...(provider.logo_url ? [provider.logo_url] : [])
+        ];
+
+        for (const imageUrl of allImages) {
+          try {
+            // Extract path from URL
+            const path = imageUrl.split('/service-images/')[1];
+            if (path) {
+              await supabase.storage.from('service-images').remove([path]);
+            }
+          } catch (imgError) {
+            console.error('Error deleting image:', imgError);
+            // Continue even if image deletion fails
+          }
+        }
+      }
+
+      // Delete the service provider from database
       const { error } = await supabase
         .from('service_providers')
         .delete()
