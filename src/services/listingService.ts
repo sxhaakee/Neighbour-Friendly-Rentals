@@ -90,6 +90,33 @@ export const listingService = {
     return data;
   },
 
+  // Toggle featured status (admin only)
+  async toggleFeatured(id: string, featured: boolean) {
+    const { data, error } = await supabase
+      .from('listings')
+      .update({ featured })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  // Get featured listings for home page
+  async getFeaturedListings(limit: number = 6) {
+    const { data, error } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('featured', true)
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+    return data || [];
+  },
+
   // Delete listing
   async deleteListing(id: string) {
     // First, get the listing to access its images

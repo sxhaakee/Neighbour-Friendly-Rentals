@@ -225,7 +225,7 @@ class ServiceProviderService {
   // Update service provider
   async updateProvider(id: string, updates: Partial<ServiceProvider>): Promise<ServiceProvider> {
     try {
-      const { data, error } = await supabase
+      const { data, error} = await supabase
         .from('service_providers')
         .update(updates)
         .eq('id', id)
@@ -236,6 +236,24 @@ class ServiceProviderService {
       return data;
     } catch (error) {
       console.error('Error updating service provider:', error);
+      throw error;
+    }
+  }
+
+  // Toggle featured status (admin only)
+  async toggleFeatured(id: string, featured: boolean): Promise<ServiceProvider> {
+    try {
+      const { data, error } = await supabase
+        .from('service_providers')
+        .update({ featured })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
       throw error;
     }
   }

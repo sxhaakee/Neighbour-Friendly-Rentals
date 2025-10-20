@@ -224,6 +224,24 @@ class PropertyService {
     }
   }
 
+  // Toggle featured status (admin only)
+  async toggleFeatured(id: string, featured: boolean): Promise<Property> {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .update({ featured })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      throw error;
+    }
+  }
+
   // Delete property
   async deleteProperty(id: string): Promise<void> {
     try {
