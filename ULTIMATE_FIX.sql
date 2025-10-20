@@ -171,6 +171,63 @@ CREATE TABLE bookings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- STEP 13.5: Create service_providers table
+CREATE TABLE IF NOT EXISTS service_providers (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  business_name TEXT NOT NULL,
+  category TEXT NOT NULL,
+  subcategories TEXT[] DEFAULT '{}',
+  description TEXT NOT NULL,
+  tagline TEXT,
+  services TEXT[] DEFAULT '{}',
+  pricing_model TEXT NOT NULL CHECK (pricing_model IN ('per-event', 'per-hour', 'per-day', 'package', 'custom')),
+  base_price DECIMAL(10,2),
+  price_range_min DECIMAL(10,2),
+  price_range_max DECIMAL(10,2),
+  city TEXT NOT NULL,
+  state TEXT NOT NULL,
+  service_areas TEXT[] DEFAULT '{}',
+  latitude DECIMAL(10,8),
+  longitude DECIMAL(11,8),
+  owner_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  contact_person TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT NOT NULL,
+  whatsapp TEXT,
+  website TEXT,
+  logo_url TEXT,
+  images TEXT[] DEFAULT '{}',
+  portfolio_images TEXT[] DEFAULT '{}',
+  instagram_url TEXT,
+  facebook_url TEXT,
+  youtube_url TEXT,
+  linkedin_url TEXT,
+  twitter_url TEXT,
+  website_url TEXT,
+  video_url TEXT,
+  years_experience INTEGER,
+  team_size INTEGER,
+  equipment_owned TEXT[] DEFAULT '{}',
+  certifications TEXT[] DEFAULT '{}',
+  rating DECIMAL(3,2) DEFAULT 0,
+  total_bookings INTEGER DEFAULT 0,
+  completed_bookings INTEGER DEFAULT 0,
+  views_count INTEGER DEFAULT 0,
+  verified BOOLEAN DEFAULT false,
+  business_license TEXT,
+  gst_number TEXT,
+  featured BOOLEAN DEFAULT false,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'inactive')),
+  rejection_reason TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_service_providers_owner ON service_providers(owner_id);
+CREATE INDEX IF NOT EXISTS idx_service_providers_category ON service_providers(category);
+CREATE INDEX IF NOT EXISTS idx_service_providers_city ON service_providers(city);
+CREATE INDEX IF NOT EXISTS idx_service_providers_status ON service_providers(status);
+
 -- STEP 14: Create conversations and messages tables
 CREATE TABLE conversations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -263,6 +320,7 @@ CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(read);
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE review_helpful_votes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE service_providers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_follows ENABLE ROW LEVEL SECURITY;
@@ -305,6 +363,16 @@ CREATE POLICY "Users create bookings" ON bookings FOR INSERT
   WITH CHECK (auth.uid() = renter_id);
 CREATE POLICY "Users update own bookings" ON bookings FOR UPDATE
   USING (auth.uid() = renter_id OR auth.uid() = owner_id);
+
+-- Service Providers policies
+CREATE POLICY "Anyone can view approved service providers" ON service_providers FOR SELECT
+  USING (status = 'approved' OR auth.uid() = owner_id);
+CREATE POLICY "Users can create service providers" ON service_providers FOR INSERT
+  WITH CHECK (auth.uid() = owner_id);
+CREATE POLICY "Owners can update own service providers" ON service_providers FOR UPDATE
+  USING (auth.uid() = owner_id);
+CREATE POLICY "Owners can delete own service providers" ON service_providers FOR DELETE
+  USING (auth.uid() = owner_id);
 
 -- Conversations policies
 CREATE POLICY "Users view own conversations" ON conversations FOR SELECT
