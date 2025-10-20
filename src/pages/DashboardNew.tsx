@@ -296,6 +296,12 @@ const DashboardNew = () => {
                               View
                             </button>
                             <button
+                              onClick={() => navigate(`/edit-item/${item.id}`)}
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-700 py-2 px-3 rounded-lg transition-colors"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
                               onClick={() => handleDelete('item', item.id)}
                               className="bg-red-100 hover:bg-red-200 text-red-700 py-2 px-3 rounded-lg transition-colors"
                             >
@@ -379,6 +385,12 @@ const DashboardNew = () => {
                               View
                             </button>
                             <button
+                              onClick={() => navigate(`/edit-property/${property.id}`)}
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-700 py-2 px-3 rounded-lg transition-colors"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
                               onClick={() => handleDelete('property', property.id)}
                               className="bg-red-100 hover:bg-red-200 text-red-700 py-2 px-3 rounded-lg transition-colors"
                             >
@@ -453,6 +465,12 @@ const DashboardNew = () => {
                             >
                               <Eye className="w-4 h-4" />
                               View
+                            </button>
+                            <button
+                              onClick={() => navigate(`/edit-service/${service.id}`)}
+                              className="bg-blue-100 hover:bg-blue-200 text-blue-700 py-2 px-3 rounded-lg transition-colors"
+                            >
+                              <Edit2 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDelete('service', service.id)}

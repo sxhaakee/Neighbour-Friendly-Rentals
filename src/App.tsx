@@ -11,6 +11,7 @@ import About from './pages/About';
 import Login from './pages/Login';
 import AddItem from './pages/AddItem';
 import EditItem from './pages/EditItem';
+import EditService from './pages/EditService';
 import VerifyID from './pages/VerifyID';
 import Admin from './pages/Admin';
 import BookItem from './pages/BookItem';
@@ -60,6 +61,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/add-item" element={<AddItem />} />
           <Route path="/edit-item/:id" element={<EditItem />} />
+          <Route path="/edit-service/:id" element={<EditService />} />
           <Route path="/verify-id" element={<VerifyID />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/messages" element={<Messages />} />
