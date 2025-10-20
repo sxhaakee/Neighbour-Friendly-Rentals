@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
 import { showToast } from '../utils/toast';
 import { Database } from '../lib/database.types';
+import { notificationService } from '../services/notificationService';
 import { IDVerificationDashboard } from '../components/Admin/IDVerificationDashboard';
 import { OrdersManagement } from '../components/Admin/OrdersManagement';
 import { AgreementsManagement } from '../components/Admin/AgreementsManagement';
@@ -16,7 +17,7 @@ type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Admin = () => {
   const navigate = useNavigate();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements'>('orders');
   const [listings, setListings] = useState<Listing[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
@@ -31,12 +32,15 @@ const Admin = () => {
   });
 
   useEffect(() => {
+    // Wait for auth to load before checking
+    if (authLoading) return;
+    
     if (!user || !isAdmin) {
-      navigate('/');
+      navigate('/', { replace: true });
       return;
     }
     fetchListings();
-  }, [user, isAdmin, navigate, filter]);
+  }, [user, isAdmin, authLoading, navigate, filter]);
 
   const fetchListings = async () => {
     try {
@@ -68,11 +72,23 @@ const Admin = () => {
 
   const handleApprove = async (id: string) => {
     try {
+      const listing = listings.find(l => l.id === id);
       await listingService.approveListing(id);
+      
+      // Send notification to owner
+      if (listing) {
+        await notificationService.notifyListingApproval(
+          listing.owner_id,
+          listing.title,
+          listing.id
+        );
+      }
+      
+      showToast.success('Listing approved and owner notified');
       fetchListings();
     } catch (error) {
       console.error('Error approving listing:', error);
-      alert('Failed to approve listing');
+      showToast.error('Failed to approve listing');
     }
   };
 
@@ -81,8 +97,19 @@ const Admin = () => {
     if (!reason) return;
 
     try {
+      const listing = listings.find(l => l.id === id);
       await listingService.rejectListing(id, reason);
-      showToast.success('Listing rejected');
+      
+      // Send notification to owner
+      if (listing) {
+        await notificationService.notifyListingRejection(
+          listing.owner_id,
+          listing.title,
+          reason
+        );
+      }
+      
+      showToast.success('Listing rejected and owner notified');
       setSelectedListing(null);
       fetchListings();
     } catch (error) {

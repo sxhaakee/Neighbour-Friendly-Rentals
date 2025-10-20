@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 export interface Notification {
   id: string;
   user_id: string;
-  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder';
+  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder' | 'approval' | 'rejection' | 'verification';
   title: string;
   message: string;
   link?: string;
@@ -14,7 +14,7 @@ export interface Notification {
 
 export interface NotificationInsert {
   user_id: string;
-  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder';
+  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder' | 'approval' | 'rejection' | 'verification';
   title: string;
   message: string;
   link?: string;
@@ -137,5 +137,155 @@ export const notificationService = {
     return () => {
       supabase.removeChannel(channel);
     };
+  },
+
+  // Helper: Notify listing approval
+  async notifyListingApproval(ownerId: string, listingTitle: string, listingId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'approval',
+        title: '✅ Listing Approved!',
+        message: `Your listing "${listingTitle}" has been approved and is now live!`,
+        link: `/item/${listingId}`,
+      });
+    } catch (error) {
+      console.error('Error creating approval notification:', error);
+    }
+  },
+
+  // Helper: Notify listing rejection
+  async notifyListingRejection(ownerId: string, listingTitle: string, reason?: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'rejection',
+        title: '❌ Listing Rejected',
+        message: `Your listing "${listingTitle}" was rejected. ${reason ? `Reason: ${reason}` : 'Please contact support for details.'}`,
+        link: '/dashboard',
+      });
+    } catch (error) {
+      console.error('Error creating rejection notification:', error);
+    }
+  },
+
+  // Helper: Notify service provider approval
+  async notifyServiceApproval(ownerId: string, serviceName: string, serviceId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'approval',
+        title: '✅ Service Approved!',
+        message: `Your service "${serviceName}" has been approved and is now visible to customers!`,
+        link: `/service/${serviceId}`,
+      });
+    } catch (error) {
+      console.error('Error creating service approval notification:', error);
+    }
+  },
+
+  // Helper: Notify service provider rejection
+  async notifyServiceRejection(ownerId: string, serviceName: string, reason?: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'rejection',
+        title: '❌ Service Rejected',
+        message: `Your service "${serviceName}" was rejected. ${reason ? `Reason: ${reason}` : 'Please contact support for details.'}`,
+        link: '/dashboard',
+      });
+    } catch (error) {
+      console.error('Error creating service rejection notification:', error);
+    }
+  },
+
+  // Helper: Notify property approval
+  async notifyPropertyApproval(ownerId: string, propertyName: string, propertyId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'approval',
+        title: '✅ Property Approved!',
+        message: `Your property "${propertyName}" has been approved and is now listed!`,
+        link: `/property/${propertyId}`,
+      });
+    } catch (error) {
+      console.error('Error creating property approval notification:', error);
+    }
+  },
+
+  // Helper: Notify property rejection
+  async notifyPropertyRejection(ownerId: string, propertyName: string, reason?: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'rejection',
+        title: '❌ Property Rejected',
+        message: `Your property "${propertyName}" was rejected. ${reason ? `Reason: ${reason}` : 'Please contact support for details.'}`,
+        link: '/dashboard',
+      });
+    } catch (error) {
+      console.error('Error creating property rejection notification:', error);
+    }
+  },
+
+  // Helper: Notify ID verification approval
+  async notifyVerificationApproval(userId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: userId,
+        type: 'verification',
+        title: '✅ ID Verified!',
+        message: 'Your ID verification has been approved. You can now book items!',
+        link: '/dashboard',
+      });
+    } catch (error) {
+      console.error('Error creating verification approval notification:', error);
+    }
+  },
+
+  // Helper: Notify ID verification rejection
+  async notifyVerificationRejection(userId: string, reason?: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: userId,
+        type: 'verification',
+        title: '❌ ID Verification Rejected',
+        message: `Your ID verification was rejected. ${reason ? `Reason: ${reason}` : 'Please resubmit with valid documents.'}`,
+        link: '/verify-id',
+      });
+    } catch (error) {
+      console.error('Error creating verification rejection notification:', error);
+    }
+  },
+
+  // Helper: Notify new booking (to owner)
+  async notifyNewBooking(ownerId: string, renterName: string, itemTitle: string, bookingId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: ownerId,
+        type: 'booking',
+        title: '📅 New Booking Request!',
+        message: `${renterName} wants to book your "${itemTitle}"`,
+        link: `/dashboard?tab=owner-bookings&booking=${bookingId}`,
+      });
+    } catch (error) {
+      console.error('Error creating booking notification:', error);
+    }
+  },
+
+  // Helper: Notify booking confirmation (to renter)
+  async notifyBookingConfirmation(renterId: string, itemTitle: string, bookingId: string): Promise<void> {
+    try {
+      await this.createNotification({
+        user_id: renterId,
+        type: 'booking',
+        title: '✅ Booking Confirmed!',
+        message: `Your booking for "${itemTitle}" has been confirmed!`,
+        link: `/dashboard?tab=my-bookings&booking=${bookingId}`,
+      });
+    } catch (error) {
+      console.error('Error creating booking confirmation notification:', error);
+    }
   },
 };

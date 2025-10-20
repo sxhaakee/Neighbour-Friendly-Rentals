@@ -112,6 +112,9 @@ export const NotificationCenter = () => {
       payment: '💰',
       system: '🔔',
       reminder: '⏰',
+      approval: '✅',
+      rejection: '❌',
+      verification: '🆔',
     };
     return icons[type] || '🔔';
   };

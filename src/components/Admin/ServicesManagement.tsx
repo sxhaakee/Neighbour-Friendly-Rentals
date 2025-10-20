@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PartyPopper, CheckCircle, XCircle, Eye, Trash2, MapPin, IndianRupee, Star } from 'lucide-react';
 import { serviceProviderService, ServiceProvider } from '../../services/serviceProviderService';
 import { showToast } from '../../utils/toast';
+import { notificationService } from '../../services/notificationService';
 
 export const ServicesManagement = () => {
   const [services, setServices] = useState<ServiceProvider[]>([]);
@@ -33,8 +34,19 @@ export const ServicesManagement = () => {
 
   const handleApprove = async (id: string) => {
     try {
+      const service = services.find(s => s.id === id);
       await serviceProviderService.updateProvider(id, { status: 'approved' });
-      showToast.success('Service approved');
+      
+      // Send notification to owner
+      if (service) {
+        await notificationService.notifyServiceApproval(
+          service.owner_id,
+          service.business_name,
+          service.id
+        );
+      }
+      
+      showToast.success('Service approved and owner notified');
       fetchServices();
     } catch (error) {
       console.error('Error approving service:', error);
@@ -47,8 +59,19 @@ export const ServicesManagement = () => {
     if (!reason) return;
 
     try {
-      await serviceProviderService.updateProvider(id, { status: 'rejected' });
-      showToast.success('Service rejected');
+      const service = services.find(s => s.id === id);
+      await serviceProviderService.updateProvider(id, { status: 'rejected', rejection_reason: reason });
+      
+      // Send notification to owner
+      if (service) {
+        await notificationService.notifyServiceRejection(
+          service.owner_id,
+          service.business_name,
+          reason
+        );
+      }
+      
+      showToast.success('Service rejected and owner notified');
       fetchServices();
     } catch (error) {
       console.error('Error rejecting service:', error);

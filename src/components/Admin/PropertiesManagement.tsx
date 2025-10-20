@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Home, CheckCircle, XCircle, Eye, Trash2, MapPin, IndianRupee } from 'lucide-react';
+import { Building2, CheckCircle, XCircle, Eye, Trash2, MapPin, IndianRupee, Star } from 'lucide-react';
 import { propertyService, Property } from '../../services/propertyService';
 import { showToast } from '../../utils/toast';
+import { notificationService } from '../../services/notificationService';
 
 export const PropertiesManagement = () => {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -33,8 +34,19 @@ export const PropertiesManagement = () => {
 
   const handleApprove = async (id: string) => {
     try {
+      const property = properties.find(p => p.id === id);
       await propertyService.updateProperty(id, { status: 'approved' });
-      showToast.success('Property approved');
+      
+      // Send notification to owner
+      if (property) {
+        await notificationService.notifyPropertyApproval(
+          property.owner_id,
+          property.title,
+          property.id
+        );
+      }
+      
+      showToast.success('Property approved and owner notified');
       fetchProperties();
     } catch (error) {
       console.error('Error approving property:', error);
@@ -47,8 +59,19 @@ export const PropertiesManagement = () => {
     if (!reason) return;
 
     try {
-      await propertyService.updateProperty(id, { status: 'rejected' });
-      showToast.success('Property rejected');
+      const property = properties.find(p => p.id === id);
+      await propertyService.updateProperty(id, { status: 'rejected', rejection_reason: reason });
+      
+      // Send notification to owner
+      if (property) {
+        await notificationService.notifyPropertyRejection(
+          property.owner_id,
+          property.title,
+          reason
+        );
+      }
+      
+      showToast.success('Property rejected and owner notified');
       fetchProperties();
     } catch (error) {
       console.error('Error rejecting property:', error);

@@ -7,6 +7,7 @@ import { listingService } from '../services/listingService';
 import { bookingService } from '../services/bookingService';
 import { verificationService } from '../services/verificationService';
 import { rentalAgreementService } from '../services/rentalAgreementService';
+import { notificationService } from '../services/notificationService';
 import { supabase } from '../lib/supabase';
 import { Database } from '../lib/database.types';
 import { showToast } from '../utils/toast';
@@ -277,6 +278,18 @@ const BookItem = () => {
       } catch (agreementError) {
         console.error('Error creating rental agreement:', agreementError);
         // Don't fail the booking if agreement creation fails
+      }
+
+      // Send notification to owner
+      try {
+        await notificationService.notifyNewBooking(
+          typedListing.owner_id,
+          profile.full_name || profile.email,
+          typedListing.title,
+          booking.id
+        );
+      } catch (notifError) {
+        console.error('Error sending notification:', notifError);
       }
 
       showToast.success('Booking created! Check your email for details.');

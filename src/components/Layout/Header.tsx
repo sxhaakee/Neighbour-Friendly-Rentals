@@ -65,9 +65,11 @@ const Header = () => {
             {user ? (
               <>
                 {/* Notification Center */}
-                <NotificationCenter />
+                <div className="relative flex-shrink-0">
+                  <NotificationCenter />
+                </div>
                 
-                <div className="relative">
+                <div className="relative flex-shrink-0">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
                     className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors max-w-[200px]"
