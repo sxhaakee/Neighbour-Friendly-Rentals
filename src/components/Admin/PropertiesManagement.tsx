@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Building2, CheckCircle, XCircle, Eye, Trash2, MapPin, IndianRupee, Star } from 'lucide-react';
+import { Building2, CheckCircle, XCircle, Eye, Trash2, MapPin, IndianRupee, Star, Home } from 'lucide-react';
 import { propertyService, Property } from '../../services/propertyService';
 import { showToast } from '../../utils/toast';
 import { notificationService } from '../../services/notificationService';
@@ -230,7 +230,7 @@ export const PropertiesManagement = () => {
 
                 <div className="flex items-center gap-1 text-lg font-bold text-purple-600 mb-4">
                   <IndianRupee className="w-5 h-5" />
-                  {property.rent?.toLocaleString('en-IN')}/month
+                  {property.rent_amount?.toLocaleString('en-IN')}/month
                 </div>
 
                 {/* Actions */}
@@ -319,17 +319,17 @@ export const PropertiesManagement = () => {
                       <li>Bedrooms: {selectedProperty.bedrooms}</li>
                       <li>Bathrooms: {selectedProperty.bathrooms}</li>
                       <li>Furnishing: {selectedProperty.furnishing}</li>
-                      <li>Area: {selectedProperty.area} sqft</li>
+                      <li>Area: {selectedProperty.area_sqft} sqft</li>
                     </ul>
                   </div>
 
                   <div>
                     <h3 className="font-semibold mb-2">Pricing</h3>
                     <ul className="space-y-1 text-sm text-gray-600">
-                      <li>Rent: ₹{selectedProperty.rent?.toLocaleString('en-IN')}/month</li>
-                      <li>Deposit: ₹{selectedProperty.deposit?.toLocaleString('en-IN')}</li>
-                      {selectedProperty.maintenance && (
-                        <li>Maintenance: ₹{selectedProperty.maintenance.toLocaleString('en-IN')}</li>
+                      <li>Rent: ₹{selectedProperty.rent_amount?.toLocaleString('en-IN')}/month</li>
+                      <li>Deposit: ₹{selectedProperty.deposit_amount?.toLocaleString('en-IN')}</li>
+                      {selectedProperty.maintenance_charges && (
+                        <li>Maintenance: ₹{selectedProperty.maintenance_charges.toLocaleString('en-IN')}</li>
                       )}
                     </ul>
                   </div>
