@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Calendar, User, Shield, Clock, AlertCircle, Star, MessageCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Calendar, MapPin, User, Phone, Mail, MessageCircle, AlertCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { listingService } from '../services/listingService';
-import { reviewService } from '../services/reviewService';
 import { useAuth } from '../contexts/AuthContext';
-import { Database } from '../lib/database.types';
 import { showToast } from '../utils/toast';
+import { ShareButton } from '../components/ShareButton';
+import { reviewService } from '../services/reviewService';
+import { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
