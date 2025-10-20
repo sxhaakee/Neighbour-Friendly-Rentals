@@ -4,6 +4,7 @@ import { ArrowLeft, Phone, Mail, MapPin, Star, Clock, Users, CheckCircle, Instag
 import { serviceProviderService, ServiceProvider } from '../services/serviceProviderService';
 import { showToast } from '../utils/toast';
 import { AnimatePresence, motion } from 'framer-motion';
+import { ShareButton } from '../components/ShareButton';
 
 const ServiceDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -126,19 +127,27 @@ const ServiceDetails = () => {
 
             {/* Business Info */}
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex-1">
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">
                     {service.business_name}
                   </h1>
                   <p className="text-lg text-gray-600">{service.tagline}</p>
                 </div>
-                {service.verified && (
-                  <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                    <CheckCircle className="w-4 h-4" />
-                    <span className="text-sm font-semibold">Verified</span>
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  {service.verified && (
+                    <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="text-sm font-semibold">Verified</span>
+                    </div>
+                  )}
+                  <ShareButton
+                    url={window.location.href}
+                    title={service.business_name}
+                    description={service.description}
+                    className="flex-shrink-0"
+                  />
+                </div>
               </div>
 
               <div className="flex items-center gap-4 mb-6">

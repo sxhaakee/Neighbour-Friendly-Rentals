@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { propertyService, Property } from '../services/propertyService';
 import { showToast } from '../utils/toast';
 import { useAuth } from '../contexts/AuthContext';
+import { ShareButton } from '../components/ShareButton';
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -176,7 +177,15 @@ const PropertyDetails = () => {
 
             {/* Property Info */}
             <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{property.title}</h1>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h1 className="text-3xl font-bold text-gray-900">{property.title}</h1>
+                <ShareButton
+                  url={window.location.href}
+                  title={property.title}
+                  description={property.description}
+                  className="flex-shrink-0"
+                />
+              </div>
               
               <div className="flex items-center gap-2 text-gray-600 mb-6">
                 <MapPin className="w-5 h-5" />

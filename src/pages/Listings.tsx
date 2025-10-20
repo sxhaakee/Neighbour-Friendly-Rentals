@@ -3,16 +3,25 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, MapPin, Star, Navigation } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
+import { serviceProviderService } from '../services/serviceProviderService';
+import { propertyService } from '../services/propertyService';
 import { Database } from '../lib/database.types';
 import { SearchFilters, FilterValues } from '../components/SearchFilters';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
+type ServiceProvider = Database['public']['Tables']['service_providers']['Row'];
+type Property = Database['public']['Tables']['properties']['Row'];
 
 const Listings = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<'items' | 'services' | 'properties'>('items');
   const [listings, setListings] = useState<Listing[]>([]);
+  const [services, setServices] = useState<ServiceProvider[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [filteredListings, setFilteredListings] = useState<Listing[]>([]);
+  const [filteredServices, setFilteredServices] = useState<ServiceProvider[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [maxPrice, setMaxPrice] = useState(10000);

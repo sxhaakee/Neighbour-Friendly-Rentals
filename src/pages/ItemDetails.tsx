@@ -382,7 +382,15 @@ const ItemDetails = () => {
             {/* Header */}
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <div className="mb-4">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">{listing.title}</h1>
+                <div className="flex items-start justify-between gap-4 mb-2">
+                  <h1 className="text-3xl font-bold text-gray-900">{listing.title}</h1>
+                  <ShareButton
+                    url={window.location.href}
+                    title={listing.title}
+                    description={listing.description}
+                    className="flex-shrink-0"
+                  />
+                </div>
                 <div className="flex items-center gap-3 text-sm text-gray-600">
                   <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium">
                     {listing.category}
