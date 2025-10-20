@@ -93,6 +93,17 @@ export const PropertiesManagement = () => {
     }
   };
 
+  const handleToggleFeatured = async (id: string, currentFeatured: boolean) => {
+    try {
+      await propertyService.toggleFeatured(id, !currentFeatured);
+      showToast.success(currentFeatured ? 'Removed from featured' : 'Marked as featured!');
+      fetchProperties();
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      showToast.error('Failed to toggle featured status');
+    }
+  };
+
   const stats = {
     total: properties.length,
     pending: properties.filter(p => p.status === 'pending').length,
@@ -260,6 +271,21 @@ export const PropertiesManagement = () => {
                         Reject
                       </button>
                     </>
+                  )}
+                  
+                  {property.status === 'approved' && (
+                    <button
+                      onClick={() => handleToggleFeatured(property.id, property.featured || false)}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                        property.featured
+                          ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                          : 'bg-gray-200 text-gray-700 hover:bg-yellow-100'
+                      }`}
+                      title={property.featured ? 'Remove from featured' : 'Mark as featured'}
+                    >
+                      <Star className={`w-4 h-4 ${property.featured ? 'fill-current' : ''}`} />
+                      {property.featured ? 'Featured' : 'Feature'}
+                    </button>
                   )}
                   
                   <button

@@ -170,20 +170,22 @@ export const NotificationCenter = () => {
 
               {/* Actions */}
               {notifications.length > 0 && (
-                <div className="p-4 border-b border-gray-200 flex gap-2">
+                <div className="p-3 sm:p-4 border-b border-gray-200 flex gap-2">
                   <button
                     onClick={handleMarkAllRead}
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-100 transition-colors active:scale-95"
                   >
-                    <CheckCheck className="w-4 h-4" />
-                    Mark all read
+                    <CheckCheck className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Mark all read</span>
+                    <span className="sm:hidden">Read All</span>
                   </button>
                   <button
                     onClick={handleDeleteAll}
-                    className="flex items-center gap-2 px-3 py-2 bg-red-50 text-red-700 rounded-lg text-sm font-semibold hover:bg-red-100 transition-colors"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-red-50 text-red-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-100 transition-colors active:scale-95"
                   >
-                    <Trash2 className="w-4 h-4" />
-                    Clear all
+                    <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Clear all</span>
+                    <span className="sm:hidden">Clear</span>
                   </button>
                 </div>
               )}

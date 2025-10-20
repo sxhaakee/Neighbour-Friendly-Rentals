@@ -39,9 +39,9 @@ const Home = () => {
       setLoading(true);
       // Fetch featured items, services, and properties
       const [items, services, properties] = await Promise.all([
-        listingService.getFeaturedListings(3),
-        serviceProviderService.getFeaturedProviders(3),
-        propertyService.getFeaturedProperties(3)
+        listingService.getFeaturedListings(6),
+        serviceProviderService.getFeaturedProviders(6),
+        propertyService.getFeaturedProperties(6)
       ]);
       
       setFeaturedListings(items);
@@ -354,7 +354,7 @@ const Home = () => {
               <p className="text-xl text-gray-600">Top-rated service providers</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {featuredServices.map((service: any, index: number) => (
                 <motion.div
                   key={service.id}
@@ -416,7 +416,7 @@ const Home = () => {
               <p className="text-xl text-gray-600">Premium rental properties</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {featuredProperties.map((property: any, index: number) => (
                 <motion.div
                   key={property.id}

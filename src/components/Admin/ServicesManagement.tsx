@@ -93,6 +93,17 @@ export const ServicesManagement = () => {
     }
   };
 
+  const handleToggleFeatured = async (id: string, currentFeatured: boolean) => {
+    try {
+      await serviceProviderService.toggleFeatured(id, !currentFeatured);
+      showToast.success(currentFeatured ? 'Removed from featured' : 'Marked as featured!');
+      fetchServices();
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      showToast.error('Failed to toggle featured status');
+    }
+  };
+
   const stats = {
     total: services.length,
     pending: services.filter(s => s.status === 'pending').length,
@@ -272,6 +283,21 @@ export const ServicesManagement = () => {
                         Reject
                       </button>
                     </>
+                  )}
+                  
+                  {service.status === 'approved' && (
+                    <button
+                      onClick={() => handleToggleFeatured(service.id, service.featured || false)}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+                        service.featured
+                          ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                          : 'bg-gray-200 text-gray-700 hover:bg-yellow-100'
+                      }`}
+                      title={service.featured ? 'Remove from featured' : 'Mark as featured'}
+                    >
+                      <Star className={`w-4 h-4 ${service.featured ? 'fill-current' : ''}`} />
+                      {service.featured ? 'Featured' : 'Feature'}
+                    </button>
                   )}
                   
                   <button
