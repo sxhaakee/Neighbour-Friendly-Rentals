@@ -134,6 +134,17 @@ const Admin = () => {
     }
   };
 
+  const handleToggleFeatured = async (id: string, currentFeatured: boolean) => {
+    try {
+      await listingService.toggleFeatured(id, !currentFeatured);
+      showToast.success(currentFeatured ? 'Removed from featured' : 'Marked as featured!');
+      fetchListings();
+    } catch (error) {
+      console.error('Error toggling featured status:', error);
+      showToast.error('Failed to toggle featured status');
+    }
+  };
+
   const nextImage = () => {
     if (selectedListing && currentImageIndex < selectedListing.images.length - 1) {
       setCurrentImageIndex(currentImageIndex + 1);
@@ -283,6 +294,33 @@ const Admin = () => {
               />
             </div>
 
+            {/* Recent Activity / Notifications */}
+            <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+              <h3 className="text-lg font-bold mb-4">📬 Recent Activity</h3>
+              <div className="space-y-2">
+                {listings.filter(l => l.status === 'pending').slice(0, 5).map(listing => (
+                  <div key={listing.id} className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                      <div>
+                        <p className="font-semibold text-sm">{listing.title}</p>
+                        <p className="text-xs text-gray-600">Awaiting approval</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setSelectedListing(listing)}
+                      className="text-primary text-sm font-semibold hover:underline"
+                    >
+                      Review
+                    </button>
+                  </div>
+                ))}
+                {listings.filter(l => l.status === 'pending').length === 0 && (
+                  <p className="text-gray-500 text-center py-4">No pending items</p>
+                )}
+              </div>
+            </div>
+
             {/* Filters */}
             <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 mb-4 sm:mb-6 overflow-x-auto">
               <div className="flex gap-2 min-w-max">
@@ -413,6 +451,19 @@ const Admin = () => {
                                 <XCircle className="w-5 h-5" />
                               </button>
                             </>
+                          )}
+                          {listing.status === 'approved' && (
+                            <button
+                              onClick={() => handleToggleFeatured(listing.id, (listing as any).featured || false)}
+                              className={`${
+                                (listing as any).featured
+                                  ? 'text-yellow-600 hover:text-yellow-900'
+                                  : 'text-gray-400 hover:text-yellow-600'
+                              }`}
+                              title={(listing as any).featured ? 'Remove from featured' : 'Mark as featured'}
+                            >
+                              ⭐
+                            </button>
                           )}
                           <button
                             onClick={() => handleDelete(listing.id)}

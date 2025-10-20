@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home as HomeIcon } from 'lucide-react';
+import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home as HomeIcon, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
+import { serviceProviderService } from '../services/serviceProviderService';
+import { propertyService } from '../services/propertyService';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 
 const Home = () => {
   const navigate = useNavigate();
   const [featuredListings, setFeaturedListings] = useState<any[]>([]);
+  const [featuredServices, setFeaturedServices] = useState<any[]>([]);
+  const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -33,11 +37,18 @@ const Home = () => {
   const fetchFeaturedListings = async () => {
     try {
       setLoading(true);
-      const data = await listingService.getApprovedListings();
-      // Get first 4 listings as featured
-      setFeaturedListings(data.slice(0, 4));
+      // Fetch featured items, services, and properties
+      const [items, services, properties] = await Promise.all([
+        listingService.getFeaturedListings(3),
+        serviceProviderService.getFeaturedProviders(3),
+        propertyService.getFeaturedProperties(3)
+      ]);
+      
+      setFeaturedListings(items);
+      setFeaturedServices(services);
+      setFeaturedProperties(properties);
     } catch (error) {
-      console.error('Error fetching listings:', error);
+      console.error('Error fetching featured items:', error);
     } finally {
       setLoading(false);
     }
@@ -327,6 +338,130 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Featured Services */}
+      {featuredServices.length > 0 && (
+        <section className="py-16 px-4 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">⭐ Featured Services</h2>
+              <p className="text-xl text-gray-600">Top-rated service providers</p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {featuredServices.map((service: any, index: number) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -3 }}
+                  onClick={() => navigate(`/services/${service.id}`)}
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                >
+                  <img
+                    src={service.images?.[0] || '/placeholder.jpg'}
+                    alt={service.business_name}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">{service.business_name}</h3>
+                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">{service.description}</p>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span>{service.city}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-center mt-12"
+            >
+              <Link
+                to="/listings"
+                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+              >
+                View All Services
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Properties */}
+      {featuredProperties.length > 0 && (
+        <section className="py-16 px-4">
+          <div className="max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">⭐ Featured Properties</h2>
+              <p className="text-xl text-gray-600">Premium rental properties</p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {featuredProperties.map((property: any, index: number) => (
+                <motion.div
+                  key={property.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -3 }}
+                  onClick={() => navigate(`/properties/${property.id}`)}
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                >
+                  <img
+                    src={property.images?.[0] || '/placeholder.jpg'}
+                    alt={property.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-bold text-lg mb-2">{property.title}</h3>
+                    <p className="text-sm text-gray-600 mb-2">₹{property.rent_amount}/month</p>
+                    <div className="flex items-center text-sm text-gray-500">
+                      <MapPin className="w-4 h-4 mr-1" />
+                      <span>{property.city}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-center mt-12"
+            >
+              <Link
+                to="/listings"
+                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+              >
+                View All Properties
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* Trust Section */}
       <section className="py-16 px-4">
