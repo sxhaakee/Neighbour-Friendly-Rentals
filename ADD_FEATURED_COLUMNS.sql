@@ -48,12 +48,27 @@ BEGIN
     RAISE NOTICE '⏭️  Featured column already exists in properties';
   END IF;
 
-  -- Create indexes for faster featured queries
-  CREATE INDEX IF NOT EXISTS idx_listings_featured ON listings(featured) WHERE featured = TRUE;
-  CREATE INDEX IF NOT EXISTS idx_service_providers_featured ON service_providers(featured) WHERE featured = TRUE;
-  CREATE INDEX IF NOT EXISTS idx_properties_featured ON properties(featured) WHERE featured = TRUE;
+  -- Create indexes for faster featured queries (only if columns exist)
+  BEGIN
+    CREATE INDEX IF NOT EXISTS idx_listings_featured ON listings(featured) WHERE featured = TRUE;
+    RAISE NOTICE '✅ Created index for listings.featured';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '⚠️  Could not create index for listings.featured';
+  END;
   
-  RAISE NOTICE '✅ Created indexes for featured columns';
+  BEGIN
+    CREATE INDEX IF NOT EXISTS idx_service_providers_featured ON service_providers(featured) WHERE featured = TRUE;
+    RAISE NOTICE '✅ Created index for service_providers.featured';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '⚠️  Could not create index for service_providers.featured';
+  END;
+  
+  BEGIN
+    CREATE INDEX IF NOT EXISTS idx_properties_featured ON properties(featured) WHERE featured = TRUE;
+    RAISE NOTICE '✅ Created index for properties.featured';
+  EXCEPTION WHEN OTHERS THEN
+    RAISE NOTICE '⚠️  Could not create index for properties.featured';
+  END;
 
   RAISE NOTICE '==============================================';
   RAISE NOTICE '🎉 Featured columns added successfully!';
