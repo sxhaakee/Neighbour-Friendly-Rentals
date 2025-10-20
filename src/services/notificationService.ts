@@ -288,4 +288,82 @@ export const notificationService = {
       console.error('Error creating booking confirmation notification:', error);
     }
   },
+
+  // Helper: Notify admin of new listing (for approval)
+  async notifyAdminNewListing(listingTitle: string, ownerName: string, listingId: string): Promise<void> {
+    try {
+      // Get all admin users
+      const { data: admins } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('role', 'admin');
+
+      if (!admins || admins.length === 0) return;
+
+      // Send notification to all admins
+      for (const admin of admins) {
+        await this.createNotification({
+          user_id: admin.id,
+          type: 'system',
+          title: '📦 New Listing for Approval',
+          message: `${ownerName} listed "${listingTitle}" - Pending approval`,
+          link: `/admin?tab=listings&filter=pending`,
+        });
+      }
+    } catch (error) {
+      console.error('Error notifying admins of new listing:', error);
+    }
+  },
+
+  // Helper: Notify admin of new service (for approval)
+  async notifyAdminNewService(serviceName: string, ownerName: string, serviceId: string): Promise<void> {
+    try {
+      // Get all admin users
+      const { data: admins } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('role', 'admin');
+
+      if (!admins || admins.length === 0) return;
+
+      // Send notification to all admins
+      for (const admin of admins) {
+        await this.createNotification({
+          user_id: admin.id,
+          type: 'system',
+          title: '🎉 New Service for Approval',
+          message: `${ownerName} listed "${serviceName}" - Pending approval`,
+          link: `/admin?tab=services&filter=pending`,
+        });
+      }
+    } catch (error) {
+      console.error('Error notifying admins of new service:', error);
+    }
+  },
+
+  // Helper: Notify admin of new property (for approval)
+  async notifyAdminNewProperty(propertyTitle: string, ownerName: string, propertyId: string): Promise<void> {
+    try {
+      // Get all admin users
+      const { data: admins } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('role', 'admin');
+
+      if (!admins || admins.length === 0) return;
+
+      // Send notification to all admins
+      for (const admin of admins) {
+        await this.createNotification({
+          user_id: admin.id,
+          type: 'system',
+          title: '🏠 New Property for Approval',
+          message: `${ownerName} listed "${propertyTitle}" - Pending approval`,
+          link: `/admin?tab=properties&filter=pending`,
+        });
+      }
+    } catch (error) {
+      console.error('Error notifying admins of new property:', error);
+    }
+  },
 };

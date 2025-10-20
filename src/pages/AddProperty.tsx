@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { propertyService } from '../services/propertyService';
 import { showToast } from '../utils/toast';
+import { notificationService } from '../services/notificationService';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 import { supabase } from '../lib/supabase';
 import { compressImages } from '../utils/imageCompression';
@@ -191,7 +192,7 @@ const AddProperty = () => {
 
     setLoading(true);
     try {
-      await propertyService.createProperty({
+      const newProperty = await propertyService.createProperty({
         type: formData.type as any,
         title: formData.title,
         description: formData.description,
@@ -228,6 +229,17 @@ const AddProperty = () => {
         verified: false,
         featured: false,
       });
+
+      // Notify admin of new property
+      try {
+        await notificationService.notifyAdminNewProperty(
+          formData.title,
+          profile.full_name || profile.email || 'User',
+          newProperty.id
+        );
+      } catch (notifError) {
+        console.error('Error notifying admin:', notifError);
+      }
 
       showToast.success('Property listed successfully! Awaiting admin approval.');
       navigate('/dashboard');

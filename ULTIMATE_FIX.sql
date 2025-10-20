@@ -228,6 +228,63 @@ CREATE INDEX IF NOT EXISTS idx_service_providers_category ON service_providers(c
 CREATE INDEX IF NOT EXISTS idx_service_providers_city ON service_providers(city);
 CREATE INDEX IF NOT EXISTS idx_service_providers_status ON service_providers(status);
 
+-- STEP 13.6: Create properties table
+CREATE TABLE IF NOT EXISTS properties (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  type TEXT NOT NULL CHECK (type IN ('flat', 'house', 'pg', 'hostel', 'villa', 'commercial', 'office', 'shop', 'warehouse')),
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  address TEXT NOT NULL,
+  city TEXT NOT NULL,
+  state TEXT NOT NULL,
+  pincode TEXT NOT NULL,
+  latitude DECIMAL(10,8),
+  longitude DECIMAL(11,8),
+  locality TEXT,
+  rent_amount DECIMAL(10,2) NOT NULL,
+  deposit_amount DECIMAL(10,2) NOT NULL,
+  maintenance_charges DECIMAL(10,2) DEFAULT 0,
+  negotiable BOOLEAN DEFAULT false,
+  bedrooms INTEGER,
+  bathrooms INTEGER,
+  balconies INTEGER,
+  area_sqft DECIMAL(10,2) NOT NULL,
+  floor_number INTEGER,
+  total_floors INTEGER,
+  age_years INTEGER,
+  furnishing TEXT CHECK (furnishing IN ('furnished', 'semi-furnished', 'unfurnished')),
+  amenities TEXT[] DEFAULT '{}',
+  preferred_tenants TEXT[] DEFAULT '{}',
+  pets_allowed BOOLEAN DEFAULT false,
+  non_veg_allowed BOOLEAN DEFAULT true,
+  images TEXT[] DEFAULT '{}',
+  video_url TEXT,
+  virtual_tour_url TEXT,
+  owner_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  owner_name TEXT NOT NULL,
+  owner_phone TEXT NOT NULL,
+  owner_email TEXT NOT NULL,
+  builder_id UUID,
+  builder_name TEXT,
+  available_from DATE NOT NULL,
+  lease_duration TEXT NOT NULL CHECK (lease_duration IN ('11-months', '1-year', '2-years', '3-years', 'flexible')),
+  minimum_stay_months INTEGER DEFAULT 11,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'rented', 'inactive')),
+  verified BOOLEAN DEFAULT false,
+  featured BOOLEAN DEFAULT false,
+  rejection_reason TEXT,
+  views_count INTEGER DEFAULT 0,
+  inquiries_count INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_properties_owner ON properties(owner_id);
+CREATE INDEX IF NOT EXISTS idx_properties_city ON properties(city);
+CREATE INDEX IF NOT EXISTS idx_properties_type ON properties(type);
+CREATE INDEX IF NOT EXISTS idx_properties_status ON properties(status);
+CREATE INDEX IF NOT EXISTS idx_properties_rent ON properties(rent_amount);
+
 -- STEP 14: Create conversations and messages tables
 CREATE TABLE conversations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -321,6 +378,7 @@ ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE review_helpful_votes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE service_providers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE properties ENABLE ROW LEVEL SECURITY;
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_follows ENABLE ROW LEVEL SECURITY;
@@ -372,6 +430,16 @@ CREATE POLICY "Users can create service providers" ON service_providers FOR INSE
 CREATE POLICY "Owners can update own service providers" ON service_providers FOR UPDATE
   USING (auth.uid() = owner_id);
 CREATE POLICY "Owners can delete own service providers" ON service_providers FOR DELETE
+  USING (auth.uid() = owner_id);
+
+-- Properties policies
+CREATE POLICY "Anyone can view approved properties" ON properties FOR SELECT
+  USING (status = 'approved' OR auth.uid() = owner_id);
+CREATE POLICY "Users can create properties" ON properties FOR INSERT
+  WITH CHECK (auth.uid() = owner_id);
+CREATE POLICY "Owners can update own properties" ON properties FOR UPDATE
+  USING (auth.uid() = owner_id);
+CREATE POLICY "Owners can delete own properties" ON properties FOR DELETE
   USING (auth.uid() = owner_id);
 
 -- Conversations policies

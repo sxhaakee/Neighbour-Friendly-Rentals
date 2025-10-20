@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { showToast } from '../utils/toast';
+import { notificationService } from '../services/notificationService';
 import { supabase } from '../lib/supabase';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 import { compressImages } from '../utils/imageCompression';
@@ -175,7 +176,7 @@ const AddService = () => {
 
     setLoading(true);
     try {
-      await serviceProviderService.createProvider({
+      const newService = await serviceProviderService.createProvider({
         business_name: formData.business_name,
         category: formData.category as any,
         subcategories: [],
@@ -209,6 +210,17 @@ const AddService = () => {
         verified: false,
         featured: false,
       });
+
+      // Notify admin of new service
+      try {
+        await notificationService.notifyAdminNewService(
+          formData.business_name,
+          formData.contact_person || user.email || 'User',
+          newService.id
+        );
+      } catch (notifError) {
+        console.error('Error notifying admin:', notifError);
+      }
 
       showToast.success('Service listed successfully! Awaiting admin approval.');
       navigate('/dashboard');

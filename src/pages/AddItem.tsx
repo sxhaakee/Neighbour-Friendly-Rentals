@@ -7,6 +7,7 @@ import { listingService } from '../services/listingService';
 import { compressImages, getEstimatedSize } from '../utils/imageCompression';
 import { showToast } from '../utils/toast';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
+import { notificationService } from '../services/notificationService';
 
 const AddItem = () => {
   const navigate = useNavigate();
@@ -170,7 +171,18 @@ const AddItem = () => {
       };
 
       console.log('Creating listing with data:', listingData);
-      await listingService.createListing(listingData);
+      const newListing = await listingService.createListing(listingData);
+
+      // Notify admin of new listing
+      try {
+        await notificationService.notifyAdminNewListing(
+          formData.title,
+          profile.full_name || user.email || 'User',
+          newListing.id
+        );
+      } catch (notifError) {
+        console.error('Error notifying admin:', notifError);
+      }
 
       showToast.dismiss(toastId);
       showToast.success('Item added successfully! It will be visible after admin approval.');
