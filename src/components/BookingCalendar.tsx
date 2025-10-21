@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, IndianRupee, AlertCircle, AlertTriangle } from 'lucide-react';
 import { bookingService, BookingInsert } from '../services/bookingService';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { motion } from 'framer-motion';
+import { RentalAgreement } from './Agreement/RentalAgreement';
 
 interface BookingCalendarProps {
   type: 'item' | 'property' | 'service';
@@ -15,7 +17,8 @@ interface BookingCalendarProps {
 
 export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCalendarProps) => {
   const { user } = useAuth();
-  const isVerified = true; // Placeholder - replace with actual verification check
+  const navigate = useNavigate();
+  const isVerified = false; // Set to false to always show verification note - replace with actual check later
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -25,6 +28,8 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
   const [checking, setChecking] = useState(false);
   const [available, setAvailable] = useState<boolean | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showAgreement, setShowAgreement] = useState(false);
+  const [pendingBookingData, setPendingBookingData] = useState<BookingInsert | null>(null);
 
   const calculateDays = () => {
     if (!startDate || !endDate) return 0;
@@ -66,11 +71,6 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
       return;
     }
 
-    if (!isVerified) {
-      showToast.error('Please verify your account before booking');
-      return;
-    }
-
     if (user.id === ownerId) {
       showToast.error('You cannot book your own listing');
       return;
@@ -104,8 +104,25 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
       else if (type === 'property') bookingData.property_id = id;
       else bookingData.service_id = id;
 
-      await bookingService.createBooking(bookingData);
-      showToast.success('Booking request sent successfully!');
+      // Store booking data and show agreement
+      setPendingBookingData(bookingData);
+      setShowAgreement(true);
+    } catch (error: any) {
+      console.error('Error creating booking:', error);
+      showToast.error(error.message || 'Failed to create booking');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleAgreeToAgreement = async () => {
+    if (!pendingBookingData) return;
+
+    try {
+      setSubmitting(true);
+      await bookingService.createBooking(pendingBookingData);
+      
+      showToast.success('Booking confirmed! Redirecting to My Bookings...');
       
       // Reset form
       setStartDate('');
@@ -115,12 +132,26 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
       setNotes('');
       setSpecialRequests('');
       setAvailable(null);
+      setShowAgreement(false);
+      setPendingBookingData(null);
+      
+      // Redirect to My Bookings page
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
     } catch (error: any) {
-      console.error('Error creating booking:', error);
-      showToast.error(error.message || 'Failed to create booking');
+      console.error('Error confirming booking:', error);
+      showToast.error(error.message || 'Failed to confirm booking');
+      setShowAgreement(false);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCancelAgreement = () => {
+    setShowAgreement(false);
+    setPendingBookingData(null);
+    setSubmitting(false);
   };
 
   const today = new Date().toISOString().split('T')[0];
@@ -134,14 +165,14 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg"
+          className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg"
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5" />
             <div>
-              <p className="text-sm font-semibold text-yellow-800 mb-1">Verification Required</p>
-              <p className="text-xs text-yellow-700">
-                Please verify your account before booking. This helps ensure trust and security for all users.
+              <p className="text-sm font-semibold text-blue-800 mb-1">Verification Recommended</p>
+              <p className="text-xs text-blue-700">
+                Verify your account to build trust with owners and increase your booking approval chances.
               </p>
             </div>
           </div>
@@ -303,6 +334,26 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
       <p className="text-xs text-gray-500 text-center mt-4">
         You won't be charged yet. The owner will review your request.
       </p>
+
+      {/* Rental Agreement Modal */}
+      {showAgreement && pendingBookingData && (
+        <RentalAgreement
+          listing={{ title, condition: 'Good' }}
+          renterName={user?.user_metadata?.full_name || user?.email || 'User'}
+          renterPhone={user?.phone || 'Not provided'}
+          renterAddress="Address on file"
+          ownerName="Owner"
+          ownerPhone="Owner Phone"
+          ownerAddress="Owner Address"
+          startDate={startDate}
+          endDate={endDate}
+          totalDays={calculateDays()}
+          totalPrice={totalPrice}
+          orderId={`ORD-${Date.now()}`}
+          onAgree={handleAgreeToAgreement}
+          onCancel={handleCancelAgreement}
+        />
+      )}
     </div>
   );
 };

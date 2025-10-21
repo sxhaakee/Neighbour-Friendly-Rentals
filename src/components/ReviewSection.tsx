@@ -29,15 +29,17 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
       setLoading(true);
       let data: Review[] = [];
       if (type === 'item') {
-        data = await reviewService.getItemReviews(id);
+        data = await reviewService.getListingReviews(id);
       } else if (type === 'property') {
-        data = await reviewService.getPropertyReviews(id);
+        data = await reviewService.getListingReviews(id);
       } else {
-        data = await reviewService.getServiceReviews(id);
+        data = await reviewService.getListingReviews(id);
       }
-      setReviews(data);
-    } catch (error) {
+      setReviews(data || []);
+    } catch (error: any) {
       console.error('Error fetching reviews:', error);
+      // Silently fail - reviews are optional
+      setReviews([]);
     } finally {
       setLoading(false);
     }

@@ -38,7 +38,7 @@ const DashboardNew = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [items, properties, services, favs, bookings, incomingRentals] = await Promise.all([
+      const [items, properties, services, favs, bookings, ownerRentals] = await Promise.all([
         listingService.getUserListings(user!.id),
         propertyService.getOwnerProperties(user!.id),
         serviceProviderService.getOwnerProviders(user!.id),
@@ -52,7 +52,7 @@ const DashboardNew = () => {
       setMyServices(services);
       setFavorites(favs);
       setMyBookings(bookings);
-      setOwnerBookings(incomingRentals);
+      setOwnerBookings(ownerRentals);
       await refreshListingCounts();
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
