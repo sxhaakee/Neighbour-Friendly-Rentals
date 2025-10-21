@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Calendar, Clock, IndianRupee, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Calendar, Clock, IndianRupee, AlertCircle, AlertTriangle } from 'lucide-react';
 import { bookingService, BookingInsert } from '../services/bookingService';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
@@ -15,6 +15,7 @@ interface BookingCalendarProps {
 
 export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCalendarProps) => {
   const { user } = useAuth();
+  const isVerified = true; // Placeholder - replace with actual verification check
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -62,6 +63,11 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
   const handleBooking = async () => {
     if (!user) {
       showToast.error('Please sign in to make a booking');
+      return;
+    }
+
+    if (!isVerified) {
+      showToast.error('Please verify your account before booking');
       return;
     }
 
@@ -122,6 +128,25 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 sticky top-4">
       <h3 className="text-2xl font-bold text-gray-900 mb-4">Book {title}</h3>
+
+      {/* Verification Note for Unverified Users */}
+      {!isVerified && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg"
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-yellow-600 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-yellow-800 mb-1">Verification Required</p>
+              <p className="text-xs text-yellow-700">
+                Please verify your account before booking. This helps ensure trust and security for all users.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {price && (
         <div className="flex items-center gap-2 mb-6 p-4 bg-primary/5 rounded-lg">

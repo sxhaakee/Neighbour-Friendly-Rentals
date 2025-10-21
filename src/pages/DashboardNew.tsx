@@ -222,22 +222,21 @@ const DashboardNew = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-1 md:p-2 mb-4 md:mb-6 overflow-x-auto">
-          <div className="flex gap-1 md:gap-2 min-w-max">
+        <div className="bg-white rounded-2xl shadow-lg p-2 mb-6 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-1 sm:gap-2 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 lg:px-6 py-2 md:py-3 rounded-xl font-semibold transition-all text-xs md:text-sm ${
+                className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all ${
                   activeTab === tab.id
                     ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <tab.icon className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="whitespace-nowrap hidden sm:inline">{tab.label}</span>
-                <span className="whitespace-nowrap sm:hidden">{tab.label.split(' ')[0]}</span>
-                <span className={`px-1.5 md:px-2 py-0.5 rounded-full text-xs font-bold ${
+                <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="whitespace-nowrap">{tab.label}</span>
+                <span className={`px-1 py-0.5 rounded-full text-xs font-bold ${
                   activeTab === tab.id ? 'bg-white/30' : 'bg-gray-200'
                 }`}>
                   {tab.count}
