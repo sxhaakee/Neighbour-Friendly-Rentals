@@ -18,7 +18,7 @@ const DashboardNew = () => {
   const [myListings, setMyListings] = useState<any[]>([]);
   const [myProperties, setMyProperties] = useState<any[]>([]);
   const [myServices, setMyServices] = useState<any[]>([]);
-  const [favorites, setFavorites] = useState<any[]>([]);
+  const [ownerBookings, setOwnerBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [premiumModalType, setPremiumModalType] = useState<'item' | 'property' | 'service'>('item');
@@ -46,6 +46,7 @@ const DashboardNew = () => {
       setMyProperties(properties);
       setMyServices(services);
       setFavorites(favs);
+      setOwnerBookings([]); // Placeholder for now
       await refreshListingCounts();
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
