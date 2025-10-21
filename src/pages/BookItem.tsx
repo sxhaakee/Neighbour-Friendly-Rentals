@@ -105,19 +105,21 @@ const BookItem = () => {
       const itemTotal = typedListing.price * diffDays;
       setItemPrice(itemTotal);
       
-      // Service charge (10% - for safe renting and trust)
-      const service = itemTotal * 0.10;
-      setServiceCharge(service);
-      
+      // Platform commission (20% deducted from rental fee)
+      // Customer pays: itemTotal
+      // Platform gets: 20% of itemTotal
+      // Owner gets: 80% of itemTotal
+      const commission = itemTotal * 0.20;
+      setServiceCharge(commission);
       
       // Security deposit (20% of item price)
       const deposit = itemTotal * 0.20;
       setSecurityDeposit(deposit);
       
-      // Grand total = rental + service fee (deposit is NOT added to payment)
-      // Customer pays: rental fee + service fee on pickup
-      // Deposit is just for reference, not charged
-      const total = itemTotal + service;
+      // Grand total = rental fee (commission is deducted, not added)
+      // Customer pays ONLY the rental fee
+      // Platform takes commission from this amount
+      const total = itemTotal;
       setGrandTotal(total);
     } else {
       setTotalDays(0);
@@ -591,12 +593,18 @@ const BookItem = () => {
               {totalDays > 0 ? (
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Item price (₹{typedListing.price} × {totalDays} days)</span>
+                    <span className="text-gray-600">Rental fee (₹{typedListing.price} × {totalDays} days)</span>
                     <span className="font-semibold">₹{itemPrice.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Service charge (10%)</span>
-                    <span className="font-semibold">₹{serviceCharge.toFixed(2)}</span>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-2 my-2">
+                    <div className="flex justify-between text-xs text-green-700">
+                      <span>Platform commission (20% - included)</span>
+                      <span>₹{serviceCharge.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-green-700 mt-1">
+                      <span>Owner receives (80%)</span>
+                      <span>₹{(itemPrice - serviceCharge).toFixed(2)}</span>
+                    </div>
                   </div>
                   <div className="border-t pt-3 flex justify-between">
                     <span className="font-semibold">Total Amount to Pay</span>

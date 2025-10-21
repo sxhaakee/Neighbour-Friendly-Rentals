@@ -591,19 +591,25 @@ export const OrdersManagement = () => {
                 <h3 className="font-semibold text-lg mb-3">Pricing Breakdown</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Item Price</span>
+                    <span className="text-gray-600">Rental Fee</span>
                     <span className="font-semibold">₹{selectedBooking.item_price || 0}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Service Charge (10%)</span>
-                    <span className="font-semibold">₹{selectedBooking.platform_commission || 0}</span>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-2 my-2">
+                    <div className="flex justify-between text-sm text-green-700">
+                      <span>Platform Commission (20%)</span>
+                      <span className="font-semibold">₹{selectedBooking.platform_commission || 0}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-green-700 mt-1">
+                      <span>Owner Receives (80%)</span>
+                      <span className="font-semibold">₹{(selectedBooking.item_price || 0) - (selectedBooking.platform_commission || 0)}</span>
+                    </div>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Security Deposit (20%)</span>
                     <span className="font-semibold">₹{selectedBooking.security_deposit || 0}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-primary border-t pt-2">
-                    <span>TOTAL</span>
+                    <span>CUSTOMER PAYS</span>
                     <span>₹{selectedBooking.total_price || 0}</span>
                   </div>
                 </div>
