@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, User, Phone, Mail, MessageCircle, AlertCircle, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, User, Phone, Mail, MessageCircle, AlertCircle, X, ChevronLeft, ChevronRight, ArrowLeft, Star, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { useAuth } from '../contexts/AuthContext';
@@ -62,7 +62,7 @@ const ItemDetails = () => {
 
   const fetchAverageRating = async () => {
     try {
-      const { average, count } = await reviewService.getAverageRating(id!);
+      const { average, count } = await reviewService.getAverageRating('item', id!);
       setAverageRating(average);
       setReviewCount(count);
     } catch (error) {

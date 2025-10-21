@@ -27,17 +27,37 @@ export interface ReviewInsert {
 export const reviewService = {
   // Get reviews for a listing
   async getListingReviews(listingId: string): Promise<Review[]> {
-    const { data, error } = await supabase
-      .from('reviews')
-      .select(`
-        *,
-        user:profiles(id, full_name, avatar_url)
-      `)
-      .eq('listing_id', listingId)
-      .order('created_at', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select(`
+          *,
+          user:profiles(id, full_name, avatar_url)
+        `)
+        .eq('listing_id', listingId)
+        .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    return data || [];
+      if (error) {
+        // If profiles relationship doesn't work, fetch without it
+        if (error.message.includes('foreign key') || error.message.includes('relationship')) {
+          console.warn('Profiles relationship error, fetching reviews without user data');
+          const { data: simpleData, error: simpleError } = await supabase
+            .from('reviews')
+            .select('*')
+            .eq('listing_id', listingId)
+            .order('created_at', { ascending: false });
+          
+          if (simpleError) throw simpleError;
+          return simpleData || [];
+        }
+        throw error;
+      }
+      
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      return [];
+    }
   },
 
   // Create review
@@ -138,23 +158,35 @@ export const reviewService = {
   async getAverageRating(type: 'item' | 'property' | 'service', id: string) {
     const column = type === 'item' ? 'listing_id' : type === 'property' ? 'property_id' : 'service_id';
     
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('rating')
-      .eq(column, id);
+    try {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select('rating')
+        .eq(column, id);
 
-    if (error) throw error;
+      if (error) {
+        // If column doesn't exist yet, return empty result
+        if (error.message.includes('does not exist')) {
+          console.warn(`Column ${column} does not exist in reviews table yet. Run FIX_REVIEWS_SCHEMA.sql`);
+          return { average: 0, count: 0 };
+        }
+        throw error;
+      }
 
-    if (!data || data.length === 0) {
+      if (!data || data.length === 0) {
+        return { average: 0, count: 0 };
+      }
+
+      const sum = data.reduce((acc, review) => acc + review.rating, 0);
+      const average = sum / data.length;
+
+      return {
+        average: Math.round(average * 10) / 10,
+        count: data.length,
+      };
+    } catch (error) {
+      console.error('Error fetching average rating:', error);
       return { average: 0, count: 0 };
     }
-
-    const sum = data.reduce((acc, review) => acc + review.rating, 0);
-    const average = sum / data.length;
-
-    return {
-      average: Math.round(average * 10) / 10,
-      count: data.length,
-    };
   },
 };
