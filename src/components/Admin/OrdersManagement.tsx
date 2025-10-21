@@ -596,11 +596,11 @@ export const OrdersManagement = () => {
                   </div>
                   <div className="bg-green-50 border border-green-200 rounded-lg p-2 my-2">
                     <div className="flex justify-between text-sm text-green-700">
-                      <span>Platform Commission (20%)</span>
+                      <span>Platform Commission (15%)</span>
                       <span className="font-semibold">₹{selectedBooking.platform_commission || 0}</span>
                     </div>
                     <div className="flex justify-between text-sm text-green-700 mt-1">
-                      <span>Owner Receives (80%)</span>
+                      <span>Owner Receives (85%)</span>
                       <span className="font-semibold">₹{(selectedBooking.item_price || 0) - (selectedBooking.platform_commission || 0)}</span>
                     </div>
                   </div>

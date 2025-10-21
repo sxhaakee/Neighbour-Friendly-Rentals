@@ -105,11 +105,11 @@ const BookItem = () => {
       const itemTotal = typedListing.price * diffDays;
       setItemPrice(itemTotal);
       
-      // Platform commission (20% deducted from rental fee)
+      // Platform commission (15% deducted from rental fee)
       // Customer pays: itemTotal
-      // Platform gets: 20% of itemTotal
-      // Owner gets: 80% of itemTotal
-      const commission = itemTotal * 0.20;
+      // Platform gets: 15% of itemTotal
+      // Owner gets: 85% of itemTotal
+      const commission = itemTotal * 0.15;
       setServiceCharge(commission);
       
       // Security deposit (20% of item price)
@@ -596,14 +596,10 @@ const BookItem = () => {
                     <span className="text-gray-600">Rental fee (₹{typedListing.price} × {totalDays} days)</span>
                     <span className="font-semibold">₹{itemPrice.toFixed(2)}</span>
                   </div>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-2 my-2">
-                    <div className="flex justify-between text-xs text-green-700">
-                      <span>Platform commission (20% - included)</span>
-                      <span>₹{serviceCharge.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-xs text-green-700 mt-1">
-                      <span>Owner receives (80%)</span>
-                      <span>₹{(itemPrice - serviceCharge).toFixed(2)}</span>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-2 my-2">
+                    <div className="flex items-center gap-2 text-xs text-blue-700">
+                      <span className="inline-block w-2 h-2 bg-blue-500 rounded-full"></span>
+                      <span>Platform fee (15% included in rental fee)</span>
                     </div>
                   </div>
                   <div className="border-t pt-3 flex justify-between">
