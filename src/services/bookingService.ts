@@ -224,6 +224,22 @@ export const bookingService = {
     return data;
   },
 
+  // Update booking status (generic method)
+  async updateBookingStatus(id: string, status: string) {
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ 
+        status,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
   // Check if dates are available for a listing
   async checkAvailability(listingId: string, startDate: string, endDate: string) {
     const { data, error } = await supabase

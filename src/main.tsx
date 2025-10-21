@@ -8,7 +8,7 @@ import './index.css';
 import { analyticsService } from './services/analyticsService';
 
 // Initialize Sentry
-if (import.meta.env.VITE_SENTRY_DSN) {
+if (import.meta.env.VITE_SENTRY_DSN && import.meta.env.VITE_SENTRY_DSN !== 'https://your_sentry_dsn') {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,

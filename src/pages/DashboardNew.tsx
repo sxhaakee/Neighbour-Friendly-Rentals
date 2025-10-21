@@ -168,7 +168,7 @@ const DashboardNew = () => {
             className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
           >
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                 Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
               </h1>
               <p className="text-teal-100 text-sm md:text-base">
@@ -222,21 +222,22 @@ const DashboardNew = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-lg p-2 mb-6 overflow-x-auto">
-          <div className="flex gap-2 min-w-max">
+        <div className="bg-white rounded-2xl shadow-lg p-1 md:p-2 mb-4 md:mb-6 overflow-x-auto">
+          <div className="flex gap-1 md:gap-2 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 md:px-6 py-3 rounded-xl font-semibold transition-all ${
+                className={`flex items-center gap-1 md:gap-2 px-2 md:px-4 lg:px-6 py-2 md:py-3 rounded-xl font-semibold transition-all text-xs md:text-sm ${
                   activeTab === tab.id
                     ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
-                <tab.icon className="w-5 h-5" />
-                <span className="whitespace-nowrap">{tab.label}</span>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
+                <tab.icon className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="whitespace-nowrap hidden sm:inline">{tab.label}</span>
+                <span className="whitespace-nowrap sm:hidden">{tab.label.split(' ')[0]}</span>
+                <span className={`px-1.5 md:px-2 py-0.5 rounded-full text-xs font-bold ${
                   activeTab === tab.id ? 'bg-white/30' : 'bg-gray-200'
                 }`}>
                   {tab.count}
@@ -618,35 +619,35 @@ const DashboardNew = () => {
                         key={booking.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                        className="bg-white rounded-xl p-4 md:p-6 shadow-lg border border-gray-100"
                       >
-                        <div className="flex items-start justify-between mb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">{booking.listing?.title || 'Item'}</h3>
-                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <h3 className="text-base md:text-lg font-bold text-gray-900 mb-2 line-clamp-2">{booking.listing?.title || 'Item'}</h3>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                               <div className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
+                                <Calendar className="w-4 h-4 flex-shrink-0" />
+                                <span className="text-xs md:text-sm">{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
                               </div>
                               <div className="flex items-center gap-1">
-                                <IndianRupee className="w-4 h-4" />
-                                <span className="font-semibold">₹{booking.total_price}</span>
+                                <IndianRupee className="w-4 h-4 flex-shrink-0" />
+                                <span className="font-semibold text-sm md:text-base">₹{booking.total_price}</span>
                               </div>
                             </div>
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
+                          <span className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold self-start ${getStatusColor(booking.status)}`}>
                             {booking.status}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-gray-500">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div className="text-xs md:text-sm text-gray-500">
                             Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
                               {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
                             </span>
                           </div>
                           <button
                             onClick={() => navigate(`/item/${booking.listing_id}`)}
-                            className="text-primary hover:text-primary/80 font-semibold text-sm"
+                            className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm self-start sm:self-auto"
                           >
                             View Item
                           </button>
@@ -682,45 +683,45 @@ const DashboardNew = () => {
                         key={booking.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                        className="bg-white rounded-xl p-4 md:p-6 shadow-lg border border-gray-100"
                       >
-                        <div className="flex items-start justify-between mb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
                           <div className="flex-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">{booking.listing?.title || 'Item'}</h3>
-                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <h3 className="text-base md:text-lg font-bold text-gray-900 mb-2 line-clamp-2">{booking.listing?.title || 'Item'}</h3>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                               <div className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                <span>{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
+                                <Calendar className="w-4 h-4 flex-shrink-0" />
+                                <span className="text-xs md:text-sm">{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
                               </div>
                               <div className="flex items-center gap-1">
-                                <IndianRupee className="w-4 h-4" />
-                                <span className="font-semibold">₹{booking.total_price}</span>
+                                <IndianRupee className="w-4 h-4 flex-shrink-0" />
+                                <span className="font-semibold text-sm md:text-base">₹{booking.total_price}</span>
                               </div>
                             </div>
-                            <p className="text-sm text-gray-500 mt-2">Rented by: {booking.renter?.full_name || 'Unknown'}</p>
+                            <p className="text-xs md:text-sm text-gray-500 mt-2">Rented by: {booking.renter?.full_name || 'Unknown'}</p>
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
+                          <span className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold self-start ${getStatusColor(booking.status)}`}>
                             {booking.status}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-gray-500">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <div className="text-xs md:text-sm text-gray-500">
                             Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
                               {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
                             </span>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex flex-col sm:flex-row gap-2">
                             {booking.status === 'pending' && (
                               <button
                                 onClick={() => handleBookingAction(booking.id, 'confirmed')}
-                                className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-semibold transition-colors"
+                                className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-colors w-full sm:w-auto"
                               >
                                 Accept
                               </button>
                             )}
                             <button
                               onClick={() => navigate(`/item/${booking.listing_id}`)}
-                              className="text-primary hover:text-primary/80 font-semibold text-sm"
+                              className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
                             >
                               View Item
                             </button>
