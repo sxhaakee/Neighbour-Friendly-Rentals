@@ -157,12 +157,6 @@ const Header = () => {
               
               {user ? (
                 <>
-                  {/* Notification Center - Mobile */}
-                  <div className="md:hidden flex items-center space-x-2">
-                    <NotificationCenter />
-                    <div className="h-6 w-px bg-gray-300"></div>
-                  </div>
-                  
                   {isAdmin && (
                     <Link
                       to="/admin"

@@ -131,12 +131,6 @@ const BookItem = () => {
   };
 
   const handleProceedToAgreement = () => {
-    if (!isVerified) {
-      showToast.error('Please verify your ID first');
-      setTimeout(() => navigate('/verify-id'), 1500);
-      return;
-    }
-
     if (!startDate || !endDate) {
       showToast.error('Please select start and end dates');
       return;
@@ -167,13 +161,6 @@ const BookItem = () => {
 
   const handleAgreeAndBook = async () => {
     if (!user || !profile || !listing) return;
-
-    // Check if user is verified
-    if (!profile.is_verified) {
-      showToast.error('Please verify your ID before making a booking. Go to your profile to upload verification documents.');
-      navigate('/verify-id');
-      return;
-    }
 
     setProcessing(true);
     setShowAgreement(false);
@@ -357,19 +344,19 @@ const BookItem = () => {
           Back
         </button>
 
-        {/* Verification Warning */}
+        {/* Verification Recommendation */}
         {!isVerified && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6"
+            className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6"
           >
             <div className="flex gap-3">
-              <Shield className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-yellow-800">ID Verification Required</p>
-                <p className="text-sm text-yellow-700 mt-1">
-                  You need to verify your ID before booking. 
+                <p className="font-semibold text-blue-800">Verification Recommended</p>
+                <p className="text-sm text-blue-700 mt-1">
+                  Verify your ID to build trust with owners and increase booking approval chances. 
                   <button
                     onClick={() => navigate('/verify-id')}
                     className="underline ml-1 font-semibold"
@@ -635,7 +622,7 @@ const BookItem = () => {
 
               <button
                 onClick={handleProceedToAgreement}
-                disabled={processing || !totalDays || !isVerified || !videoAcknowledged}
+                disabled={processing || !totalDays || !videoAcknowledged}
                 className="w-full bg-gradient-to-r from-primary to-accent text-white py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {processing ? (
