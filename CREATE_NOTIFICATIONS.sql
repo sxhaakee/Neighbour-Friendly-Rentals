@@ -44,36 +44,30 @@ CREATE POLICY "Users can update own notifications" ON notifications
 CREATE POLICY "Users can delete own notifications" ON notifications
     FOR DELETE USING (auth.uid() = user_id);
 
--- 6. Add some test notifications (replace 'your-user-id' with actual user ID)
--- Get your user ID from Supabase Dashboard > Authentication > Users
--- Or run: SELECT id FROM auth.users WHERE email = 'your-email@example.com';
+-- 6. No test notifications needed - notifications will be created automatically
+-- when real events happen in the app (approvals, bookings, etc.)
 
-DO $$
-DECLARE
-    test_user_id UUID := 'your-user-id-here'; -- REPLACE THIS with your actual user ID
-BEGIN
-    -- Test notifications
-    INSERT INTO notifications (user_id, type, title, message, link, read) VALUES
-    (test_user_id, 'system', '🎉 Welcome to NFRR!', 'Your account has been successfully created. Start exploring rentals!', '/dashboard', FALSE),
-    (test_user_id, 'booking', '📅 New Booking Request', 'Someone wants to book your camera! Check your dashboard.', '/dashboard?tab=owner-bookings', FALSE),
-    (test_user_id, 'approval', '✅ Listing Approved', 'Your "Canon EOS Camera" listing is now live!', '/item/test-listing-id', TRUE),
-    (test_user_id, 'reminder', '⏰ Payment Reminder', 'Your rental payment of ₹500 is due tomorrow.', '/dashboard?tab=my-bookings', FALSE),
-    (test_user_id, 'review', '⭐ New Review', 'Someone left a 5-star review on your listing!', '/dashboard?tab=my-listings', TRUE);
-
-    RAISE NOTICE '✅ Added 5 test notifications';
-EXCEPTION WHEN OTHERS THEN
-    RAISE NOTICE '⚠️  Error adding test notifications: %', SQLERRM;
-END $$;
+-- The notification system is now ready for real usage!
+-- Notifications will be created automatically when:
+-- - Admins approve/reject listings
+-- - Users receive booking requests
+-- - Users get payment reminders
+-- - Users receive reviews
+-- - And many other events...
 
 -- 7. Show success message
-RAISE NOTICE '';
-RAISE NOTICE '==============================================';
-RAISE NOTICE '🎉 Notifications system created successfully!';
-RAISE NOTICE '==============================================';
-RAISE NOTICE '';
-RAISE NOTICE 'Next steps:';
-RAISE NOTICE '1. Replace "your-user-id-here" with your actual user ID';
-RAISE NOTICE '2. Get your user ID from: Supabase Dashboard > Authentication > Users';
-RAISE NOTICE '3. Or run: SELECT id FROM auth.users WHERE email = ''your-email@example.com'';';
-RAISE NOTICE '4. Refresh your app and click the bell icon to see notifications!';
-RAISE NOTICE '';
+DO $$
+BEGIN
+    RAISE NOTICE '';
+    RAISE NOTICE '==============================================';
+    RAISE NOTICE '🎉 Notifications system created successfully!';
+    RAISE NOTICE '==============================================';
+    RAISE NOTICE '';
+    RAISE NOTICE 'Changes made:';
+    RAISE NOTICE '1. Created notifications table with proper schema';
+    RAISE NOTICE '2. Added performance indexes';
+    RAISE NOTICE '3. Enabled Row Level Security (RLS)';
+    RAISE NOTICE '4. Created security policies for user access';
+    RAISE NOTICE '5. Ready for real-time notifications!';
+    RAISE NOTICE '';
+END $$;

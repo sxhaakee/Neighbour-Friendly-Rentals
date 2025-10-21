@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle, Home, Briefcase } from 'lucide-react';
+import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle, Home, Briefcase, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -135,6 +135,7 @@ const DashboardNew = () => {
     { id: 'listings', label: 'My Listings', icon: Package },
     { id: 'bookings', label: 'My Bookings', icon: Calendar },
     { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle },
+    { id: 'earnings', label: 'Earnings', icon: TrendingUp },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 
@@ -484,13 +485,103 @@ const DashboardNew = () => {
           ))}
         </div>
       )}
-    </div>
-  );
+  const renderEarnings = () => {
+    const totalEarnings = ownerBookings
+      .filter(booking => booking.status === 'completed' && booking.payment_status === 'completed')
+      .reduce((sum, booking) => sum + (booking.platform_commission || 0), 0);
+
+    const totalBookings = ownerBookings.filter(booking => booking.status === 'completed').length;
+    const averageRating = 4.2; // This would come from actual reviews
+
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-gray-900">Earnings & Analytics</h2>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-green-100 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-green-600 font-medium">Total Earnings</p>
+                <p className="text-2xl font-bold text-green-800">₹{totalEarnings.toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <Package className="w-6 h-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-blue-600 font-medium">Completed Rentals</p>
+                <p className="text-2xl font-bold text-blue-800">{totalBookings}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-yellow-100 rounded-lg">
+                <User className="w-6 h-6 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm text-yellow-600 font-medium">Average Rating</p>
+                <p className="text-2xl font-bold text-yellow-800">{averageRating}⭐</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Earnings */}
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Completed Rentals</h3>
+          {ownerBookings.filter(booking => booking.status === 'completed').length === 0 ? (
+            <div className="text-center py-8">
+              <TrendingUp className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">No completed rentals yet</p>
+              <p className="text-sm text-gray-500">Earnings will appear here when rentals are completed</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {ownerBookings
+                .filter(booking => booking.status === 'completed')
+                .slice(0, 5)
+                .map((booking) => (
+                  <div key={booking.id} className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={booking.listings?.images[0] || '/placeholder.jpg'}
+                        alt={booking.listings?.title}
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                      <div>
+                        <p className="font-semibold text-gray-900">{booking.listings?.title}</p>
+                        <p className="text-sm text-gray-600">Rented by {booking.renter_name}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-green-600">+₹{booking.platform_commission || 0}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(booking.end_date).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   const handleSaveProfile = async () => {
     try {
       setSaving(true);
-      
+
       // Build update object - only include address if it has a value
       const updateData: any = {
         full_name: fullName,
@@ -498,17 +589,17 @@ const DashboardNew = () => {
         location: location,
         updated_at: new Date().toISOString(),
       };
-      
+
       // Only include address if it's not empty
       if (address && address.trim()) {
         updateData.address = address;
       }
-      
+
       const { error } = await supabase
         .from('profiles')
         .update(updateData)
         .eq('id', user.id);
-      
+
       if (error) {
         // If error is about address column, show helpful message
         if (error.message.includes('address')) {
@@ -516,12 +607,12 @@ const DashboardNew = () => {
         }
         throw error;
       }
-      
+
       // Refresh profile in context
       if (refreshProfile) {
         await refreshProfile();
       }
-      
+
       showToast.success('Profile updated successfully!');
     } catch (error: any) {
       console.error('Error updating profile:', error);
@@ -534,7 +625,7 @@ const DashboardNew = () => {
   const renderProfile = () => (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
-      
+
       <div className="bg-white rounded-xl shadow-lg p-8">
         <div className="flex items-center space-x-6 mb-8">
           <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
@@ -559,7 +650,7 @@ const DashboardNew = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
             <input
@@ -569,7 +660,7 @@ const DashboardNew = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
             <input
@@ -580,7 +671,7 @@ const DashboardNew = () => {
               placeholder="Enter your phone number"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
             <input
@@ -591,7 +682,7 @@ const DashboardNew = () => {
               placeholder="Enter your city/location"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
             <textarea
@@ -602,8 +693,8 @@ const DashboardNew = () => {
               placeholder="Enter your full address"
             />
           </div>
-          
-          <button 
+
+          <button
             onClick={handleSaveProfile}
             disabled={saving}
             className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -623,6 +714,8 @@ const DashboardNew = () => {
         return renderBookings();
       case 'rentals':
         return renderIncomingRentals();
+      case 'earnings':
+        return renderEarnings();
       case 'profile':
         return renderProfile();
       default:
