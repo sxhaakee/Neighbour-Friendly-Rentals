@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { initGA, trackPageView } from './utils/googleAnalytics';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
@@ -37,8 +38,15 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
+    // Initialize Google Analytics on mount
+    initGA();
+  }, []);
+
+  useEffect(() => {
+    // Track page views
     logPageView(location.pathname + location.search);
     analyticsService.pageView(location.pathname);
+    trackPageView(location.pathname + location.search);
   }, [location]);
 
   return (

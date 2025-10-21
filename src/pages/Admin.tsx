@@ -12,13 +12,14 @@ import { OrdersManagement } from '../components/Admin/OrdersManagement';
 import { AgreementsManagement } from '../components/Admin/AgreementsManagement';
 import { PropertiesManagement } from '../components/Admin/PropertiesManagement';
 import { ServicesManagement } from '../components/Admin/ServicesManagement';
+import { AnalyticsDashboard } from '../components/Admin/AnalyticsDashboard';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user, isAdmin, loading: authLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements'>('orders');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements'>('analytics');
   const [listings, setListings] = useState<Listing[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
   const [loading, setLoading] = useState(true);
@@ -189,7 +190,17 @@ const Admin = () => {
 
         {/* Tab Navigation */}
         <div className="bg-white rounded-xl shadow-md p-1 sm:p-2 mb-4 sm:mb-6 overflow-x-auto">
-          <div className="flex gap-1 sm:gap-2 min-w-max sm:min-w-0">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
+                activeTab === 'analytics'
+                  ? 'bg-primary text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+              }`}
+            >
+              📊 Analytics
+            </button>
             <button
               onClick={() => setActiveTab('orders')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
@@ -254,7 +265,9 @@ const Admin = () => {
         </div>
 
         {/* Content based on active tab */}
-        {activeTab === 'orders' ? (
+        {activeTab === 'analytics' ? (
+          <AnalyticsDashboard />
+        ) : activeTab === 'orders' ? (
           <OrdersManagement />
         ) : activeTab === 'properties' ? (
           <PropertiesManagement />
