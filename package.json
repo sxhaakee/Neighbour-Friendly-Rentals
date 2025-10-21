@@ -1,7 +1,7 @@
 {
   "name": "nfrr-rental-marketplace",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A complete multi-vendor rental marketplace platform with Supabase and Razorpay",
   "type": "module",
   "scripts": {
