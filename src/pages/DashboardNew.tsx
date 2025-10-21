@@ -571,6 +571,7 @@ const DashboardNew = () => {
                   </div>
                 )}
               </div>
+            )}
             {/* Earnings Tab */}
             {activeTab === 'earnings' && (
               <div className="space-y-6">
