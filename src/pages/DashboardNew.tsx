@@ -431,39 +431,6 @@ const DashboardNew = () => {
               </div>
             )}
 
-            {/* Bookings Tab */}
-            {activeTab === 'bookings' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
-
-                <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-                  <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No bookings yet</h3>
-                  <p className="text-gray-600 mb-6">Browse listings and book your first rental!</p>
-                  <button
-                    onClick={() => navigate('/listings')}
-                    className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
-                  >
-                    Browse Listings
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Incoming Rentals Tab */}
-            {activeTab === 'rentals' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900">Incoming Rentals</h2>
-                <p className="text-gray-600">Items you own that others have booked</p>
-
-                <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-                  <CheckCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No incoming rentals</h3>
-                  <p className="text-gray-600">Your listings haven't been booked yet</p>
-                </div>
-              </div>
-            )}
-
             {/* Services Tab */}
             {activeTab === 'services' && (
               <div className="space-y-4">
@@ -645,12 +612,22 @@ const DashboardNew = () => {
                               {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
                             </span>
                           </div>
-                          <button
-                            onClick={() => navigate(`/item/${booking.listing_id}`)}
-                            className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm self-start sm:self-auto"
-                          >
-                            View Item
-                          </button>
+                          <div className="flex flex-col sm:flex-row gap-2">
+                            {booking.status === 'pending' && (
+                              <button
+                                onClick={() => handleBookingAction(booking.id, 'cancelled')}
+                                className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-colors w-full sm:w-auto"
+                              >
+                                Cancel Booking
+                              </button>
+                            )}
+                            <button
+                              onClick={() => navigate(`/item/${booking.listing_id}`)}
+                              className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
+                            >
+                              View Item
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
                     ))}

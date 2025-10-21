@@ -168,6 +168,13 @@ const BookItem = () => {
   const handleAgreeAndBook = async () => {
     if (!user || !profile || !listing) return;
 
+    // Check if user is verified
+    if (!profile.is_verified) {
+      showToast.error('Please verify your ID before making a booking. Go to your profile to upload verification documents.');
+      navigate('/verify-id');
+      return;
+    }
+
     setProcessing(true);
     setShowAgreement(false);
 
