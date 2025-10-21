@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, User, Phone, Mail, MessageCircle, AlertCircle, X, ChevronLeft, ChevronRight, ArrowLeft, Star, Shield } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, MapPin, User, MessageCircle, AlertCircle, ArrowLeft, Star, Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
@@ -26,16 +26,12 @@ const ItemDetails = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
-  const [hasActiveBooking, setHasActiveBooking] = useState(false);
 
   useEffect(() => {
     if (id) {
       fetchListing();
       fetchReviews();
       fetchAverageRating();
-      if (user) {
-        checkActiveBooking();
-      }
     }
   }, [id, user]);
 
@@ -70,22 +66,6 @@ const ItemDetails = () => {
     }
   };
 
-  const checkActiveBooking = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bookings')
-        .select('id')
-        .eq('listing_id', id!)
-        .eq('renter_id', user!.id)
-        .in('status', ['pending', 'confirmed', 'active'])
-        .limit(1);
-
-      if (error) throw error;
-      setHasActiveBooking(data && data.length > 0);
-    } catch (error) {
-      console.error('Error checking booking:', error);
-    }
-  };
 
   const handleBookNow = () => {
     if (!user) {
@@ -444,7 +424,7 @@ const ItemDetails = () => {
                           await listingService.deleteListing(listing.id);
                           showToast.success('Listing deleted successfully');
                           navigate('/dashboard');
-                        } catch (error) {
+                        } catch {
                           showToast.error('Failed to delete listing');
                         }
                       }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, MapPin, Star, Navigation } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
@@ -29,25 +29,6 @@ const Listings = () => {
   const [userLocation, setUserLocation] = useState<string>('');
   const [sortBy, setSortBy] = useState<'relevance' | 'price-low' | 'price-high' | 'distance'>('relevance');
 
-  const categories = [
-    'All',
-    'Electronics',
-    'Cameras & Photography',
-    'Tools & Equipment',
-    'Vehicles',
-    'Sports & Fitness',
-    'Musical Instruments',
-    'Furniture',
-    'Appliances',
-    'Books & Media',
-    'Clothing & Accessories',
-    'Party & Events',
-    'Gaming & Consoles',
-    'Outdoor & Camping',
-    'Baby & Kids',
-    'Medical & Health',
-    'Miscellaneous'
-  ];
 
   useEffect(() => {
     fetchListings();

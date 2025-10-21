@@ -485,6 +485,9 @@ const DashboardNew = () => {
           ))}
         </div>
       )}
+    </div>
+  );
+
   const renderEarnings = () => {
     const totalEarnings = ownerBookings
       .filter(booking => booking.status === 'completed' && booking.payment_status === 'completed')
