@@ -51,6 +51,24 @@ export const OrdersManagement = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
+      
+      // First, get current user to verify admin status
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+
+      // Check if user is admin
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+
+      if (!profile?.is_admin) {
+        throw new Error('Not authorized');
+      }
+
       let query = supabase
         .from('bookings')
         .select(`
@@ -73,10 +91,12 @@ export const OrdersManagement = () => {
 
       if (error) {
         console.error('Error fetching bookings:', error);
-        throw error;
+        showToast.error('Failed to load bookings');
+        setBookings([]);
+        return;
       }
       
-      console.log('Fetched bookings:', data);
+      console.log('Admin fetched bookings:', data);
       setBookings(data || []);
     } catch (error) {
       console.error('Error fetching bookings:', error);
