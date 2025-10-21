@@ -7,6 +7,7 @@ import { listingService } from '../services/listingService';
 import { propertyService } from '../services/propertyService';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { favoritesService } from '../services/favoritesService';
+import { bookingService } from '../services/bookingService';
 import { showToast } from '../utils/toast';
 import { FavoriteButton } from '../components/FavoriteButton';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
@@ -18,6 +19,8 @@ const DashboardNew = () => {
   const [myListings, setMyListings] = useState<any[]>([]);
   const [myProperties, setMyProperties] = useState<any[]>([]);
   const [myServices, setMyServices] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [myBookings, setMyBookings] = useState<any[]>([]);
   const [ownerBookings, setOwnerBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPremiumModal, setShowPremiumModal] = useState(false);
@@ -35,18 +38,21 @@ const DashboardNew = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [items, properties, services, favs] = await Promise.all([
+      const [items, properties, services, favs, bookings, incomingRentals] = await Promise.all([
         listingService.getUserListings(user!.id),
         propertyService.getOwnerProperties(user!.id),
         serviceProviderService.getOwnerProviders(user!.id),
         favoritesService.getUserFavorites(user!.id),
+        bookingService.getUserBookings(user!.id),
+        bookingService.getOwnerBookings(user!.id),
       ]);
 
       setMyListings(items);
       setMyProperties(properties);
       setMyServices(services);
       setFavorites(favs);
-      setOwnerBookings([]); // Placeholder for now
+      setMyBookings(bookings);
+      setOwnerBookings(incomingRentals);
       await refreshListingCounts();
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -108,16 +114,31 @@ const DashboardNew = () => {
       approved: 'bg-green-100 text-green-800 border-green-200',
       rejected: 'bg-red-100 text-red-800 border-red-200',
       available: 'bg-blue-100 text-blue-800 border-blue-200',
+      confirmed: 'bg-blue-100 text-blue-800 border-blue-200',
+      active: 'bg-green-100 text-green-800 border-green-200',
+      completed: 'bg-gray-100 text-gray-800 border-gray-200',
+      cancelled: 'bg-red-100 text-red-800 border-red-200',
     };
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+  };
+
+  const handleBookingAction = async (bookingId: string, action: string) => {
+    try {
+      await bookingService.updateBookingStatus(bookingId, action);
+      showToast.success(`Booking ${action} successfully!`);
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error updating booking:', error);
+      showToast.error('Failed to update booking');
+    }
   };
 
   const tabs = [
     { id: 'items', label: 'Products', icon: Package, count: listingCounts.items, color: 'from-blue-500 to-cyan-500' },
     { id: 'properties', label: 'Properties', icon: Home, count: listingCounts.properties, color: 'from-purple-500 to-pink-500' },
     { id: 'services', label: 'Services', icon: Briefcase, count: listingCounts.services, color: 'from-orange-500 to-red-500' },
-    { id: 'bookings', label: 'My Bookings', icon: Calendar, count: 0, color: 'from-indigo-500 to-purple-500' },
-    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: 0, color: 'from-emerald-500 to-teal-500' },
+    { id: 'bookings', label: 'My Bookings', icon: Calendar, count: myBookings.length, color: 'from-indigo-500 to-purple-500' },
+    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: ownerBookings.length, color: 'from-emerald-500 to-teal-500' },
     { id: 'earnings', label: 'Earnings', icon: TrendingUp, count: 0, color: 'from-green-500 to-emerald-500' },
     { id: 'favorites', label: 'Favorites', icon: Heart, count: favorites.length, color: 'from-red-500 to-pink-500' },
   ];
@@ -572,6 +593,146 @@ const DashboardNew = () => {
                 )}
               </div>
             )}
+
+            {/* Bookings Tab */}
+            {activeTab === 'bookings' && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
+                
+                {myBookings.length === 0 ? (
+                  <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
+                    <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">No bookings yet</h3>
+                    <p className="text-gray-600 mb-6">Start renting items to see your bookings here!</p>
+                    <button
+                      onClick={() => navigate('/listings')}
+                      className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+                    >
+                      Browse Items
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {myBookings.map((booking) => (
+                      <motion.div
+                        key={booking.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">{booking.listing?.title || 'Item'}</h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                <span>{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <IndianRupee className="w-4 h-4" />
+                                <span className="font-semibold">₹{booking.total_price}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm text-gray-500">
+                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                              {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => navigate(`/item/${booking.listing_id}`)}
+                            className="text-primary hover:text-primary/80 font-semibold text-sm"
+                          >
+                            View Item
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Incoming Rentals Tab */}
+            {activeTab === 'rentals' && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-900">Incoming Rentals</h2>
+                
+                {ownerBookings.length === 0 ? (
+                  <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
+                    <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">No incoming rentals</h3>
+                    <p className="text-gray-600 mb-6">When people rent your items, they'll appear here!</p>
+                    <button
+                      onClick={() => navigate('/add-item')}
+                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+                    >
+                      Add Items
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {ownerBookings.map((booking) => (
+                      <motion.div
+                        key={booking.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                      >
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-2">{booking.listing?.title || 'Item'}</h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                <span>{new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <IndianRupee className="w-4 h-4" />
+                                <span className="font-semibold">₹{booking.total_price}</span>
+                              </div>
+                            </div>
+                            <p className="text-sm text-gray-500 mt-2">Rented by: {booking.renter?.full_name || 'Unknown'}</p>
+                          </div>
+                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(booking.status)}`}>
+                            {booking.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div className="text-sm text-gray-500">
+                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                              {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            {booking.status === 'pending' && (
+                              <button
+                                onClick={() => handleBookingAction(booking.id, 'confirmed')}
+                                className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-semibold transition-colors"
+                              >
+                                Accept
+                              </button>
+                            )}
+                            <button
+                              onClick={() => navigate(`/item/${booking.listing_id}`)}
+                              className="text-primary hover:text-primary/80 font-semibold text-sm"
+                            >
+                              View Item
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Earnings Tab */}
             {activeTab === 'earnings' && (
               <div className="space-y-6">
@@ -586,7 +747,11 @@ const DashboardNew = () => {
                       </div>
                       <div>
                         <p className="text-sm text-green-600 font-medium">Total Earnings</p>
-                        <p className="text-2xl font-bold text-green-800">₹0</p>
+                        <p className="text-2xl font-bold text-green-800">
+                          ₹{ownerBookings
+                            .filter(booking => booking.status === 'completed' && booking.payment_status === 'completed')
+                            .reduce((sum, booking) => sum + (booking.total_price || 0), 0)}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -598,7 +763,9 @@ const DashboardNew = () => {
                       </div>
                       <div>
                         <p className="text-sm text-blue-600 font-medium">Completed Rentals</p>
-                        <p className="text-2xl font-bold text-blue-800">0</p>
+                        <p className="text-2xl font-bold text-blue-800">
+                          {ownerBookings.filter(booking => booking.status === 'completed').length}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -609,8 +776,12 @@ const DashboardNew = () => {
                         <Star className="w-6 h-6 text-yellow-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-yellow-600 font-medium">Average Rating</p>
-                        <p className="text-2xl font-bold text-yellow-800">4.2⭐</p>
+                        <p className="text-sm text-yellow-600 font-medium">Pending Earnings</p>
+                        <p className="text-2xl font-bold text-yellow-800">
+                          ₹{ownerBookings
+                            .filter(booking => booking.status === 'confirmed' && booking.payment_status === 'completed')
+                            .reduce((sum, booking) => sum + (booking.total_price || 0), 0)}
+                        </p>
                       </div>
                     </div>
                   </div>
