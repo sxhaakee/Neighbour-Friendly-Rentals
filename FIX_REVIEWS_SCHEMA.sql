@@ -23,15 +23,22 @@ END $$;
 -- 2. Add foreign key to profiles table (if not exists)
 DO $$ 
 BEGIN
-    ALTER TABLE reviews 
-    ADD CONSTRAINT reviews_reviewer_id_fkey 
-    FOREIGN KEY (reviewer_id) 
-    REFERENCES auth.users(id) 
-    ON DELETE CASCADE;
-    
-    RAISE NOTICE '✅ Added foreign key to auth.users';
-EXCEPTION WHEN duplicate_object THEN
-    RAISE NOTICE '⚠️  Foreign key already exists';
+    -- Check if constraint exists
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints 
+        WHERE constraint_name = 'reviews_reviewer_id_fkey' 
+        AND table_name = 'reviews'
+    ) THEN
+        ALTER TABLE reviews 
+        ADD CONSTRAINT reviews_reviewer_id_fkey 
+        FOREIGN KEY (reviewer_id) 
+        REFERENCES auth.users(id) 
+        ON DELETE CASCADE;
+        
+        RAISE NOTICE '✅ Added foreign key to auth.users';
+    ELSE
+        RAISE NOTICE '⚠️  Foreign key already exists';
+    END IF;
 EXCEPTION WHEN OTHERS THEN
     RAISE NOTICE '❌ Error adding foreign key: %', SQLERRM;
 END $$;
