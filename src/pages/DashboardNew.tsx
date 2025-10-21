@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Package, Home, Briefcase, Heart, TrendingUp, Eye, Trash2, Edit2, Star, Crown, Calendar, MapPin, IndianRupee } from 'lucide-react';
+import { Plus, Package, Home, Briefcase, Heart, TrendingUp, Eye, Trash2, Edit2, Star, Crown, Calendar, MapPin, IndianRupee, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -14,7 +14,7 @@ import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 const DashboardNew = () => {
   const navigate = useNavigate();
   const { user, profile, isPremium, listingCounts, canAddListing, refreshListingCounts, loading: authLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<'items' | 'properties' | 'services' | 'favorites'>('items');
+  const [activeTab, setActiveTab] = useState<'items' | 'properties' | 'services' | 'favorites' | 'earnings' | 'bookings' | 'rentals'>('items');
   const [myListings, setMyListings] = useState<any[]>([]);
   const [myProperties, setMyProperties] = useState<any[]>([]);
   const [myServices, setMyServices] = useState<any[]>([]);
@@ -115,6 +115,9 @@ const DashboardNew = () => {
     { id: 'items', label: 'Products', icon: Package, count: listingCounts.items, color: 'from-blue-500 to-cyan-500' },
     { id: 'properties', label: 'Properties', icon: Home, count: listingCounts.properties, color: 'from-purple-500 to-pink-500' },
     { id: 'services', label: 'Services', icon: Briefcase, count: listingCounts.services, color: 'from-orange-500 to-red-500' },
+    { id: 'bookings', label: 'My Bookings', icon: Calendar, count: 0, color: 'from-indigo-500 to-purple-500' },
+    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: 0, color: 'from-emerald-500 to-teal-500' },
+    { id: 'earnings', label: 'Earnings', icon: TrendingUp, count: 0, color: 'from-green-500 to-emerald-500' },
     { id: 'favorites', label: 'Favorites', icon: Heart, count: favorites.length, color: 'from-red-500 to-pink-500' },
   ];
 
@@ -405,6 +408,39 @@ const DashboardNew = () => {
               </div>
             )}
 
+            {/* Bookings Tab */}
+            {activeTab === 'bookings' && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
+
+                <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+                  <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No bookings yet</h3>
+                  <p className="text-gray-600 mb-6">Browse listings and book your first rental!</p>
+                  <button
+                    onClick={() => navigate('/listings')}
+                    className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+                  >
+                    Browse Listings
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Incoming Rentals Tab */}
+            {activeTab === 'rentals' && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-900">Incoming Rentals</h2>
+                <p className="text-gray-600">Items you own that others have booked</p>
+
+                <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+                  <CheckCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No incoming rentals</h3>
+                  <p className="text-gray-600">Your listings haven't been booked yet</p>
+                </div>
+              </div>
+            )}
+
             {/* Services Tab */}
             {activeTab === 'services' && (
               <div className="space-y-4">
@@ -534,12 +570,65 @@ const DashboardNew = () => {
                   </div>
                 )}
               </div>
+            {/* Earnings Tab */}
+            {activeTab === 'earnings' && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-gray-900">Earnings & Analytics</h2>
+
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-green-100 rounded-lg">
+                        <TrendingUp className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-green-600 font-medium">Total Earnings</p>
+                        <p className="text-2xl font-bold text-green-800">₹0</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-blue-100 rounded-lg">
+                        <Package className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-blue-600 font-medium">Completed Rentals</p>
+                        <p className="text-2xl font-bold text-blue-800">0</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-3 bg-yellow-100 rounded-lg">
+                        <Star className="w-6 h-6 text-yellow-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-yellow-600 font-medium">Average Rating</p>
+                        <p className="text-2xl font-bold text-yellow-800">4.2⭐</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Earnings */}
+                <div className="bg-white rounded-xl shadow-lg p-6">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Completed Rentals</h3>
+                  <div className="text-center py-8">
+                    <TrendingUp className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600">No completed rentals yet</p>
+                    <p className="text-sm text-gray-500">Earnings will appear here when rentals are completed</p>
+                  </div>
+                </div>
+              </div>
             )}
+
           </motion.div>
         </AnimatePresence>
       </div>
-
-      {/* Premium Modal */}
       <PremiumUpgradeModal
         isOpen={showPremiumModal}
         onClose={() => setShowPremiumModal(false)}
