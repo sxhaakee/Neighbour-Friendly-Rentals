@@ -63,8 +63,8 @@ const Header = () => {
             
             {user ? (
               <>
-                {/* Notification Center */}
-                <div className="relative flex-shrink-0">
+                {/* Notification Center - Desktop */}
+                <div className="hidden md:block relative flex-shrink-0">
                   <NotificationCenter />
                 </div>
                 
@@ -157,6 +157,12 @@ const Header = () => {
               
               {user ? (
                 <>
+                  {/* Notification Center - Mobile */}
+                  <div className="md:hidden flex items-center space-x-2">
+                    <NotificationCenter />
+                    <div className="h-6 w-px bg-gray-300"></div>
+                  </div>
+                  
                   {isAdmin && (
                     <Link
                       to="/admin"
