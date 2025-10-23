@@ -151,12 +151,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           data: {
             full_name: fullName,
           },
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       });
 
       if (error) return { error };
 
       // Profile will be created automatically by the database trigger
+      // User will receive email with verification link
+      // After clicking link, they'll be redirected to dashboard and auto-logged in
       return { error: null };
     } catch (error) {
       return { error: error as AuthError };

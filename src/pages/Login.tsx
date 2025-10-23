@@ -59,8 +59,10 @@ const Login = () => {
         if (error) {
           setError(error.message);
         } else {
-          showToast.success('Account created successfully! Please check your email to verify your account.');
-          setIsLogin(true);
+          // Show success message with clear instructions
+          showToast.success('✅ Account created! Check your email to verify and get started.');
+          // Keep the form in signup mode to show the verification message
+          setFormData({ name: '', email: '', password: '', confirmPassword: '' });
         }
       }
     } catch (err) {

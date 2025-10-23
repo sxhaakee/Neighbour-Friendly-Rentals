@@ -82,7 +82,7 @@ Find: **Authorized redirect URIs**
 ```
 https://neighbourfriendly.in/auth/callback
 https://www.neighbourfriendly.in/auth/callback
-https://[YOUR-PROJECT-ID].supabase.co/auth/v1/callback
+https://epolbovqrclrfozfgwvc.supabase.co/auth/v1/callback
 ```
 
 **Replace `[YOUR-PROJECT-ID]`** with your actual Supabase project ID.
