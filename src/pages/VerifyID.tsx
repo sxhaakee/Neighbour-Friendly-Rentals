@@ -59,26 +59,38 @@ const VerifyID = () => {
     }
 
     setLoading(true);
-    const toastId = showToast.loading('Uploading document...');
+    const compressingToast = showToast.loading('Compressing image...');
 
     try {
-      await verificationService.uploadIDDocument(
+      const result = await verificationService.uploadIDDocument(
         user!.id,
         file,
         documentType,
         documentNumber
       );
 
-      showToast.dismiss(toastId);
-      showToast.success('Document uploaded successfully! Awaiting admin verification.');
+      showToast.dismiss(compressingToast);
+      
+      // Show compression success
+      const originalSizeKB = (result.originalSize / 1024).toFixed(1);
+      const compressedSizeKB = (result.compressedSize / 1024).toFixed(1);
+      showToast.success(
+        `✅ Compressed ${originalSizeKB}KB → ${compressedSizeKB}KB (${result.compressionRatio}% saved) & uploaded!`
+      );
       
       setTimeout(() => {
-        navigate('/dashboard');
+        showToast.success('Document submitted! Awaiting admin verification.');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading document:', error);
-      showToast.dismiss(toastId);
-      showToast.error('Failed to upload document. Please try again.');
+      showToast.dismiss(compressingToast);
+      
+      // Show specific error message
+      const errorMessage = error?.message || 'Failed to upload document';
+      showToast.error(`❌ Upload failed: ${errorMessage}`);
     } finally {
       setLoading(false);
     }

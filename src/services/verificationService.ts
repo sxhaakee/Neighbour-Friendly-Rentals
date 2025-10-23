@@ -12,27 +12,52 @@ export const verificationService = {
     documentNumber: string
   ) {
     try {
-      // Compress the document image AGGRESSIVELY to save storage
-      // ID documents don't need high quality, just readable text
+      // Validate file
+      if (!file) {
+        throw new Error('No file provided');
+      }
+
+      // Check file size (max 10MB before compression)
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('File too large. Maximum size is 10MB');
+      }
+
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        throw new Error('Invalid file type. Please upload an image');
+      }
+
+      // Compress the document image for better storage
+      // ID documents need to be readable but don't need high quality
       const compressedFile = await compressImage(file, {
-        maxWidth: 800,  // Smaller dimensions
-        maxHeight: 800,
-        quality: 0.6,   // Lower quality (still readable)
-        maxSizeMB: 0.05, // 50KB max - VERY aggressive for storage savings
+        maxWidth: 1200,  // Good enough for ID documents
+        maxHeight: 1200,
+        quality: 0.75,   // Balanced quality
+        maxSizeMB: 0.2,  // 200KB max - good balance
       });
 
       // Upload to storage
       const fileName = `${userId}/${documentType}_${Date.now()}.jpg`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('id-documents')
-        .upload(fileName, compressedFile);
+        .upload(fileName, compressedFile, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
 
       // Get public URL
       const { data: urlData } = supabase.storage
         .from('id-documents')
         .getPublicUrl(fileName);
+
+      if (!urlData?.publicUrl) {
+        throw new Error('Failed to get document URL');
+      }
 
       // Update profile with document info
       const { error: updateError } = await supabase
@@ -45,10 +70,18 @@ export const verificationService = {
         } as any)
         .eq('id', userId);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error('Profile update error:', updateError);
+        throw new Error(`Failed to update profile: ${updateError.message}`);
+      }
 
-      return urlData.publicUrl;
-    } catch (error) {
+      return {
+        url: urlData.publicUrl,
+        originalSize: file.size,
+        compressedSize: compressedFile.size,
+        compressionRatio: ((1 - compressedFile.size / file.size) * 100).toFixed(1)
+      };
+    } catch (error: any) {
       console.error('Error uploading ID document:', error);
       throw error;
     }
