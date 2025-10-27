@@ -96,23 +96,45 @@ export const rentalAgreementService = {
    * Get all agreements (Admin only)
    */
   async getAllAgreements(includeDeleted: boolean = false): Promise<any[]> {
-    let query = supabase
-      .from('admin_rental_agreements')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      // First verify user is admin
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
 
-    if (!includeDeleted) {
-      query = query.is('deleted_at', null);
-    }
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin, role')
+        .eq('id', user.id)
+        .single();
 
-    const { data, error } = await query;
+      if (!profile?.is_admin && profile?.role !== 'admin') {
+        throw new Error('Not authorized - Admin access required');
+      }
 
-    if (error) {
-      console.error('Error fetching all agreements:', error);
+      // Fetch from rental_agreements table directly
+      let query = supabase
+        .from('rental_agreements')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!includeDeleted) {
+        query = query.is('deleted_at', null);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching all agreements:', error);
+        throw error;
+      }
+
+      return data || [];
+    } catch (error: any) {
+      console.error('Error in getAllAgreements:', error);
       throw error;
     }
-
-    return data || [];
   },
 
   /**

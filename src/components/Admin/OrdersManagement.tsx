@@ -675,9 +675,9 @@ export const OrdersManagement = () => {
             </div>
 
             {/* Actions */}
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 space-y-3">
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 sm:p-6 space-y-3">
               {selectedBooking.status === 'pending' && (
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <button
                     onClick={() => handleApprove(selectedBooking)}
                     disabled={processing === selectedBooking.id}
@@ -702,15 +702,32 @@ export const OrdersManagement = () => {
                   </button>
                 </div>
               )}
-              {(selectedBooking.status === 'confirmed' || selectedBooking.status === 'completed') && (
+              {/* Admin can cancel/reject any booking at any time */}
+              {(selectedBooking.status === 'confirmed' || selectedBooking.status === 'completed' || selectedBooking.status === 'pending') && (
                 <button
                   onClick={() => handleCancelOrder(selectedBooking)}
                   disabled={processing === selectedBooking.id}
-                  className="w-full bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <X className="w-5 h-5" />
-                  Cancel Order
+                  {selectedBooking.status === 'pending' ? 'Reject Booking' : 'Cancel Order (Admin Override)'}
                 </button>
+              )}
+              {selectedBooking.status === 'rejected' && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-800 font-semibold">This booking has been rejected</p>
+                  {selectedBooking.rejection_reason && (
+                    <p className="text-red-700 text-sm mt-1">Reason: {selectedBooking.rejection_reason}</p>
+                  )}
+                </div>
+              )}
+              {selectedBooking.status === 'cancelled' && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-gray-800 font-semibold">This order has been cancelled</p>
+                  {selectedBooking.rejection_reason && (
+                    <p className="text-gray-700 text-sm mt-1">Reason: {selectedBooking.rejection_reason}</p>
+                  )}
+                </div>
               )}
             </div>
           </motion.div>

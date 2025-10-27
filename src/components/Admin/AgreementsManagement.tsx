@@ -137,38 +137,38 @@ export const AgreementsManagement = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-          <div className="text-sm text-gray-600">Total Agreements</div>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 sm:gap-4">
+        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm">
+          <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.total}</div>
+          <div className="text-xs sm:text-sm text-gray-600">Total</div>
         </div>
-        <div className="bg-green-50 rounded-xl p-4 shadow-sm">
-          <div className="text-2xl font-bold text-green-900">{stats.active}</div>
-          <div className="text-sm text-green-700">Active</div>
+        <div className="bg-green-50 rounded-xl p-3 sm:p-4 shadow-sm">
+          <div className="text-xl sm:text-2xl font-bold text-green-900">{stats.active}</div>
+          <div className="text-xs sm:text-sm text-green-700">Active</div>
         </div>
-        <div className="bg-blue-50 rounded-xl p-4 shadow-sm">
-          <div className="text-2xl font-bold text-blue-900">{stats.completed}</div>
-          <div className="text-sm text-blue-700">Completed</div>
+        <div className="bg-blue-50 rounded-xl p-3 sm:p-4 shadow-sm">
+          <div className="text-xl sm:text-2xl font-bold text-blue-900">{stats.completed}</div>
+          <div className="text-xs sm:text-sm text-blue-700">Completed</div>
         </div>
-        <div className="bg-red-50 rounded-xl p-4 shadow-sm">
-          <div className="text-2xl font-bold text-red-900">{stats.cancelled}</div>
-          <div className="text-sm text-red-700">Cancelled</div>
+        <div className="bg-red-50 rounded-xl p-3 sm:p-4 shadow-sm">
+          <div className="text-xl sm:text-2xl font-bold text-red-900">{stats.cancelled}</div>
+          <div className="text-xs sm:text-sm text-red-700">Cancelled</div>
         </div>
-        <div className="bg-yellow-50 rounded-xl p-4 shadow-sm">
-          <div className="text-2xl font-bold text-yellow-900">{stats.disputed}</div>
-          <div className="text-sm text-yellow-700">Disputed</div>
+        <div className="bg-yellow-50 rounded-xl p-3 sm:p-4 shadow-sm col-span-2 md:col-span-1">
+          <div className="text-xl sm:text-2xl font-bold text-yellow-900">{stats.disputed}</div>
+          <div className="text-xs sm:text-sm text-yellow-700">Disputed</div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl p-4 shadow-sm">
-        <div className="flex flex-wrap gap-4 items-center justify-between">
-          <div className="flex gap-2">
+      <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center sm:justify-between">
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -176,7 +176,7 @@ export const AgreementsManagement = () => {
             </button>
             <button
               onClick={() => setFilter('active')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === 'active' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -184,7 +184,7 @@ export const AgreementsManagement = () => {
             </button>
             <button
               onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -192,7 +192,7 @@ export const AgreementsManagement = () => {
             </button>
             <button
               onClick={() => setFilter('cancelled')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === 'cancelled' ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -200,14 +200,14 @@ export const AgreementsManagement = () => {
             </button>
             <button
               onClick={() => setFilter('disputed')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === 'disputed' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               Disputed
             </button>
           </div>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center justify-between sm:justify-start">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -215,7 +215,7 @@ export const AgreementsManagement = () => {
                 onChange={(e) => setShowDeleted(e.target.checked)}
                 className="w-4 h-4"
               />
-              <span className="text-sm text-gray-700">Show Deleted</span>
+              <span className="text-xs sm:text-sm text-gray-700 whitespace-nowrap">Show Deleted</span>
             </label>
             <button
               onClick={() => {
@@ -225,7 +225,7 @@ export const AgreementsManagement = () => {
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               title="Refresh"
             >
-              <RefreshCw className="w-5 h-5 text-gray-600" />
+              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
             </button>
           </div>
         </div>
@@ -235,37 +235,37 @@ export const AgreementsManagement = () => {
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         {agreements.length === 0 ? (
           <div className="text-center py-12">
-            <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Agreements Found</h3>
-            <p className="text-gray-600">No rental agreements match your current filters.</p>
+            <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">No Agreements Found</h3>
+            <p className="text-sm sm:text-base text-gray-600">No rental agreements match your current filters.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-[800px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Agreement ID
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Item
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Renter
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Owner
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Dates
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -278,30 +278,30 @@ export const AgreementsManagement = () => {
                     animate={{ opacity: 1 }}
                     className={agreement.deleted_at ? 'bg-red-50' : ''}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
                       {agreement.id.slice(0, 8)}...
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                       {agreement.item_title}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                       <div>{agreement.renter_name}</div>
                       <div className="text-xs text-gray-500">{agreement.renter_email}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                       <div>{agreement.owner_name}</div>
                       <div className="text-xs text-gray-500">{agreement.owner_email}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
                       <div>{new Date(agreement.start_date).toLocaleDateString()}</div>
                       <div className="text-xs text-gray-500">to {new Date(agreement.end_date).toLocaleDateString()}</div>
                       <div className="text-xs text-gray-500">{agreement.total_days} days</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900">
                       ₹{agreement.total_price}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(agreement.status)}`}>
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                      <span className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(agreement.status)}`}>
                         {getStatusIcon(agreement.status)}
                         {agreement.status}
                       </span>
@@ -309,8 +309,8 @@ export const AgreementsManagement = () => {
                         <div className="text-xs text-red-600 mt-1">Deleted</div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                      <div className="flex gap-1 sm:gap-2">
                         <button
                           onClick={() => setSelectedAgreement(agreement)}
                           className="text-primary hover:text-primary/80"

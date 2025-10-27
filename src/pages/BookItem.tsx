@@ -166,6 +166,17 @@ const BookItem = () => {
     setShowAgreement(false);
 
     try {
+      // Check if user is verified before allowing booking
+      const verified = await verificationService.isUserVerified(user.id);
+      if (!verified) {
+        showToast.error('You must verify your ID before booking. Please complete ID verification first.');
+        setProcessing(false);
+        setTimeout(() => {
+          navigate('/verify-id');
+        }, 2000);
+        return;
+      }
+
       const typedListing = listing as any;
 
       // Check availability
@@ -344,24 +355,24 @@ const BookItem = () => {
           Back
         </button>
 
-        {/* Verification Recommendation */}
+        {/* Verification Required */}
         {!isVerified && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6"
+            className="bg-red-50 border-2 border-red-300 rounded-xl p-4 mb-6"
           >
             <div className="flex gap-3">
-              <Shield className="w-5 h-5 text-blue-600 flex-shrink-0" />
+              <Shield className="w-5 h-5 text-red-600 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-blue-800">Verification Recommended</p>
-                <p className="text-sm text-blue-700 mt-1">
-                  Verify your ID to build trust with owners and increase booking approval chances. 
+                <p className="font-bold text-red-800">⚠️ ID Verification Required</p>
+                <p className="text-sm text-red-700 mt-1">
+                  You must verify your ID before you can book any items. This is mandatory for all bookings.
                   <button
                     onClick={() => navigate('/verify-id')}
-                    className="underline ml-1 font-semibold"
+                    className="underline ml-1 font-bold hover:text-red-900"
                   >
-                    Verify Now
+                    Verify Now →
                   </button>
                 </p>
               </div>
@@ -622,13 +633,18 @@ const BookItem = () => {
 
               <button
                 onClick={handleProceedToAgreement}
-                disabled={processing || !totalDays || !videoAcknowledged}
+                disabled={processing || !totalDays || !videoAcknowledged || !isVerified}
                 className="w-full bg-gradient-to-r from-primary to-accent text-white py-4 rounded-xl font-semibold text-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {processing ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                     Processing...
+                  </>
+                ) : !isVerified ? (
+                  <>
+                    <Shield size={20} />
+                    Verify ID to Book
                   </>
                 ) : (
                   <>
