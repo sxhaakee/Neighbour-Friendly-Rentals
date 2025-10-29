@@ -58,22 +58,49 @@ export const razorpayService = {
       }
 
       console.log('📦 Loading Razorpay SDK...');
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.async = true;
       
-      script.onload = () => {
-        console.log('✅ Razorpay SDK loaded successfully');
-        resolve(true);
+      // Try loading with multiple attempts
+      let attempts = 0;
+      const maxAttempts = 3;
+      
+      const tryLoad = () => {
+        attempts++;
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        
+        const timeout = setTimeout(() => {
+          console.warn(`⏱️ Razorpay SDK loading timeout (attempt ${attempts}/${maxAttempts})`);
+          if (attempts < maxAttempts) {
+            document.body.removeChild(script);
+            tryLoad();
+          } else {
+            console.error('❌ Failed to load Razorpay SDK after multiple attempts');
+            resolve(false);
+          }
+        }, 10000); // 10 second timeout
+        
+        script.onload = () => {
+          clearTimeout(timeout);
+          console.log('✅ Razorpay SDK loaded successfully');
+          resolve(true);
+        };
+        
+        script.onerror = (error) => {
+          clearTimeout(timeout);
+          console.error(`❌ Failed to load Razorpay SDK (attempt ${attempts}/${maxAttempts}):`, error);
+          if (attempts < maxAttempts) {
+            setTimeout(tryLoad, 1000); // Wait 1 second before retry
+          } else {
+            alert('Failed to load payment gateway. Please check your internet connection and try again.');
+            resolve(false);
+          }
+        };
+        
+        document.body.appendChild(script);
       };
       
-      script.onerror = (error) => {
-        console.error('❌ Failed to load Razorpay SDK:', error);
-        alert('Failed to load payment gateway. Please check your internet connection and try again.');
-        resolve(false);
-      };
-      
-      document.body.appendChild(script);
+      tryLoad();
     });
   },
 
