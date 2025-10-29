@@ -228,14 +228,20 @@ const About = () => {
               <div className="space-y-3 text-lg">
                 <p className="text-gray-700">
                   <span className="font-semibold">Email:</span>{' '}
-                  <a href="mailto:friendlyrentals.nfr@gmail.com" className="text-primary hover:underline">
-                    friendlyrentals.nfr@gmail.com
+                  <a href="mailto:friendlyrentals.mlr@gmail.com" className="text-primary hover:underline">
+                    friendlyrentals.mlr@gmail.com
                   </a>
                 </p>
                 <p className="text-gray-700">
                   <span className="font-semibold">Phone:</span>{' '}
-                  <a href="tel:+919742374986" className="text-primary hover:underline">
-                    +91 97423 74986
+                  <a href="tel:+918746934346" className="text-primary hover:underline">
+                    +91 87469 34346
+                  </a>
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Instagram:</span>{' '}
+                  <a href="https://instagram.com/neighbourfriendly" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                    @neighbourfriendly
                   </a>
                 </p>
               </div>
