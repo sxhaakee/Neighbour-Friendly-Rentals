@@ -70,17 +70,17 @@ const Home = () => {
         <AnimatedBackground />
         <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Why Buy When You Can
+            Rent Anything.
             <br />
             <span className="text-secondary">
-              Earn Every Month?
+              Earn Everything.
             </span>
           </h1>
           <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
-            Turn your idle stuff into cash. Rent what you need for 90% less.
+            List your idle items and earn ₹15,000+/month. Or rent what you need for 90% less than buying.
           </p>
           <p className="text-lg md:text-xl mb-8 text-secondary/90 font-bold">
-            💰 Your neighbors are already making money. What are you waiting for?
+            💰 Your neighbours are already earning. Join India's fastest-growing rental community!
           </p>
           
           {/* Search Bar */}
