@@ -1,16 +1,16 @@
 import { supabase } from '../lib/supabase';
 
-// Razorpay configuration - HARDCODED KEY
-// TODO: Replace with your actual Razorpay key from dashboard
-const RAZORPAY_KEY_ID = 'YOUR_RAZORPAY_KEY_HERE';
+// Razorpay configuration - Your live key
+const RAZORPAY_KEY_ID = 'rzp_live_RZHNDjla2df5tS';
 
-// Validate key
+// Validate and log
 if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_HERE') {
-  console.error('❌ REPLACE THE RAZORPAY KEY IN razorpayService.ts');
-  console.error('🔗 Get your key from: https://dashboard.razorpay.com/app/keys');
+  console.error('❌ Razorpay key not configured');
+} else if (!RAZORPAY_KEY_ID.startsWith('rzp_')) {
+  console.error('❌ Invalid Razorpay key format');
 } else {
   const keyType = RAZORPAY_KEY_ID.includes('test') ? 'TEST' : 'LIVE';
-  console.log(`✅ Razorpay ${keyType} key loaded`);
+  console.log(`✅ Razorpay ${keyType} key loaded: ${RAZORPAY_KEY_ID.substring(0, 15)}...`);
 }
 
 interface RazorpayOptions {
