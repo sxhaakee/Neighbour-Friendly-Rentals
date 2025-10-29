@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, DollarSign, Clock, CheckCircle, AlertCircle, ArrowLeft, Video, Shield } from 'lucide-react';
+import { Calendar, MapPin, Phone, User, AlertCircle, CheckCircle, Shield, CreditCard, Video } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -28,7 +28,7 @@ const BookItem = () => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState('');
   const [showAgreement, setShowAgreement] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'upi'>('cash');
+  const [paymentMethod] = useState<'online'>('online');
   const [isVerified, setIsVerified] = useState(false);
   const [videoAcknowledged, setVideoAcknowledged] = useState(false);
   
@@ -528,6 +528,41 @@ const BookItem = () => {
               </div>
             </motion.div>
 
+            {/* Payment Method */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="bg-white rounded-2xl shadow-sm p-6"
+            >
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-primary" />
+                Payment Method
+              </h2>
+              <div className="bg-gradient-to-r from-primary/10 to-accent/10 border-2 border-primary/30 rounded-xl p-6">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900 text-lg">Secure Online Payment</p>
+                    <p className="text-sm text-gray-600">Pay securely via Razorpay</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">💳 Credit Card</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">💳 Debit Card</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">📱 UPI</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">🏦 Net Banking</span>
+                  <span className="bg-white px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow-sm">💰 Wallets</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-4 flex items-center gap-1">
+                  <Shield className="w-3 h-3" />
+                  100% Secure & Encrypted Payment
+                </p>
+              </div>
+            </motion.div>
+
             {/* Video Recording Requirement */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -567,53 +602,6 @@ const BookItem = () => {
                 </span>
               </label>
             </motion.div>
-
-            {/* Payment Method */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="bg-white rounded-2xl p-6 shadow-sm"
-            >
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
-                Payment Method
-              </h2>
-              <div className="space-y-3">
-                <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="cash"
-                    checked={paymentMethod === 'cash'}
-                    onChange={(e) => setPaymentMethod(e.target.value as 'cash')}
-                    className="w-4 h-4 text-primary"
-                  />
-                  <div>
-                    <p className="font-semibold">Cash on Delivery</p>
-                    <p className="text-sm text-gray-600">Pay in cash when you receive the item</p>
-                  </div>
-                </label>
-                <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="upi"
-                    checked={paymentMethod === 'upi'}
-                    onChange={(e) => setPaymentMethod(e.target.value as 'upi')}
-                    className="w-4 h-4 text-primary"
-                  />
-                  <div>
-                    <p className="font-semibold">UPI on Delivery</p>
-                    <p className="text-sm text-gray-600">Pay via UPI when you receive the item</p>
-                  </div>
-                </label>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Booking Summary */}
-          <div className="lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -681,8 +669,9 @@ const BookItem = () => {
                 )}
               </button>
 
-              <p className="text-xs text-gray-500 mt-4 text-center">
-                Payment via {paymentMethod === 'cash' ? 'Cash' : 'UPI'} on delivery
+              <p className="text-xs text-gray-500 mt-4 text-center flex items-center justify-center gap-1">
+                <Shield className="w-3 h-3" />
+                Secure payment via Razorpay
               </p>
             </motion.div>
           </div>

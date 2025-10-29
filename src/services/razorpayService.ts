@@ -44,21 +44,35 @@ export const razorpayService = {
     return new Promise((resolve) => {
       // Check if Razorpay key is configured
       if (!RAZORPAY_KEY_ID) {
-        console.error('Razorpay key not configured. Please add VITE_RAZORPAY_KEY_ID to .env file');
+        console.error('❌ Razorpay key not configured. Please add VITE_RAZORPAY_KEY_ID to .env file');
+        alert('Payment gateway not configured. Please contact support.');
         resolve(false);
         return;
       }
 
       // Check if already loaded
       if (window.Razorpay) {
+        console.log('✅ Razorpay SDK already loaded');
         resolve(true);
         return;
       }
 
+      console.log('📦 Loading Razorpay SDK...');
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
+      script.async = true;
+      
+      script.onload = () => {
+        console.log('✅ Razorpay SDK loaded successfully');
+        resolve(true);
+      };
+      
+      script.onerror = (error) => {
+        console.error('❌ Failed to load Razorpay SDK:', error);
+        alert('Failed to load payment gateway. Please check your internet connection and try again.');
+        resolve(false);
+      };
+      
       document.body.appendChild(script);
     });
   },
