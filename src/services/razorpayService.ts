@@ -1,12 +1,21 @@
 import { supabase } from '../lib/supabase';
 
-// Razorpay configuration - Using your live key
-const RAZORPAY_KEY_ID = 'rzp_live_RZAjiONe3JhSfa';
+// Razorpay configuration
+// IMPORTANT: Get your actual key from https://dashboard.razorpay.com/app/keys
+// For testing, use test key (starts with rzp_test_)
+// For production, use live key (starts with rzp_live_) after KYC verification
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_PLACEHOLDER';
 
 // Debug logging
 console.log('🔑 Razorpay Key:', RAZORPAY_KEY_ID);
-console.log('🔑 Key Length:', RAZORPAY_KEY_ID.length);
+console.log('🔑 Key Type:', RAZORPAY_KEY_ID.includes('test') ? 'TEST MODE ⚠️' : 'LIVE MODE ✅');
 console.log('🔑 Key Valid:', RAZORPAY_KEY_ID.startsWith('rzp_'));
+
+// Warning if using placeholder
+if (RAZORPAY_KEY_ID === 'rzp_test_PLACEHOLDER') {
+  console.error('❌ CRITICAL: Replace PLACEHOLDER with your actual Razorpay key!');
+  console.error('📝 Get your key from: https://dashboard.razorpay.com/app/keys');
+}
 
 interface RazorpayOptions {
   key: string;
