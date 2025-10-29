@@ -299,12 +299,39 @@ const BookItem = () => {
         console.error('Error sending notification:', notifError);
       }
 
-      showToast.success('Booking created! Check your email for details.');
+      // Process payment through Razorpay
+      showToast.success('Booking created! Proceeding to payment...');
       
-      // Navigate to dashboard after a short delay
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2000);
+      // Import Razorpay service dynamically
+      const { default: razorpayService } = await import('../services/razorpayService');
+      
+      // Process payment
+      const paymentResult = await razorpayService.processBookingPayment(
+        booking.id,
+        Math.round(grandTotal),
+        user.id,
+        profile.email,
+        profile.full_name || 'User',
+        renterPhone || profile.phone || '',
+        typedListing.title
+      );
+
+      if (paymentResult.success) {
+        showToast.success('Payment successful! Booking confirmed.');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      } else {
+        // Payment failed or cancelled - update booking status
+        await supabase
+          .from('bookings')
+          .update({ status: 'cancelled', payment_status: 'failed' })
+          .eq('id', booking.id);
+        
+        showToast.error(paymentResult.error || 'Payment failed. Booking cancelled.');
+        setProcessing(false);
+        return;
+      }
     } catch (err: any) {
       console.error('Error creating booking:', err);
       if (err.message?.includes('already booked')) {
