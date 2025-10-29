@@ -1,16 +1,16 @@
 import { supabase } from '../lib/supabase';
 
-// Razorpay configuration - Load from environment
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
+// Razorpay configuration - HARDCODED KEY
+// TODO: Replace with your actual Razorpay key from dashboard
+const RAZORPAY_KEY_ID = 'YOUR_RAZORPAY_KEY_HERE';
 
-// Validate key on load
-if (!RAZORPAY_KEY_ID) {
-  console.error('❌ RAZORPAY KEY NOT FOUND!');
-  console.error('📝 Add VITE_RAZORPAY_KEY_ID to your .env file');
+// Validate key
+if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_HERE') {
+  console.error('❌ REPLACE THE RAZORPAY KEY IN razorpayService.ts');
   console.error('🔗 Get your key from: https://dashboard.razorpay.com/app/keys');
 } else {
   const keyType = RAZORPAY_KEY_ID.includes('test') ? 'TEST' : 'LIVE';
-  console.log(`✅ Razorpay ${keyType} key loaded successfully`);
+  console.log(`✅ Razorpay ${keyType} key loaded`);
 }
 
 interface RazorpayOptions {
