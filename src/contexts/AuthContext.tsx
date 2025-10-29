@@ -124,8 +124,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isPremium = profile?.is_premium === true && 
     (profile?.premium_expires_at === null || new Date(profile.premium_expires_at) > new Date());
 
-  // Check if user is verified
-  const isVerified = profile?.is_verified === true;
+  // Check if user is verified (using id_verified field from database)
+  const isVerified = (profile as any)?.id_verified === true;
 
   // Check if user can add a listing of specific type
   const canAddListing = (type: 'item' | 'property' | 'service'): boolean => {

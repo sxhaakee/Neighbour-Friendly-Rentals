@@ -1,7 +1,87 @@
 import { supabase } from '../lib/supabase';
 import { Resend } from 'resend';
-// Email templates
+
+// Initialize Resend with API key
+const getResendClient = () => {
+  const apiKey = import.meta.env.VITE_RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn('⚠️ Resend API key not configured. Emails will be logged only.');
+    return null;
+  }
+  return new Resend(apiKey);
+};
+
+// Email templates with FOMO and money-saving messaging
 const EMAIL_TEMPLATES = {
+  welcome: (data: any) => ({
+    subject: '🎉 Welcome to NeighbourFriendly Rentals - Start Earning & Saving Today!',
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #14b8a6 0%, #f59e0b 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+          .highlight-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b; }
+          .money-stat { font-size: 32px; font-weight: bold; color: #059669; text-align: center; margin: 10px 0; }
+          .button { display: inline-block; background: #14b8a6; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; margin: 15px 0; font-weight: bold; }
+          .feature { padding: 15px; margin: 10px 0; background: white; border-radius: 8px; border-left: 4px solid #14b8a6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>🎉 Welcome to NFRR!</h1>
+            <p style="font-size: 18px; margin-top: 10px;">Your Journey to Smart Savings Starts Now</p>
+          </div>
+          
+          <div class="content">
+            <p>Hi ${data.userName},</p>
+            <p><strong>Congratulations!</strong> You've just joined India's fastest-growing rental community where neighbors help neighbors save money and earn extra income!</p>
+
+            <div class="highlight-box">
+              <h2 style="margin-top: 0; color: #92400e;">💰 Did You Know?</h2>
+              <p class="money-stat">₹15,000+</p>
+              <p style="text-align: center; font-size: 16px;">Average annual savings for our active users!</p>
+              <p style="text-align: center; margin-top: 15px;">Why buy when you can rent for 90% less?</p>
+            </div>
+
+            <h3>🚀 Start Making Money in 3 Simple Steps:</h3>
+            <div class="feature">
+              <strong>1. List Your Idle Items</strong><br>
+              That camera gathering dust? List it for ₹500/day and earn ₹15,000/month!
+            </div>
+            <div class="feature">
+              <strong>2. Rent What You Need</strong><br>
+              Need a drill for 1 day? Pay ₹100 instead of buying for ₹5,000!
+            </div>
+            <div class="feature">
+              <strong>3. Build Your Reputation</strong><br>
+              Get verified, earn reviews, and watch your earnings grow!
+            </div>
+
+            <div style="background: #fee2e2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ef4444;">
+              <h3 style="margin-top: 0; color: #991b1b;">⚡ Limited Time Offer!</h3>
+              <p><strong>List your first 3 items FREE!</strong> No commission for the first month. But hurry - this offer won't last!</p>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${data.dashboardUrl}" class="button">Start Listing Now →</a>
+            </div>
+
+            <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
+              <strong>Pro Tip:</strong> Users who list items in their first week earn 3x more than those who wait!
+            </p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+  }),
+
+
   bookingConfirmation: (data: any) => ({
     subject: `Booking Confirmation - ${data.itemTitle}`,
     html: `
@@ -90,6 +170,10 @@ const EMAIL_TEMPLATES = {
           </div>
 
           <div class="footer">
+            <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+              <p style="margin: 0; font-weight: bold; color: #92400e;">💡 Smart Saver Tip</p>
+              <p style="margin: 5px 0; color: #78350f;">You just saved ₹${Math.round(data.totalPrice * 10)} by renting instead of buying!</p>
+            </div>
             <p>© 2025 Neighbour Friendly Rentals. All rights reserved.</p>
             <p>Questions? Contact us at support@nfrr.com</p>
           </div>
@@ -202,34 +286,86 @@ const EMAIL_TEMPLATES = {
 
 export const emailService = {
   /**
+   * Send welcome email to new users
+   */
+  async sendWelcomeEmail(userData: any) {
+    try {
+      console.log('📧 Sending Welcome Email to:', userData.email);
+      
+      const resend = getResendClient();
+      if (!resend) {
+        // Log email for development
+        const template = EMAIL_TEMPLATES.welcome(userData);
+        console.log('Email Subject:', template.subject);
+        console.log('Email would be sent to:', userData.email);
+        return { success: true, message: 'Email logged (Resend not configured)' };
+      }
+      
+      const template = EMAIL_TEMPLATES.welcome(userData);
+      const response = await resend.emails.send({
+        from: 'NFRR <onboarding@nfrr.in>',
+        to: userData.email,
+        subject: template.subject,
+        html: template.html,
+      });
+      
+      return { success: true, data: response };
+    } catch (error) {
+      console.error('Error sending welcome email:', error);
+      return { success: false, error };
+    }
+  },
+
+  /**
+   * Resend verification email
+   */
+  async resendVerificationEmail(email: string) {
+    try {
+      console.log('📧 Resending verification email to:', email);
+      
+      // Trigger Supabase to resend verification
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+      });
+
+      if (error) throw error;
+      
+      return { success: true, message: 'Verification email sent!' };
+    } catch (error: any) {
+      console.error('Error resending verification email:', error);
+      return { success: false, error: error.message };
+    }
+  },
+
+  /**
    * Send booking confirmation email
    */
   async sendBookingConfirmation(bookingData: any) {
     try {
-      // For now, log the email (in production, use Resend/SendGrid)
-      console.log('📧 Booking Confirmation Email:', bookingData);
+      console.log('📧 Sending Booking Confirmation to:', bookingData.email);
       
-
-      const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
+      const resend = getResendClient();
+      if (!resend) {
+        const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
+        console.log('Email Subject:', template.subject);
+        console.log('Email would be sent to:', bookingData.email);
+        return { success: true, message: 'Email logged (Resend not configured)' };
+      }
       
+      const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
       const response = await resend.emails.send({
-        from: 'NFRR <noreply@yourdomain.com>', // Change after domain setup
+        from: 'NFRR Bookings <bookings@nfrr.in>',
         to: bookingData.email,
-        cc: 'friendlyrentals.mlr@gmail.com', // Admin gets copy
-        ...EMAIL_TEMPLATES.bookingConfirmation(bookingData),
+        cc: 'friendlyrentals.mlr@gmail.com',
+        subject: template.subject,
+        html: template.html,
       });
       
       return { success: true, data: response };
-
-      // For manual testing, you can copy the HTML and send manually
-      const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
-      console.log('Email Subject:', template.subject);
-      console.log('Email HTML:', template.html);
-      
-      return { success: true, message: 'Email logged (implement actual sending)' };
     } catch (error) {
       console.error('Error sending booking confirmation:', error);
-      throw error;
+      return { success: false, error };
     }
   },
 

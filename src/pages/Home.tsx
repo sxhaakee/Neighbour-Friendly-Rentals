@@ -70,16 +70,17 @@ const Home = () => {
         <AnimatedBackground />
         <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Rent Smart.
-            <br />
-            Share Local.
+            Why Buy When You Can
             <br />
             <span className="text-secondary">
-              Save Together.
+              Earn ₹15K/Month?
             </span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-white/90 font-light">
-            Connect with your neighbours to share tools, books, electronics, and more.
+          <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
+            Turn your idle stuff into cash. Rent what you need for 90% less.
+          </p>
+          <p className="text-lg md:text-xl mb-8 text-secondary/90 font-bold">
+            💰 Your neighbors are already making money. What are you waiting for?
           </p>
           
           {/* Search Bar */}
@@ -114,7 +115,7 @@ const Home = () => {
                 to="/listings"
                 className="block bg-secondary text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-secondary/90 transition-colors shadow-lg hover:shadow-2xl"
               >
-                Browse Rentals
+                💸 Start Saving Now
               </Link>
             </motion.div>
             <motion.div
@@ -125,7 +126,7 @@ const Home = () => {
                 to="/add-item"
                 className="block bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border-2 border-white/30 hover:border-white/50"
               >
-                Post an Item
+                🚀 Start Earning Today
               </Link>
             </motion.div>
           </div>
@@ -142,8 +143,8 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Browse by Category</h2>
-            <p className="text-xl text-gray-600">Find exactly what you need from trusted neighbors</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Rent Anything. Save Everything.</h2>
+            <p className="text-xl text-gray-600">Why waste ₹50,000 buying when you can rent for ₹500?</p>
           </motion.div>
 
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
@@ -178,8 +179,8 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">One Platform, All Your Rental Needs</h2>
-            <p className="text-xl text-gray-600">From homes to events, we've got you covered</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Your Money-Making Machine</h2>
+            <p className="text-xl text-gray-600">List once. Earn forever. It's that simple.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -195,9 +196,9 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <HomeIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Find Your Home</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">💰 Properties That Pay</h3>
               <p className="text-gray-600 mb-4">
-                Discover flats, houses, PG, and commercial spaces across India. Verified listings from trusted owners and builders.
+                Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn ₹25K+ monthly passive income.
               </p>
               <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                 Browse Properties
@@ -217,9 +218,9 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <Package className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Rent Products</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">🎯 The Smart Money Move</h3>
               <p className="text-gray-600 mb-4">
-                Electronics, tools, cameras, furniture and more. Rent from your neighbors and save money while building community.
+                That DSLR collecting dust? List it for ₹800/day. That drill you need once? Rent for ₹100. Everyone wins.
               </p>
               <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                 Browse Items
@@ -239,9 +240,9 @@ const Home = () => {
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <PartyPopper className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Event Services</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">💼 Turn Skills Into Cash</h3>
               <p className="text-gray-600 mb-4">
-                DJ, catering, decorations, photography and more. Find verified service providers for all your celebrations.
+                DJ? Photographer? Caterer? Get booked daily. Customers save 40%, you earn more. No middlemen eating your profits.
               </p>
               <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                 Browse Services

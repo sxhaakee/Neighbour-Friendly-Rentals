@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle } from 'lucide-react';
+import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle, Crown, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { NotificationCenter } from '../NotificationCenter';
@@ -10,7 +10,7 @@ const Header = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, profile, signOut, isAdmin } = useAuth();
+  const { user, profile, signOut, isAdmin, isPremium } = useAuth();
 
   const navigationItems = [
     { path: '/', label: 'Home', icon: Home },
@@ -63,6 +63,17 @@ const Header = () => {
             
             {user ? (
               <>
+                {/* Premium Button - Desktop */}
+                {!isPremium && (
+                  <Link
+                    to="/premium"
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-white hover:from-yellow-500 hover:to-yellow-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                  >
+                    <Crown className="w-4 h-4" />
+                    <span className="font-semibold">Go Premium</span>
+                  </Link>
+                )}
+                
                 {/* Notification Center - Desktop */}
                 <div className="hidden md:block relative flex-shrink-0">
                   <NotificationCenter />
@@ -75,6 +86,7 @@ const Header = () => {
                   >
                     <User className="w-4 h-4 flex-shrink-0" />
                     <span className="font-medium truncate">{profile?.full_name || 'User'}</span>
+                    {isPremium && <Crown className="w-4 h-4 flex-shrink-0 text-yellow-300" />}
                     {isAdmin && <Shield className="w-4 h-4 flex-shrink-0" />}
                   </button>
                 
@@ -98,6 +110,24 @@ const Header = () => {
                       <User className="w-4 h-4" />
                       <span>Dashboard</span>
                     </Link>
+                    <Link
+                      to="/profile"
+                      onClick={() => setShowUserMenu(false)}
+                      className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      <User className="w-4 h-4" />
+                      <span>Profile</span>
+                    </Link>
+                    {!isPremium && (
+                      <Link
+                        to="/premium"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center space-x-2 px-4 py-2 text-yellow-600 hover:bg-yellow-50 font-semibold"
+                      >
+                        <Crown className="w-4 h-4" />
+                        <span>Upgrade Premium</span>
+                      </Link>
+                    )}
                     <button
                       onClick={handleSignOut}
                       className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
@@ -157,6 +187,19 @@ const Header = () => {
               
               {user ? (
                 <>
+                  {/* Premium Button - Mobile */}
+                  {!isPremium && (
+                    <Link
+                      to="/premium"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center justify-center space-x-2 px-3 py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-semibold shadow-md"
+                    >
+                      <Crown className="w-5 h-5" />
+                      <span>Upgrade to Premium</span>
+                      <Sparkles className="w-4 h-4" />
+                    </Link>
+                  )}
+                  
                   {isAdmin && (
                     <Link
                       to="/admin"

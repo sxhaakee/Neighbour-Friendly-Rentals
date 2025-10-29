@@ -327,7 +327,11 @@ const Listings = () => {
           className="mb-6"
         >
           <p className="text-gray-600">
-            Showing <span className="font-semibold">{filteredListings.length}</span> results
+            Showing <span className="font-semibold">
+              {activeTab === 'items' ? filteredListings.length : 
+               activeTab === 'services' ? filteredServices.length : 
+               filteredProperties.length}
+            </span> {activeTab === 'items' ? 'items' : activeTab === 'services' ? 'services' : 'properties'}
           </p>
         </motion.div>
 

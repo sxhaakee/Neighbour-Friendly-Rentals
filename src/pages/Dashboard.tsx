@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle, Home, Briefcase, TrendingUp } from 'lucide-react';
+import { Plus, Package, Calendar, User, Edit, Trash2, Eye, Clock, CheckCircle, Home, Briefcase, TrendingUp, Crown, Heart, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -132,11 +132,12 @@ const DashboardNew = () => {
   };
 
   const tabs = [
-    { id: 'listings', label: 'My Listings', icon: Package },
-    { id: 'bookings', label: 'My Bookings', icon: Calendar },
-    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle },
-    { id: 'earnings', label: 'Earnings', icon: TrendingUp },
-    { id: 'profile', label: 'Profile', icon: User },
+    { id: 'listings', label: 'Listings', icon: Package, mobileLabel: 'Listings' },
+    { id: 'bookings', label: 'Bookings', icon: Calendar, mobileLabel: 'Bookings' },
+    { id: 'favorites', label: 'Favorites', icon: Heart, mobileLabel: 'Saved' },
+    { id: 'rentals', label: 'Rentals', icon: CheckCircle, mobileLabel: 'Rentals' },
+    { id: 'earnings', label: 'Earnings', icon: TrendingUp, mobileLabel: 'Earnings' },
+    { id: 'profile', label: 'Profile', icon: User, mobileLabel: 'Profile' },
   ];
 
   if (loading) {
@@ -727,33 +728,65 @@ const DashboardNew = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header with Premium Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="pt-8 pb-4"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
-          <p className="text-xl text-gray-600">Manage your rentals and profile</p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
+              <p className="text-base sm:text-xl text-gray-600">Manage your rentals and profile</p>
+            </div>
+            {isPremium && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-xl shadow-lg">
+                <Crown className="w-5 h-5" />
+                <span className="font-bold">Premium Member</span>
+                <Star className="w-4 h-4" />
+              </div>
+            )}
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
+        {/* Mobile Horizontal Tabs */}
+        <div className="lg:hidden mb-6 -mx-4 px-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 pb-2 min-w-max">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex flex-col items-center justify-center px-4 py-3 rounded-xl transition-all min-w-[80px] ${
+                  activeTab === tab.id
+                    ? 'bg-primary text-white shadow-lg scale-105'
+                    : 'bg-white text-gray-600 hover:bg-gray-50 shadow'
+                }`}
+              >
+                <tab.icon className="w-5 h-5 mb-1" />
+                <span className="text-xs font-semibold">{tab.mobileLabel}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Desktop Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="lg:col-span-1"
+            className="hidden lg:block lg:col-span-1"
           >
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-              <nav className="space-y-2">
+            <div className="bg-white rounded-xl shadow-lg p-4 sticky top-24">
+              <nav className="space-y-1">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-left ${
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left ${
                       activeTab === tab.id
-                        ? 'bg-primary text-white'
+                        ? 'bg-primary text-white shadow-md'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
@@ -767,9 +800,10 @@ const DashboardNew = () => {
 
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ duration: 0.2 }}
             className="lg:col-span-3"
           >
             {renderContent()}

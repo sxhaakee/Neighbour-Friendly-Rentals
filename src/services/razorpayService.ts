@@ -148,20 +148,24 @@ export const razorpayService = {
               }
 
               try {
-                // Update profile
+                // Update profile with payment tracking
                 await supabase
                   .from('profiles')
                   .update({
                     is_premium: true,
                     premium_expires_at: expiryDate.toISOString(),
+                    premium_payment_id: response.razorpay_payment_id,
+                    premium_plan: plan,
                   })
                   .eq('id', userId);
 
-                // Track revenue
+                // Track revenue with payment ID for refund tracking
                 await supabase.from('revenue_tracking').insert({
                   revenue_type: 'premium',
                   amount: amount,
                   user_id: userId,
+                  payment_id: response.razorpay_payment_id,
+                  payment_status: 'completed',
                   description: `Premium ${plan} subscription - Payment ID: ${response.razorpay_payment_id}`,
                 });
 
@@ -428,6 +432,350 @@ export const razorpayService = {
       return true;
     } catch (error) {
       console.error('Payment verification error:', error);
+      return false;
+    }
+  },
+
+  /**
+   * Handle Razorpay Webhook Events (Refunds, Payment Failures)
+   * This should be called from a backend webhook endpoint
+   */
+  async handleWebhookEvent(event: any) {
+    try {
+      const { event: eventType, payload } = event;
+      
+      console.log('Razorpay Webhook Event:', eventType);
+
+      switch (eventType) {
+        case 'payment.refunded':
+          await this.handlePaymentRefund(payload.payment.entity);
+          break;
+        
+        case 'payment.failed':
+          await this.handlePaymentFailure(payload.payment.entity);
+          break;
+        
+        default:
+          console.log('Unhandled webhook event:', eventType);
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Webhook handling error:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Handle payment refund - revoke premium access
+   */
+  async handlePaymentRefund(paymentData: any) {
+    try {
+      const paymentId = paymentData.id;
+      const amountRefunded = paymentData.amount_refunded / 100; // Convert from paise
+
+      console.log(`Processing refund for payment ${paymentId}, amount: ₹${amountRefunded}`);
+
+      // Find user with this payment ID
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, email, full_name')
+        .eq('premium_payment_id', paymentId)
+        .single();
+
+      if (profileError || !profile) {
+        console.error('User not found for payment ID:', paymentId);
+        return;
+      }
+
+      // Revoke premium access
+      await supabase
+        .from('profiles')
+        .update({
+          is_premium: false,
+          premium_expires_at: null,
+          premium_payment_id: null,
+          premium_plan: null,
+        })
+        .eq('id', profile.id);
+
+      // Update revenue tracking
+      await supabase
+        .from('revenue_tracking')
+        .update({
+          payment_status: 'refunded',
+          description: `REFUNDED - Original: Premium subscription - Payment ID: ${paymentId}`,
+        })
+        .eq('payment_id', paymentId);
+
+      // Create notification
+      await supabase.from('notifications').insert({
+        user_id: profile.id,
+        type: 'system',
+        title: '⚠️ Premium Membership Cancelled',
+        message: 'Your premium membership has been cancelled due to a payment refund. Your listings are now limited.',
+        read: false,
+      });
+
+      console.log(`Premium access revoked for user ${profile.email}`);
+    } catch (error) {
+      console.error('Error handling refund:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Handle payment failure
+   */
+  async handlePaymentFailure(paymentData: any) {
+    try {
+      const paymentId = paymentData.id;
+      console.log(`Payment failed: ${paymentId}`);
+
+      // Update any pending transactions
+      await supabase
+        .from('revenue_tracking')
+        .update({ payment_status: 'failed' })
+        .eq('payment_id', paymentId);
+
+    } catch (error) {
+      console.error('Error handling payment failure:', error);
+    }
+  },
+
+  /**
+   * Process Property Booking Payment
+   */
+  async processPropertyBookingPayment(
+    bookingId: string,
+    amount: number,
+    userId: string,
+    userEmail: string,
+    userName: string,
+    userPhone: string,
+    propertyTitle: string
+  ): Promise<{ success: boolean; paymentId?: string; error?: string }> {
+    try {
+      const scriptLoaded = await this.loadScript();
+      if (!scriptLoaded) {
+        throw new Error('Failed to load Razorpay SDK');
+      }
+
+      const amountInPaise = amount * 100;
+
+      return new Promise((resolve) => {
+        const options: RazorpayOptions = {
+          key: RAZORPAY_KEY_ID,
+          amount: amountInPaise,
+          currency: 'INR',
+          name: 'NeighbourFriendly Rentals',
+          description: `Property Booking: ${propertyTitle}`,
+          prefill: {
+            name: userName,
+            email: userEmail,
+            contact: userPhone,
+          },
+          theme: {
+            color: '#667eea',
+          },
+          handler: async (response: RazorpayResponse) => {
+            console.log('Property booking payment successful:', response);
+
+            try {
+              // Update booking payment status
+              await supabase
+                .from('property_bookings')
+                .update({
+                  payment_status: 'completed',
+                  payment_id: response.razorpay_payment_id,
+                  status: 'confirmed',
+                })
+                .eq('id', bookingId);
+
+              // Track revenue (service fee)
+              const serviceFee = amount * 0.1; // 10% service fee
+              await supabase.from('revenue_tracking').insert({
+                revenue_type: 'property_booking',
+                amount: serviceFee,
+                user_id: userId,
+                booking_id: bookingId,
+                payment_id: response.razorpay_payment_id,
+                payment_status: 'completed',
+                description: `Property booking fee - Payment ID: ${response.razorpay_payment_id}`,
+              });
+
+              resolve({
+                success: true,
+                paymentId: response.razorpay_payment_id,
+              });
+            } catch (error) {
+              console.error('Error updating property booking status:', error);
+              resolve({
+                success: false,
+                error: 'Payment successful but failed to update booking. Contact support.',
+              });
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              resolve({
+                success: false,
+                error: 'Payment cancelled by user',
+              });
+            },
+          },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      });
+    } catch (error: any) {
+      console.error('Razorpay error:', error);
+      return {
+        success: false,
+        error: error.message || 'Payment failed',
+      };
+    }
+  },
+
+  /**
+   * Process Service Booking Payment
+   */
+  async processServiceBookingPayment(
+    bookingId: string,
+    amount: number,
+    userId: string,
+    userEmail: string,
+    userName: string,
+    userPhone: string,
+    serviceTitle: string
+  ): Promise<{ success: boolean; paymentId?: string; error?: string }> {
+    try {
+      const scriptLoaded = await this.loadScript();
+      if (!scriptLoaded) {
+        throw new Error('Failed to load Razorpay SDK');
+      }
+
+      const amountInPaise = amount * 100;
+
+      return new Promise((resolve) => {
+        const options: RazorpayOptions = {
+          key: RAZORPAY_KEY_ID,
+          amount: amountInPaise,
+          currency: 'INR',
+          name: 'NeighbourFriendly Rentals',
+          description: `Service Booking: ${serviceTitle}`,
+          prefill: {
+            name: userName,
+            email: userEmail,
+            contact: userPhone,
+          },
+          theme: {
+            color: '#667eea',
+          },
+          handler: async (response: RazorpayResponse) => {
+            console.log('Service booking payment successful:', response);
+
+            try {
+              // Update booking payment status
+              await supabase
+                .from('service_bookings')
+                .update({
+                  payment_status: 'completed',
+                  payment_id: response.razorpay_payment_id,
+                  status: 'confirmed',
+                })
+                .eq('id', bookingId);
+
+              // Track revenue (service fee)
+              const serviceFee = amount * 0.15; // 15% service fee for services
+              await supabase.from('revenue_tracking').insert({
+                revenue_type: 'service_booking',
+                amount: serviceFee,
+                user_id: userId,
+                booking_id: bookingId,
+                payment_id: response.razorpay_payment_id,
+                payment_status: 'completed',
+                description: `Service booking fee - Payment ID: ${response.razorpay_payment_id}`,
+              });
+
+              resolve({
+                success: true,
+                paymentId: response.razorpay_payment_id,
+              });
+            } catch (error) {
+              console.error('Error updating service booking status:', error);
+              resolve({
+                success: false,
+                error: 'Payment successful but failed to update booking. Contact support.',
+              });
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              resolve({
+                success: false,
+                error: 'Payment cancelled by user',
+              });
+            },
+          },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      });
+    } catch (error: any) {
+      console.error('Razorpay error:', error);
+      return {
+        success: false,
+        error: error.message || 'Payment failed',
+      };
+    }
+  },
+
+  /**
+   * Check if premium has expired and revoke access
+   */
+  async checkAndRevokeExpiredPremium(userId: string) {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_premium, premium_expires_at')
+        .eq('id', userId)
+        .single();
+
+      if (!profile || !profile.is_premium) return;
+
+      const expiryDate = new Date(profile.premium_expires_at);
+      const now = new Date();
+
+      if (expiryDate < now) {
+        // Premium has expired
+        await supabase
+          .from('profiles')
+          .update({
+            is_premium: false,
+            premium_expires_at: null,
+          })
+          .eq('id', userId);
+
+        // Create notification
+        await supabase.from('notifications').insert({
+          user_id: userId,
+          type: 'system',
+          title: '⏰ Premium Membership Expired',
+          message: 'Your premium membership has expired. Renew now to continue enjoying unlimited listings!',
+          link: '/premium',
+          read: false,
+        });
+
+        console.log(`Premium expired for user ${userId}`);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('Error checking premium expiry:', error);
       return false;
     }
   },
