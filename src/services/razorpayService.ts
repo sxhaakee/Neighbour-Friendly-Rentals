@@ -1,7 +1,13 @@
 import { supabase } from '../lib/supabase';
 
 // Razorpay configuration
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RZAjiONe3JhSfa';
+
+// Debug: Log if key is loaded
+if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
+  console.warn('⚠️ VITE_RAZORPAY_KEY_ID not found in env, using fallback key');
+}
+console.log('🔑 Razorpay Key Status:', RAZORPAY_KEY_ID ? 'Loaded ✅' : 'Missing ❌');
 
 interface RazorpayOptions {
   key: string;
