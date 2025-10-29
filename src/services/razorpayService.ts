@@ -42,6 +42,13 @@ export const razorpayService = {
    */
   loadScript(): Promise<boolean> {
     return new Promise((resolve) => {
+      // Check if Razorpay key is configured
+      if (!RAZORPAY_KEY_ID) {
+        console.error('Razorpay key not configured. Please add VITE_RAZORPAY_KEY_ID to .env file');
+        resolve(false);
+        return;
+      }
+
       // Check if already loaded
       if (window.Razorpay) {
         resolve(true);

@@ -31,11 +31,6 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-
     if (profile) {
       setFormData({
         full_name: profile.full_name || '',
@@ -43,7 +38,7 @@ const Profile = () => {
         address: profile.address || '',
       });
     }
-  }, [user, profile, navigate]);
+  }, [profile]);
 
   const handleSave = async () => {
     if (!user) return;

@@ -23,17 +23,17 @@ const Premium = () => {
 
   const plans = {
     monthly: {
-      price: 299,
+      price: 49,
       period: 'month',
       savings: 0,
-      total: 299
+      total: 49
     },
     yearly: {
-      price: 2999,
+      price: 499,
       period: 'year',
-      savings: 589,
-      total: 2999,
-      monthlyEquivalent: 250
+      savings: 89,
+      total: 499,
+      monthlyEquivalent: 42
     }
   };
 

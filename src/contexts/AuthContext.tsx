@@ -23,6 +23,7 @@ interface AuthContextType {
   refreshProfile: () => Promise<void>;
   isAdmin: boolean;
   isPremium: boolean;
+  isVerified: boolean;
   listingCounts: ListingCounts;
   canAddListing: (type: 'item' | 'property' | 'service') => boolean;
   refreshListingCounts: () => Promise<void>;
@@ -122,6 +123,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Check if user is premium
   const isPremium = profile?.is_premium === true && 
     (profile?.premium_expires_at === null || new Date(profile.premium_expires_at) > new Date());
+
+  // Check if user is verified
+  const isVerified = profile?.is_verified === true;
 
   // Check if user can add a listing of specific type
   const canAddListing = (type: 'item' | 'property' | 'service'): boolean => {
@@ -225,6 +229,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshProfile,
     isAdmin,
     isPremium,
+    isVerified,
     listingCounts,
     canAddListing,
     refreshListingCounts,
