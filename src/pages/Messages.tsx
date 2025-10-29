@@ -171,6 +171,9 @@ const Messages = () => {
       setMessages(prev => prev.map(msg => 
         msg.id === optimisticMessage.id ? sentMessage : msg
       ));
+      
+      // Refresh conversations to update order
+      await loadConversations();
     } catch (error) {
       console.error('Error sending message:', error);
       // Remove optimistic message on error

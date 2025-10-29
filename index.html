@@ -52,6 +52,43 @@
     
     <!-- Razorpay SDK - Preload for faster payment processing -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <!-- Structured Data / JSON-LD for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NeighbourFriendly Rentals",
+      "url": "https://neighbourfriendly.in",
+      "description": "India's trusted peer-to-peer rental marketplace for items, properties, and services",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://neighbourfriendly.in/browse?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "NeighbourFriendly Rentals",
+      "url": "https://neighbourfriendly.in",
+      "logo": "https://neighbourfriendly.in/logo.png",
+      "sameAs": [
+        "https://www.facebook.com/neighbourfriendly",
+        "https://twitter.com/neighbourfriendly",
+        "https://www.instagram.com/neighbourfriendly"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@neighbourfriendly.in",
+        "contactType": "Customer Service",
+        "areaServed": "IN"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -86,12 +86,12 @@ const Header = () => {
                       {/* User Info Header */}
                       <div className="px-4 py-3 border-b border-gray-100">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg">
+                          <div className="w-10 h-10 min-w-[2.5rem] rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-lg shadow-md">
                             {profile?.full_name?.charAt(0).toUpperCase() || 'M'}
                           </div>
-                          <div>
-                            <p className="font-semibold text-gray-900">{profile?.full_name || 'User'}</p>
-                            <p className="text-xs text-gray-500">{profile?.email || user?.email}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-900 truncate">{profile?.full_name || 'User'}</p>
+                            <p className="text-xs text-gray-500 truncate">{profile?.email || user?.email}</p>
                           </div>
                         </div>
                         {isPremium && (
