@@ -7,11 +7,27 @@ This guide explains how to set up an automated cron job to check and revoke expi
 
 ## Option 1: Supabase Edge Function (Recommended)
 
-### Step 1: Create Edge Function
-```bash
-# Install Supabase CLI if not already installed
-npm install -g supabase
+### Step 1: Install Supabase CLI
 
+**For macOS (using Homebrew):**
+```bash
+brew install supabase/tap/supabase
+```
+
+**For macOS/Linux (using npm - NOT recommended, use Homebrew instead):**
+```bash
+# Note: npm global install is not supported
+# Use Homebrew or download binary instead
+```
+
+**Alternative - Download Binary:**
+```bash
+# Visit: https://github.com/supabase/cli/releases
+# Download the appropriate binary for your OS
+```
+
+### Step 2: Initialize and Create Edge Function
+```bash
 # Initialize Supabase in your project
 supabase init
 
