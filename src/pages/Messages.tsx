@@ -112,7 +112,11 @@ const Messages = () => {
       console.log('Loading conversations for user:', user.id);
       const data = await chatService.getUserConversations(user.id);
       console.log('Loaded conversations:', data);
-      setConversations(data);
+      // Sort by last_message_at descending (latest first)
+      const sortedData = data.sort((a, b) => 
+        new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime()
+      );
+      setConversations(sortedData);
     } catch (error) {
       console.error('Error loading conversations:', error);
     } finally {
@@ -188,6 +192,23 @@ const Messages = () => {
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
     return messageDate.toLocaleDateString();
+  };
+
+  const formatMessageTime = (date: string) => {
+    const messageDate = new Date(date);
+    return messageDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
+  const getUnreadCount = (conversationId: string) => {
+    return messages.filter(msg => 
+      msg.conversation_id === conversationId && 
+      !msg.read && 
+      msg.sender_id !== user?.id
+    ).length;
   };
 
   const filteredConversations = conversations.filter(convo =>
@@ -379,7 +400,7 @@ const Messages = () => {
                               </div>
                               <div className={`flex items-center gap-1 mt-1 px-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
                                 <span className="text-xs text-gray-500">
-                                  {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  {formatMessageTime(msg.created_at)}
                                 </span>
                                 {isOwn && (
                                   msg.read ? (

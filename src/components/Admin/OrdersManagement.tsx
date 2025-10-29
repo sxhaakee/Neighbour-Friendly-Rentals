@@ -204,8 +204,7 @@ export const OrdersManagement = () => {
         .from('bookings')
         .update({ 
           status: 'rejected',
-          rejection_reason: reason,
-          rejected_at: new Date().toISOString()
+          rejection_reason: reason
         } as any)
         .eq('id', booking.id);
 
@@ -236,8 +235,7 @@ export const OrdersManagement = () => {
         .from('bookings')
         .update({ 
           status: 'cancelled',
-          rejection_reason: reason,
-          rejected_at: new Date().toISOString()
+          rejection_reason: reason
         } as any)
         .eq('id', booking.id);
 
