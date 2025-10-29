@@ -45,7 +45,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-4">
             {navigationItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
@@ -62,83 +62,84 @@ const Header = () => {
             ))}
             
             {user ? (
-              <>
+              <div className="flex items-center space-x-3 ml-4">
                 {/* Premium Button - Desktop */}
                 {!isPremium && (
                   <Link
                     to="/premium"
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-white hover:from-yellow-500 hover:to-yellow-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                    className="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-white hover:from-yellow-500 hover:to-yellow-700 transition-all duration-200 shadow-md hover:shadow-lg whitespace-nowrap"
                   >
                     <Crown className="w-4 h-4" />
-                    <span className="font-semibold">Go Premium</span>
+                    <span className="font-semibold text-sm">Go Premium</span>
                   </Link>
                 )}
                 
                 {/* Notification Center - Desktop */}
-                <div className="hidden md:block relative flex-shrink-0">
+                <div className="relative flex-shrink-0">
                   <NotificationCenter />
                 </div>
                 
+                {/* User Menu */}
                 <div className="relative flex-shrink-0">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors max-w-[200px]"
+                    className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors"
                   >
                     <User className="w-4 h-4 flex-shrink-0" />
-                    <span className="font-medium truncate">{profile?.full_name || 'User'}</span>
+                    <span className="font-medium text-sm max-w-[120px] truncate">{profile?.full_name?.split(' ')[0] || 'User'}</span>
                     {isPremium && <Crown className="w-4 h-4 flex-shrink-0 text-yellow-300" />}
                     {isAdmin && <Shield className="w-4 h-4 flex-shrink-0" />}
                   </button>
                 
-                {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
-                    {isAdmin && (
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setShowUserMenu(false)}
+                          className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        >
+                          <Shield className="w-4 h-4" />
+                          <span>Admin Panel</span>
+                        </Link>
+                      )}
                       <Link
-                        to="/admin"
+                        to="/dashboard"
                         onClick={() => setShowUserMenu(false)}
                         className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
                       >
-                        <Shield className="w-4 h-4" />
-                        <span>Admin Panel</span>
+                        <User className="w-4 h-4" />
+                        <span>Dashboard</span>
                       </Link>
-                    )}
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setShowUserMenu(false)}
-                      className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                      <User className="w-4 h-4" />
-                      <span>Dashboard</span>
-                    </Link>
-                    <Link
-                      to="/profile"
-                      onClick={() => setShowUserMenu(false)}
-                      className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    >
-                      <User className="w-4 h-4" />
-                      <span>Profile</span>
-                    </Link>
-                    {!isPremium && (
                       <Link
-                        to="/premium"
+                        to="/profile"
                         onClick={() => setShowUserMenu(false)}
-                        className="flex items-center space-x-2 px-4 py-2 text-yellow-600 hover:bg-yellow-50 font-semibold"
+                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100"
                       >
-                        <Crown className="w-4 h-4" />
-                        <span>Upgrade Premium</span>
+                        <User className="w-4 h-4" />
+                        <span>Profile</span>
                       </Link>
-                    )}
-                    <button
-                      onClick={handleSignOut}
-                      className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      <span>Sign Out</span>
-                    </button>
-                  </div>
-                )}
+                      {!isPremium && (
+                        <Link
+                          to="/premium"
+                          onClick={() => setShowUserMenu(false)}
+                          className="flex items-center space-x-2 px-4 py-2 text-yellow-600 hover:bg-yellow-50 font-semibold"
+                        >
+                          <Crown className="w-4 h-4" />
+                          <span>Upgrade Premium</span>
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleSignOut}
+                        className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-              </>
             ) : (
               <Link
                 to="/login"
