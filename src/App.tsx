@@ -29,7 +29,6 @@ import Premium from './pages/Premium';
 import Profile from './pages/Profile';
 import FAB from './components/Common/FAB';
 import { ToastContainer } from './components/Common/Toast';
-import { BookingNotification } from './components/Notifications/BookingNotification';
 import Chat from './pages/Chat';
 import Messages from './pages/Messages';
 import { logPageView } from './utils/analytics';
@@ -88,7 +87,6 @@ function AppContent() {
       </main>
       <Footer />
       <FAB />
-      <BookingNotification />
       <ToastContainer />
       <Analytics />
     </div>
