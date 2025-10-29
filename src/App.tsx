@@ -25,6 +25,7 @@ import ServiceDetails from './pages/ServiceDetails';
 import AddService from './pages/AddService';
 import Terms from './pages/Legal/Terms';
 import Privacy from './pages/Legal/Privacy';
+import Premium from './pages/Premium';
 import FAB from './components/Common/FAB';
 import { ToastContainer } from './components/Common/Toast';
 import { BookingNotification } from './components/Notifications/BookingNotification';
@@ -78,6 +79,7 @@ function AppContent() {
           <Route path="/messages/:conversationId" element={<Messages />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:conversationId" element={<Chat />} />
+          <Route path="/premium" element={<Premium />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
