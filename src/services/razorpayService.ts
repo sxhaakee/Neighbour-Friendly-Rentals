@@ -118,82 +118,104 @@ export const razorpayService = {
       // Load Razorpay script
       const scriptLoaded = await this.loadScript();
       if (!scriptLoaded) {
-        throw new Error('Failed to load Razorpay SDK');
+        return { success: false, error: 'Failed to load payment gateway. Please check your internet connection.' };
       }
+
+      // Verify Razorpay is available
+      if (!window.Razorpay) {
+        console.error('❌ Razorpay object not found on window');
+        return { success: false, error: 'Payment gateway not initialized. Please refresh and try again.' };
+      }
+
+      // Verify key is present
+      if (!RAZORPAY_KEY_ID) {
+        console.error('❌ Razorpay key not configured');
+        return { success: false, error: 'Payment gateway not configured. Please contact support.' };
+      }
+
+      console.log('✅ Razorpay initialized, processing payment...');
 
       // Calculate amount
       const amount = plan === 'monthly' ? 49 : 499;
       const amountInPaise = amount * 100; // Razorpay uses paise
 
       return new Promise((resolve) => {
-        const options: RazorpayOptions = {
-          key: RAZORPAY_KEY_ID,
-          amount: amountInPaise,
-          currency: 'INR',
-          name: 'NeighbourFriendly Rentals',
-          description: `Premium ${plan === 'monthly' ? 'Monthly' : 'Yearly'} Subscription`,
-          prefill: {
-            name: userName,
-            email: userEmail,
-            contact: userPhone,
-          },
-          theme: {
-            color: '#667eea',
-          },
-          handler: async (response: RazorpayResponse) => {
-            // Payment successful
-            console.log('Payment successful:', response);
-
-            // Update user to premium
-            const expiryDate = new Date();
-            if (plan === 'monthly') {
-              expiryDate.setMonth(expiryDate.getMonth() + 1);
-            } else {
-              expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-            }
-
-            try {
-              // Update profile
-              await supabase
-                .from('profiles')
-                .update({
-                  is_premium: true,
-                  premium_expires_at: expiryDate.toISOString(),
-                })
-                .eq('id', userId);
-
-              // Track revenue
-              await supabase.from('revenue_tracking').insert({
-                revenue_type: 'premium',
-                amount: amount,
-                user_id: userId,
-                description: `Premium ${plan} subscription - Payment ID: ${response.razorpay_payment_id}`,
-              });
-
-              resolve({
-                success: true,
-                paymentId: response.razorpay_payment_id,
-              });
-            } catch (error) {
-              console.error('Error updating premium status:', error);
-              resolve({
-                success: false,
-                error: 'Payment successful but failed to update account. Contact support.',
-              });
-            }
-          },
-          modal: {
-            ondismiss: () => {
-              resolve({
-                success: false,
-                error: 'Payment cancelled by user',
-              });
+        try {
+          const options: RazorpayOptions = {
+            key: RAZORPAY_KEY_ID,
+            amount: amountInPaise,
+            currency: 'INR',
+            name: 'NeighbourFriendly Rentals',
+            description: `Premium ${plan === 'monthly' ? 'Monthly' : 'Yearly'} Subscription`,
+            prefill: {
+              name: userName,
+              email: userEmail,
+              contact: userPhone,
             },
-          },
-        };
+            theme: {
+              color: '#667eea',
+            },
+            handler: async (response: RazorpayResponse) => {
+              // Payment successful
+              console.log('Payment successful:', response);
 
-        const razorpay = new window.Razorpay(options);
-        razorpay.open();
+              // Update user to premium
+              const expiryDate = new Date();
+              if (plan === 'monthly') {
+                expiryDate.setMonth(expiryDate.getMonth() + 1);
+              } else {
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+              }
+
+              try {
+                // Update profile
+                await supabase
+                  .from('profiles')
+                  .update({
+                    is_premium: true,
+                    premium_expires_at: expiryDate.toISOString(),
+                  })
+                  .eq('id', userId);
+
+                // Track revenue
+                await supabase.from('revenue_tracking').insert({
+                  revenue_type: 'premium',
+                  amount: amount,
+                  user_id: userId,
+                  description: `Premium ${plan} subscription - Payment ID: ${response.razorpay_payment_id}`,
+                });
+
+                resolve({
+                  success: true,
+                  paymentId: response.razorpay_payment_id,
+                });
+              } catch (error) {
+                console.error('Error updating premium status:', error);
+                resolve({
+                  success: false,
+                  error: 'Payment successful but failed to update account. Contact support.',
+                });
+              }
+            },
+            modal: {
+              ondismiss: () => {
+                resolve({
+                  success: false,
+                  error: 'Payment cancelled by user',
+                });
+              },
+            },
+          };
+
+          const razorpay = new window.Razorpay(options);
+          razorpay.open();
+        } catch (error: any) {
+          console.error('❌ Error creating Razorpay instance:', error);
+          resolve({
+            success: false,
+            error: error.message || 'Failed to open payment gateway',
+          });
+        }
       });
     } catch (error: any) {
       console.error('Razorpay error:', error);
