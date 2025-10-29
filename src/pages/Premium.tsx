@@ -71,7 +71,7 @@ const Premium = () => {
   ];
 
   const handleUpgrade = async (plan: 'monthly' | 'yearly') => {
-    if (!user) {
+    if (!user || !profile) {
       showToast.error('Please login to upgrade');
       navigate('/login');
       return;
@@ -80,41 +80,29 @@ const Premium = () => {
     setLoading(true);
 
     try {
-      // Calculate expiry date
-      const expiryDate = new Date();
-      if (plan === 'monthly') {
-        expiryDate.setMonth(expiryDate.getMonth() + 1);
+      // Import Razorpay service dynamically
+      const { default: razorpayService } = await import('../services/razorpayService');
+
+      // Process payment through Razorpay
+      const result = await razorpayService.processPremiumPayment(
+        user.id,
+        user.email || profile.email || '',
+        profile.full_name || 'User',
+        profile.phone || '',
+        plan
+      );
+
+      if (result.success) {
+        // Refresh profile
+        await refreshProfile();
+        showToast.success('🎉 Welcome to Premium! Enjoy unlimited listings!');
+        navigate('/dashboard');
       } else {
-        expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+        showToast.error(result.error || 'Payment failed. Please try again.');
       }
-
-      // Update user profile to premium
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          is_premium: true,
-          premium_expires_at: expiryDate.toISOString()
-        })
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      // Track revenue
-      await supabase.from('revenue_tracking').insert({
-        revenue_type: 'premium',
-        amount: plans[plan].price,
-        user_id: user.id,
-        description: `Premium ${plan} subscription`
-      });
-
-      // Refresh profile
-      await refreshProfile();
-
-      showToast.success('🎉 Welcome to Premium! Enjoy unlimited listings!');
-      navigate('/dashboard');
     } catch (error: any) {
       console.error('Error upgrading to premium:', error);
-      showToast.error('Failed to upgrade. Please try again.');
+      showToast.error('Failed to process payment. Please try again.');
     } finally {
       setLoading(false);
     }
