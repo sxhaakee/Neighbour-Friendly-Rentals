@@ -73,7 +73,7 @@ const Home = () => {
             Why Buy When You Can
             <br />
             <span className="text-secondary">
-              Earn ₹15K/Month?
+              Earn Every Month?
             </span>
           </h1>
           <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
@@ -144,7 +144,7 @@ const Home = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Rent Anything. Save Everything.</h2>
-            <p className="text-xl text-gray-600">Why waste ₹50,000 buying when you can rent for ₹500?</p>
+            <p className="text-xl text-gray-600">Why waste thousands buying when you can rent for a fraction?</p>
           </motion.div>
 
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
@@ -198,7 +198,7 @@ const Home = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">💰 Properties That Pay</h3>
               <p className="text-gray-600 mb-4">
-                Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn ₹25K+ monthly passive income.
+                Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn monthly passive income.
               </p>
               <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                 Browse Properties
@@ -220,7 +220,7 @@ const Home = () => {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">🎯 The Smart Money Move</h3>
               <p className="text-gray-600 mb-4">
-                That DSLR collecting dust? List it for ₹800/day. That drill you need once? Rent for ₹100. Everyone wins.
+                That camera collecting dust? List it and earn daily. Need a drill for one day? Rent instead of buying. Everyone wins.
               </p>
               <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
                 Browse Items
