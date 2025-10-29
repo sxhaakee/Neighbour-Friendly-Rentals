@@ -176,27 +176,16 @@ const DashboardNew = () => {
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              {isPremium && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="flex items-center gap-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-bold shadow-lg"
-                >
-                  <Crown className="w-5 h-5" />
-                  <span>Premium Member</span>
-                </motion.div>
-              )}
-              <button
-                onClick={() => navigate('/profile')}
-                className="flex items-center gap-2 bg-white text-teal-600 hover:bg-gray-100 px-4 py-2 rounded-full font-semibold transition-all shadow-md hover:shadow-lg"
+            {isPremium && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="flex items-center gap-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-bold shadow-lg"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500 to-green-600 flex items-center justify-center text-white font-bold text-sm">
-                  {profile?.full_name?.[0]?.toUpperCase() || 'U'}
-                </div>
-                <span className="hidden md:inline">My Profile</span>
-              </button>
-            </div>
+                <Crown className="w-5 h-5" />
+                <span>Premium Member</span>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Quick Stats */}

@@ -74,11 +74,11 @@ const Header = () => {
                     onClick={() => setShowUserMenu(!showUserMenu)}
                     className="flex items-center space-x-2 px-4 py-2 rounded-full bg-white border-2 border-primary hover:bg-primary/5 transition-all"
                   >
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 min-w-[2rem] rounded-full bg-primary flex items-center justify-center text-white font-bold text-base">
                       {profile?.full_name?.charAt(0).toUpperCase() || 'M'}
                     </div>
-                    <span className="font-medium text-sm text-gray-900">My Profile</span>
-                    {isPremium && <Crown className="w-4 h-4 text-yellow-500" />}
+                    <span className="font-medium text-sm text-gray-900 whitespace-nowrap">My Profile</span>
+                    {isPremium && <Crown className="w-4 h-4 text-yellow-500 flex-shrink-0" />}
                   </button>
                 
                   {showUserMenu && (
