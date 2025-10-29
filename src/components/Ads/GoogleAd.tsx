@@ -42,7 +42,7 @@ export const GoogleAd = ({
       <ins
         className="adsbygoogle"
         style={{ display: 'block', ...style }}
-        data-ad-client="ca-pub-XXXXXXXXXX" // Replace with your AdSense ID
+        data-ad-client="ca-pub-1300897517747545"
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive.toString()}
