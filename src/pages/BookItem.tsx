@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, MapPin, Phone, User, AlertCircle, CheckCircle, Shield, CreditCard, Video } from 'lucide-react';
+import { Calendar, MapPin, Phone, User, AlertCircle, CheckCircle, Shield, CreditCard, Video, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
