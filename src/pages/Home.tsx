@@ -375,7 +375,7 @@ const Home = () => {
                     />
                     <div className="absolute top-2 left-2">
                       <span className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        Service
+                        {service.service_category || 'Service'}
                       </span>
                     </div>
                   </div>
