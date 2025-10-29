@@ -1,20 +1,16 @@
 import { supabase } from '../lib/supabase';
 
-// Razorpay configuration
-// IMPORTANT: Get your actual key from https://dashboard.razorpay.com/app/keys
-// For testing, use test key (starts with rzp_test_)
-// For production, use live key (starts with rzp_live_) after KYC verification
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_PLACEHOLDER';
+// Razorpay configuration - Load from environment
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
-// Debug logging
-console.log('🔑 Razorpay Key:', RAZORPAY_KEY_ID);
-console.log('🔑 Key Type:', RAZORPAY_KEY_ID.includes('test') ? 'TEST MODE ⚠️' : 'LIVE MODE ✅');
-console.log('🔑 Key Valid:', RAZORPAY_KEY_ID.startsWith('rzp_'));
-
-// Warning if using placeholder
-if (RAZORPAY_KEY_ID === 'rzp_test_PLACEHOLDER') {
-  console.error('❌ CRITICAL: Replace PLACEHOLDER with your actual Razorpay key!');
-  console.error('📝 Get your key from: https://dashboard.razorpay.com/app/keys');
+// Validate key on load
+if (!RAZORPAY_KEY_ID) {
+  console.error('❌ RAZORPAY KEY NOT FOUND!');
+  console.error('📝 Add VITE_RAZORPAY_KEY_ID to your .env file');
+  console.error('🔗 Get your key from: https://dashboard.razorpay.com/app/keys');
+} else {
+  const keyType = RAZORPAY_KEY_ID.includes('test') ? 'TEST' : 'LIVE';
+  console.log(`✅ Razorpay ${keyType} key loaded successfully`);
 }
 
 interface RazorpayOptions {
@@ -54,67 +50,37 @@ export const razorpayService = {
   /**
    * Load Razorpay script
    */
+  /**
+   * Load Razorpay SDK
+   * According to: https://razorpay.com/docs/payments/payment-gateway/web-integration/standard/
+   */
   loadScript(): Promise<boolean> {
     return new Promise((resolve) => {
-      // Check if Razorpay key is configured
+      // Validate key first
       if (!RAZORPAY_KEY_ID) {
-        console.error('❌ Razorpay key not configured. Please add VITE_RAZORPAY_KEY_ID to .env file');
-        alert('Payment gateway not configured. Please contact support.');
+        console.error('❌ Razorpay key not configured');
         resolve(false);
         return;
       }
 
       // Check if already loaded
       if (window.Razorpay) {
-        console.log('✅ Razorpay SDK already loaded');
         resolve(true);
         return;
       }
 
-      console.log('📦 Loading Razorpay SDK...');
-      
-      // Try loading with multiple attempts
-      let attempts = 0;
-      const maxAttempts = 3;
-      
-      const tryLoad = () => {
-        attempts++;
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.async = true;
-        
-        const timeout = setTimeout(() => {
-          console.warn(`⏱️ Razorpay SDK loading timeout (attempt ${attempts}/${maxAttempts})`);
-          if (attempts < maxAttempts) {
-            document.body.removeChild(script);
-            tryLoad();
-          } else {
-            console.error('❌ Failed to load Razorpay SDK after multiple attempts');
-            resolve(false);
-          }
-        }, 10000); // 10 second timeout
-        
-        script.onload = () => {
-          clearTimeout(timeout);
-          console.log('✅ Razorpay SDK loaded successfully');
-          resolve(true);
-        };
-        
-        script.onerror = (error) => {
-          clearTimeout(timeout);
-          console.error(`❌ Failed to load Razorpay SDK (attempt ${attempts}/${maxAttempts}):`, error);
-          if (attempts < maxAttempts) {
-            setTimeout(tryLoad, 1000); // Wait 1 second before retry
-          } else {
-            alert('Failed to load payment gateway. Please check your internet connection and try again.');
-            resolve(false);
-          }
-        };
-        
-        document.body.appendChild(script);
+      // Load Razorpay checkout script
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => {
+        console.log('✅ Razorpay SDK loaded');
+        resolve(true);
       };
-      
-      tryLoad();
+      script.onerror = () => {
+        console.error('❌ Failed to load Razorpay SDK');
+        resolve(false);
+      };
+      document.body.appendChild(script);
     });
   },
 
