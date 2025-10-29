@@ -382,8 +382,28 @@ const BookItem = () => {
           Back
         </button>
 
-        {/* Verification Required */}
-        {!isVerified && (
+        {/* Verification Status */}
+        {isVerified ? (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-green-50 border-2 border-green-300 rounded-xl p-4 mb-6"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="font-bold text-green-800 flex items-center gap-2">
+                  ✓ Verified Account
+                </p>
+                <p className="text-sm text-green-700">
+                  Your ID is verified. You can book items securely.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

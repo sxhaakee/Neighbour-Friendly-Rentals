@@ -107,9 +107,6 @@ const Profile = () => {
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-4xl font-bold">
                     {(profile.full_name || profile.email || 'U')[0].toUpperCase()}
                   </div>
-                  <button className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:shadow-lg transition-shadow">
-                    <Camera className="w-4 h-4 text-gray-600" />
-                  </button>
                 </div>
               </div>
 

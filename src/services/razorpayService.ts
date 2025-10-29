@@ -95,7 +95,7 @@ export const razorpayService = {
       }
 
       // Calculate amount
-      const amount = plan === 'monthly' ? 299 : 2999;
+      const amount = plan === 'monthly' ? 49 : 499;
       const amountInPaise = amount * 100; // Razorpay uses paise
 
       return new Promise((resolve) => {
