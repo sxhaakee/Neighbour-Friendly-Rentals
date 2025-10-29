@@ -29,6 +29,7 @@ const AddService = () => {
   const [formData, setFormData] = useState({
     business_name: '',
     category: 'event-management',
+    custom_category: '',
     description: '',
     tagline: '',
     services: [] as string[],
@@ -53,27 +54,59 @@ const AddService = () => {
   });
 
   const categories = [
+    // Event Services
     { value: 'event-management', label: 'Event Management' },
     { value: 'catering', label: 'Catering' },
-    { value: 'dj', label: 'DJ' },
     { value: 'decoration', label: 'Decoration' },
-    { value: 'photography', label: 'Photography' },
-    { value: 'videography', label: 'Videography' },
-    { value: 'shamiyana', label: 'Shamiyana' },
+    { value: 'shamiyana', label: 'Shamiyana / Tent' },
+    { value: 'mehendi', label: 'Mehendi Artist' },
+    { value: 'makeup', label: 'Makeup Artist' },
+    { value: 'venue', label: 'Venue / Banquet Hall' },
+    { value: 'invitation', label: 'Invitation Cards' },
+    { value: 'florist', label: 'Florist' },
+    { value: 'cake', label: 'Cake & Desserts' },
+    // Audio/Visual
+    { value: 'dj', label: 'DJ' },
     { value: 'sound-system', label: 'Sound System' },
     { value: 'lighting', label: 'Lighting' },
-    { value: 'mehendi', label: 'Mehendi' },
-    { value: 'makeup', label: 'Makeup' },
+    { value: 'photography', label: 'Photography' },
+    { value: 'videography', label: 'Videography' },
+    { value: 'live-streaming', label: 'Live Streaming' },
     // Performers
     { value: 'singer', label: 'Singer / Vocalist' },
     { value: 'musician', label: 'Musician / Band' },
     { value: 'dancer', label: 'Dancer / Choreographer' },
     { value: 'comedian', label: 'Comedian / Entertainer' },
-    { value: 'sports-coach', label: 'Sports Coach / Player' },
-    { value: 'fitness-trainer', label: 'Fitness Trainer' },
-    { value: 'yoga-instructor', label: 'Yoga Instructor' },
     { value: 'magician', label: 'Magician' },
     { value: 'anchor', label: 'Anchor / Emcee' },
+    // Fitness & Wellness
+    { value: 'sports-coach', label: 'Sports Coach' },
+    { value: 'fitness-trainer', label: 'Fitness Trainer' },
+    { value: 'yoga-instructor', label: 'Yoga Instructor' },
+    { value: 'nutritionist', label: 'Nutritionist / Dietician' },
+    { value: 'physiotherapist', label: 'Physiotherapist' },
+    // Professional Services
+    { value: 'tutor', label: 'Tutor / Teacher' },
+    { value: 'consultant', label: 'Business Consultant' },
+    { value: 'accountant', label: 'Accountant / CA' },
+    { value: 'lawyer', label: 'Lawyer / Legal Advisor' },
+    { value: 'graphic-designer', label: 'Graphic Designer' },
+    { value: 'web-developer', label: 'Web Developer' },
+    { value: 'content-writer', label: 'Content Writer' },
+    // Home Services
+    { value: 'plumber', label: 'Plumber' },
+    { value: 'electrician', label: 'Electrician' },
+    { value: 'carpenter', label: 'Carpenter' },
+    { value: 'painter', label: 'Painter' },
+    { value: 'cleaning', label: 'Cleaning Service' },
+    { value: 'pest-control', label: 'Pest Control' },
+    { value: 'gardener', label: 'Gardener / Landscaping' },
+    // Transportation
+    { value: 'car-rental', label: 'Car Rental' },
+    { value: 'bus-rental', label: 'Bus / Tempo Traveller' },
+    { value: 'driver', label: 'Driver Service' },
+    // Other
+    { value: 'other', label: '🔧 Other (Specify Below)' },
   ];
 
   const servicesList: Record<string, string[]> = {
@@ -92,6 +125,10 @@ const AddService = () => {
     'yoga-instructor': ['Hatha Yoga', 'Power Yoga', 'Meditation', 'Pranayama', 'Corporate Yoga'],
     'magician': ['Close-up Magic', 'Stage Magic', 'Kids Magic Show', 'Corporate Events'],
     'anchor': ['Wedding Anchor', 'Corporate Events', 'Birthday Parties', 'Stage Shows', 'Bilingual'],
+    'tutor': ['Math', 'Science', 'English', 'Coding', 'Music', 'Languages'],
+    'plumber': ['Pipe Repair', 'Tap Installation', 'Drainage', 'Bathroom Fitting', 'Emergency Service'],
+    'electrician': ['Wiring', 'Appliance Repair', 'Fan Installation', 'Light Fitting', 'Emergency Service'],
+    'other': ['Custom Service'],
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -264,6 +301,27 @@ const AddService = () => {
                   ))}
                 </select>
               </div>
+
+              {/* Custom Category Field - Shows when "Other" is selected */}
+              {formData.category === 'other' && (
+                <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    🔧 Specify Your Service Category *
+                  </label>
+                  <input 
+                    type="text" 
+                    name="custom_category" 
+                    value={formData.custom_category} 
+                    onChange={handleInputChange} 
+                    placeholder="e.g., Mobile Repair, Astrology, Pet Grooming, etc." 
+                    required={formData.category === 'other'}
+                    className="w-full px-4 py-3 border border-yellow-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white" 
+                  />
+                  <p className="text-xs text-gray-600 mt-2">
+                    💡 Be specific! This helps customers find your service easily.
+                  </p>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Tagline</label>

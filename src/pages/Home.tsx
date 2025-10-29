@@ -355,7 +355,7 @@ const Home = () => {
               <p className="text-xl text-gray-600">Top-rated service providers</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {featuredServices.map((service: any, index: number) => (
                 <motion.div
                   key={service.id}
@@ -365,19 +365,28 @@ const Home = () => {
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
                   onClick={() => navigate(`/services/${service.id}`)}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
-                  <img
-                    src={service.images?.[0] || '/placeholder.jpg'}
-                    alt={service.business_name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{service.business_name}</h3>
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">{service.description}</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span>{service.city}</span>
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={service.images?.[0] || '/placeholder.jpg'}
+                      alt={service.business_name}
+                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Service
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 flex flex-col flex-grow">
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{service.business_name}</h3>
+                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{service.description}</p>
+                    <div className="mt-auto">
+                      <span className="text-xs text-gray-500 truncate block flex items-center">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {service.city}
+                      </span>
                     </div>
                   </div>
                 </motion.div>
@@ -417,7 +426,7 @@ const Home = () => {
               <p className="text-xl text-gray-600">Premium rental properties</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {featuredProperties.map((property: any, index: number) => (
                 <motion.div
                   key={property.id}
@@ -427,19 +436,28 @@ const Home = () => {
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
                   onClick={() => navigate(`/properties/${property.id}`)}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
-                  <img
-                    src={property.images?.[0] || '/placeholder.jpg'}
-                    alt={property.title}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2">{property.title}</h3>
-                    <p className="text-sm text-gray-600 mb-2">₹{property.rent_amount}/month</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span>{property.city}</span>
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={property.images?.[0] || '/placeholder.jpg'}
+                      alt={property.title}
+                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 left-2">
+                      <span className="bg-purple-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Property
+                      </span>
+                    </div>
+                  </div>
+                  <div className="p-3 flex flex-col flex-grow">
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{property.title}</h3>
+                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">₹{property.rent_amount}/month</p>
+                    <div className="mt-auto">
+                      <span className="text-xs text-gray-500 truncate block flex items-center">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {property.city}
+                      </span>
                     </div>
                   </div>
                 </motion.div>
