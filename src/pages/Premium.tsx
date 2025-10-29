@@ -93,10 +93,21 @@ const Premium = () => {
       );
 
       if (result.success) {
-        // Refresh profile
+        // Refresh profile multiple times to ensure update
         await refreshProfile();
+        
+        // Wait a bit and refresh again to ensure database has updated
+        setTimeout(async () => {
+          await refreshProfile();
+        }, 1000);
+        
         showToast.success('🎉 Welcome to Premium! Enjoy unlimited listings!');
-        navigate('/dashboard');
+        
+        // Navigate to dashboard and force a page reload to ensure fresh data
+        setTimeout(() => {
+          navigate('/dashboard');
+          window.location.reload();
+        }, 1500);
       } else {
         showToast.error(result.error || 'Payment failed. Please try again.');
       }
