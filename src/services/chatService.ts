@@ -150,6 +150,7 @@ export const chatService = {
     receiverId: string,
     message: string
   ): Promise<Message> {
+    // Insert the message
     const { data, error } = await supabase
       .from('messages')
       .insert({
@@ -164,6 +165,15 @@ export const chatService = {
     if (error) {
       throw error;
     }
+
+    // Update conversation's last_message and last_message_at
+    await supabase
+      .from('conversations')
+      .update({
+        last_message: message,
+        last_message_at: new Date().toISOString(),
+      })
+      .eq('id', conversationId);
 
     return data;
   },
