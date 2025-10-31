@@ -155,10 +155,15 @@ const DashboardNew = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-amber-400 to-yellow-500 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+      <div className="bg-gradient-to-br from-white to-amber-50 relative overflow-hidden border-b-2 border-yellow-200">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, gold 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <motion.div
@@ -167,10 +172,10 @@ const DashboardNew = () => {
             className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
           >
             <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
                 Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
               </h1>
-              <p className="text-white/90 text-sm md:text-base">
+              <p className="text-gray-700 text-sm md:text-base">
                 Manage your listings and grow your business
               </p>
             </div>
@@ -200,17 +205,17 @@ const DashboardNew = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/30 backdrop-blur-md rounded-xl p-4 border border-white/40"
+                className="bg-gradient-to-br from-white to-amber-50 rounded-xl p-4 border-2 border-yellow-200 shadow-lg"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className={`w-8 h-8 ${stat.color} rounded-lg flex items-center justify-center`}>
                     <stat.icon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-xs md:text-sm text-white/90">{stat.label}</span>
+                  <span className="text-xs md:text-sm text-gray-700 font-semibold">{stat.label}</span>
                 </div>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-2xl md:text-3xl font-bold">{stat.value}</span>
-                  <span className="text-sm text-white/80">/ {stat.max}</span>
+                  <span className="text-2xl md:text-3xl font-bold text-gray-900">{stat.value}</span>
+                  <span className="text-sm text-amber-600 font-semibold">/ {stat.max}</span>
                 </div>
               </motion.div>
             ))}
