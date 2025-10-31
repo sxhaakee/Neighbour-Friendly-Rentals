@@ -55,7 +55,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4">
         <motion.div

@@ -160,7 +160,7 @@ const Home = () => {
       )}
 
       {/* Categories Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 bg-gradient-to-br from-white via-amber-50/30 to-white">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -169,7 +169,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Rent Anything. Save Everything.</h2>
+            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Rent Anything.</span> Save Everything.</h2>
             <p className="text-xl text-gray-600">Why waste thousands buying when you can rent for a fraction?</p>
           </motion.div>
 
@@ -183,7 +183,7 @@ const Home = () => {
                 viewport={{ once: true }}
                 whileHover={{ y: -3 }}
                 onClick={() => navigate(`/listings?category=${encodeURIComponent(category.name)}`)}
-                className="bg-white p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer group"
+                className="bg-gradient-to-br from-white to-amber-50 p-3 sm:p-4 rounded-lg shadow-md hover:shadow-xl border border-yellow-100 transition-all duration-200 cursor-pointer group"
               >
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 ${category.color} rounded-lg flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform duration-200`}>
                   <category.icon className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -196,7 +196,7 @@ const Home = () => {
       </section>
 
       {/* New Platform Features */}
-      <section className="bg-gradient-to-br from-purple-50 to-blue-50 py-16 px-4">
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -205,7 +205,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Your Money-Making Machine</h2>
+            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Your Money-Making Machine</span></h2>
             <p className="text-xl text-gray-600">List once. Earn forever. It's that simple.</p>
           </motion.div>
 
@@ -239,9 +239,9 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
               onClick={() => navigate('/listings')}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+              className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-blue-100 transition-all duration-300 cursor-pointer group"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
                 <Package className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">🎯 The Smart Money Move</h3>
@@ -261,9 +261,9 @@ const Home = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
               onClick={() => navigate('/services')}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+              className="bg-gradient-to-br from-white to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-orange-100 transition-all duration-300 cursor-pointer group"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
                 <PartyPopper className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">💼 Turn Skills Into Cash</h3>
@@ -280,7 +280,7 @@ const Home = () => {
       </section>
 
       {/* Featured Listings */}
-      <section className="bg-gray-50 py-16 px-4">
+      <section className="bg-gradient-to-br from-white via-amber-50/20 to-white py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -289,7 +289,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Items</h2>
+            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Featured Items</span></h2>
             <p className="text-xl text-gray-600">Popular rentals in your area</p>
           </motion.div>
 

@@ -3,7 +3,7 @@ import { FileText } from 'lucide-react';
 
 const Terms = () => {
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <motion.div

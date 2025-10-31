@@ -139,7 +139,7 @@ const Properties = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary to-purple-700 text-white py-8 md:py-12">
         <div className="max-w-7xl mx-auto px-4">

@@ -272,7 +272,7 @@ const AddService = () => {
   const currentServices = servicesList[formData.category as keyof typeof servicesList] || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 px-4 md:py-8">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 py-4 px-4 md:py-8">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4">

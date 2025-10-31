@@ -99,7 +99,7 @@ const VerifyID = () => {
   // Show loading while checking status
   if (checkingStatus) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center p-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
@@ -108,7 +108,7 @@ const VerifyID = () => {
   // Show status if already submitted (only if document URL exists)
   if (verificationStatus?.id_verification_status === 'pending' && verificationStatus?.id_document_url) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -133,7 +133,7 @@ const VerifyID = () => {
   // Show verified status (only if actually verified)
   if (verificationStatus?.id_verified && verificationStatus?.id_document_url) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -158,7 +158,7 @@ const VerifyID = () => {
   // Show rejected status (only if document was uploaded and rejected)
   if (verificationStatus?.id_verification_status === 'rejected' && verificationStatus?.id_document_url) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -189,7 +189,7 @@ const VerifyID = () => {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
