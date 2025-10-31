@@ -22,7 +22,7 @@
 5. **Check your email inbox** (might take 1-2 minutes)
 
 **Expected Result:**
-- ✅ Email from: `NeighbourFriendly Rentals <noreply@friendlyrentals.ml>`
+- ✅ Email from: `NeighbourFriendly Rentals <noreply@neighbourfriendly.in>`
 - ✅ Subject: "🎉 Welcome to NeighbourFriendly Rentals - Start Earning & Saving Today!"
 - ✅ Beautiful HTML email with gold theme
 
