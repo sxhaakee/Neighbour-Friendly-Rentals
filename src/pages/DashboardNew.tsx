@@ -134,9 +134,9 @@ const DashboardNew = () => {
   };
 
   const tabs = [
-    { id: 'items', label: 'Products', icon: Package, count: listingCounts.items, color: 'from-blue-500 to-cyan-500' },
-    { id: 'properties', label: 'Properties', icon: Home, count: listingCounts.properties, color: 'from-purple-500 to-pink-500' },
-    { id: 'services', label: 'Services', icon: Briefcase, count: listingCounts.services, color: 'from-orange-500 to-red-500' },
+    { id: 'items', label: 'Products', icon: Package, count: listingCounts.items, color: 'from-yellow-400 to-amber-500' },
+    { id: 'properties', label: 'Properties', icon: Home, count: listingCounts.properties, color: 'from-amber-500 to-orange-500' },
+    { id: 'services', label: 'Services', icon: Briefcase, count: listingCounts.services, color: 'from-yellow-500 to-orange-600' },
     { id: 'bookings', label: 'My Bookings', icon: Calendar, count: myBookings.length, color: 'from-indigo-500 to-purple-500' },
     { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: ownerBookings.length, color: 'from-emerald-500 to-teal-500' },
     { id: 'earnings', label: 'Earnings', icon: TrendingUp, count: 0, color: 'from-green-500 to-emerald-500' },
@@ -157,8 +157,7 @@ const DashboardNew = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
+      <div className="bg-gradient-to-r from-amber-400 to-yellow-500 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -171,7 +170,7 @@ const DashboardNew = () => {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                 Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
               </h1>
-              <p className="text-teal-100 text-sm md:text-base">
+              <p className="text-white/90 text-sm md:text-base">
                 Manage your listings and grow your business
               </p>
             </div>
@@ -201,17 +200,17 @@ const DashboardNew = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/30"
+                className="bg-white/30 backdrop-blur-md rounded-xl p-4 border border-white/40"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <div className={`w-8 h-8 ${stat.color} rounded-lg flex items-center justify-center`}>
                     <stat.icon className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-xs md:text-sm text-teal-100">{stat.label}</span>
+                  <span className="text-xs md:text-sm text-white/90">{stat.label}</span>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-2xl md:text-3xl font-bold">{stat.value}</span>
-                  <span className="text-sm text-teal-200">/ {stat.max}</span>
+                  <span className="text-sm text-white/80">/ {stat.max}</span>
                 </div>
               </motion.div>
             ))}
