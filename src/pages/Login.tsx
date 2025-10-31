@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, Home } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
@@ -73,7 +73,14 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-accent flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 flex items-center justify-center py-12 px-4">
+      {/* Gold dot pattern background */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, gold 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -83,37 +90,47 @@ const Login = () => {
         {/* Back to Home */}
         <Link
           to="/"
-          className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors mb-8"
+          className="flex items-center space-x-2 text-gray-700 hover:text-amber-600 transition-colors mb-8 relative z-10"
         >
-          <Home className="w-4 h-4" />
-          <span>Back to Home</span>
+          <ArrowLeft className="w-4 h-4" />
+          <span className="font-semibold">Back to Home</span>
         </Link>
 
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-yellow-200 relative z-10">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4">
-              <Home className="w-8 h-8 text-white" />
+            <div className="flex items-center justify-center mb-4">
+              <img 
+                src="/logo.png" 
+                alt="NeighbourFriendly" 
+                className="h-16 w-auto"
+                onError={(e) => {
+                  // Fallback to text logo if image fails
+                  e.currentTarget.style.display = 'none';
+                  const textLogo = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (textLogo) textLogo.style.display = 'block';
+                }}
+              />
+              <h1 className="text-2xl font-bold text-gray-900" style={{ display: 'none' }}>
+                Neighbour<span className="text-amber-600">Friendly</span>
+              </h1>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Neighbour<span className="text-amber-600">Friendly</span>
-            </h1>
           </div>
 
           {/* Toggle Tabs */}
-          <div className="flex mb-8 bg-gray-100 rounded-xl p-1">
+          <div className="flex mb-8 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-1 border border-yellow-200">
             <button
               onClick={() => setIsLogin(true)}
-              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-colors ${
-                isLogin ? 'bg-white text-amber-600 shadow-sm' : 'text-gray-600'
+              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-all ${
+                isLogin ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg' : 'text-gray-600 hover:text-amber-600'
               }`}
             >
               Sign In
             </button>
             <button
               onClick={() => setIsLogin(false)}
-              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-colors ${
-                !isLogin ? 'bg-white text-amber-600 shadow-sm' : 'text-gray-600'
+              className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-all ${
+                !isLogin ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg' : 'text-gray-600 hover:text-amber-600'
               }`}
             >
               Sign Up
@@ -143,7 +160,7 @@ const Login = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                     placeholder="Enter your full name"
                     required
                   />
@@ -160,7 +177,7 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                   placeholder="Enter your email"
                   required
                 />
@@ -176,7 +193,7 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-full pl-10 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                   placeholder="Enter your password"
                   required
                 />
@@ -204,7 +221,7 @@ const Login = () => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                     placeholder="Confirm your password"
                     required
                   />
@@ -215,7 +232,7 @@ const Login = () => {
             {isLogin && (
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-amber-600 focus:ring-primary" />
+                  <input type="checkbox" className="rounded border-gray-300 text-amber-600 focus:ring-amber-500" />
                   <span className="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
                 <a href="#" className="text-sm text-amber-600 hover:text-amber-600/80">
@@ -227,7 +244,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white py-3 px-6 rounded-lg font-bold hover:shadow-2xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
