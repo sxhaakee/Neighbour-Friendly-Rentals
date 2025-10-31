@@ -4,9 +4,31 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2C7A7B', // Teal Green
+        primary: '#2C7A7B', // Teal Green (keeping for compatibility)
         secondary: '#FFB703', // Warm Yellow
         accent: '#38B2AC', // Bright Teal
+        premium: {
+          50: '#FFFBEB',   // Lightest gold
+          100: '#FEF3C7',  // Very light gold
+          200: '#FDE68A',  // Light gold
+          300: '#FCD34D',  // Medium light gold
+          400: '#FBBF24',  // Medium gold
+          500: '#F59E0B',  // Base gold
+          600: '#D97706',  // Dark gold
+          700: '#B45309',  // Darker gold
+          800: '#92400E',  // Very dark gold
+          900: '#78350F',  // Darkest gold
+        },
+        gold: {
+          light: '#FFD700',
+          DEFAULT: '#FFC107',
+          dark: '#FF9800',
+        },
+        amber: {
+          light: '#FFF8E1',
+          DEFAULT: '#FFC107',
+          dark: '#FF6F00',
+        },
         neutral: {
           50: '#F7FAFC', // Soft White
           900: '#1A202C', // Dark Charcoal
