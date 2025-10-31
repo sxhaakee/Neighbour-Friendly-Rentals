@@ -225,7 +225,7 @@ const Home = () => {
                 🚀 Start Earning Today
               </Link>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
         </section>
       )}
