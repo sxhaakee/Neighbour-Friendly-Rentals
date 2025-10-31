@@ -303,7 +303,7 @@ export const emailService = {
       
       const template = EMAIL_TEMPLATES.welcome(userData);
       const response = await resend.emails.send({
-        from: 'NFRR <onboarding@nfrr.in>',
+        from: 'NeighbourFriendly Rentals <noreply@friendlyrentals.ml>',
         to: userData.email,
         subject: template.subject,
         html: template.html,
@@ -355,9 +355,8 @@ export const emailService = {
       
       const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
       const response = await resend.emails.send({
-        from: 'NFRR Bookings <bookings@nfrr.in>',
+        from: 'NeighbourFriendly Rentals <noreply@friendlyrentals.ml>',
         to: bookingData.email,
-        cc: 'friendlyrentals.mlr@gmail.com',
         subject: template.subject,
         html: template.html,
       });
