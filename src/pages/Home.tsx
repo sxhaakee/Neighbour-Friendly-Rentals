@@ -139,12 +139,12 @@ const Home = () => {
               transition={{ delay: 0.2 }}
               className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight"
             >
-              <span className="text-white">
+              <span className="text-white drop-shadow-2xl">
                 Turn Your Stuff Into
               </span>
               <br />
-              <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 bg-clip-text text-transparent">
-                ₹15,000+ Monthly
+              <span className="text-white drop-shadow-2xl">
+                ₹15,000+ Monthly Income
               </span>
             </motion.h1>
             
