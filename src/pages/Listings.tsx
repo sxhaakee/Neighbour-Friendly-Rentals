@@ -207,7 +207,7 @@ const Listings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -215,7 +215,7 @@ const Listings = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-4"><span className="text-primary">Browse</span> Rentals</h1>
+          <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Browse</span> Rentals</h1>
           <p className="text-xl text-gray-600">Find the perfect item to rent from your neighbors</p>
         </motion.div>
 
@@ -230,8 +230,8 @@ const Listings = () => {
             onClick={() => setActiveTab('items')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'items'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
+                : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
             }`}
           >
             📦 Items
@@ -240,8 +240,8 @@ const Listings = () => {
             onClick={() => setActiveTab('services')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'services'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
+                : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
             }`}
           >
             🛠️ Services
@@ -250,8 +250,8 @@ const Listings = () => {
             onClick={() => setActiveTab('properties')}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'properties'
-                ? 'bg-primary text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
+                : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
             }`}
           >
             🏠 Properties
@@ -263,7 +263,7 @@ const Listings = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-6 mb-8"
         >
           <div className="flex items-center gap-4 mb-6">
             {/* Search */}
@@ -274,7 +274,7 @@ const Listings = () => {
                 placeholder="Search items or location..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400"
               />
             </div>
 
