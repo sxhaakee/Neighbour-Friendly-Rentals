@@ -447,7 +447,7 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">⭐ Featured Services</h2>
+              <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">⭐ Featured Services</span></h2>
               <p className="text-xl text-gray-600">Top-rated service providers</p>
             </motion.div>
 
@@ -518,7 +518,7 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">⭐ Featured Properties</h2>
+              <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">🏠 Featured Properties</span></h2>
               <p className="text-xl text-gray-600">Premium rental properties</p>
             </motion.div>
 

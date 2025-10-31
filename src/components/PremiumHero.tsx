@@ -42,8 +42,6 @@ export const PremiumHero = () => {
         >
           {/* Premium Badge */}
           <motion.div
-            animate={{ rotate: [0, 5, 0, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-full shadow-2xl mb-6"
           >
             <Crown className="w-6 h-6" />

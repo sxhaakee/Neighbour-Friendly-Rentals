@@ -157,7 +157,7 @@ const DashboardNew = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-green-600 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
         
