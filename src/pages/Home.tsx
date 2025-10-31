@@ -91,32 +91,31 @@ const Home = () => {
       {isPremium ? (
         <PremiumHero />
       ) : (
-        <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black py-24 px-4 overflow-hidden">
-          {/* Premium Background Effects */}
-          <div className="absolute inset-0 opacity-20">
+        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-20 px-4 overflow-hidden">
+          {/* Premium Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
             <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, rgba(251, 191, 36, 0.3) 1px, transparent 0)`,
+              backgroundImage: `radial-gradient(circle at 2px 2px, gold 1px, transparent 0)`,
               backgroundSize: '40px 40px'
             }} />
           </div>
           
-          {/* Floating Gold Orbs */}
-          {[...Array(8)].map((_, i) => (
+          {/* Floating Gold Particles */}
+          {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-64 h-64 rounded-full"
+              className="absolute w-2 h-2 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full"
               style={{
-                background: `radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%)`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
               }}
               animate={{
-                x: [0, Math.random() * 100 - 50],
-                y: [0, Math.random() * 100 - 50],
-                scale: [1, 1.2, 1],
+                y: [0, -30, 0],
+                opacity: [0.3, 0.8, 0.3],
+                scale: [1, 1.5, 1],
               }}
               transition={{
-                duration: 10 + i * 2,
+                duration: 3 + i * 0.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
@@ -128,9 +127,9 @@ const Home = () => {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400/20 to-amber-500/20 backdrop-blur-sm border border-yellow-400/30 px-6 py-2 rounded-full mb-8"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-2 rounded-full shadow-lg mb-6"
             >
-              <span className="text-yellow-400 text-sm font-semibold">✨ India's #1 Rental Platform</span>
+              <span className="text-sm font-semibold">✨ India's #1 Rental Platform</span>
             </motion.div>
 
             <motion.h1 
@@ -139,12 +138,12 @@ const Home = () => {
               transition={{ delay: 0.2 }}
               className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight"
             >
-              <span className="text-white drop-shadow-2xl">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
                 Turn Your Stuff Into
               </span>
               <br />
-              <span className="text-white drop-shadow-2xl">
-                ₹15,000+ Monthly Income
+              <span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                ₹15K+ Monthly Income
               </span>
             </motion.h1>
             
@@ -152,10 +151,10 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl mb-6 text-gray-300 max-w-3xl mx-auto font-light"
+              className="text-lg md:text-xl mb-6 text-gray-700 max-w-3xl mx-auto"
             >
-              That camera collecting dust? <span className="text-yellow-400 font-semibold">₹500/day</span>. 
-              Your spare room? <span className="text-yellow-400 font-semibold">₹20,000/month</span>. 
+              That camera collecting dust? <span className="text-amber-600 font-semibold">₹500/day</span>. 
+              Your spare room? <span className="text-amber-600 font-semibold">₹20K/month</span>. 
               Start earning from what you already own!
             </motion.p>
             
@@ -163,9 +162,9 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm border border-green-400/30 px-6 py-3 rounded-full mb-10"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300 px-5 py-2 rounded-full mb-8"
             >
-              <span className="text-green-400 text-lg font-bold">💰 Your neighbours: ₹10,000-₹50,000/month</span>
+              <span className="text-green-700 text-base font-bold">💰 Neighbours earning ₹10K-₹50K/month</span>
             </motion.div>
           
           {/* Premium Search Bar */}
@@ -173,23 +172,23 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-2 max-w-3xl mx-auto mb-10 shadow-2xl"
+            className="bg-white rounded-2xl p-2 max-w-3xl mx-auto mb-8 shadow-xl border-2 border-yellow-200"
           >
             <div className="flex flex-col sm:flex-row items-stretch gap-3">
-              <div className="flex flex-1 items-center gap-3 px-6 h-14 rounded-xl bg-white/5 border border-white/10">
-                <Search className="text-yellow-400 w-5 h-5" />
+              <div className="flex flex-1 items-center gap-3 px-6 h-14 rounded-xl bg-gray-50">
+                <Search className="text-amber-500 w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search items near you..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                  className="flex-1 bg-transparent text-white placeholder-gray-400 text-base focus:outline-none"
+                  className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 text-base focus:outline-none"
                 />
               </div>
               <button 
                 onClick={handleSearch}
-                className="h-14 px-8 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-black rounded-xl font-bold hover:shadow-2xl hover:scale-105 transition-all"
+                className="h-14 px-8 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white rounded-xl font-bold hover:shadow-2xl hover:scale-105 transition-all"
               >
                 Search
               </button>
@@ -209,7 +208,7 @@ const Home = () => {
             >
               <Link
                 to="/listings"
-                className="block bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-black px-10 py-5 rounded-2xl font-black text-lg shadow-2xl hover:shadow-yellow-500/50 transition-all"
+                className="block bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
               >
                 💸 Start Saving Now
               </Link>
@@ -220,7 +219,7 @@ const Home = () => {
             >
               <Link
                 to="/add-item"
-                className="block bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/30 transition-colors border-2 border-white/30 hover:border-white/50"
+                className="block bg-white text-amber-600 px-10 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all border-2 border-amber-300"
               >
                 🚀 Start Earning Today
               </Link>
