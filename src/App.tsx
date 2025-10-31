@@ -51,7 +51,7 @@ function AppContent() {
   }, [location]);
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50/30 via-white to-yellow-50/30">
       <ScrollToTop />
       <Header />
       <main className="pt-16">

@@ -1,0 +1,134 @@
+/* Premium Theme Global Styles */
+
+/* Apply premium styling to all buttons that don't use PremiumButton component */
+button:not([class*="Premium"]):not([class*="toast"]):not([class*="notification"]) {
+  @apply transition-all duration-300;
+}
+
+button:not([class*="Premium"]):not([class*="toast"]):hover {
+  @apply transform scale-105;
+}
+
+/* Premium card styling for all card-like elements */
+.card, [class*="card"]:not([class*="Premium"]) {
+  @apply shadow-lg hover:shadow-xl transition-all duration-300;
+}
+
+/* Premium link styling */
+a:not([class*="Premium"]):hover {
+  @apply text-amber-600 transition-colors;
+}
+
+/* Premium input styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  @apply border-gray-300 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 transition-all;
+}
+
+/* Premium badge styling */
+.badge, [class*="badge"]:not([class*="Premium"]) {
+  @apply bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-3 py-1 rounded-full font-semibold shadow-md;
+}
+
+/* Premium section backgrounds */
+section {
+  @apply transition-all duration-300;
+}
+
+/* Premium hover effects for interactive elements */
+[role="button"],
+.clickable {
+  @apply hover:scale-105 transition-transform duration-300;
+}
+
+/* Premium scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-amber-50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-yellow-400 to-amber-500 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gradient-to-b from-yellow-500 to-amber-600;
+}
+
+/* Premium selection color */
+::selection {
+  @apply bg-yellow-200 text-gray-900;
+}
+
+::-moz-selection {
+  @apply bg-yellow-200 text-gray-900;
+}
+
+/* Premium focus outline */
+*:focus-visible {
+  @apply outline-none ring-2 ring-yellow-400 ring-offset-2;
+}
+
+/* Premium loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(to right, #fef3c7 4%, #fde68a 25%, #fef3c7 36%);
+  background-size: 1000px 100%;
+}
+
+/* Premium pulse animation */
+@keyframes pulse-gold {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-gold {
+  animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Premium gradient text */
+.gradient-text {
+  @apply bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent;
+}
+
+/* Premium shadow effects */
+.shadow-premium {
+  box-shadow: 0 10px 40px -10px rgba(251, 191, 36, 0.3);
+}
+
+.shadow-premium-lg {
+  box-shadow: 0 20px 60px -15px rgba(251, 191, 36, 0.4);
+}
+
+/* Premium border glow */
+.border-glow {
+  @apply border-2 border-yellow-400;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+/* Premium card hover effect */
+.premium-card-hover {
+  @apply transition-all duration-300 hover:shadow-premium-lg hover:-translate-y-1;
+}
