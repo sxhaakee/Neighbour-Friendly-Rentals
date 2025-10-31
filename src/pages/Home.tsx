@@ -91,20 +91,20 @@ const Home = () => {
       {isPremium ? (
         <PremiumHero />
       ) : (
-        <section className="relative bg-gradient-to-br from-[#1a5557] via-[#2C7A7B] to-[#1a5557] py-20 px-4 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500 py-20 px-4 overflow-hidden">
           <AnimatedBackground />
           <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               Turn Your Stuff Into
               <br />
-              <span className="text-secondary">
+              <span className="text-white drop-shadow-lg">
                 ₹15,000+ Monthly Income
               </span>
             </h1>
             <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
               That camera in your closet? It could earn you ₹500/day. Your spare room? ₹20,000/month. Start earning from what you already own!
             </p>
-            <p className="text-lg md:text-xl mb-8 text-secondary/90 font-bold">
+            <p className="text-lg md:text-xl mb-8 text-white/95 font-bold drop-shadow-md">
               💰 Your neighbours are making ₹10,000-₹50,000/month. Why not you?
             </p>
           
@@ -124,7 +124,7 @@ const Home = () => {
               </div>
               <button 
                 onClick={handleSearch}
-                className="h-12 px-6 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                className="h-12 px-6 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-semibold hover:shadow-xl transition-all"
               >
                 Search
               </button>
@@ -138,7 +138,7 @@ const Home = () => {
             >
               <Link
                 to="/listings"
-                className="block bg-secondary text-gray-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-secondary/90 transition-colors shadow-lg hover:shadow-2xl"
+                className="block bg-white text-amber-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-amber-50 transition-colors shadow-lg hover:shadow-2xl border-2 border-white"
               >
                 💸 Start Saving Now
               </Link>

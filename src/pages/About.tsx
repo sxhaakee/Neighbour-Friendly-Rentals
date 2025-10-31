@@ -57,7 +57,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-primary/90 to-accent py-20 px-4">
+      <section className="bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500 py-20 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -66,9 +66,9 @@ const About = () => {
         >
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
             Building Stronger<br />
-            <span className="text-secondary">Communities</span>
+            <span className="text-white drop-shadow-lg">Communities</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-teal-100">
+          <p className="text-xl md:text-2xl mb-8 text-white/90">
             We're on a mission to transform how neighbors share resources and build lasting connections.
           </p>
         </motion.div>

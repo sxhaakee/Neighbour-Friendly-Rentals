@@ -39,8 +39,8 @@ const Header = () => {
               alt="NeighbourFriendly Rentals" 
               className="w-12 h-12 object-contain rounded-lg"
             />
-            <span className="font-bold text-xl bg-gradient-to-r from-gray-900 via-amber-700 to-gray-900 bg-clip-text text-transparent">
-              Neighbour<span className="bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">Friendly</span> Rentals
+            <span className="font-bold text-xl text-gray-900">
+              Neighbour<span className="text-amber-600">Friendly</span> Rentals
             </span>
           </Link>
 
