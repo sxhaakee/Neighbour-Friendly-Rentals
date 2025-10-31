@@ -6,14 +6,19 @@ import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { propertyService } from '../services/propertyService';
 import { AnimatedBackground } from '../components/AnimatedBackground';
+import { PremiumHero } from '../components/PremiumHero';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 const Home = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [featuredListings, setFeaturedListings] = useState<any[]>([]);
   const [featuredServices, setFeaturedServices] = useState<any[]>([]);
   const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isPremium, setIsPremium] = useState(false);
 
   const categories = [
     { name: 'Electronics', icon: Smartphone, color: 'bg-purple-100 text-purple-600' },
@@ -32,7 +37,24 @@ const Home = () => {
 
   useEffect(() => {
     fetchFeaturedListings();
-  }, []);
+    checkPremiumStatus();
+  }, [user]);
+
+  const checkPremiumStatus = async () => {
+    if (!user) return;
+    
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('is_premium')
+        .eq('id', user.id)
+        .single();
+      
+      setIsPremium(data?.is_premium || false);
+    } catch (error) {
+      console.error('Error checking premium status:', error);
+    }
+  };
 
   const fetchFeaturedListings = async () => {
     try {
@@ -65,23 +87,26 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#1a5557] via-[#2C7A7B] to-[#1a5557] py-20 px-4 overflow-hidden">
-        <AnimatedBackground />
-        <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Turn Your Stuff Into
-            <br />
-            <span className="text-secondary">
-              ₹15,000+ Monthly Income
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
-            That camera in your closet? It could earn you ₹500/day. Your spare room? ₹20,000/month. Start earning from what you already own!
-          </p>
-          <p className="text-lg md:text-xl mb-8 text-secondary/90 font-bold">
-            💰 Your neighbours are making ₹10,000-₹50,000/month. Why not you?
-          </p>
+      {/* Hero Section - Premium or Regular */}
+      {isPremium ? (
+        <PremiumHero />
+      ) : (
+        <section className="relative bg-gradient-to-br from-[#1a5557] via-[#2C7A7B] to-[#1a5557] py-20 px-4 overflow-hidden">
+          <AnimatedBackground />
+          <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+              Turn Your Stuff Into
+              <br />
+              <span className="text-secondary">
+                ₹15,000+ Monthly Income
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
+              That camera in your closet? It could earn you ₹500/day. Your spare room? ₹20,000/month. Start earning from what you already own!
+            </p>
+            <p className="text-lg md:text-xl mb-8 text-secondary/90 font-bold">
+              💰 Your neighbours are making ₹10,000-₹50,000/month. Why not you?
+            </p>
           
           {/* Search Bar */}
           <div className="bg-white rounded-xl p-2 max-w-2xl mx-auto mb-8 shadow-2xl">
@@ -131,7 +156,8 @@ const Home = () => {
             </motion.div>
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* Categories Section */}
       <section className="py-16 px-4">
