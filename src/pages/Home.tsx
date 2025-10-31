@@ -94,19 +94,37 @@ const Home = () => {
         <section className="relative bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500 py-20 px-4 overflow-hidden">
           <AnimatedBackground />
           <div className="relative z-10 max-w-4xl mx-auto text-center text-white">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-              Turn Your Stuff Into
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="bg-gradient-to-r from-amber-900 via-orange-800 to-amber-900 bg-clip-text text-transparent drop-shadow-2xl">
+                Turn Your Stuff Into
+              </span>
               <br />
-              <span className="text-white drop-shadow-lg">
+              <span className="bg-gradient-to-r from-white via-amber-100 to-white bg-clip-text text-transparent drop-shadow-2xl">
                 ₹15,000+ Monthly Income
               </span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-4 text-white/90 font-medium">
-              That camera in your closet? It could earn you ₹500/day. Your spare room? ₹20,000/month. Start earning from what you already own!
-            </p>
-            <p className="text-lg md:text-xl mb-8 text-white/95 font-bold drop-shadow-md">
-              💰 Your neighbours are making ₹10,000-₹50,000/month. Why not you?
-            </p>
+            </motion.h1>
+            <motion.p 
+              className="text-xl md:text-2xl mb-4 font-medium"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+            >
+              <span className="bg-gradient-to-r from-amber-900 via-orange-900 to-amber-900 bg-clip-text text-transparent drop-shadow-lg">
+                That camera in your closet? It could earn you ₹500/day. Your spare room? ₹20,000/month. Start earning from what you already own!
+              </span>
+            </motion.p>
+            <motion.p 
+              className="text-lg md:text-xl mb-8 font-bold"
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+            >
+              <span className="bg-gradient-to-r from-amber-950 via-orange-950 to-amber-950 bg-clip-text text-transparent drop-shadow-lg">
+                💰 Your neighbours are making ₹10,000-₹50,000/month. Why not you?
+              </span>
+            </motion.p>
           
           {/* Search Bar */}
           <div className="bg-white rounded-xl p-2 max-w-2xl mx-auto mb-8 shadow-2xl">
@@ -318,7 +336,7 @@ const Home = () => {
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
                   onClick={() => navigate(`/item/${item.id}`)}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
                     <img
@@ -391,7 +409,7 @@ const Home = () => {
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
                   onClick={() => navigate(`/services/${service.id}`)}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
                     <img
@@ -462,7 +480,7 @@ const Home = () => {
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
                   onClick={() => navigate(`/properties/${property.id}`)}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
                     <img

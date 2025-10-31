@@ -85,7 +85,7 @@ const About = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
-            <div className="bg-white rounded-xl shadow-lg p-8 text-left">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8 text-left">
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
                 Neighbour-Friendly Rentals started with a simple idea: what if we could help neighbors share the tools and items they occasionally need, instead of everyone buying everything individually?
               </p>
@@ -189,7 +189,7 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
+                className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 overflow-hidden"
               >
                 <img
                   src={member.image}
@@ -221,7 +221,7 @@ const About = () => {
             <p className="text-xl text-gray-600">We'd love to hear from you</p>
           </motion.div>
 
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8">
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📧</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Contact Us</h3>

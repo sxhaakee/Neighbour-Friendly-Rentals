@@ -765,7 +765,7 @@ const DashboardNew = () => {
                 </div>
 
                 {/* Recent Earnings */}
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Completed Rentals</h3>
                   <div className="text-center py-8">
                     <TrendingUp className="w-16 h-16 text-gray-400 mx-auto mb-4" />

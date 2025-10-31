@@ -202,7 +202,7 @@ const DashboardNew = () => {
       </div>
 
       {myListings.length === 0 && myProperties.length === 0 && myServices.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+        <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-12 text-center">
           <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No listings yet</h3>
           <p className="text-gray-600 mb-6">Start earning by listing your first item!</p>
@@ -228,7 +228,7 @@ const DashboardNew = () => {
                     key={listing.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md hover:shadow-xl border border-yellow-100 transition-shadow overflow-hidden"
                   >
                     <img
                       src={listing.images[0] || '/placeholder.jpg'}
@@ -280,7 +280,7 @@ const DashboardNew = () => {
                     key={property.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md hover:shadow-xl border border-yellow-100 transition-shadow overflow-hidden"
                   >
                     <img
                       src={property.images?.[0] || '/placeholder.jpg'}
@@ -333,7 +333,7 @@ const DashboardNew = () => {
                     key={service.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow overflow-hidden"
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md hover:shadow-xl border border-yellow-100 transition-shadow overflow-hidden"
                   >
                     <img
                       src={service.portfolio_images?.[0] || '/placeholder.jpg'}
@@ -380,7 +380,7 @@ const DashboardNew = () => {
       <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
       
       {myBookings.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+        <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-12 text-center">
           <Calendar className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No bookings yet</h3>
           <p className="text-gray-600 mb-6">Browse listings and book your first rental!</p>
@@ -398,7 +398,7 @@ const DashboardNew = () => {
               key={booking.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-6"
+              className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
             >
               <div className="flex items-center space-x-4">
                 <img
@@ -440,7 +440,7 @@ const DashboardNew = () => {
       <p className="text-gray-600">Items you own that others have booked</p>
       
       {ownerBookings.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-lg p-12 text-center">
+        <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-12 text-center">
           <CheckCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">No incoming rentals</h3>
           <p className="text-gray-600">Your listings haven't been booked yet</p>
@@ -452,7 +452,7 @@ const DashboardNew = () => {
               key={booking.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg p-6"
+              className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
             >
               <div className="flex items-center space-x-4">
                 <img
@@ -541,7 +541,7 @@ const DashboardNew = () => {
         </div>
 
         {/* Recent Earnings */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Recent Completed Rentals</h3>
           {ownerBookings.filter(booking => booking.status === 'completed').length === 0 ? (
             <div className="text-center py-8">
@@ -630,7 +630,7 @@ const DashboardNew = () => {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
 
-      <div className="bg-white rounded-xl shadow-lg p-8">
+      <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8">
         <div className="flex items-center space-x-6 mb-8">
           <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
             <User className="w-12 h-12 text-primary" />
@@ -778,7 +778,7 @@ const DashboardNew = () => {
             animate={{ opacity: 1, x: 0 }}
             className="hidden lg:block lg:col-span-1"
           >
-            <div className="bg-white rounded-xl shadow-lg p-4 sticky top-24">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-4 sticky top-24">
               <nav className="space-y-1">
                 {tabs.map((tab) => (
                   <button

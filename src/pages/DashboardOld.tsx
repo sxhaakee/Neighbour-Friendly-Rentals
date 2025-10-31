@@ -138,7 +138,7 @@ const Dashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -155,7 +155,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -172,7 +172,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -189,7 +189,7 @@ const Dashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
         >
           <div className="flex items-center justify-between">
             <div>
@@ -204,7 +204,7 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Rental Activity</h3>
         <div className="space-y-4">
           {rentalHistory.slice(0, 3).map((rental, index) => (
@@ -249,7 +249,7 @@ const Dashboard = () => {
       <h2 className="text-2xl font-bold text-gray-900">Earnings & Statistics</h2>
       
       {/* Earnings Summary */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Earnings Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center p-4 bg-primary/5 rounded-lg">
@@ -268,7 +268,7 @@ const Dashboard = () => {
       </div>
 
       {/* Detailed Rental History */}
-      <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Detailed Rental History</h3>
         <div className="space-y-4">
           {rentalHistory.map((rental, index) => (
@@ -364,7 +364,7 @@ const Dashboard = () => {
                   key={item.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+                  className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 overflow-hidden hover:shadow-xl transition-shadow"
                 >
                   <div className="md:flex">
                     <div className="md:w-48">
@@ -428,7 +428,7 @@ const Dashboard = () => {
                   key={rental.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white rounded-xl shadow-lg p-6"
+                  className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6"
                 >
                   <div className="flex items-center space-x-4">
                     <img
@@ -503,7 +503,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
             
-            <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8">
               <div className="flex items-center space-x-6 mb-8">
                 <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
                   <User className="w-12 h-12 text-gray-400" />
@@ -583,7 +583,7 @@ const Dashboard = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-1"
           >
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6 sticky top-24">
               <nav className="space-y-2">
                 {tabs.map(tab => (
                   <button

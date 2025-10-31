@@ -370,7 +370,7 @@ const Listings = () => {
                 transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                 whileHover={{ y: -3 }}
                 onClick={() => navigate(`/item/${item.id}`)}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group flex flex-col"
+                className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group flex flex-col"
               >
                 <div className="relative overflow-hidden">
                   <img
@@ -450,7 +450,7 @@ const Listings = () => {
                     transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                     whileHover={{ y: -3 }}
                     onClick={() => navigate(`/services/${service.id}`)}
-                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
                   >
                     <img
                       src={service.images?.[0] || '/placeholder.jpg'}
@@ -486,7 +486,7 @@ const Listings = () => {
                     transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
                     whileHover={{ y: -3 }}
                     onClick={() => navigate(`/properties/${property.id}`)}
-                    className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
                   >
                     <img
                       src={property.images?.[0] || '/placeholder.jpg'}

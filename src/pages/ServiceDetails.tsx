@@ -77,7 +77,7 @@ const ServiceDetails = () => {
             {/* Images */}
             {((service.portfolio_images && service.portfolio_images.length > 0) || 
               (service.images && service.images.length > 0)) && (
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 overflow-hidden">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-2">
                   {(service.portfolio_images || service.images || []).map((image, index) => (
                     <img
@@ -126,7 +126,7 @@ const ServiceDetails = () => {
             </AnimatePresence>
 
             {/* Business Info */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div className="flex-1">
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -293,7 +293,7 @@ const ServiceDetails = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Card */}
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6 sticky top-24">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
               
               <div className="space-y-4">

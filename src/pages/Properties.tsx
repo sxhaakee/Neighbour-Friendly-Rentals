@@ -154,7 +154,7 @@ const Properties = () => {
             </p>
 
             {/* Search Bar */}
-            <div className="bg-white rounded-lg shadow-lg p-2 flex flex-col sm:flex-row gap-2">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-lg p-2 flex flex-col sm:flex-row gap-2">
               <div className="flex-1 flex items-center gap-2 px-3 md:px-4 py-2 sm:py-0">
                 <Search className="w-4 h-4 md:w-5 md:h-5 text-gray-400 flex-shrink-0" />
                 <input
