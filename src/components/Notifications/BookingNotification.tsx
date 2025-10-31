@@ -165,7 +165,7 @@ export const BookingNotification = () => {
               <div className="flex items-center gap-2 text-white">
                 <Bell className="w-5 h-5" />
                 <h3 className="font-bold">New Bookings</h3>
-                <span className="bg-white text-primary px-2 py-0.5 rounded-full text-sm font-bold">
+                <span className="bg-white text-amber-600 px-2 py-0.5 rounded-full text-sm font-bold">
                   {pendingBookings.length}
                 </span>
               </div>
@@ -205,7 +205,7 @@ export const BookingNotification = () => {
                       <p className="text-xs text-gray-600">
                         {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                       </p>
-                      <p className="text-sm font-bold text-primary mt-1">
+                      <p className="text-sm font-bold text-amber-600 mt-1">
                         ₹{booking.total_price}
                       </p>
                       <p className="text-xs text-gray-500">
@@ -250,7 +250,7 @@ export const BookingNotification = () => {
                   setShowNotifications(false);
                   navigate(isAdmin ? '/admin' : '/dashboard');
                 }}
-                className="w-full text-center text-primary font-semibold text-sm hover:underline"
+                className="w-full text-center text-amber-600 font-semibold text-sm hover:underline"
               >
                 View All Bookings
               </button>

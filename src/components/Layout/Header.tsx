@@ -119,7 +119,7 @@ const Header = () => {
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                         >
-                          <User className="w-4 h-4 text-primary" />
+                          <User className="w-4 h-4 text-amber-600" />
                           <span className="font-medium">Dashboard</span>
                         </Link>
                         <Link
@@ -127,7 +127,7 @@ const Header = () => {
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                         >
-                          <User className="w-4 h-4 text-primary" />
+                          <User className="w-4 h-4 text-amber-600" />
                           <span className="font-medium">Edit Profile</span>
                         </Link>
                         
@@ -205,8 +205,8 @@ const Header = () => {
                   onClick={() => setIsMenuOpen(false)}
                   className={`flex items-center space-x-2 px-3 py-3 rounded-lg transition-colors ${
                     isActive(path)
-                      ? 'bg-primary text-white'
-                      : 'text-gray-600 hover:text-primary hover:bg-primary/10'
+                      ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                      : 'text-gray-600 hover:text-amber-600 hover:bg-primary/10'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -233,7 +233,7 @@ const Header = () => {
                     <Link
                       to="/admin"
                       onClick={() => setIsMenuOpen(false)}
-                      className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-primary hover:bg-primary/10"
+                      className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-amber-600 hover:bg-primary/10"
                     >
                       <Shield className="w-4 h-4" />
                       <span className="font-medium">Admin Panel</span>

@@ -11,7 +11,7 @@ const Privacy = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <Shield className="w-16 h-16 text-primary mx-auto mb-4" />
+          <Shield className="w-16 h-16 text-amber-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
           <p className="text-gray-600">Last updated: October 12, 2025</p>
         </motion.div>

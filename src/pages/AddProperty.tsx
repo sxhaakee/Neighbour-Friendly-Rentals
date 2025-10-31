@@ -337,7 +337,7 @@ const AddProperty = () => {
               </div>
             </div>
             <label className="flex items-center gap-2 mt-4">
-              <input type="checkbox" name="negotiable" checked={formData.negotiable} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+              <input type="checkbox" name="negotiable" checked={formData.negotiable} onChange={handleInputChange} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
               <span className="text-sm text-gray-700">Price is negotiable</span>
             </label>
           </div>
@@ -381,7 +381,7 @@ const AddProperty = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
               {amenitiesList.map((amenity) => (
                 <label key={amenity} className="flex items-center gap-2 p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input type="checkbox" checked={formData.amenities.includes(amenity)} onChange={() => handleAmenityToggle(amenity)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                  <input type="checkbox" checked={formData.amenities.includes(amenity)} onChange={() => handleAmenityToggle(amenity)} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
                   <span className="text-xs md:text-sm">{amenity}</span>
                 </label>
               ))}
@@ -397,7 +397,7 @@ const AddProperty = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4">
                 {tenantPreferences.map((tenant) => (
                   <label key={tenant} className="flex items-center gap-2 p-2 md:p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                    <input type="checkbox" checked={formData.preferred_tenants.includes(tenant)} onChange={() => handleTenantToggle(tenant)} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <input type="checkbox" checked={formData.preferred_tenants.includes(tenant)} onChange={() => handleTenantToggle(tenant)} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
                     <span className="text-xs md:text-sm">{tenant}</span>
                   </label>
                 ))}
@@ -405,11 +405,11 @@ const AddProperty = () => {
               {!isPG && (
                 <div className="grid grid-cols-2 gap-4">
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" name="pets_allowed" checked={formData.pets_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <input type="checkbox" name="pets_allowed" checked={formData.pets_allowed} onChange={handleInputChange} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
                     <span className="text-sm text-gray-700">Pets Allowed</span>
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="checkbox" name="non_veg_allowed" checked={formData.non_veg_allowed} onChange={handleInputChange} className="w-4 h-4 text-primary rounded focus:ring-primary" />
+                    <input type="checkbox" name="non_veg_allowed" checked={formData.non_veg_allowed} onChange={handleInputChange} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
                     <span className="text-sm text-gray-700">Non-Veg Allowed</span>
                   </label>
                 </div>
@@ -454,7 +454,7 @@ const AddProperty = () => {
                     <X className="w-3 h-3 md:w-4 md:h-4" />
                   </button>
                   {index === 0 && (
-                    <span className="absolute bottom-1 left-1 bg-primary text-white text-xs px-2 py-0.5 rounded">Cover</span>
+                    <span className="absolute bottom-1 left-1 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white text-xs px-2 py-0.5 rounded">Cover</span>
                   )}
                 </div>
               ))}
@@ -474,7 +474,7 @@ const AddProperty = () => {
             <button type="button" onClick={() => navigate(-1)} className="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors">
               Cancel
             </button>
-            <button type="submit" disabled={loading || uploading} className="flex-1 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <button type="submit" disabled={loading || uploading} className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               {loading ? 'Submitting...' : 'List Property'}
             </button>
           </div>

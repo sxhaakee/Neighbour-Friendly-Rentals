@@ -50,7 +50,7 @@ const ServiceDetails = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Service not found</h2>
           <button
             onClick={() => navigate('/services')}
-            className="text-primary hover:underline"
+            className="text-amber-600 hover:underline"
           >
             Back to Services
           </button>
@@ -175,7 +175,7 @@ const ServiceDetails = () => {
                     {service.services.map((svc, index) => (
                       <span
                         key={index}
-                        className="px-4 py-2 bg-primary/10 text-primary rounded-lg font-medium"
+                        className="px-4 py-2 bg-primary/10 text-amber-600 rounded-lg font-medium"
                       >
                         {svc}
                       </span>
@@ -191,7 +191,7 @@ const ServiceDetails = () => {
                   {service.years_experience && (
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Clock className="w-6 h-6 text-primary" />
+                        <Clock className="w-6 h-6 text-amber-600" />
                       </div>
                       <div>
                         <p className="text-2xl font-bold text-gray-900">{service.years_experience}+</p>
@@ -202,7 +202,7 @@ const ServiceDetails = () => {
                   {service.team_size && (
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Users className="w-6 h-6 text-primary" />
+                        <Users className="w-6 h-6 text-amber-600" />
                       </div>
                       <div>
                         <p className="text-2xl font-bold text-gray-900">{service.team_size}</p>
@@ -298,10 +298,10 @@ const ServiceDetails = () => {
               
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-primary mt-1" />
+                  <Phone className="w-5 h-5 text-amber-600 mt-1" />
                   <div>
                     <p className="text-sm text-gray-600">Phone</p>
-                    <a href={`tel:${service.phone}`} className="text-gray-900 font-semibold hover:text-primary">
+                    <a href={`tel:${service.phone}`} className="text-gray-900 font-semibold hover:text-amber-600">
                       {service.phone}
                     </a>
                   </div>
@@ -320,17 +320,17 @@ const ServiceDetails = () => {
                 )}
 
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-primary mt-1" />
+                  <Mail className="w-5 h-5 text-amber-600 mt-1" />
                   <div>
                     <p className="text-sm text-gray-600">Email</p>
-                    <a href={`mailto:${service.email}`} className="text-gray-900 font-semibold hover:text-primary break-all">
+                    <a href={`mailto:${service.email}`} className="text-gray-900 font-semibold hover:text-amber-600 break-all">
                       {service.email}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary mt-1" />
+                  <MapPin className="w-5 h-5 text-amber-600 mt-1" />
                   <div>
                     <p className="text-sm text-gray-600">Service Areas</p>
                     <p className="text-gray-900 font-semibold">
@@ -343,7 +343,7 @@ const ServiceDetails = () => {
               {service.base_price && (
                 <div className="mt-6 pt-6 border-t">
                   <p className="text-sm text-gray-600 mb-2">Starting from</p>
-                  <p className="text-3xl font-bold text-primary">₹{service.base_price}</p>
+                  <p className="text-3xl font-bold text-amber-600">₹{service.base_price}</p>
                   <p className="text-sm text-gray-600">{service.pricing_model}</p>
                 </div>
               )}

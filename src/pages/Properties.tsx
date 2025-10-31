@@ -167,7 +167,7 @@ const Properties = () => {
               </div>
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="bg-primary text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
               >
                 <SlidersHorizontal className="w-4 h-4 md:w-5 md:h-5" />
                 Filters
@@ -201,7 +201,7 @@ const Properties = () => {
                         onClick={() => handleTypeToggle(type.value)}
                         className={`px-4 py-2 rounded-lg border-2 transition-all flex items-center gap-2 ${
                           isSelected
-                            ? 'border-primary bg-primary text-white'
+                            ? 'border-primary bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                             : 'border-gray-200 bg-white text-gray-700 hover:border-primary'
                         }`}
                       >
@@ -258,7 +258,7 @@ const Properties = () => {
                         onClick={() => setFilters({ ...filters, bedrooms: num })}
                         className={`px-4 py-2 rounded-lg border-2 transition-all ${
                           filters.bedrooms === num
-                            ? 'border-primary bg-primary text-white'
+                            ? 'border-primary bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                             : 'border-gray-200 bg-white text-gray-700 hover:border-primary'
                         }`}
                       >
@@ -296,7 +296,7 @@ const Properties = () => {
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                  className="px-6 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
                 >
                   Apply Filters
                 </button>
@@ -327,7 +327,7 @@ const Properties = () => {
             <p className="text-gray-600 mb-6">Try adjusting your filters or search criteria</p>
             <button
               onClick={clearFilters}
-              className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+              className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
             >
               Clear Filters
             </button>

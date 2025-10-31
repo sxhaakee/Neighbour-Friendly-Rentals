@@ -159,7 +159,7 @@ export const AnalyticsDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -327,7 +327,7 @@ export const AnalyticsDashboard = () => {
           {analytics.topItems.map((item, index) => (
             <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                <div className="w-10 h-10 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-full flex items-center justify-center font-bold">
                   {index + 1}
                 </div>
                 <div>
@@ -336,7 +336,7 @@ export const AnalyticsDashboard = () => {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-lg font-bold text-primary">₹{item.revenue.toLocaleString()}</p>
+                <p className="text-lg font-bold text-amber-600">₹{item.revenue.toLocaleString()}</p>
                 <p className="text-sm text-gray-600">Commission</p>
               </div>
             </div>

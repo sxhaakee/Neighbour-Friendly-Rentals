@@ -181,9 +181,9 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
 
       {price && (
         <div className="flex items-center gap-2 mb-6 p-4 bg-primary/5 rounded-lg">
-          <IndianRupee className="w-6 h-6 text-primary" />
+          <IndianRupee className="w-6 h-6 text-amber-600" />
           <div>
-            <p className="text-3xl font-bold text-primary">₹{price}</p>
+            <p className="text-3xl font-bold text-amber-600">₹{price}</p>
             <p className="text-sm text-gray-600">per day</p>
           </div>
         </div>
@@ -204,7 +204,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
               setAvailable(null);
             }}
             min={today}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
           />
         </div>
 
@@ -221,7 +221,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
               setAvailable(null);
             }}
             min={startDate || today}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
           />
         </div>
 
@@ -236,7 +236,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
             />
           </div>
           <div>
@@ -248,7 +248,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
             />
           </div>
         </div>
@@ -263,7 +263,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Any additional information..."
             rows={3}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
           />
         </div>
 
@@ -277,7 +277,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
             onChange={(e) => setSpecialRequests(e.target.value)}
             placeholder="Any special requirements..."
             rows={2}
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
           />
         </div>
       </div>
@@ -307,7 +307,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
           </div>
           <div className="flex justify-between text-lg font-bold border-t pt-2">
             <span>Total</span>
-            <span className="text-primary">₹{totalPrice}</span>
+            <span className="text-amber-600">₹{totalPrice}</span>
           </div>
         </div>
       )}
@@ -325,7 +325,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
         <button
           onClick={handleBooking}
           disabled={submitting || !startDate || !endDate || available === false}
-          className="w-full px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
+          className="w-full px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
         >
           {submitting ? 'Booking...' : 'Request Booking'}
         </button>

@@ -182,7 +182,7 @@ const Admin = () => {
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
-            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
           </div>
           <p className="text-sm sm:text-base text-gray-600">Manage listings and monitor platform activity</p>
@@ -195,7 +195,7 @@ const Admin = () => {
               onClick={() => setActiveTab('analytics')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'analytics'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -205,7 +205,7 @@ const Admin = () => {
               onClick={() => setActiveTab('orders')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'orders'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -215,7 +215,7 @@ const Admin = () => {
               onClick={() => setActiveTab('listings')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'listings'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -225,7 +225,7 @@ const Admin = () => {
               onClick={() => setActiveTab('properties')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'properties'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -235,7 +235,7 @@ const Admin = () => {
               onClick={() => setActiveTab('services')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'services'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -245,7 +245,7 @@ const Admin = () => {
               onClick={() => setActiveTab('verifications')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'verifications'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -255,7 +255,7 @@ const Admin = () => {
               onClick={() => setActiveTab('agreements')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
                 activeTab === 'agreements'
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
               }`}
             >
@@ -322,7 +322,7 @@ const Admin = () => {
                     </div>
                     <button
                       onClick={() => setSelectedListing(listing)}
-                      className="text-primary text-sm font-semibold hover:underline"
+                      className="text-amber-600 text-sm font-semibold hover:underline"
                     >
                       Review
                     </button>
@@ -343,7 +343,7 @@ const Admin = () => {
                     onClick={() => setFilter(status as any)}
                 className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                   filter === status
-                    ? 'bg-primary text-white'
+                    ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -584,7 +584,7 @@ const Admin = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Price</p>
-                      <p className="font-semibold text-primary">₹{selectedListing.price}/day</p>
+                      <p className="font-semibold text-amber-600">₹{selectedListing.price}/day</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Location</p>

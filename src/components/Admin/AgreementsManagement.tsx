@@ -131,7 +131,7 @@ export const AgreementsManagement = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -169,7 +169,7 @@ export const AgreementsManagement = () => {
             <button
               onClick={() => setFilter('all')}
               className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                filter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                filter === 'all' ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               All
@@ -313,7 +313,7 @@ export const AgreementsManagement = () => {
                       <div className="flex gap-1 sm:gap-2">
                         <button
                           onClick={() => setSelectedAgreement(agreement)}
-                          className="text-primary hover:text-primary/80"
+                          className="text-amber-600 hover:text-amber-600/80"
                           title="View Details"
                         >
                           <Eye className="w-5 h-5" />
@@ -456,7 +456,7 @@ export const AgreementsManagement = () => {
                     <hr />
                     <div className="flex justify-between text-lg">
                       <span className="font-semibold text-gray-900">Total Amount:</span>
-                      <span className="font-bold text-primary">₹{selectedAgreement.total_price}</span>
+                      <span className="font-bold text-amber-600">₹{selectedAgreement.total_price}</span>
                     </div>
                   </div>
                 </div>
@@ -464,7 +464,7 @@ export const AgreementsManagement = () => {
                 <div className="flex gap-4">
                   <button
                     onClick={() => handleDownloadPDF(selectedAgreement)}
-                    className="flex-1 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                   >
                     <Download className="w-5 h-5" />
                     Download PDF

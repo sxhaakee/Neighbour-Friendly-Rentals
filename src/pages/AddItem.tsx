@@ -225,8 +225,8 @@ const AddItem = () => {
 
             {/* Basic Information */}
             <div>
-              <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-2">
-                <Tag className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-semibold text-amber-600 mb-6 flex items-center gap-2">
+                <Tag className="w-5 h-5 text-amber-600" />
                 Basic Information
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -298,8 +298,8 @@ const AddItem = () => {
 
             {/* Pricing & Location */}
             <div>
-              <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-semibold text-amber-600 mb-6 flex items-center gap-2">
+                <DollarSign className="w-5 h-5 text-amber-600" />
                 Pricing & Location
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -369,8 +369,8 @@ const AddItem = () => {
 
             {/* Image Upload */}
             <div>
-              <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-2">
-                <Upload className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-semibold text-amber-600 mb-6 flex items-center gap-2">
+                <Upload className="w-5 h-5 text-amber-600" />
                 Photos
               </h2>
               <div className="space-y-4">
@@ -386,7 +386,7 @@ const AddItem = () => {
                   />
                   <label
                     htmlFor="image-upload"
-                    className="cursor-pointer text-primary hover:text-primary/80 font-medium"
+                    className="cursor-pointer text-amber-600 hover:text-amber-600/80 font-medium"
                   >
                     Click to upload photos or drag and drop
                   </label>

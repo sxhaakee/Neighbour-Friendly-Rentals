@@ -388,7 +388,7 @@ const Listings = () => {
                   )}
                   {!(item as any).featured && (
                     <div className="absolute top-2 left-2">
-                      <span className="bg-primary text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                      <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
                         {item.category}
                       </span>
                     </div>
@@ -403,13 +403,13 @@ const Listings = () => {
                 </div>
                 
                 <div className="p-2 sm:p-3 flex flex-col h-full">
-                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5rem]">
+                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-amber-600 transition-colors min-h-[2.5rem]">
                     {item.title}
                   </h3>
                   <p className="text-xs text-gray-500 mb-2 truncate">by {item.owner_name}</p>
                   
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-base sm:text-lg font-bold text-primary">
+                    <span className="text-base sm:text-lg font-bold text-amber-600">
                       ₹{item.price}<span className="text-xs text-gray-500">/day</span>
                     </span>
                   </div>

@@ -104,7 +104,7 @@ export const ShareButton = ({ url, title, description, className = '' }: ShareBu
   return (
     <button
       onClick={handleShare}
-      className={`flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors ${className}`}
+      className={`flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg hover:bg-primary/90 transition-colors ${className}`}
       title="Share this listing"
     >
       <Share2 className="w-4 h-4" />

@@ -307,7 +307,7 @@ const DashboardNew = () => {
                         <div className="p-4">
                           <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">{item.title}</h3>
                           <p className="text-sm text-gray-600 mb-2 line-clamp-1">{item.category}</p>
-                          <div className="flex items-center gap-1 text-primary font-bold text-lg mb-3">
+                          <div className="flex items-center gap-1 text-amber-600 font-bold text-lg mb-3">
                             <IndianRupee className="w-4 h-4" />
                             {item.price}
                             <span className="text-xs text-gray-500 font-normal">/day</span>
@@ -549,7 +549,7 @@ const DashboardNew = () => {
                               const routes = { item: '/item/', property: '/properties/', service: '/services/' };
                               navigate(`${routes[fav.type as keyof typeof routes]}${fav.item_id}`);
                             }}
-                            className="text-primary hover:text-primary/80 font-semibold text-sm"
+                            className="text-amber-600 hover:text-amber-600/80 font-semibold text-sm"
                           >
                             View
                           </button>
@@ -622,7 +622,7 @@ const DashboardNew = () => {
                             )}
                             <button
                               onClick={() => navigate(`/item/${booking.listing_id}`)}
-                              className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
+                              className="text-amber-600 hover:text-amber-600/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
                             >
                               View Item
                             </button>
@@ -697,7 +697,7 @@ const DashboardNew = () => {
                             )}
                             <button
                               onClick={() => navigate(`/item/${booking.listing_id}`)}
-                              className="text-primary hover:text-primary/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
+                              className="text-amber-600 hover:text-amber-600/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
                             >
                               View Item
                             </button>

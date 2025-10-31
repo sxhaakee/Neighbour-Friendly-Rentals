@@ -302,7 +302,7 @@ export const OrdersManagement = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -312,7 +312,7 @@ export const OrdersManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
-          <Package className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+          <Package className="w-6 h-6 sm:w-8 sm:h-8 text-amber-600" />
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Orders Management</h2>
             <p className="text-sm sm:text-base text-gray-600 hidden sm:block">View and manage all bookings</p>
@@ -330,7 +330,7 @@ export const OrdersManagement = () => {
               onClick={() => setFilter(status as any)}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filter === status
-                  ? 'bg-primary text-white'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -438,7 +438,7 @@ export const OrdersManagement = () => {
                     </div>
                     <div>
                       <p className="text-gray-500">Total</p>
-                      <p className="font-semibold text-primary">₹{booking.total_price}</p>
+                      <p className="font-semibold text-amber-600">₹{booking.total_price}</p>
                     </div>
                   </div>
 
@@ -626,7 +626,7 @@ export const OrdersManagement = () => {
                     <span className="text-gray-600">Security Deposit (20%)</span>
                     <span className="font-semibold">₹{selectedBooking.security_deposit || 0}</span>
                   </div>
-                  <div className="flex justify-between text-lg font-bold text-primary border-t pt-2">
+                  <div className="flex justify-between text-lg font-bold text-amber-600 border-t pt-2">
                     <span>CUSTOMER PAYS</span>
                     <span>₹{selectedBooking.total_price || 0}</span>
                   </div>

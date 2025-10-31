@@ -359,7 +359,7 @@ const BookItem = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Listing Not Found</h1>
           <button
             onClick={() => navigate('/listings')}
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
           >
             Back to Listings
           </button>
@@ -464,7 +464,7 @@ const BookItem = () => {
                 <div>
                   <h3 className="font-semibold text-lg">{typedListing.title}</h3>
                   <p className="text-gray-600 text-sm">{typedListing.category}</p>
-                  <p className="text-primary font-semibold mt-2">₹{typedListing.price}/day</p>
+                  <p className="text-amber-600 font-semibold mt-2">₹{typedListing.price}/day</p>
                 </div>
               </div>
             </motion.div>
@@ -556,7 +556,7 @@ const BookItem = () => {
               className="bg-white rounded-2xl shadow-sm p-6"
             >
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-primary" />
+                <CreditCard className="w-5 h-5 text-amber-600" />
                 Payment Method
               </h2>
               <div className="bg-gradient-to-r from-primary/10 to-accent/10 border-2 border-primary/30 rounded-xl p-6">
@@ -615,7 +615,7 @@ const BookItem = () => {
                   type="checkbox"
                   checked={videoAcknowledged}
                   onChange={(e) => setVideoAcknowledged(e.target.checked)}
-                  className="w-5 h-5 text-primary"
+                  className="w-5 h-5 text-amber-600"
                 />
                 <span className="font-semibold text-red-900">
                   I understand and agree to record videos during handover and return
@@ -644,7 +644,7 @@ const BookItem = () => {
                   </div>
                   <div className="border-t pt-3 flex justify-between">
                     <span className="font-semibold">Total Amount to Pay</span>
-                    <span className="text-2xl font-bold text-primary">₹{Math.round(grandTotal)}</span>
+                    <span className="text-2xl font-bold text-amber-600">₹{Math.round(grandTotal)}</span>
                   </div>
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
                     <div className="flex justify-between text-sm mb-2">

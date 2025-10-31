@@ -115,7 +115,7 @@ const Profile = () => {
                 {!editing ? (
                   <button
                     onClick={() => setEditing(true)}
-                    className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl hover:shadow-xl hover:scale-105 transition-colors"
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit Profile

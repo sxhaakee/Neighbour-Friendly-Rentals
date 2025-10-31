@@ -156,7 +156,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
         {user && user.id !== ownerId && (
           <button
             onClick={() => setShowAddReview(!showAddReview)}
-            className="px-4 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+            className="px-4 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors"
           >
             Write a Review
           </button>
@@ -202,7 +202,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Share your experience..."
                 rows={4}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
               />
             </div>
 
@@ -210,7 +210,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
               <button
                 onClick={handleSubmitReview}
                 disabled={submitting}
-                className="px-6 py-2 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
+                className="px-6 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
                 {submitting ? 'Submitting...' : 'Submit Review'}
               </button>
@@ -239,7 +239,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-primary font-bold">
+                    <span className="text-amber-600 font-bold">
                       {review.user?.full_name?.charAt(0) || 'U'}
                     </span>
                   </div>
@@ -273,7 +273,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleMarkHelpful(review.id)}
-                    className="flex items-center gap-1 text-gray-500 hover:text-primary transition-colors"
+                    className="flex items-center gap-1 text-gray-500 hover:text-amber-600 transition-colors"
                   >
                     <ThumbsUp className="w-4 h-4" />
                     <span className="text-sm">{review.helpful_count}</span>

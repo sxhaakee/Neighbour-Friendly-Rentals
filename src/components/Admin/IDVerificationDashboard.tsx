@@ -115,7 +115,7 @@ export const IDVerificationDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -124,7 +124,7 @@ export const IDVerificationDashboard = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Shield className="w-8 h-8 text-primary" />
+        <Shield className="w-8 h-8 text-amber-600" />
         <div>
           <h2 className="text-2xl font-bold text-gray-900">ID Verification</h2>
           <p className="text-gray-600">Review and approve user ID documents</p>
@@ -216,7 +216,7 @@ export const IDVerificationDashboard = () => {
                 {activeTab === 'pending' ? (
                   <button
                     onClick={() => setSelectedVerification(verification)}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     <Eye size={18} />
                     Review

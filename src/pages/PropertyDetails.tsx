@@ -75,7 +75,7 @@ const PropertyDetails = () => {
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Property Not Found</h2>
-          <Link to="/properties" className="text-primary hover:underline">
+          <Link to="/properties" className="text-amber-600 hover:underline">
             Back to Properties
           </Link>
         </div>
@@ -141,7 +141,7 @@ const PropertyDetails = () => {
                   </>
                 )}
                 <div className="absolute top-4 left-4 flex gap-2">
-                  <span className="bg-primary text-white px-3 py-1 rounded-lg text-sm font-semibold capitalize">
+                  <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-3 py-1 rounded-lg text-sm font-semibold capitalize">
                     {property.type}
                   </span>
                   {property.featured && (
@@ -301,7 +301,7 @@ const PropertyDetails = () => {
               {/* Pricing Card */}
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <div className="mb-6">
-                  <div className="flex items-center gap-2 text-3xl font-bold text-primary mb-2">
+                  <div className="flex items-center gap-2 text-3xl font-bold text-amber-600 mb-2">
                     <IndianRupee className="w-7 h-7" />
                     {property.rent_amount.toLocaleString('en-IN')}
                     <span className="text-lg text-gray-500 font-normal">/month</span>
@@ -327,11 +327,11 @@ const PropertyDetails = () => {
                 <div className="space-y-3">
                   <button
                     onClick={() => setShowContactForm(true)}
-                    className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors"
                   >
                     Contact Owner
                   </button>
-                  <button className="w-full border-2 border-primary text-primary py-3 rounded-lg font-semibold hover:bg-primary/5 transition-colors">
+                  <button className="w-full border-2 border-amber-500 text-amber-600 py-3 rounded-lg font-semibold hover:bg-amber-600/5 transition-colors">
                     Schedule Viewing
                   </button>
                 </div>
@@ -349,13 +349,13 @@ const PropertyDetails = () => {
                     <>
                       <div className="flex items-center gap-2 text-gray-700">
                         <Phone className="w-5 h-5 text-gray-400" />
-                        <a href={`tel:${property.owner_phone}`} className="hover:text-primary">
+                        <a href={`tel:${property.owner_phone}`} className="hover:text-amber-600">
                           {property.owner_phone}
                         </a>
                       </div>
                       <div className="flex items-center gap-2 text-gray-700">
                         <Mail className="w-5 h-5 text-gray-400" />
-                        <a href={`mailto:${property.owner_email}`} className="hover:text-primary">
+                        <a href={`mailto:${property.owner_email}`} className="hover:text-amber-600">
                           {property.owner_email}
                         </a>
                       </div>

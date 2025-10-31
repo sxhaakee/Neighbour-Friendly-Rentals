@@ -121,7 +121,7 @@ const VerifyID = () => {
           </p>
           <button
             onClick={() => navigate('/dashboard')}
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
           >
             Back to Dashboard
           </button>
@@ -146,7 +146,7 @@ const VerifyID = () => {
           </p>
           <button
             onClick={() => navigate('/dashboard')}
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
           >
             Back to Dashboard
           </button>
@@ -179,7 +179,7 @@ const VerifyID = () => {
               setVerificationStatus(null);
               fetchVerificationStatus();
             }}
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
           >
             Upload Again
           </button>
@@ -197,7 +197,7 @@ const VerifyID = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <Shield className="w-16 h-16 text-primary mx-auto mb-4" />
+          <Shield className="w-16 h-16 text-amber-600 mx-auto mb-4" />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Verify Your Identity</h1>
           <p className="text-gray-600">
             Upload a valid ID document to start booking items
@@ -259,7 +259,7 @@ const VerifyID = () => {
                     value={doc.value}
                     checked={documentType === doc.value}
                     onChange={(e) => setDocumentType(e.target.value as any)}
-                    className="w-4 h-4 text-primary"
+                    className="w-4 h-4 text-amber-600"
                   />
                   <span className="font-medium">{doc.label}</span>
                 </label>

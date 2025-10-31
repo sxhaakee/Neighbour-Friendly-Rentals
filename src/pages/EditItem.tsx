@@ -437,7 +437,7 @@ const EditItem = () => {
             <button
               type="submit"
               disabled={loading || compressing}
-              className="flex-1 bg-primary text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Updating...' : 'Update Listing'}
             </button>

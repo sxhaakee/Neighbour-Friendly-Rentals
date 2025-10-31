@@ -244,7 +244,7 @@ const Home = () => {
               <p className="text-gray-600 mb-4">
                 Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn monthly passive income.
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
                 Browse Properties
                 <span className="ml-2 group-hover:ml-0 transition-all">→</span>
               </div>
@@ -266,7 +266,7 @@ const Home = () => {
               <p className="text-gray-600 mb-4">
                 That camera collecting dust? List it and earn daily. Need a drill for one day? Rent instead of buying. Everyone wins.
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
                 Browse Items
                 <span className="ml-2 group-hover:ml-0 transition-all">→</span>
               </div>
@@ -288,7 +288,7 @@ const Home = () => {
               <p className="text-gray-600 mb-4">
                 DJ? Photographer? Caterer? Get booked daily. Customers save 40%, you earn more. No middlemen eating your profits.
               </p>
-              <div className="flex items-center text-primary font-semibold group-hover:gap-2 transition-all">
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
                 Browse Services
                 <span className="ml-2 group-hover:ml-0 transition-all">→</span>
               </div>
@@ -320,7 +320,7 @@ const Home = () => {
               <p className="text-gray-600 text-lg mb-6">No listings available yet. Be the first to list an item!</p>
               <Link
                 to="/add-item"
-                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg inline-block"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg inline-block"
               >
                 Add Your First Item
               </Link>
@@ -345,17 +345,17 @@ const Home = () => {
                       className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute top-2 left-2">
-                      <span className="bg-primary text-white px-2 py-1 rounded text-xs font-semibold">
+                      <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-2 py-1 rounded text-xs font-semibold">
                         {item.category}
                       </span>
                     </div>
                   </div>
                   <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{item.title}</h3>
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{item.title}</h3>
                     <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{item.description}</p>
                     <div className="mt-auto">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-lg font-bold text-primary">
+                        <span className="text-lg font-bold text-amber-600">
                           ₹{item.price}<span className="text-xs text-gray-500">/day</span>
                         </span>
                       </div>
@@ -376,7 +376,7 @@ const Home = () => {
           >
             <Link
               to="/listings"
-              className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+              className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
             >
               View All Listings
             </Link>
@@ -424,7 +424,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{service.business_name}</h3>
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{service.business_name}</h3>
                     <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{service.description}</p>
                     <div className="mt-auto">
                       <span className="text-xs text-gray-500 truncate block flex items-center">
@@ -446,7 +446,7 @@ const Home = () => {
             >
               <Link
                 to="/listings"
-                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
               >
                 View All Services
               </Link>
@@ -495,7 +495,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-primary transition-colors">{property.title}</h3>
+                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{property.title}</h3>
                     <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">₹{property.rent_amount}/month</p>
                     <div className="mt-auto">
                       <span className="text-xs text-gray-500 truncate block flex items-center">
@@ -517,7 +517,7 @@ const Home = () => {
             >
               <Link
                 to="/listings"
-                className="bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-colors shadow-lg"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
               >
                 View All Properties
               </Link>
@@ -567,7 +567,7 @@ const Home = () => {
                 className="text-center"
               >
                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
-                  <feature.icon className="w-8 h-8 text-primary" />
+                  <feature.icon className="w-8 h-8 text-amber-600" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>

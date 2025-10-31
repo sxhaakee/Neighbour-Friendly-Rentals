@@ -143,10 +143,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Earnings</p>
-              <p className="text-2xl font-bold text-primary">₹{stats.totalEarnings.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-amber-600">₹{stats.totalEarnings.toLocaleString()}</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-primary" />
+              <DollarSign className="w-6 h-6 text-amber-600" />
             </div>
           </div>
         </motion.div>
@@ -160,10 +160,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Rentals</p>
-              <p className="text-2xl font-bold text-primary">{stats.totalRentals}</p>
+              <p className="text-2xl font-bold text-amber-600">{stats.totalRentals}</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Calendar className="w-6 h-6 text-primary" />
+              <Calendar className="w-6 h-6 text-amber-600" />
             </div>
           </div>
         </motion.div>
@@ -177,10 +177,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Active Listings</p>
-              <p className="text-2xl font-bold text-primary">{stats.activeListings}</p>
+              <p className="text-2xl font-bold text-amber-600">{stats.activeListings}</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Package className="w-6 h-6 text-primary" />
+              <Package className="w-6 h-6 text-amber-600" />
             </div>
           </div>
         </motion.div>
@@ -194,10 +194,10 @@ const Dashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Total Views</p>
-              <p className="text-2xl font-bold text-primary">{stats.totalViews}</p>
+              <p className="text-2xl font-bold text-amber-600">{stats.totalViews}</p>
             </div>
             <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Eye className="w-6 h-6 text-primary" />
+              <Eye className="w-6 h-6 text-amber-600" />
             </div>
           </div>
         </motion.div>
@@ -226,7 +226,7 @@ const Dashboard = () => {
                 <p className="text-sm text-gray-500">{rental.startDate} - {rental.endDate}</p>
               </div>
               <div className="text-right">
-                <p className="font-semibold text-primary">₹{rental.totalEarned}</p>
+                <p className="font-semibold text-amber-600">₹{rental.totalEarned}</p>
                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                   rental.status === 'Completed' 
                     ? 'bg-green-100 text-green-800' 
@@ -253,7 +253,7 @@ const Dashboard = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Earnings Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center p-4 bg-primary/5 rounded-lg">
-            <p className="text-3xl font-bold text-primary">₹{stats.totalEarnings.toLocaleString()}</p>
+            <p className="text-3xl font-bold text-amber-600">₹{stats.totalEarnings.toLocaleString()}</p>
             <p className="text-sm text-gray-600">Total Earnings</p>
           </div>
           <div className="text-center p-4 bg-secondary/5 rounded-lg">
@@ -352,7 +352,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-gray-900">My Listings</h2>
-              <button className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center space-x-2">
+              <button className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors flex items-center space-x-2">
                 <Plus className="w-4 h-4" />
                 <span>Add New Item</span>
               </button>
@@ -386,7 +386,7 @@ const Dashboard = () => {
                         </span>
                       </div>
                       
-                      <p className="text-2xl font-bold text-primary mb-3">
+                      <p className="text-2xl font-bold text-amber-600 mb-3">
                         ₹{item.price}<span className="text-sm text-gray-500">/day</span>
                       </p>
                       
@@ -397,7 +397,7 @@ const Dashboard = () => {
                       
                       <div className="flex justify-between text-sm text-gray-500 mb-4">
                         <span>Total Earned:</span>
-                        <span className="font-semibold text-primary">₹{item.totalEarned}</span>
+                        <span className="font-semibold text-amber-600">₹{item.totalEarned}</span>
                       </div>
                       
                       <div className="flex space-x-2">
@@ -441,7 +441,7 @@ const Dashboard = () => {
                       <p className="text-gray-600">by {rental.owner}</p>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
                         <span>{rental.startDate} - {rental.endDate}</span>
-                        <span className="text-xl font-bold text-primary">₹{rental.price}/day</span>
+                        <span className="text-xl font-bold text-amber-600">₹{rental.price}/day</span>
                       </div>
                     </div>
                     <div className="text-right">
@@ -549,7 +549,7 @@ const Dashboard = () => {
                   </div>
                 </div>
                 
-                <button className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+                <button className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors">
                   Save Changes
                 </button>
               </div>
@@ -591,7 +591,7 @@ const Dashboard = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors text-left ${
                       activeTab === tab.id
-                        ? 'bg-primary text-white'
+                        ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >

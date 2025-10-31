@@ -125,7 +125,7 @@ const About = () => {
                 className="bg-gray-50 rounded-xl p-8"
               >
                 <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-                  <value.icon className="w-8 h-8 text-primary" />
+                  <value.icon className="w-8 h-8 text-amber-600" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">{value.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{value.description}</p>
@@ -198,7 +198,7 @@ const About = () => {
                 />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-primary font-semibold mb-3">{member.role}</p>
+                  <p className="text-amber-600 font-semibold mb-3">{member.role}</p>
                   <p className="text-gray-600">{member.bio}</p>
                 </div>
               </motion.div>
@@ -228,19 +228,19 @@ const About = () => {
               <div className="space-y-3 text-lg">
                 <p className="text-gray-700">
                   <span className="font-semibold">Email:</span>{' '}
-                  <a href="mailto:friendlyrentals.mlr@gmail.com" className="text-primary hover:underline">
+                  <a href="mailto:friendlyrentals.mlr@gmail.com" className="text-amber-600 hover:underline">
                     friendlyrentals.mlr@gmail.com
                   </a>
                 </p>
                 <p className="text-gray-700">
                   <span className="font-semibold">Phone:</span>{' '}
-                  <a href="tel:+918746934346" className="text-primary hover:underline">
+                  <a href="tel:+918746934346" className="text-amber-600 hover:underline">
                     +91 87469 34346
                   </a>
                 </p>
                 <p className="text-gray-700">
                   <span className="font-semibold">Instagram:</span>{' '}
-                  <a href="https://instagram.com/neighbourfriendly" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  <a href="https://instagram.com/neighbourfriendly" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
                     @neighbourfriendly
                   </a>
                 </p>

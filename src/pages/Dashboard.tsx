@@ -208,7 +208,7 @@ const DashboardNew = () => {
           <p className="text-gray-600 mb-6">Start earning by listing your first item!</p>
           <button
             onClick={() => navigate('/add-item')}
-            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors"
           >
             Add Your First Item
           </button>
@@ -242,7 +242,7 @@ const DashboardNew = () => {
                           {listing.status}
                         </span>
                       </div>
-                      <p className="text-lg font-bold text-primary mb-2">
+                      <p className="text-lg font-bold text-amber-600 mb-2">
                         ₹{listing.price}<span className="text-xs text-gray-500">/day</span>
                       </p>
                       <div className="flex gap-2">
@@ -295,7 +295,7 @@ const DashboardNew = () => {
                         </span>
                       </div>
                       <p className="text-xs text-gray-600 mb-1">{property.city}, {property.state}</p>
-                      <p className="text-lg font-bold text-primary mb-2">
+                      <p className="text-lg font-bold text-amber-600 mb-2">
                         ₹{property.monthly_rent || property.price}<span className="text-xs text-gray-500">/month</span>
                       </p>
                       <div className="flex gap-2">
@@ -386,7 +386,7 @@ const DashboardNew = () => {
           <p className="text-gray-600 mb-6">Browse listings and book your first rental!</p>
           <button
             onClick={() => navigate('/listings')}
-            className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors"
           >
             Browse Listings
           </button>
@@ -413,7 +413,7 @@ const DashboardNew = () => {
                       <Clock className="w-4 h-4 inline mr-1" />
                       {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                     </span>
-                    <span className="font-semibold text-primary">₹{booking.total_price}</span>
+                    <span className="font-semibold text-amber-600">₹{booking.total_price}</span>
                   </div>
                 </div>
                 <div className="text-right space-y-2">
@@ -633,12 +633,12 @@ const DashboardNew = () => {
       <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8">
         <div className="flex items-center space-x-6 mb-8">
           <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
-            <User className="w-12 h-12 text-primary" />
+            <User className="w-12 h-12 text-amber-600" />
           </div>
           <div>
             <h3 className="text-2xl font-bold text-gray-900">{profile?.full_name || 'User'}</h3>
             <p className="text-gray-600">{profile?.email}</p>
-            <span className="inline-block mt-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+            <span className="inline-block mt-2 px-3 py-1 bg-primary/10 text-amber-600 rounded-full text-sm font-medium">
               {profile?.role === 'admin' ? 'Admin' : 'Customer'}
             </span>
           </div>
@@ -701,7 +701,7 @@ const DashboardNew = () => {
           <button
             onClick={handleSaveProfile}
             disabled={saving}
-            className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
@@ -760,7 +760,7 @@ const DashboardNew = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex flex-col items-center justify-center px-4 py-3 rounded-xl transition-all min-w-[80px] ${
                   activeTab === tab.id
-                    ? 'bg-primary text-white shadow-lg scale-105'
+                    ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg scale-105'
                     : 'bg-white text-gray-600 hover:bg-gray-50 shadow'
                 }`}
               >
@@ -786,7 +786,7 @@ const DashboardNew = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all text-left ${
                       activeTab === tab.id
-                        ? 'bg-primary text-white shadow-md'
+                        ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-md'
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >

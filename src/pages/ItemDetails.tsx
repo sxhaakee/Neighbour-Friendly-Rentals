@@ -152,7 +152,7 @@ const ItemDetails = () => {
           <p className="text-gray-600 mb-6">The item you're looking for doesn't exist.</p>
           <button
             onClick={() => navigate('/listings')}
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-3 rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
           >
             Back to Listings
           </button>
@@ -250,7 +250,7 @@ const ItemDetails = () => {
               {user && user.id !== listing.owner_id && (
                 <button
                   onClick={() => setShowReviewForm(!showReviewForm)}
-                  className="mb-4 text-primary hover:text-primary/80 font-medium flex items-center gap-2"
+                  className="mb-4 text-amber-600 hover:text-amber-600/80 font-medium flex items-center gap-2"
                 >
                   <Star className="w-4 h-4" />
                   Write a Review
@@ -301,7 +301,7 @@ const ItemDetails = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={handleSubmitReview}
-                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                      className="px-4 py-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-lg hover:shadow-xl hover:scale-105 transition-colors"
                     >
                       Submit Review
                     </button>
@@ -384,7 +384,7 @@ const ItemDetails = () => {
 
               {/* Price */}
               <div className="border-t border-gray-200 pt-4">
-                <div className="text-4xl font-bold text-primary mb-2">
+                <div className="text-4xl font-bold text-amber-600 mb-2">
                   ₹{listing.price}
                   <span className="text-lg text-gray-600 font-normal">/day</span>
                 </div>
@@ -452,7 +452,7 @@ const ItemDetails = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleContactOwner}
-                      className="w-full bg-white border-2 border-primary text-primary py-4 rounded-xl font-semibold text-lg hover:bg-primary/5 transition-all flex items-center justify-center gap-2"
+                      className="w-full bg-white border-2 border-amber-500 text-amber-600 py-4 rounded-xl font-semibold text-lg hover:bg-amber-600/5 transition-all flex items-center justify-center gap-2"
                     >
                       <MessageCircle className="w-5 h-5" />
                       Contact Owner

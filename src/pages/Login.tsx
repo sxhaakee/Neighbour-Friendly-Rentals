@@ -96,7 +96,7 @@ const Login = () => {
               <Home className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900">
-              Neighbour<span className="text-primary">Friendly</span>
+              Neighbour<span className="text-amber-600">Friendly</span>
             </h1>
           </div>
 
@@ -105,7 +105,7 @@ const Login = () => {
             <button
               onClick={() => setIsLogin(true)}
               className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-colors ${
-                isLogin ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
+                isLogin ? 'bg-white text-amber-600 shadow-sm' : 'text-gray-600'
               }`}
             >
               Sign In
@@ -113,7 +113,7 @@ const Login = () => {
             <button
               onClick={() => setIsLogin(false)}
               className={`flex-1 py-2 px-4 rounded-lg font-semibold transition-colors ${
-                !isLogin ? 'bg-white text-primary shadow-sm' : 'text-gray-600'
+                !isLogin ? 'bg-white text-amber-600 shadow-sm' : 'text-gray-600'
               }`}
             >
               Sign Up
@@ -215,10 +215,10 @@ const Login = () => {
             {isLogin && (
               <div className="flex items-center justify-between">
                 <label className="flex items-center">
-                  <input type="checkbox" className="rounded border-gray-300 text-primary focus:ring-primary" />
+                  <input type="checkbox" className="rounded border-gray-300 text-amber-600 focus:ring-primary" />
                   <span className="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
-                <a href="#" className="text-sm text-primary hover:text-primary/80">
+                <a href="#" className="text-sm text-amber-600 hover:text-amber-600/80">
                   Forgot password?
                 </a>
               </div>
@@ -227,7 +227,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-primary text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
@@ -274,9 +274,9 @@ const Login = () => {
           {!isLogin && (
             <p className="mt-6 text-center text-sm text-gray-600">
               By creating an account, you agree to our{' '}
-              <a href="#" className="text-primary hover:text-primary/80">Terms of Service</a>{' '}
+              <a href="#" className="text-amber-600 hover:text-amber-600/80">Terms of Service</a>{' '}
               and{' '}
-              <a href="#" className="text-primary hover:text-primary/80">Privacy Policy</a>
+              <a href="#" className="text-amber-600 hover:text-amber-600/80">Privacy Policy</a>
             </p>
           )}
         </div>

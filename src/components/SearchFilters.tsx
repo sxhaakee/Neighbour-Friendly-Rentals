@@ -56,12 +56,12 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
       {/* Filter Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="relative flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-lg hover:border-primary transition-colors"
+        className="relative flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-lg hover:border-amber-500 transition-colors"
       >
         <Filter className="w-5 h-5 text-gray-600" />
         <span className="font-semibold text-gray-700">Filters</span>
         {activeFilterCount > 0 && (
-          <span className="absolute -top-2 -right-2 w-6 h-6 bg-primary text-white text-xs font-bold rounded-full flex items-center justify-center">
+          <span className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
             {activeFilterCount}
           </span>
         )}
@@ -109,7 +109,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                   <select
                     value={filters.sortBy}
                     onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as any })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
                   >
                     <option value="newest">Newest First</option>
                     <option value="price_low">Price: Low to High</option>
@@ -131,7 +131,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                         placeholder="Min"
                         value={filters.priceMin || ''}
                         onChange={(e) => setFilters({ ...filters, priceMin: Number(e.target.value) || undefined })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -140,7 +140,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                         placeholder="Max"
                         value={filters.priceMax || ''}
                         onChange={(e) => setFilters({ ...filters, priceMax: Number(e.target.value) || undefined })}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -154,7 +154,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                   <select
                     value={filters.category || ''}
                     onChange={(e) => setFilters({ ...filters, category: e.target.value || undefined })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:outline-none"
                   >
                     <option value="">All Categories</option>
                     {categories.map((cat) => (
@@ -181,7 +181,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                   />
                   <div className="flex justify-between text-sm text-gray-600 mt-2">
                     <span>1 km</span>
-                    <span className="font-semibold text-primary">{filters.distance || 10} km</span>
+                    <span className="font-semibold text-amber-600">{filters.distance || 10} km</span>
                     <span>50 km</span>
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export const SearchFilters = ({ onApplyFilters, onReset }: SearchFiltersProps) =
                 </button>
                 <button
                   onClick={handleApply}
-                  className="flex-1 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors"
                 >
                   Apply Filters
                 </button>

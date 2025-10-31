@@ -52,7 +52,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
         
         {/* Badges */}
         <div className="absolute top-2 left-2 flex gap-2">
-          <span className="bg-primary text-white px-2 py-1 rounded text-xs font-semibold capitalize">
+          <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-2 py-1 rounded text-xs font-semibold capitalize">
             {property.type}
           </span>
           {property.featured && (
@@ -80,7 +80,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
       {/* Content */}
       <div className="p-4">
         {/* Title */}
-        <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+        <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-amber-600 transition-colors">
           {property.title}
         </h3>
 
@@ -129,13 +129,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
         {/* Price & CTA */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <div>
-            <div className="flex items-center gap-1 text-2xl font-bold text-primary">
+            <div className="flex items-center gap-1 text-2xl font-bold text-amber-600">
               <IndianRupee className="w-5 h-5" />
               <span>{property.rent_amount.toLocaleString('en-IN')}</span>
             </div>
             <span className="text-xs text-gray-500">per month</span>
           </div>
-          <button className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
+          <button className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
             View Details
           </button>
         </div>

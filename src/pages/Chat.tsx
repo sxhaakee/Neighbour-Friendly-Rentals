@@ -240,7 +240,7 @@ const Chat = () => {
                   <User className="w-8 h-8 rounded-full bg-gray-200 p-1" />
                   <div>
                     <p className="font-semibold">{selectedConversation.profiles?.full_name || 'User'}</p>
-                    <Link to={`/item/${selectedConversation.listing_id}`} className="text-sm text-primary hover:underline flex items-center gap-1">
+                    <Link to={`/item/${selectedConversation.listing_id}`} className="text-sm text-amber-600 hover:underline flex items-center gap-1">
                       <Package className="w-3 h-3" />
                       View Listing
                     </Link>
@@ -256,12 +256,12 @@ const Chat = () => {
                       <div
                         className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
                           msg.sender_id === user?.id
-                            ? 'bg-primary text-white'
+                            ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                             : 'bg-white text-gray-900 shadow-sm border border-gray-200'
                         }`}
                       >
                         <p className="text-sm break-words">{msg.content}</p>
-                        <p className={`text-xs mt-1 ${msg.sender_id === user?.id ? 'text-primary-100' : 'text-gray-500'}`}>
+                        <p className={`text-xs mt-1 ${msg.sender_id === user?.id ? 'text-amber-600-100' : 'text-gray-500'}`}>
                           {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
@@ -282,7 +282,7 @@ const Chat = () => {
                     />
                     <button
                       onClick={handleSendMessage}
-                      className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0"
+                      className="w-10 h-10 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-full flex items-center justify-center flex-shrink-0"
                     >
                       <Send className="w-5 h-5" />
                     </button>

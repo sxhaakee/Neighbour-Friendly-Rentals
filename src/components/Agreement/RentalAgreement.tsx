@@ -50,7 +50,7 @@ export const RentalAgreement = ({
         {/* Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 z-10">
           <div className="flex items-center gap-3 mb-2">
-            <FileText className="w-8 h-8 text-primary" />
+            <FileText className="w-8 h-8 text-amber-600" />
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Rental Agreement</h2>
               <p className="text-sm text-gray-600">Please review and agree to the terms</p>
@@ -177,9 +177,9 @@ export const RentalAgreement = ({
           </div>
 
           {/* Agreement Checkbox */}
-          <div className="bg-primary/5 border-2 border-primary rounded-lg p-6">
+          <div className="bg-primary/5 border-2 border-amber-500 rounded-lg p-6">
             <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+              <Check className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
               <div>
                 <p className="font-semibold text-gray-900 mb-2">Digital Confirmation</p>
                 <p className="text-sm text-gray-700">
