@@ -1,18 +1,35 @@
 -- Check Premium Status for Your Account
 -- Run this in Supabase SQL Editor
 
--- 1. Check your profile premium status
+-- FIRST: Check what columns exist in your profiles table
+SELECT column_name, data_type 
+FROM information_schema.columns 
+WHERE table_name = 'profiles' 
+AND table_schema = 'public'
+ORDER BY ordinal_position;
+
+-- 1. Check your profile premium status (basic version)
 SELECT 
   id,
   email,
   full_name,
   is_premium,
-  premium_plan,
-  premium_expires_at,
-  premium_payment_id,
   created_at
 FROM profiles
 WHERE email = 'sheriefshakeeb313@gmail.com';  -- Replace with your email
+
+-- If columns exist, use this query instead:
+-- SELECT 
+--   id,
+--   email,
+--   full_name,
+--   is_premium,
+--   premium_plan,
+--   premium_expires_at,
+--   premium_payment_id,
+--   created_at
+-- FROM profiles
+-- WHERE email = 'sheriefshakeeb313@gmail.com';
 
 -- 2. Check revenue tracking for your payments
 SELECT 
