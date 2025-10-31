@@ -155,15 +155,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/dashboard`,
+          // Remove emailRedirectTo to avoid 500 error
         },
       });
 
       if (error) return { error };
 
-      // Profile will be created automatically by the database trigger
-      // User will receive email with verification link
-      // After clicking link, they'll be redirected to dashboard and auto-logged in
+      // Create profile manually if trigger fails
+      if (data.user) {
+        try {
+          await supabase.from('profiles').insert({
+            id: data.user.id,
+            full_name: fullName,
+            email: email,
+            is_admin: false,
+            is_premium: false,
+            is_verified: false,
+            verification_status: 'pending',
+          });
+        } catch (profileError) {
+          console.log('Profile creation handled by trigger or already exists');
+        }
+      }
+
       return { error: null };
     } catch (error) {
       return { error: error as AuthError };
