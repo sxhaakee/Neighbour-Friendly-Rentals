@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-white via-amber-50/30 to-white backdrop-blur-md border-b border-yellow-200/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -39,8 +39,8 @@ const Header = () => {
               alt="NeighbourFriendly Rentals" 
               className="w-12 h-12 object-contain rounded-lg"
             />
-            <span className="font-bold text-xl text-gray-900">
-              Neighbour<span className="text-primary">Friendly</span> Rentals
+            <span className="font-bold text-xl bg-gradient-to-r from-gray-900 via-amber-700 to-gray-900 bg-clip-text text-transparent">
+              Neighbour<span className="bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">Friendly</span> Rentals
             </span>
           </Link>
 
@@ -52,8 +52,8 @@ const Header = () => {
                 to={path}
                 className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 ${
                   isActive(path)
-                    ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:text-primary hover:bg-primary/10'
+                    ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-md'
+                    : 'text-gray-600 hover:text-amber-600 hover:bg-amber-50'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -72,9 +72,9 @@ const Header = () => {
                 <div className="relative flex-shrink-0">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-full bg-white border-2 border-primary hover:bg-primary/5 transition-all"
+                    className="flex items-center space-x-2 px-4 py-2 rounded-full bg-gradient-to-r from-white to-amber-50 border-2 border-yellow-400 hover:border-yellow-500 hover:shadow-md transition-all"
                   >
-                    <div className="w-8 h-8 min-w-[2rem] rounded-full bg-primary flex items-center justify-center text-white font-bold text-base">
+                    <div className="w-8 h-8 min-w-[2rem] rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center text-white font-bold text-base shadow-md">
                       {profile?.full_name?.charAt(0).toUpperCase() || 'M'}
                     </div>
                     <span className="font-medium text-sm text-gray-900 whitespace-nowrap">My Profile</span>
@@ -164,7 +164,7 @@ const Header = () => {
             ) : (
               <Link
                 to="/login"
-                className="bg-secondary text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-secondary/80 transition-colors duration-200"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200"
               >
                 Sign In
               </Link>
