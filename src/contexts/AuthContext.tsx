@@ -66,9 +66,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // Send welcome email when user confirms their email
+      if (event === 'SIGNED_IN' && session?.user) {
+        const metadata = session.user.user_metadata;
+        
+        // Send welcome email via Edge Function
+        try {
+          await emailService.sendWelcomeEmail({
+            email: session.user.email!,
+            userName: metadata?.full_name || 'User',
+            dashboardUrl: `${window.location.origin}/dashboard`,
+          });
+          console.log('✅ Welcome email sent after confirmation');
+        } catch (error) {
+          console.error('Failed to send welcome email:', error);
+        }
+      }
+      
       if (session?.user) {
         fetchProfile(session.user.id);
       } else {
@@ -161,18 +179,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) return { error };
 
-      // Send welcome email
-      try {
-        await emailService.sendWelcomeEmail({
-          email,
-          userName: fullName,
-          dashboardUrl: `${window.location.origin}/dashboard`,
-        });
-      } catch (emailError) {
-        console.error('Failed to send welcome email:', emailError);
-        // Don't fail signup if email fails
-      }
-
+      // Note: Welcome email will be sent automatically when user confirms their email
+      // via the onAuthStateChange listener (SIGNED_IN event)
+      
       // Wait a moment for database trigger to create profile
       // If trigger fails, profile will be created on first login
       return { error: null };

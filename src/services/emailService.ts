@@ -374,14 +374,28 @@ export const emailService = {
    */
   async sendIDVerificationStatus(userData: any, status: 'approved' | 'rejected', reason?: string) {
     try {
-      const template = status === 'approved' 
-        ? EMAIL_TEMPLATES.idVerificationApproved(userData)
-        : EMAIL_TEMPLATES.idVerificationRejected({ ...userData, reason });
+      console.log(`📧 Sending ID Verification ${status} email to:`, userData.email);
       
-      console.log('📧 ID Verification Email:', template.subject);
-      console.log('Email HTML:', template.html);
-      
-      return { success: true };
+      // Call Supabase Edge Function
+      const emailType = status === 'approved' ? 'idVerificationApproved' : 'idVerificationRejected';
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: userData.email,
+          type: emailType,
+          data: {
+            userName: userData.userName || userData.full_name,
+            reason: reason || 'Document not clear or invalid'
+          }
+        }
+      });
+
+      if (error) {
+        console.error('Error sending ID verification email:', error);
+        return { success: false, error };
+      }
+
+      console.log('✅ ID verification email sent successfully');
+      return { success: true, data };
     } catch (error) {
       console.error('Error sending ID verification email:', error);
       throw error;
