@@ -13,22 +13,35 @@ export const GA_MEASUREMENT_ID = 'G-HTX0NE9DQ0'; // Replace with your GA4 ID
 // Initialize Google Analytics
 export const initGA = () => {
   if (typeof window === 'undefined') return;
+  
+  // Skip if GA ID not configured
+  if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') {
+    console.log('⚠️ Google Analytics not configured');
+    return;
+  }
 
-  // Load gtag script
-  const script = document.createElement('script');
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
-  script.async = true;
-  document.head.appendChild(script);
+  try {
+    // Load gtag script
+    const script = document.createElement('script');
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.async = true;
+    script.onerror = () => {
+      console.warn('⚠️ Failed to load Google Analytics');
+    };
+    document.head.appendChild(script);
 
-  // Initialize dataLayer
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag() {
-    window.dataLayer.push(arguments);
-  };
-  window.gtag('js', new Date());
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    page_path: window.location.pathname,
-  });
+    // Initialize dataLayer
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag() {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_path: window.location.pathname,
+    });
+  } catch (error) {
+    console.warn('⚠️ Google Analytics initialization failed:', error);
+  }
 };
 
 // Track page views

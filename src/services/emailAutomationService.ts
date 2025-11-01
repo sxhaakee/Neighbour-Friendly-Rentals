@@ -1,14 +1,15 @@
-import { Resend } from 'resend';
 import { supabase } from '../lib/supabase';
 
-// Initialize Resend with API key - using Vite's import.meta.env
+// NOTE: Resend is a SERVER-SIDE API and cannot be called from the browser
+// It causes CORS errors when called from frontend
+// Solution: Use Supabase Edge Functions to send emails
+// For now, we'll log emails to console instead of sending them
+
 const getResendClient = () => {
-  const apiKey = import.meta.env.VITE_RESEND_API_KEY;
-  if (!apiKey) {
-    console.warn('⚠️ Resend API key not configured in emailAutomationService. Emails will be logged only.');
-    return null;
-  }
-  return new Resend(apiKey);
+  // Always return null in browser environment
+  // Emails will be logged to console instead
+  console.log('📧 Email automation service running in browser mode (logging only)');
+  return null;
 };
 
 interface EmailCampaign {
