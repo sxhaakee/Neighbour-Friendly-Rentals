@@ -2,5 +2,17 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /dashboard
+Disallow: /login
+Disallow: /verify-id
+Disallow: /add-item
+Disallow: /add-property
+Disallow: /add-service
+Disallow: /edit-item/
+Disallow: /edit-property/
+Disallow: /edit-service/
+Disallow: /book/
+Disallow: /messages
+Disallow: /chat
+Disallow: /profile
 
 Sitemap: https://neighbourfriendly.in/sitemap.xml

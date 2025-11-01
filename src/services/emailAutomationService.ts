@@ -1,7 +1,15 @@
 import { Resend } from 'resend';
 import { supabase } from '../lib/supabase';
 
-const resend = new Resend(process.env.VITE_RESEND_API_KEY);
+// Initialize Resend with API key - using Vite's import.meta.env
+const getResendClient = () => {
+  const apiKey = import.meta.env.VITE_RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn('⚠️ Resend API key not configured in emailAutomationService. Emails will be logged only.');
+    return null;
+  }
+  return new Resend(apiKey);
+};
 
 interface EmailCampaign {
   delay: number; // days
@@ -86,6 +94,12 @@ export const emailAutomationService = {
    */
   async sendWeeklyDigest(userId: string) {
     try {
+      const resend = getResendClient();
+      if (!resend) {
+        console.log('⚠️ Resend not configured, skipping weekly digest');
+        return;
+      }
+
       // Get user details
       const { data: user } = await supabase
         .from('profiles')
@@ -104,7 +118,7 @@ export const emailAutomationService = {
 
       // Send email
       await resend.emails.send({
-        from: 'NeighbourFriendly <hello@neighbourfriendly.vercel.app>',
+        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: user.email,
         subject: '🏠 New items near you this week!',
         html: this.generateWeeklyDigestHTML(user.full_name, nearbyItems || [])
@@ -120,27 +134,33 @@ export const emailAutomationService = {
    * Re-engagement campaigns for inactive users
    */
   async sendReEngagementCampaign(inactiveUsers: User[]) {
+    const resend = getResendClient();
+    if (!resend) {
+      console.log('⚠️ Resend not configured, skipping re-engagement campaign');
+      return;
+    }
+
     for (const user of inactiveUsers) {
       const daysSinceLastLogin = this.getDaysSinceLastLogin(user);
       
       try {
         if (daysSinceLastLogin === 30) {
           await resend.emails.send({
-            from: 'NeighbourFriendly <hello@neighbourfriendly.vercel.app>',
+            from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
             to: user.email,
             subject: 'We miss you! 15% off your next booking 🎁',
             html: this.generateReEngagementHTML(user.full_name, 15)
           });
         } else if (daysSinceLastLogin === 60) {
           await resend.emails.send({
-            from: 'NeighbourFriendly <hello@neighbourfriendly.vercel.app>',
+            from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
             to: user.email,
             subject: "See what's new on NeighbourFriendly! 🆕",
             html: this.generateWhatsNewHTML(user.full_name)
           });
         } else if (daysSinceLastLogin === 90) {
           await resend.emails.send({
-            from: 'NeighbourFriendly <hello@neighbourfriendly.vercel.app>',
+            from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
             to: user.email,
             subject: 'Last chance: 20% off before we say goodbye 😢',
             html: this.generateLastChanceHTML(user.full_name, 20)
@@ -159,6 +179,12 @@ export const emailAutomationService = {
    */
   async sendBookingConfirmation(bookingId: string) {
     try {
+      const resend = getResendClient();
+      if (!resend) {
+        console.log('⚠️ Resend not configured, skipping booking confirmation');
+        return;
+      }
+
       const { data: booking } = await supabase
         .from('bookings')
         .select(`
@@ -172,7 +198,7 @@ export const emailAutomationService = {
       if (!booking) return;
 
       await resend.emails.send({
-        from: 'NeighbourFriendly <bookings@neighbourfriendly.vercel.app>',
+        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: booking.renter.email,
         subject: `Booking Confirmed: ${booking.listing.title} ✅`,
         html: this.generateBookingConfirmationHTML(booking)
@@ -189,6 +215,12 @@ export const emailAutomationService = {
    */
   async sendRentalReminder(bookingId: string) {
     try {
+      const resend = getResendClient();
+      if (!resend) {
+        console.log('⚠️ Resend not configured, skipping rental reminder');
+        return;
+      }
+
       const { data: booking } = await supabase
         .from('bookings')
         .select(`
@@ -202,7 +234,7 @@ export const emailAutomationService = {
       if (!booking) return;
 
       await resend.emails.send({
-        from: 'NeighbourFriendly <reminders@neighbourfriendly.vercel.app>',
+        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: booking.renter.email,
         subject: `Reminder: Pick up ${booking.listing.title} tomorrow! 📅`,
         html: this.generateRentalReminderHTML(booking)
@@ -219,6 +251,12 @@ export const emailAutomationService = {
    */
   async sendReviewRequest(bookingId: string) {
     try {
+      const resend = getResendClient();
+      if (!resend) {
+        console.log('⚠️ Resend not configured, skipping review request');
+        return;
+      }
+
       const { data: booking } = await supabase
         .from('bookings')
         .select(`
@@ -232,7 +270,7 @@ export const emailAutomationService = {
       if (!booking) return;
 
       await resend.emails.send({
-        from: 'NeighbourFriendly <feedback@neighbourfriendly.vercel.app>',
+        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: booking.renter.email,
         subject: `How was your experience with ${booking.listing.title}? ⭐`,
         html: this.generateReviewRequestHTML(booking)
@@ -249,6 +287,12 @@ export const emailAutomationService = {
    */
   async sendPremiumUpgradeEmail(userId: string) {
     try {
+      const resend = getResendClient();
+      if (!resend) {
+        console.log('⚠️ Resend not configured, skipping premium upgrade email');
+        return;
+      }
+
       const { data: user } = await supabase
         .from('profiles')
         .select('*')
@@ -258,7 +302,7 @@ export const emailAutomationService = {
       if (!user || user.is_premium) return;
 
       await resend.emails.send({
-        from: 'NeighbourFriendly <premium@neighbourfriendly.vercel.app>',
+        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: user.email,
         subject: '🚀 Unlock unlimited listings with Premium!',
         html: this.generatePremiumUpgradeHTML(user.full_name)
