@@ -50,6 +50,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     properties: 0,
     services: 0,
   });
+  
+  // Track users who already received welcome emails (prevent duplicates)
+  const welcomeEmailSentRef = React.useRef<Set<string>>(new Set());
 
   useEffect(() => {
     // Get initial session
@@ -73,13 +76,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Send welcome email ONLY when user confirms their email (not on regular login)
       // Check if this is a new user by looking at created_at timestamp
       if (event === 'SIGNED_IN' && session?.user) {
+        const userId = session.user.id;
         const userCreatedAt = new Date(session.user.created_at);
         const now = new Date();
         const timeSinceCreation = now.getTime() - userCreatedAt.getTime();
         const isNewUser = timeSinceCreation < 60000; // Less than 1 minute old = new user
         
-        if (isNewUser) {
+        // Check if we already sent welcome email to this user
+        const alreadySent = welcomeEmailSentRef.current.has(userId);
+        
+        if (isNewUser && !alreadySent) {
           const metadata = session.user.user_metadata;
+          
+          // Mark as sent BEFORE sending to prevent race conditions
+          welcomeEmailSentRef.current.add(userId);
           
           // Send welcome email via Edge Function
           try {
@@ -91,11 +101,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             
             if (result.success) {
               console.log('✅ Welcome email sent to new user');
+            } else {
+              // If failed, remove from set so we can retry
+              welcomeEmailSentRef.current.delete(userId);
             }
           } catch (error) {
             console.error('Failed to send welcome email:', error);
-            // Don't block login if email fails
+            // If failed, remove from set so we can retry
+            welcomeEmailSentRef.current.delete(userId);
           }
+        } else if (alreadySent) {
+          console.log('⏭️ Welcome email already sent to this user, skipping');
         }
       }
       
