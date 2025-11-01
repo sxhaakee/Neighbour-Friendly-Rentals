@@ -293,24 +293,25 @@ export const emailService = {
     try {
       console.log('📧 Sending Welcome Email to:', userData.email);
       
-      const resend = getResendClient();
-      if (!resend) {
-        // Log email for development
-        const template = EMAIL_TEMPLATES.welcome(userData);
-        console.log('Email Subject:', template.subject);
-        console.log('Email would be sent to:', userData.email);
-        return { success: true, message: 'Email logged (Resend not configured)' };
-      }
-      
-      const template = EMAIL_TEMPLATES.welcome(userData);
-      const response = await resend.emails.send({
-        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
-        to: userData.email,
-        subject: template.subject,
-        html: template.html,
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: userData.email,
+          type: 'welcome',
+          data: {
+            userName: userData.userName,
+            dashboardUrl: userData.dashboardUrl
+          }
+        }
       });
-      
-      return { success: true, data: response };
+
+      if (error) {
+        console.error('Error sending welcome email:', error);
+        return { success: false, error };
+      }
+
+      console.log('✅ Welcome email sent successfully');
+      return { success: true, data };
     } catch (error) {
       console.error('Error sending welcome email:', error);
       return { success: false, error };
@@ -346,23 +347,22 @@ export const emailService = {
     try {
       console.log('📧 Sending Booking Confirmation to:', bookingData.email);
       
-      const resend = getResendClient();
-      if (!resend) {
-        const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
-        console.log('Email Subject:', template.subject);
-        console.log('Email would be sent to:', bookingData.email);
-        return { success: true, message: 'Email logged (Resend not configured)' };
-      }
-      
-      const template = EMAIL_TEMPLATES.bookingConfirmation(bookingData);
-      const response = await resend.emails.send({
-        from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
-        to: bookingData.email,
-        subject: template.subject,
-        html: template.html,
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: bookingData.email,
+          type: 'bookingConfirmation',
+          data: bookingData
+        }
       });
-      
-      return { success: true, data: response };
+
+      if (error) {
+        console.error('Error sending booking confirmation:', error);
+        return { success: false, error };
+      }
+
+      console.log('✅ Booking confirmation sent successfully');
+      return { success: true, data };
     } catch (error) {
       console.error('Error sending booking confirmation:', error);
       return { success: false, error };
