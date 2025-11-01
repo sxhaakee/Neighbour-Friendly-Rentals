@@ -111,11 +111,11 @@ const Profile = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 mt-4 md:mt-0">
+              <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0 w-full sm:w-auto">
                 {!editing ? (
                   <button
                     onClick={() => setEditing(true)}
-                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl hover:shadow-xl hover:scale-105 transition-colors"
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl hover:shadow-xl hover:scale-105 transition-all w-full sm:w-auto"
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit Profile
@@ -125,7 +125,7 @@ const Profile = () => {
                     <button
                       onClick={handleCancel}
                       disabled={loading}
-                      className="flex items-center gap-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors disabled:opacity-50 w-full sm:w-auto"
                     >
                       <X className="w-4 h-4" />
                       Cancel
@@ -133,7 +133,7 @@ const Profile = () => {
                     <button
                       onClick={handleSave}
                       disabled={loading}
-                      className="flex items-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50"
+                      className="flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
                     >
                       {loading ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
