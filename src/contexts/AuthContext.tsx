@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import { Database } from '../lib/database.types';
+import { emailService } from '../services/emailService';
 
 type Profile = Database['public']['Tables']['profiles']['Row'];
 
@@ -159,6 +160,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) return { error };
+
+      // Send welcome email
+      try {
+        await emailService.sendWelcomeEmail({
+          email,
+          userName: fullName,
+          dashboardUrl: `${window.location.origin}/dashboard`,
+        });
+      } catch (emailError) {
+        console.error('Failed to send welcome email:', emailError);
+        // Don't fail signup if email fails
+      }
 
       // Wait a moment for database trigger to create profile
       // If trigger fails, profile will be created on first login
