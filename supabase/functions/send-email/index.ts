@@ -142,12 +142,29 @@ serve(async (req) => {
   }
 
   try {
-    const { email, type, data } = await req.json()
+    const body = await req.json()
+    console.log('Received request:', JSON.stringify(body))
+    
+    const { email, type, data } = body
     
     // Validate inputs
     if (!email || !type) {
+      console.error('Validation failed:', { email, type })
       return new Response(
-        JSON.stringify({ error: 'Email and type are required' }),
+        JSON.stringify({ 
+          error: 'Email and type are required',
+          received: { email: !!email, type: !!type }
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      console.error('Invalid email format:', email)
+      return new Response(
+        JSON.stringify({ error: 'Invalid email format' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }

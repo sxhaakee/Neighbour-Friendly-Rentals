@@ -70,20 +70,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(session);
       setUser(session?.user ?? null);
       
-      // Send welcome email when user confirms their email
+      // Send welcome email ONLY when user confirms their email (not on regular login)
+      // Check if this is a new user by looking at created_at timestamp
       if (event === 'SIGNED_IN' && session?.user) {
-        const metadata = session.user.user_metadata;
+        const userCreatedAt = new Date(session.user.created_at);
+        const now = new Date();
+        const timeSinceCreation = now.getTime() - userCreatedAt.getTime();
+        const isNewUser = timeSinceCreation < 60000; // Less than 1 minute old = new user
         
-        // Send welcome email via Edge Function
-        try {
-          await emailService.sendWelcomeEmail({
-            email: session.user.email!,
-            userName: metadata?.full_name || 'User',
-            dashboardUrl: `${window.location.origin}/dashboard`,
-          });
-          console.log('✅ Welcome email sent after confirmation');
-        } catch (error) {
-          console.error('Failed to send welcome email:', error);
+        if (isNewUser) {
+          const metadata = session.user.user_metadata;
+          
+          // Send welcome email via Edge Function
+          try {
+            const result = await emailService.sendWelcomeEmail({
+              email: session.user.email!,
+              userName: metadata?.full_name || 'User',
+              dashboardUrl: `${window.location.origin}/dashboard`,
+            });
+            
+            if (result.success) {
+              console.log('✅ Welcome email sent to new user');
+            }
+          } catch (error) {
+            console.error('Failed to send welcome email:', error);
+            // Don't block login if email fails
+          }
         }
       }
       
