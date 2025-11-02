@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, CheckCircle, XCircle, Clock, TrendingUp, Package, Users, DollarSign, Eye, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Shield, CheckCircle, XCircle, Clock, TrendingUp, Package, Users, DollarSign, Eye, Trash2, X, ChevronLeft, ChevronRight, Edit2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -25,6 +25,8 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [editingCategory, setEditingCategory] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
   const [stats, setStats] = useState({
     pending: 0,
     approved: 0,
@@ -155,6 +157,24 @@ const Admin = () => {
   const prevImage = () => {
     if (currentImageIndex > 0) {
       setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
+  const handleUpdateCategory = async () => {
+    if (!selectedListing || !newCategory) return;
+    
+    try {
+      await listingService.updateListing(selectedListing.id, {
+        category: newCategory,
+      });
+      
+      showToast.success('Category updated successfully!');
+      setEditingCategory(false);
+      setSelectedListing({ ...selectedListing, category: newCategory });
+      fetchListings(); // Refresh the list
+    } catch (error) {
+      console.error('Error updating category:', error);
+      showToast.error('Failed to update category');
     }
   };
 
@@ -597,8 +617,62 @@ const Admin = () => {
                       <p className="font-semibold">{selectedListing.title}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Category</p>
-                      <p className="font-semibold">{selectedListing.category}</p>
+                      <p className="text-sm text-gray-600 mb-1">Category</p>
+                      {editingCategory ? (
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={newCategory}
+                            onChange={(e) => setNewCategory(e.target.value)}
+                            className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                          >
+                            <option value="">Select Category</option>
+                            <option value="Tools">Tools</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Appliances">Appliances</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Books">Books</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Vehicles">Vehicles</option>
+                            <option value="Musical Instruments">Musical Instruments</option>
+                            <option value="Party Supplies">Party Supplies</option>
+                            <option value="Camping Gear">Camping Gear</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Gaming">Gaming</option>
+                            <option value="Other">Other</option>
+                          </select>
+                          <button
+                            onClick={handleUpdateCategory}
+                            disabled={!newCategory}
+                            className="px-3 py-1.5 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => {
+                              setEditingCategory(false);
+                              setNewCategory('');
+                            }}
+                            className="px-3 py-1.5 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold">{selectedListing.category}</p>
+                          <button
+                            onClick={() => {
+                              setEditingCategory(true);
+                              setNewCategory(selectedListing.category);
+                            }}
+                            className="text-xs text-amber-600 hover:text-amber-700 underline"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Price</p>
