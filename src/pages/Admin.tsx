@@ -524,48 +524,66 @@ const Admin = () => {
                 {/* Image Gallery */}
                 <div>
                   <h3 className="font-semibold text-lg mb-3">Images</h3>
-                  <div className="relative">
-                    <img
-                      src={selectedListing.images[currentImageIndex]}
-                      alt={`${selectedListing.title} - Image ${currentImageIndex + 1}`}
-                      className="w-full h-96 object-contain bg-gray-100 rounded-lg"
-                    />
-                    {selectedListing.images.length > 1 && (
-                      <>
-                        <button
-                          onClick={prevImage}
-                          disabled={currentImageIndex === 0}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
-                        >
-                          <ChevronLeft className="w-6 h-6" />
-                        </button>
-                        <button
-                          onClick={nextImage}
-                          disabled={currentImageIndex === selectedListing.images.length - 1}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
-                        >
-                          <ChevronRight className="w-6 h-6" />
-                        </button>
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                          {currentImageIndex + 1} / {selectedListing.images.length}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  {/* Thumbnail Strip */}
-                  {selectedListing.images.length > 1 && (
-                    <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                      {selectedListing.images.map((img, idx) => (
+                  {selectedListing.images && selectedListing.images.length > 0 ? (
+                    <>
+                      <div className="relative">
                         <img
-                          key={idx}
-                          src={img}
-                          alt={`Thumbnail ${idx + 1}`}
-                          onClick={() => setCurrentImageIndex(idx)}
-                          className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
-                            idx === currentImageIndex ? 'border-primary' : 'border-transparent'
-                          }`}
+                          src={selectedListing.images[currentImageIndex] || '/placeholder.png'}
+                          alt={`${selectedListing.title} - Image ${currentImageIndex + 1}`}
+                          className="w-full h-96 object-contain bg-gray-100 rounded-lg"
+                          onError={(e) => {
+                            e.currentTarget.src = '/placeholder.png';
+                            e.currentTarget.alt = 'Image failed to load';
+                          }}
                         />
-                      ))}
+                        {selectedListing.images.length > 1 && (
+                          <>
+                            <button
+                              onClick={prevImage}
+                              disabled={currentImageIndex === 0}
+                              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <ChevronLeft className="w-6 h-6" />
+                            </button>
+                            <button
+                              onClick={nextImage}
+                              disabled={currentImageIndex === selectedListing.images.length - 1}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <ChevronRight className="w-6 h-6" />
+                            </button>
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                              {currentImageIndex + 1} / {selectedListing.images.length}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      {/* Thumbnail Strip */}
+                      {selectedListing.images.length > 1 && (
+                        <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                          {selectedListing.images.map((img, idx) => (
+                            <img
+                              key={idx}
+                              src={img}
+                              alt={`Thumbnail ${idx + 1}`}
+                              onClick={() => setCurrentImageIndex(idx)}
+                              className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
+                                idx === currentImageIndex ? 'border-primary' : 'border-transparent'
+                              }`}
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="w-full h-96 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
+                      <div className="text-center">
+                        <p className="text-lg font-semibold">No images available</p>
+                        <p className="text-sm">Images may have failed to upload</p>
+                      </div>
                     </div>
                   )}
                 </div>
