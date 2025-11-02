@@ -263,7 +263,15 @@ const AddService = () => {
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Error adding service:', error);
-      showToast.error(error.message || 'Failed to add service');
+      
+      // Handle specific database constraint errors
+      if (error.message && error.message.includes('category_check')) {
+        showToast.error('Category validation error. Please contact support or try a different category.');
+      } else if (error.message && error.message.includes('violates check constraint')) {
+        showToast.error('Invalid data format. Please check all fields and try again.');
+      } else {
+        showToast.error(error.message || 'Failed to add service. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

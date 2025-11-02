@@ -215,7 +215,15 @@ const EditService = () => {
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Error updating service:', error);
-      showToast.error(error.message || 'Failed to update service');
+      
+      // Handle specific database constraint errors
+      if (error.message && error.message.includes('category_check')) {
+        showToast.error('Category validation error. Please contact support or try a different category.');
+      } else if (error.message && error.message.includes('violates check constraint')) {
+        showToast.error('Invalid data format. Please check all fields and try again.');
+      } else {
+        showToast.error(error.message || 'Failed to update service. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
