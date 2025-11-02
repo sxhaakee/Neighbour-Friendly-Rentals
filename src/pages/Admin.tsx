@@ -435,9 +435,23 @@ const Admin = () => {
                         <div className="text-sm text-gray-500">{listing.owner_email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                          {listing.category}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                            {listing.category}
+                          </span>
+                          <button
+                            onClick={() => {
+                              setSelectedListing(listing);
+                              setEditingCategory(true);
+                              setNewCategory(listing.category);
+                              setCurrentImageIndex(0);
+                            }}
+                            className="text-amber-600 hover:text-amber-700"
+                            title="Edit Category"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         ₹{listing.price}/day
