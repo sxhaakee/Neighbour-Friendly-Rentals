@@ -16,7 +16,6 @@ export const NotificationCenter = () => {
   useEffect(() => {
     if (user) {
       fetchNotifications();
-      fetchUnreadCount();
 
       // Subscribe to real-time notifications
       const unsubscribe = notificationService.subscribeToNotifications(user.id, (notification) => {
@@ -27,6 +26,13 @@ export const NotificationCenter = () => {
       return () => unsubscribe();
     }
   }, [user]);
+
+  // Refresh notifications when panel opens to ensure count is accurate
+  useEffect(() => {
+    if (isOpen && user) {
+      fetchNotifications();
+    }
+  }, [isOpen, user]);
 
   const fetchNotifications = async () => {
     if (!user) return;
