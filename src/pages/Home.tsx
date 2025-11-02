@@ -123,15 +123,6 @@ const Home = () => {
           ))}
 
           <div className="relative z-10 max-w-6xl mx-auto text-center">
-            {/* Premium Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-2 rounded-full shadow-lg mb-6"
-            >
-              <span className="text-sm font-semibold">✨ India's #1 Rental Platform</span>
-            </motion.div>
-
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
