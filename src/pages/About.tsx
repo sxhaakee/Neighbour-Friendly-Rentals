@@ -240,8 +240,8 @@ const About = () => {
                 </p>
                 <p className="text-gray-700">
                   <span className="font-semibold">Instagram:</span>{' '}
-                  <a href="https://instagram.com/neighbourfriendly" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
-                    @neighbourfriendly
+                  <a href="https://instagram.com/neighbour_friendly_rentals" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
+                    @neighbour_friendly_rentals
                   </a>
                 </p>
               </div>

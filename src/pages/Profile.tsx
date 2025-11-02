@@ -100,8 +100,8 @@ const Profile = () => {
 
           {/* Profile Info */}
           <div className="px-6 pb-6">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between -mt-16 mb-4">
-              {/* Avatar */}
+            {/* Avatar Section */}
+            <div className="flex justify-center md:justify-start -mt-16 mb-4">
               <div className="relative">
                 <div className="w-32 h-32 rounded-full bg-white p-2 shadow-lg">
                   <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-4xl font-bold">
@@ -109,42 +109,42 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0 w-full sm:w-auto">
-                {!editing ? (
+            {/* Action Buttons - Separate section for better mobile visibility */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-4 w-full">
+              {!editing ? (
+                <button
+                  onClick={() => setEditing(true)}
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl hover:shadow-xl hover:scale-105 transition-all w-full sm:w-auto"
+                >
+                  <Edit2 className="w-4 h-4" />
+                  Edit Profile
+                </button>
+              ) : (
+                <>
                   <button
-                    onClick={() => setEditing(true)}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl hover:shadow-xl hover:scale-105 transition-all w-full sm:w-auto"
+                    onClick={handleCancel}
+                    disabled={loading}
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors disabled:opacity-50 w-full sm:w-auto"
                   >
-                    <Edit2 className="w-4 h-4" />
-                    Edit Profile
+                    <X className="w-4 h-4" />
+                    Cancel
                   </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={handleCancel}
-                      disabled={loading}
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors disabled:opacity-50 w-full sm:w-auto"
-                    >
-                      <X className="w-4 h-4" />
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleSave}
-                      disabled={loading}
-                      className="flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
-                    >
-                      {loading ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      ) : (
-                        <Save className="w-4 h-4" />
-                      )}
-                      Save Changes
-                    </button>
-                  </>
-                )}
-              </div>
+                  <button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
+                  >
+                    {loading ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    ) : (
+                      <Save className="w-4 h-4" />
+                    )}
+                    Save Changes
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Name and Badges */}
