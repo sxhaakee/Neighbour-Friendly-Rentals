@@ -34,6 +34,10 @@ export const NotificationCenter = () => {
       setLoading(true);
       const data = await notificationService.getUserNotifications(user.id);
       setNotifications(data);
+      
+      // Calculate unread count from fetched notifications to match what's displayed
+      const unread = data.filter(n => !n.read).length;
+      setUnreadCount(unread);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
@@ -42,10 +46,13 @@ export const NotificationCenter = () => {
   };
 
   const fetchUnreadCount = async () => {
+    // This function is now redundant but kept for compatibility
+    // The count is calculated from fetched notifications
     if (!user) return;
     try {
-      const count = await notificationService.getUnreadCount(user.id);
-      setUnreadCount(count);
+      const data = await notificationService.getUserNotifications(user.id);
+      const unread = data.filter(n => !n.read).length;
+      setUnreadCount(unread);
     } catch (error) {
       console.error('Error fetching unread count:', error);
     }
@@ -84,8 +91,17 @@ export const NotificationCenter = () => {
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
+      // Check if the notification being deleted is unread
+      const notification = notifications.find(n => n.id === id);
+      const wasUnread = notification && !notification.read;
+      
       await notificationService.deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
+      
+      // Update unread count if the deleted notification was unread
+      if (wasUnread) {
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+      }
     } catch (error) {
       console.error('Error deleting notification:', error);
     }
