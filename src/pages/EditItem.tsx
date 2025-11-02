@@ -132,7 +132,7 @@ const EditItem = () => {
     setError('');
 
     try {
-      if (!user || !profile) {
+      if (!user) {
         showToast.error('You must be logged in to edit an item');
         setLoading(false);
         return;
