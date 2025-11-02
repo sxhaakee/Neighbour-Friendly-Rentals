@@ -174,8 +174,9 @@ const DashboardNew = () => {
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                 <span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                  Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}! 👋
-                </span>
+                  Welcome back, {profile?.full_name?.split(' ')[0] || 'User'}!
+                </span>{' '}
+                <span className="inline-block">👋</span>
               </h1>
               <p className="text-gray-700 text-sm md:text-base">
                 Manage your listings and grow your business

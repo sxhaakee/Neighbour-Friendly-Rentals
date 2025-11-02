@@ -216,6 +216,16 @@ const Header = () => {
               
               {user ? (
                 <>
+                  {/* Profile Link - Mobile */}
+                  <Link
+                    to="/profile"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-amber-600 hover:bg-primary/10 border-t border-gray-200"
+                  >
+                    <User className="w-4 h-4" />
+                    <span className="font-medium">My Profile</span>
+                  </Link>
+                  
                   {/* Premium Button - Mobile */}
                   {!isPremium && (
                     <Link
