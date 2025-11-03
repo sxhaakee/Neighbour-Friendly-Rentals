@@ -340,7 +340,8 @@ const EditItem = () => {
                   <option value="Musical Instruments">Musical Instruments</option>
                   <option value="Furniture">Furniture</option>
                   <option value="Appliances">Appliances</option>
-                  <option value="Books & Media">Books & Media</option>
+                  <option value="Books">Books</option>
+                  <option value="Media">Media</option>
                   <option value="Clothing & Accessories">Clothing & Accessories</option>
                   <option value="Party & Events">Party & Events</option>
                   <option value="Gaming & Consoles">Gaming & Consoles</option>

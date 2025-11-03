@@ -646,6 +646,7 @@ const Admin = () => {
                             <option value="Appliances">Appliances</option>
                             <option value="Sports">Sports</option>
                             <option value="Books">Books</option>
+                            <option value="Media">Media</option>
                             <option value="Clothing">Clothing</option>
                             <option value="Toys">Toys</option>
                             <option value="Vehicles">Vehicles</option>
