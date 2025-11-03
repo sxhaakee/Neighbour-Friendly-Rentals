@@ -16,6 +16,7 @@ const EditItem = () => {
     description: '',
     category: 'Tools',
     price: '',
+    pricing_model: 'per_day',
     location: '',
     condition: 'Excellent',
     contactInfo: '',
@@ -53,6 +54,7 @@ const EditItem = () => {
         description: listing.description,
         category: listing.category,
         price: listing.price.toString(),
+        pricing_model: listing.pricing_model || 'per_day',
         location: listing.location,
         condition: listing.condition,
         contactInfo: listing.contact_info,
@@ -162,6 +164,7 @@ const EditItem = () => {
         description: formData.description,
         category: formData.category,
         price: parseInt(formData.price),
+        pricing_model: formData.pricing_model,
         location: formData.location,
         condition: formData.condition,
         contact_info: formData.contactInfo,
@@ -354,7 +357,7 @@ const EditItem = () => {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Price per Day (₹) *
+                  Rental Price (₹) *
                 </label>
                 <input
                   type="number"
@@ -366,6 +369,25 @@ const EditItem = () => {
                   required
                   min="1"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Pricing Model *
+                </label>
+                <select
+                  name="pricing_model"
+                  value={formData.pricing_model}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="per_day">Per Day</option>
+                  <option value="per_week">Per Week</option>
+                  <option value="per_month">Per Month</option>
+                  <option value="per_event">Per Event</option>
+                  <option value="per_hour">Per Hour</option>
+                </select>
               </div>
 
               <div>
