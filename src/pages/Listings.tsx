@@ -7,6 +7,7 @@ import { serviceProviderService } from '../services/serviceProviderService';
 import { propertyService } from '../services/propertyService';
 import { Database } from '../lib/database.types';
 import { SearchFilters, FilterValues } from '../components/SearchFilters';
+import { formatPricingModel } from '../utils/pricing';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 type ServiceProvider = Database['public']['Tables']['service_providers']['Row'];
@@ -410,7 +411,7 @@ const Listings = () => {
                   
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-base sm:text-lg font-bold text-amber-600">
-                      ₹{item.price}<span className="text-xs text-gray-500">/day</span>
+                      ₹{item.price}<span className="text-xs text-gray-500">{formatPricingModel(item.pricing_model)}</span>
                     </span>
                   </div>
                   

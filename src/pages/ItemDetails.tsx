@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { ShareButton } from '../components/ShareButton';
 import { reviewService } from '../services/reviewService';
+import { formatPricingModel } from '../utils/pricing';
 import { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
 
@@ -386,7 +387,7 @@ const ItemDetails = () => {
               <div className="border-t border-gray-200 pt-4">
                 <div className="text-4xl font-bold text-amber-600 mb-2">
                   ₹{listing.price}
-                  <span className="text-lg text-gray-600 font-normal">/day</span>
+                  <span className="text-lg text-gray-600 font-normal">{formatPricingModel(listing.pricing_model)}</span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${

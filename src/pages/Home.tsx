@@ -9,6 +9,7 @@ import { AnimatedBackground } from '../components/AnimatedBackground';
 import { PremiumHero } from '../components/PremiumHero';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { formatPricingModel } from '../utils/pricing';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -400,7 +401,7 @@ const Home = () => {
                     <div className="mt-auto">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-lg font-bold text-amber-600">
-                          ₹{item.price}<span className="text-xs text-gray-500">/day</span>
+                          ₹{item.price}<span className="text-xs text-gray-500">{formatPricingModel(item.pricing_model)}</span>
                         </span>
                       </div>
                       <span className="text-xs text-gray-500 truncate block">{item.location}</span>
