@@ -5,6 +5,7 @@ import { serviceProviderService, ServiceProvider } from '../services/serviceProv
 import { showToast } from '../utils/toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ShareButton } from '../components/ShareButton';
+import { generateWhatsAppLink } from '../utils/whatsapp';
 
 const ServiceDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -312,7 +313,12 @@ const ServiceDetails = () => {
                     <Phone className="w-5 h-5 text-green-600 mt-1" />
                     <div>
                       <p className="text-sm text-gray-600">WhatsApp</p>
-                      <a href={`https://wa.me/${service.whatsapp}`} className="text-gray-900 font-semibold hover:text-green-600">
+                      <a 
+                        href={generateWhatsAppLink(service.whatsapp, 'service', service.business_name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-900 font-semibold hover:text-green-600"
+                      >
                         {service.whatsapp}
                       </a>
                     </div>
@@ -349,10 +355,10 @@ const ServiceDetails = () => {
               )}
 
               <button
-                onClick={() => window.open(`https://wa.me/${service.whatsapp || service.phone}`, '_blank')}
+                onClick={() => window.open(generateWhatsAppLink(service.whatsapp || service.phone, 'service', service.business_name), '_blank')}
                 className="w-full mt-6 bg-gradient-to-r from-primary to-accent text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all"
               >
-                Contact Now
+                Contact on WhatsApp
               </button>
             </div>
           </div>

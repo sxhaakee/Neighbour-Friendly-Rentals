@@ -6,6 +6,7 @@ import { propertyService, Property } from '../services/propertyService';
 import { showToast } from '../utils/toast';
 import { useAuth } from '../contexts/AuthContext';
 import { ShareButton } from '../components/ShareButton';
+import { generateWhatsAppLink } from '../utils/whatsapp';
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -326,13 +327,17 @@ const PropertyDetails = () => {
 
                 <div className="space-y-3">
                   <button
-                    onClick={() => setShowContactForm(true)}
-                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors"
+                    onClick={() => window.open(generateWhatsAppLink(property.owner_phone, 'property', property.title), '_blank')}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors flex items-center justify-center gap-2"
                   >
-                    Contact Owner
+                    <Phone className="w-5 h-5" />
+                    Contact on WhatsApp
                   </button>
-                  <button className="w-full border-2 border-amber-500 text-amber-600 py-3 rounded-lg font-semibold hover:bg-amber-600/5 transition-colors">
-                    Schedule Viewing
+                  <button
+                    onClick={() => setShowContactForm(true)}
+                    className="w-full border-2 border-amber-500 text-amber-600 py-3 rounded-lg font-semibold hover:bg-amber-600/5 transition-colors"
+                  >
+                    Show Contact Details
                   </button>
                 </div>
               </div>
