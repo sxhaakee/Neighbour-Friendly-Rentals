@@ -27,7 +27,6 @@ import Terms from './pages/Legal/Terms';
 import Privacy from './pages/Legal/Privacy';
 import Premium from './pages/Premium';
 import Profile from './pages/Profile';
-import FAB from './components/Common/FAB';
 import { ToastContainer } from './components/Common/Toast';
 import { AIChatbot } from './components/AIChatbot';
 import Chat from './pages/Chat';
@@ -87,7 +86,6 @@ function AppContent() {
         </Routes>
       </main>
       <Footer />
-      <FAB />
       <AIChatbot />
       <ToastContainer />
       <Analytics />
