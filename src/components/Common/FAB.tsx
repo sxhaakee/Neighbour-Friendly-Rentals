@@ -45,7 +45,7 @@ const FAB = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setShowMenu(!showMenu)}
-        className={`fixed bottom-24 right-6 ${showMenu ? 'bg-red-500' : 'bg-primary'} text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-50`}
+        className={`fixed bottom-24 right-6 ${showMenu ? 'bg-red-500' : 'bg-gradient-to-r from-amber-500 to-yellow-600'} text-white p-4 rounded-full shadow-lg hover:shadow-xl hover:shadow-amber-500/50 transition-all duration-200 z-50`}
         title={showMenu ? 'Close menu' : 'Add listing'}
       >
         <motion.div
