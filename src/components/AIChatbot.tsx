@@ -180,13 +180,13 @@ export const AIChatbot = () => {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-4 rounded-full shadow-2xl hover:shadow-amber-500/50 hover:scale-110 transition-all z-50 group"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-amber-500/50 hover:scale-110 transition-all z-50 group"
           >
-            <MessageCircle className="w-6 h-6" />
+            <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
               AI
             </span>
-            <div className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            <div className="hidden sm:block absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Need help? Chat with AI
             </div>
           </motion.button>
@@ -200,7 +200,7 @@ export const AIChatbot = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
+            className="fixed inset-4 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-96 sm:h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-4 flex items-center justify-between">
@@ -222,32 +222,32 @@ export const AIChatbot = () => {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {message.sender === 'bot' && (
-                    <div className="bg-amber-500 text-white p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-4 h-4" />
+                    <div className="bg-amber-500 text-white p-1.5 sm:p-2 rounded-full h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center flex-shrink-0">
+                      <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </div>
                   )}
                   <div
-                    className={`max-w-[75%] rounded-2xl px-4 py-2 ${
+                    className={`max-w-[80%] sm:max-w-[75%] rounded-2xl px-3 sm:px-4 py-2 ${
                       message.sender === 'user'
                         ? 'bg-amber-500 text-white rounded-br-none'
                         : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-line">{message.text}</p>
-                    <p className="text-xs mt-1 opacity-70">
+                    <p className="text-xs sm:text-sm whitespace-pre-line leading-relaxed">{message.text}</p>
+                    <p className="text-[10px] sm:text-xs mt-1 opacity-70">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                   {message.sender === 'user' && (
-                    <div className="bg-gray-300 text-gray-600 p-2 rounded-full h-8 w-8 flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4" />
+                    <div className="bg-gray-300 text-gray-600 p-1.5 sm:p-2 rounded-full h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center flex-shrink-0">
+                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </div>
                   )}
                 </div>
@@ -267,14 +267,14 @@ export const AIChatbot = () => {
 
             {/* Quick Actions */}
             {messages.length === 1 && (
-              <div className="px-4 py-2 bg-white border-t border-gray-200">
+              <div className="px-3 sm:px-4 py-2 bg-white border-t border-gray-200">
                 <p className="text-xs text-gray-600 mb-2">Quick actions:</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => handleQuickAction(action.action)}
-                      className="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 px-3 py-1 rounded-full transition-colors"
+                      className="text-[10px] sm:text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 px-2 sm:px-3 py-1 rounded-full transition-colors whitespace-nowrap"
                     >
                       {action.label}
                     </button>
@@ -284,7 +284,7 @@ export const AIChatbot = () => {
             )}
 
             {/* Input */}
-            <div className="p-4 bg-white border-t border-gray-200">
+            <div className="p-3 sm:p-4 bg-white border-t border-gray-200">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -292,14 +292,14 @@ export const AIChatbot = () => {
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="flex-1 px-3 sm:px-4 py-2 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim()}
-                  className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-amber-500 to-yellow-600 text-white p-2 rounded-full hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                 >
-                  <Send className="w-5 h-5" />
+                  <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>
