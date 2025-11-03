@@ -29,6 +29,7 @@ import Premium from './pages/Premium';
 import Profile from './pages/Profile';
 import FAB from './components/Common/FAB';
 import { ToastContainer } from './components/Common/Toast';
+import { AIChatbot } from './components/AIChatbot';
 import Chat from './pages/Chat';
 import Messages from './pages/Messages';
 import { logPageView } from './utils/analytics';
@@ -87,6 +88,7 @@ function AppContent() {
       </main>
       <Footer />
       <FAB />
+      <AIChatbot />
       <ToastContainer />
       <Analytics />
     </div>
