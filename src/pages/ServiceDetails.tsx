@@ -13,6 +13,7 @@ const ServiceDetails = () => {
   const [service, setService] = useState<ServiceProvider | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -155,7 +156,7 @@ const ServiceDetails = () => {
                 <div className="flex items-center gap-1">
                   <Star className="w-5 h-5 text-yellow-500 fill-current" />
                   <span className="font-semibold">{service.rating || 5.0}</span>
-                  <span className="text-gray-600">({service.total_bookings || 0} bookings)</span>
+                  <span className="text-gray-600">({reviews.length} reviews)</span>
                 </div>
                 <div className="flex items-center gap-1 text-gray-600">
                   <MapPin className="w-5 h-5" />

@@ -198,7 +198,7 @@ const Services = () => {
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
                 {/* Image */}
-                <div className="relative h-48 bg-gradient-to-br from-orange-100 to-pink-100 overflow-hidden">
+                <div className="relative h-36 sm:h-48 bg-gradient-to-br from-orange-100 to-pink-100 overflow-hidden">
                   {(service.portfolio_images?.length > 0 || service.images?.length > 0) ? (
                     <img
                       src={service.portfolio_images?.[0] || service.images?.[0]}
@@ -242,8 +242,6 @@ const Services = () => {
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       <span className="font-semibold">{service.rating?.toFixed(1) || '0.0'}</span>
                     </div>
-                    <span className="text-gray-400">•</span>
-                    <span className="text-sm text-gray-600">{service.total_bookings || 0} bookings</span>
                   </div>
 
                   <p className="text-gray-600 text-sm mb-3 line-clamp-2">{service.description}</p>

@@ -8,6 +8,7 @@ import { showToast } from '../utils/toast';
 import { ShareButton } from '../components/ShareButton';
 import { reviewService } from '../services/reviewService';
 import { formatPricingModel } from '../utils/pricing';
+import { updateMetaTags, resetMetaTags } from '../utils/metaTags';
 import { Database } from '../lib/database.types';
 import { supabase } from '../lib/supabase';
 
@@ -34,6 +35,11 @@ const ItemDetails = () => {
       fetchReviews();
       fetchAverageRating();
     }
+    
+    // Reset meta tags when component unmounts
+    return () => {
+      resetMetaTags();
+    };
   }, [id, user]);
 
   const fetchListing = async () => {
@@ -41,6 +47,19 @@ const ItemDetails = () => {
       setLoading(true);
       const data = await listingService.getListingById(id!);
       setListing(data);
+      
+      // Update meta tags for social media sharing
+      if (data) {
+        updateMetaTags({
+          title: data.title,
+          description: data.description,
+          image: data.images[0] || 'https://neighbourfriendly.in/og-image.png',
+          url: `https://neighbourfriendly.in/item/${data.id}`,
+          type: 'product',
+          price: data.price,
+          currency: 'INR'
+        });
+      }
     } catch (error) {
       console.error('Error fetching listing:', error);
     } finally {

@@ -126,10 +126,10 @@ const EditService = () => {
 
     try {
       const compressedFiles = await compressImages(files, {
-        maxWidth: 1024,
-        maxHeight: 1024,
-        quality: 0.7,
-        maxSizeMB: 0.1,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        quality: 0.85,
+        maxSizeMB: 0.5,
       });
 
       const uploadedUrls: string[] = [];

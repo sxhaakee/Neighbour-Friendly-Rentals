@@ -43,7 +43,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
       className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group"
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-36 sm:h-48 overflow-hidden">
         <img
           src={property.images[0] || '/placeholder-property.jpg'}
           alt={property.title}
