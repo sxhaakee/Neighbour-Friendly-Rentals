@@ -7,14 +7,25 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ShareButton } from '../components/ShareButton';
 import { generateWhatsAppLink } from '../utils/whatsapp';
 import { updateMetaTags, resetMetaTags } from '../utils/metaTags';
+import { reviewService } from '../services/reviewService';
+import { useAuth } from '../contexts/AuthContext';
+import { Database } from '../lib/database.types';
+import { supabase } from '../lib/supabase';
+
+type Review = Database['public']['Tables']['reviews']['Row'];
 
 const ServiceDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
   const [service, setService] = useState<ServiceProvider | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [reviews, setReviews] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
 
   useEffect(() => {
     if (id) {
@@ -22,6 +33,8 @@ const ServiceDetails = () => {
       setService(null);
       setLoading(true);
       fetchService();
+      fetchReviews();
+      fetchAverageRating();
     }
     
     // Reset meta tags when component unmounts
@@ -61,6 +74,71 @@ const ServiceDetails = () => {
       showToast.error('Failed to load service details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select(`
+          *,
+          user:profiles(id, full_name, avatar_url)
+        `)
+        .eq('service_id', id!)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setReviews(data || []);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      setReviews([]);
+    }
+  };
+
+  const fetchAverageRating = async () => {
+    try {
+      const { average, count } = await reviewService.getAverageRating('service', id!);
+      setAverageRating(average);
+      setReviewCount(count);
+    } catch (error) {
+      console.error('Error fetching average rating:', error);
+    }
+  };
+
+  const handleSubmitReview = async () => {
+    if (!user || !profile) {
+      showToast.error('Please login to submit a review');
+      navigate('/login');
+      return;
+    }
+
+    if (!newReview.comment.trim()) {
+      showToast.error('Please write a comment');
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('reviews')
+        .insert({
+          service_id: id!,
+          user_id: user.id,
+          user_name: profile.full_name || 'Anonymous',
+          rating: newReview.rating,
+          comment: newReview.comment,
+        });
+
+      if (error) throw error;
+
+      showToast.success('Review submitted successfully!');
+      setNewReview({ rating: 5, comment: '' });
+      setShowReviewForm(false);
+      fetchReviews();
+      fetchAverageRating();
+    } catch (error: any) {
+      console.error('Error submitting review:', error);
+      showToast.error(error.message || 'Failed to submit review');
     }
   };
 
@@ -392,6 +470,137 @@ const ServiceDetails = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-8 bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Reviews</h2>
+            {user && (
+              <button
+                onClick={() => setShowReviewForm(!showReviewForm)}
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+              >
+                Write a Review
+              </button>
+            )}
+          </div>
+
+          {/* Review Form */}
+          {showReviewForm && (
+            <div className="mb-6 p-4 bg-white rounded-lg border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-4">Share your experience</h3>
+              
+              {/* Star Rating */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-sm text-gray-600">Rating:</span>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setNewReview({ ...newReview, rating: star })}
+                      className="focus:outline-none"
+                    >
+                      <Star
+                        className={`w-6 h-6 ${
+                          star <= newReview.rating
+                            ? 'text-yellow-500 fill-current'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+                <span className="text-sm font-semibold text-gray-900">{newReview.rating}/5</span>
+              </div>
+
+              {/* Comment */}
+              <textarea
+                value={newReview.comment}
+                onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                placeholder="Tell us about your experience..."
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                rows={4}
+              />
+
+              {/* Buttons */}
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={handleSubmitReview}
+                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Submit Review
+                </button>
+                <button
+                  onClick={() => {
+                    setShowReviewForm(false);
+                    setNewReview({ rating: 5, comment: '' });
+                  }}
+                  className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Reviews List */}
+          {reviews.length === 0 ? (
+            <div className="text-center py-12">
+              <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500 text-lg">No reviews yet</p>
+              <p className="text-gray-400 text-sm">Be the first to review this service!</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <div key={review.id} className="p-4 bg-white rounded-lg border border-gray-200">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      {review.user?.avatar_url ? (
+                        <img
+                          src={review.user.avatar_url}
+                          alt={review.user.full_name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <span className="text-primary font-semibold">
+                            {(review.user?.full_name || review.user_name || 'A')[0].toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-semibold text-gray-900">
+                          {review.user?.full_name || review.user_name || 'Anonymous'}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <div className="flex">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-4 h-4 ${
+                                  star <= review.rating
+                                    ? 'text-yellow-500 fill-current'
+                                    : 'text-gray-300'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {review.comment && (
+                    <p className="text-gray-700 mt-2 leading-relaxed">{review.comment}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
