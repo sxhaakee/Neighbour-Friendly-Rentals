@@ -18,6 +18,9 @@ const ServiceDetails = () => {
 
   useEffect(() => {
     if (id) {
+      // Force fresh fetch by clearing any cached data
+      setService(null);
+      setLoading(true);
       fetchService();
     }
     
@@ -32,6 +35,10 @@ const ServiceDetails = () => {
       setLoading(true);
       const data = await serviceProviderService.getProviderById(id!);
       console.log('Service data loaded:', data);
+      console.log('Service Areas:', data?.service_areas);
+      console.log('Contact Person:', data?.contact_person);
+      console.log('Phone:', data?.phone);
+      console.log('Email:', data?.email);
       console.log('Images:', data?.images);
       console.log('Portfolio images:', data?.portfolio_images);
       setService(data);

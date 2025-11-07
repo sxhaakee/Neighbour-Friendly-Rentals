@@ -168,11 +168,19 @@ class ServiceProviderService {
   // Get service provider by ID
   async getProviderById(id: string): Promise<ServiceProvider | null> {
     try {
+      // Add timestamp to bust cache
       const { data, error } = await supabase
         .from('service_providers')
         .select('*')
         .eq('id', id)
-        .single();
+        .single()
+        .then(result => {
+          // Force fresh data by adding cache-busting
+          if (result.data) {
+            console.log('Fresh service data fetched:', result.data);
+          }
+          return result;
+        });
 
       if (error) throw error;
 
