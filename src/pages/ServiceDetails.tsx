@@ -6,6 +6,7 @@ import { showToast } from '../utils/toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ShareButton } from '../components/ShareButton';
 import { generateWhatsAppLink } from '../utils/whatsapp';
+import { updateMetaTags, resetMetaTags } from '../utils/metaTags';
 
 const ServiceDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,11 @@ const ServiceDetails = () => {
     if (id) {
       fetchService();
     }
+    
+    // Reset meta tags when component unmounts
+    return () => {
+      resetMetaTags();
+    };
   }, [id]);
 
   const fetchService = async () => {
@@ -29,6 +35,20 @@ const ServiceDetails = () => {
       console.log('Images:', data?.images);
       console.log('Portfolio images:', data?.portfolio_images);
       setService(data);
+      
+      // Update meta tags for social media sharing
+      if (data) {
+        const serviceImage = data.portfolio_images?.[0] || data.images?.[0] || 'https://neighbourfriendly.in/og-image.png';
+        updateMetaTags({
+          title: data.business_name,
+          description: data.description,
+          image: serviceImage,
+          url: `https://neighbourfriendly.in/services/${data.id}`,
+          type: 'product',
+          price: data.base_price,
+          currency: 'INR'
+        });
+      }
     } catch (error) {
       console.error('Error fetching service:', error);
       showToast.error('Failed to load service details');

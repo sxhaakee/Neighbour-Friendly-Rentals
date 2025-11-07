@@ -7,6 +7,7 @@ import { showToast } from '../utils/toast';
 import { useAuth } from '../contexts/AuthContext';
 import { ShareButton } from '../components/ShareButton';
 import { generateWhatsAppLink } from '../utils/whatsapp';
+import { updateMetaTags, resetMetaTags } from '../utils/metaTags';
 
 const PropertyDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,11 @@ const PropertyDetails = () => {
     if (id) {
       fetchProperty();
     }
+    
+    // Reset meta tags when component unmounts
+    return () => {
+      resetMetaTags();
+    };
   }, [id]);
 
   const fetchProperty = async () => {
@@ -29,6 +35,19 @@ const PropertyDetails = () => {
       setLoading(true);
       const data = await propertyService.getPropertyById(id!);
       setProperty(data);
+      
+      // Update meta tags for social media sharing
+      if (data) {
+        updateMetaTags({
+          title: data.title,
+          description: data.description,
+          image: data.images[0] || 'https://neighbourfriendly.in/og-image.png',
+          url: `https://neighbourfriendly.in/properties/${data.id}`,
+          type: 'product',
+          price: data.rent_amount,
+          currency: 'INR'
+        });
+      }
     } catch (error) {
       console.error('Error fetching property:', error);
       showToast.error('Failed to load property details');
