@@ -97,8 +97,14 @@ class AIChatService {
       return "🔍 Looking for something?\n\nHere's how to search:\n1. Use the search bar at the top\n2. Or go to /browse to see categories\n3. Filter by category, price, location\n4. Click any item for full details\n\nPopular categories: Cameras, Tools, Furniture, Electronics, Party Supplies. What are you looking for?";
     }
 
-    // Safety and trust
-    if (lowerMessage.includes('safe') || lowerMessage.includes('secure') || lowerMessage.includes('trust') || lowerMessage.includes('verify')) {
+    // Safety and trust - General
+    if (lowerMessage.includes('safe') || lowerMessage.includes('secure') || lowerMessage.includes('trust') || lowerMessage.includes('verify') || lowerMessage.includes('security')) {
+      // Check if asking about item security specifically
+      if (lowerMessage.includes('item') || lowerMessage.includes('my') || lowerMessage.includes('stuff') || lowerMessage.includes('thing')) {
+        return "🔒 **Security for Your Items:**\n\n**When Renting Out Your Items:**\n✅ Verify renter's ID before handover\n✅ Check their ratings and reviews\n✅ Take photos/videos before rental\n✅ Get security deposit (recommended)\n✅ Use written rental agreement\n✅ Keep communication on platform\n✅ Get renter's contact details\n\n**Insurance Options:**\n• Consider item insurance\n• Check if renter has insurance\n• Document item condition\n\n**If Something Goes Wrong:**\n• Report to admin immediately\n• Use our dispute resolution\n• Contact support: support@neighbourfriendly.in\n\n**Tips:**\n• Meet in person for handover\n• Don't share personal address initially\n• Trust your instincts\n• Start with shorter rentals\n\nYour items are valuable - we help you protect them!";
+      }
+      
+      // General safety
       return "🔒 Your safety is our priority!\n\n**Safety Features:**\n✅ ID verification for all users\n✅ Admin approval for listings\n✅ User ratings and reviews\n✅ Direct communication with owners\n✅ Report & block features\n✅ 24/7 support\n\n**Tips:**\n• Check user ratings before renting\n• Meet in public places\n• Inspect items before renting\n• Keep communication on platform\n\nFeel safe renting with us!";
     }
 
