@@ -369,7 +369,7 @@ const Home = () => {
               className="text-center mt-12"
             >
               <Link
-                to="/listings"
+                to="/listings?tab=services"
                 className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
               >
                 View All Services
@@ -449,42 +449,6 @@ const Home = () => {
           </div>
         </section>
       )}
-
-      {/* Categories Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-white via-amber-50/30 to-white">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Rent Anything.</span> Save Everything.</h2>
-            <p className="text-xl text-gray-600">Why waste thousands buying when you can rent for a fraction?</p>
-          </motion.div>
-
-          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 sm:gap-3">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -3 }}
-                onClick={() => navigate(`/listings?category=${encodeURIComponent(category.name)}`)}
-                className="bg-gradient-to-br from-white to-amber-50 p-3 sm:p-4 rounded-lg shadow-md hover:shadow-xl border border-yellow-100 transition-all duration-200 cursor-pointer group"
-              >
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${category.color} rounded-lg flex items-center justify-center mb-2 mx-auto group-hover:scale-110 transition-transform duration-200`}>
-                  <category.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <h3 className="text-xs sm:text-sm font-semibold text-center text-gray-900 line-clamp-2">{category.name}</h3>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Your Money-Making Machine */}
       <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">

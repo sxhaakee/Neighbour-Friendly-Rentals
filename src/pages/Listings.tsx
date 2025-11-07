@@ -16,7 +16,8 @@ type Property = Database['public']['Tables']['properties']['Row'];
 const Listings = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState<'items' | 'services' | 'properties'>('items');
+  const tabParam = searchParams.get('tab') as 'items' | 'services' | 'properties' | null;
+  const [activeTab, setActiveTab] = useState<'items' | 'services' | 'properties'>(tabParam || 'items');
   const [listings, setListings] = useState<Listing[]>([]);
   const [services, setServices] = useState<ServiceProvider[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
@@ -30,7 +31,7 @@ const Listings = () => {
   const [userLocation, setUserLocation] = useState<string>('');
   const [sortBy, setSortBy] = useState<'relevance' | 'price-low' | 'price-high' | 'distance'>('relevance');
 
-  const categories = [
+  const itemCategories = [
     { name: 'All', icon: Package, color: 'bg-amber-100 text-amber-600' },
     { name: 'Electronics', icon: Smartphone, color: 'bg-purple-100 text-purple-600' },
     { name: 'Cameras & Photography', icon: Camera, color: 'bg-indigo-100 text-indigo-600' },
@@ -47,6 +48,17 @@ const Listings = () => {
     { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
   ];
 
+  const serviceCategories = [
+    { name: 'All', icon: Package, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Photography', icon: Camera, color: 'bg-indigo-100 text-indigo-600' },
+    { name: 'Videography', icon: Camera, color: 'bg-purple-100 text-purple-600' },
+    { name: 'Catering', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
+    { name: 'Event Planning', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
+    { name: 'Music & Entertainment', icon: Music, color: 'bg-pink-100 text-pink-600' },
+    { name: 'Home Services', icon: Tool, color: 'bg-blue-100 text-blue-600' },
+    { name: 'Beauty & Wellness', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+  ];
+
 
   useEffect(() => {
     fetchListings();
@@ -61,7 +73,7 @@ const Listings = () => {
 
   useEffect(() => {
     filterServices();
-  }, [services, searchQuery]);
+  }, [services, searchQuery, selectedCategory]);
 
   useEffect(() => {
     filterProperties();
@@ -175,6 +187,12 @@ const Listings = () => {
   const filterServices = () => {
     let filtered = services;
 
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(service =>
+        service.category === selectedCategory
+      );
+    }
+
     if (searchQuery) {
       filtered = filtered.filter(service =>
         service.business_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -245,7 +263,7 @@ const Listings = () => {
           className="flex justify-center gap-2 mb-8"
         >
           <button
-            onClick={() => setActiveTab('items')}
+            onClick={() => { setActiveTab('items'); setSelectedCategory('All'); }}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'items'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
@@ -255,7 +273,7 @@ const Listings = () => {
             📦 Items
           </button>
           <button
-            onClick={() => setActiveTab('services')}
+            onClick={() => { setActiveTab('services'); setSelectedCategory('All'); }}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'services'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
@@ -265,7 +283,7 @@ const Listings = () => {
             🛠️ Services
           </button>
           <button
-            onClick={() => setActiveTab('properties')}
+            onClick={() => { setActiveTab('properties'); setSelectedCategory('All'); }}
             className={`px-6 py-3 rounded-lg font-semibold transition-all ${
               activeTab === 'properties'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
@@ -277,7 +295,7 @@ const Listings = () => {
         </motion.div>
 
         {/* Categories Section */}
-        {activeTab === 'items' && (
+        {(activeTab === 'items' || activeTab === 'services') && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -287,7 +305,7 @@ const Listings = () => {
             <div className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Browse by Category</h3>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3">
-                {categories.map((category) => (
+                {(activeTab === 'items' ? itemCategories : serviceCategories).map((category) => (
                   <motion.button
                     key={category.name}
                     whileHover={{ y: -2 }}
@@ -504,11 +522,18 @@ const Listings = () => {
                     onClick={() => navigate(`/services/${service.id}`)}
                     className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer"
                   >
-                    <img
-                      src={service.images?.[0] || '/placeholder.jpg'}
-                      alt={service.business_name}
-                      className="w-full h-48 object-cover"
-                    />
+                    <div className="relative">
+                      <img
+                        src={service.images?.[0] || '/placeholder.jpg'}
+                        alt={service.business_name}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                          {service.category || 'Service'}
+                        </span>
+                      </div>
+                    </div>
                     <div className="p-4">
                       <h3 className="font-bold text-lg mb-2">{service.business_name}</h3>
                       <p className="text-sm text-gray-600 mb-2 line-clamp-2">{service.description}</p>
