@@ -291,7 +291,7 @@ export const OrdersManagement = () => {
   const getStatusBadge = (status: string) => {
     const styles = {
       pending: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-green-100 text-green-800',
+      confirmed: 'bg-amber-100 text-amber-800',
       completed: 'bg-blue-100 text-blue-800',
       rejected: 'bg-red-100 text-red-800',
       cancelled: 'bg-gray-100 text-gray-800',
@@ -353,12 +353,12 @@ export const OrdersManagement = () => {
             </div>
           </div>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <div className="flex items-center gap-2">
-            <Check className="w-5 h-5 text-green-600" />
+            <Check className="w-5 h-5 text-amber-600" />
             <div>
-              <p className="text-sm text-green-600 font-medium">Confirmed</p>
-              <p className="text-2xl font-bold text-green-800">
+              <p className="text-sm text-amber-600 font-medium">Confirmed</p>
+              <p className="text-2xl font-bold text-amber-800">
                 {bookings.filter(b => b.status === 'confirmed').length}
               </p>
             </div>
@@ -466,7 +466,7 @@ export const OrdersManagement = () => {
                         <button
                           onClick={() => handleApprove(booking)}
                           disabled={processing === booking.id}
-                          className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 flex items-center gap-1"
+                          className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 flex items-center gap-1"
                         >
                           {processing === booking.id ? (
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -560,7 +560,7 @@ export const OrdersManagement = () => {
               </div>
 
               {/* Owner Info */}
-              <div className="bg-green-50 rounded-lg p-4">
+              <div className="bg-amber-50 rounded-lg p-4">
                 <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
                   <User className="w-5 h-5" />
                   Owner Information
@@ -612,12 +612,12 @@ export const OrdersManagement = () => {
                     <span className="text-gray-600">Rental Fee</span>
                     <span className="font-semibold">₹{selectedBooking.item_price || 0}</span>
                   </div>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-2 my-2">
-                    <div className="flex justify-between text-sm text-green-700">
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 my-2">
+                    <div className="flex justify-between text-sm text-amber-700">
                       <span>Platform Commission (15%)</span>
                       <span className="font-semibold">₹{selectedBooking.platform_commission || 0}</span>
                     </div>
-                    <div className="flex justify-between text-sm text-green-700 mt-1">
+                    <div className="flex justify-between text-sm text-amber-700 mt-1">
                       <span>Owner Receives (85%)</span>
                       <span className="font-semibold">₹{(selectedBooking.item_price || 0) - (selectedBooking.platform_commission || 0)}</span>
                     </div>
@@ -639,7 +639,7 @@ export const OrdersManagement = () => {
                 <div className="flex items-center gap-3">
                   <span className="text-gray-600">Current Status:</span>
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedBooking.payment_status === 'completed' ? 'bg-green-100 text-green-800' :
+                    selectedBooking.payment_status === 'completed' ? 'bg-amber-100 text-amber-800' :
                     selectedBooking.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                     'bg-red-100 text-red-800'
                   }`}>
@@ -650,7 +650,7 @@ export const OrdersManagement = () => {
                   <button
                     onClick={() => handleUpdatePaymentStatus(selectedBooking, 'completed')}
                     disabled={processing === selectedBooking.id || selectedBooking.payment_status === 'completed'}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Mark as Paid
                   </button>
@@ -679,7 +679,7 @@ export const OrdersManagement = () => {
                   <button
                     onClick={() => handleApprove(selectedBooking)}
                     disabled={processing === selectedBooking.id}
-                    className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 bg-amber-500 text-white py-3 rounded-xl font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {processing === selectedBooking.id ? (
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>

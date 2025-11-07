@@ -69,7 +69,7 @@ export const PremiumUpgradeModal = ({
                 <h2 className="text-3xl font-bold text-center mb-2">
                   Upgrade to Premium
                 </h2>
-                <p className="text-center text-teal-100">
+                <p className="text-center text-amber-100">
                   You have reached your free tier limit
                 </p>
               </div>
@@ -91,8 +91,8 @@ export const PremiumUpgradeModal = ({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {premiumFeatures.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <Check className="w-3 h-3 text-green-600" />
+                        <div className="w-5 h-5 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="w-3 h-3 text-amber-600" />
                         </div>
                         <span className="text-gray-700">{feature}</span>
                       </div>
@@ -105,7 +105,7 @@ export const PremiumUpgradeModal = ({
                     <span className="text-5xl font-bold text-gray-900">₹29</span>
                     <span className="text-gray-600">/month</span>
                   </div>
-                  <p className="text-center text-green-600 text-sm font-semibold">
+                  <p className="text-center text-amber-600 text-sm font-semibold">
                     Limited Time Offer!
                   </p>
                 </div>

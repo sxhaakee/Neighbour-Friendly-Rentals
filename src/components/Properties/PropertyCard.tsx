@@ -61,7 +61,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
             </span>
           )}
           {property.verified && (
-            <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-semibold">
+            <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-semibold">
               ✓ Verified
             </span>
           )}

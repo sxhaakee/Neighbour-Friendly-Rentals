@@ -262,7 +262,7 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
                         {new Date(review.created_at).toLocaleDateString()}
                       </span>
                       {review.verified_rental && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-semibold">
+                        <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-semibold">
                           Verified Rental
                         </span>
                       )}

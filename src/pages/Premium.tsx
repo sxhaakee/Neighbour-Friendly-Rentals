@@ -313,22 +313,22 @@ const Premium = () => {
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Featured Placement</td>
                   <td className="px-6 py-4 text-center text-gray-400">✗</td>
-                  <td className="px-6 py-4 text-center text-green-600">✓</td>
+                  <td className="px-6 py-4 text-center text-amber-600">✓</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Verified Badge</td>
                   <td className="px-6 py-4 text-center text-gray-400">✗</td>
-                  <td className="px-6 py-4 text-center text-green-600">✓</td>
+                  <td className="px-6 py-4 text-center text-amber-600">✓</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Priority Support</td>
                   <td className="px-6 py-4 text-center text-gray-400">✗</td>
-                  <td className="px-6 py-4 text-center text-green-600">✓</td>
+                  <td className="px-6 py-4 text-center text-amber-600">✓</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Advanced Analytics</td>
                   <td className="px-6 py-4 text-center text-gray-400">✗</td>
-                  <td className="px-6 py-4 text-center text-green-600">✓</td>
+                  <td className="px-6 py-4 text-center text-amber-600">✓</td>
                 </tr>
               </tbody>
             </table>

@@ -24,7 +24,7 @@ export const PremiumBadge = ({
     premium: 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white',
     featured: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white',
     verified: 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white',
-    new: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white',
+    new: 'bg-gradient-to-r from-amber-500 to-amber-500 text-white',
     hot: 'bg-gradient-to-r from-red-500 to-orange-500 text-white',
   };
 

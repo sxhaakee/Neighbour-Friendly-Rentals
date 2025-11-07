@@ -49,7 +49,7 @@ export const NetworkStatus = () => {
           exit={{ y: -100, opacity: 0 }}
           className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50"
         >
-          <div className="bg-green-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3">
+          <div className="bg-amber-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3">
             <Wifi className="w-5 h-5" />
             <span className="font-semibold">Back online</span>
           </div>

@@ -134,7 +134,7 @@ const Profile = () => {
                   <button
                     onClick={handleSave}
                     disabled={loading}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-xl hover:bg-green-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
+                    className="flex items-center justify-center gap-2 px-6 py-3 bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
                   >
                     {loading ? (
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
@@ -160,7 +160,7 @@ const Profile = () => {
                   </span>
                 )}
                 {isVerified && (
-                  <span className="flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                  <span className="flex items-center gap-1 bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-semibold">
                     <CheckCircle className="w-4 h-4" />
                     Verified
                   </span>
@@ -294,18 +294,18 @@ const Profile = () => {
             </div>
 
             {/* Verification Status */}
-            <div className={`p-4 rounded-xl border-2 ${isVerified ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-gray-50'}`}>
+            <div className={`p-4 rounded-xl border-2 ${isVerified ? 'border-amber-400 bg-amber-50' : 'border-gray-200 bg-gray-50'}`}>
               <div className="flex items-center gap-3 mb-2">
-                <Shield className={`w-6 h-6 ${isVerified ? 'text-green-600' : 'text-gray-400'}`} />
+                <Shield className={`w-6 h-6 ${isVerified ? 'text-amber-600' : 'text-gray-400'}`} />
                 <h3 className="font-bold text-gray-900">ID Verification</h3>
               </div>
-              <p className={`text-sm ${isVerified ? 'text-green-700' : 'text-gray-600'}`}>
+              <p className={`text-sm ${isVerified ? 'text-amber-700' : 'text-gray-600'}`}>
                 {isVerified ? 'Verified - Full access' : 'Not verified'}
               </p>
               {!isVerified && (
                 <button
                   onClick={() => navigate('/verify-id')}
-                  className="mt-3 w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition-colors"
+                  className="mt-3 w-full bg-amber-500 text-white py-2 rounded-lg font-semibold hover:bg-amber-600 transition-colors"
                 >
                   Verify ID
                 </button>

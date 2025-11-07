@@ -111,11 +111,11 @@ const DashboardNew = () => {
   const getStatusColor = (status: string) => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-      approved: 'bg-green-100 text-green-800 border-green-200',
+      approved: 'bg-amber-100 text-amber-800 border-amber-200',
       rejected: 'bg-red-100 text-red-800 border-red-200',
       available: 'bg-blue-100 text-blue-800 border-blue-200',
       confirmed: 'bg-blue-100 text-blue-800 border-blue-200',
-      active: 'bg-green-100 text-green-800 border-green-200',
+      active: 'bg-amber-100 text-amber-800 border-amber-200',
       completed: 'bg-gray-100 text-gray-800 border-gray-200',
       cancelled: 'bg-red-100 text-red-800 border-red-200',
     };
@@ -138,8 +138,8 @@ const DashboardNew = () => {
     { id: 'properties', label: 'Properties', icon: Home, count: listingCounts.properties, color: 'from-amber-500 to-orange-500' },
     { id: 'services', label: 'Services', icon: Briefcase, count: listingCounts.services, color: 'from-yellow-500 to-orange-600' },
     { id: 'bookings', label: 'My Bookings', icon: Calendar, count: myBookings.length, color: 'from-indigo-500 to-purple-500' },
-    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: ownerBookings.length, color: 'from-emerald-500 to-teal-500' },
-    { id: 'earnings', label: 'Earnings', icon: TrendingUp, count: 0, color: 'from-green-500 to-emerald-500' },
+    { id: 'rentals', label: 'Incoming Rentals', icon: CheckCircle, count: ownerBookings.length, color: 'from-amber-500 to-amber-500' },
+    { id: 'earnings', label: 'Earnings', icon: TrendingUp, count: 0, color: 'from-amber-500 to-amber-500' },
     { id: 'favorites', label: 'Favorites', icon: Heart, count: favorites.length, color: 'from-red-500 to-pink-500' },
   ];
 
@@ -614,7 +614,7 @@ const DashboardNew = () => {
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                           <div className="text-xs md:text-sm text-gray-500">
-                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-amber-600' : 'text-yellow-600'}`}>
                               {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
                             </span>
                           </div>
@@ -654,7 +654,7 @@ const DashboardNew = () => {
                     <p className="text-gray-600 mb-6">When people rent your items, they'll appear here!</p>
                     <button
                       onClick={() => navigate('/add-item')}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
+                      className="bg-gradient-to-r from-amber-500 to-amber-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all"
                     >
                       Add Items
                     </button>
@@ -689,7 +689,7 @@ const DashboardNew = () => {
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                           <div className="text-xs md:text-sm text-gray-500">
-                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                            Payment: <span className={`font-semibold ${booking.payment_status === 'completed' ? 'text-amber-600' : 'text-yellow-600'}`}>
                               {booking.payment_status === 'completed' ? '✓ Paid' : booking.payment_status === 'failed' ? '✗ Failed' : '⏳ Pending'}
                             </span>
                           </div>
@@ -697,7 +697,7 @@ const DashboardNew = () => {
                             {booking.status === 'pending' && (
                               <button
                                 onClick={() => handleBookingAction(booking.id, 'confirmed')}
-                                className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-colors w-full sm:w-auto"
+                                className="bg-amber-100 hover:bg-amber-200 text-amber-700 px-3 py-2 rounded-lg text-xs md:text-sm font-semibold transition-colors w-full sm:w-auto"
                               >
                                 Accept
                               </button>
@@ -724,14 +724,14 @@ const DashboardNew = () => {
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
                     <div className="flex items-center gap-3">
-                      <div className="p-3 bg-green-100 rounded-lg">
-                        <TrendingUp className="w-6 h-6 text-green-600" />
+                      <div className="p-3 bg-amber-100 rounded-lg">
+                        <TrendingUp className="w-6 h-6 text-amber-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-green-600 font-medium">Total Earnings</p>
-                        <p className="text-2xl font-bold text-green-800">
+                        <p className="text-sm text-amber-600 font-medium">Total Earnings</p>
+                        <p className="text-2xl font-bold text-amber-800">
                           ₹{ownerBookings
                             .filter(booking => booking.status === 'completed' && booking.payment_status === 'completed')
                             .reduce((sum, booking) => sum + (booking.total_price || 0), 0)}

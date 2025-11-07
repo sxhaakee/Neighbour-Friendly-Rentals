@@ -50,7 +50,7 @@ export const ShareButton = ({ url, title, description, className = '' }: ShareBu
       {
         name: 'WhatsApp',
         url: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
-        color: 'bg-green-500',
+        color: 'bg-amber-500',
       },
       {
         name: 'Facebook',

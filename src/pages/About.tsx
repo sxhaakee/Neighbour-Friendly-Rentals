@@ -146,7 +146,7 @@ const About = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl font-bold text-white mb-4">Impact by Numbers</h2>
-            <p className="text-xl text-teal-100">See how we're making a difference</p>
+            <p className="text-xl text-amber-100">See how we're making a difference</p>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -160,7 +160,7 @@ const About = () => {
                 className="text-center"
               >
                 <div className="text-4xl md:text-5xl font-bold text-secondary mb-2">{stat.number}</div>
-                <div className="text-teal-100 font-semibold">{stat.label}</div>
+                <div className="text-amber-100 font-semibold">{stat.label}</div>
               </motion.div>
             ))}
           </div>

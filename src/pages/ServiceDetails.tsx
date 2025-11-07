@@ -277,7 +277,7 @@ const ServiceDetails = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {service.verified && (
-                    <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                    <div className="flex items-center gap-1 bg-amber-100 text-amber-800 px-3 py-1 rounded-full">
                       <CheckCircle className="w-4 h-4" />
                       <span className="text-sm font-semibold">Verified</span>
                     </div>
@@ -450,14 +450,14 @@ const ServiceDetails = () => {
 
                 {service.whatsapp && (
                   <div className="flex items-start gap-3">
-                    <Phone className="w-5 h-5 text-green-600 mt-1" />
+                    <Phone className="w-5 h-5 text-amber-600 mt-1" />
                     <div>
                       <p className="text-sm text-gray-600">WhatsApp</p>
                       <a 
                         href={generateWhatsAppLink(service.whatsapp, 'service', service.business_name)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-900 font-semibold hover:text-green-600"
+                        className="text-gray-900 font-semibold hover:text-amber-600"
                       >
                         {service.whatsapp}
                       </a>

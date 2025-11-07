@@ -110,7 +110,7 @@ export const AgreementsManagement = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
+      case 'active': return 'bg-amber-100 text-amber-800';
       case 'completed': return 'bg-blue-100 text-blue-800';
       case 'cancelled': return 'bg-red-100 text-red-800';
       case 'disputed': return 'bg-yellow-100 text-yellow-800';
@@ -144,9 +144,9 @@ export const AgreementsManagement = () => {
           <div className="text-xl sm:text-2xl font-bold text-gray-900">{stats.total}</div>
           <div className="text-xs sm:text-sm text-gray-600">Total</div>
         </div>
-        <div className="bg-green-50 rounded-xl p-3 sm:p-4 shadow-sm">
-          <div className="text-xl sm:text-2xl font-bold text-green-900">{stats.active}</div>
-          <div className="text-xs sm:text-sm text-green-700">Active</div>
+        <div className="bg-amber-50 rounded-xl p-3 sm:p-4 shadow-sm">
+          <div className="text-xl sm:text-2xl font-bold text-amber-900">{stats.active}</div>
+          <div className="text-xs sm:text-sm text-amber-700">Active</div>
         </div>
         <div className="bg-blue-50 rounded-xl p-3 sm:p-4 shadow-sm">
           <div className="text-xl sm:text-2xl font-bold text-blue-900">{stats.completed}</div>
@@ -177,7 +177,7 @@ export const AgreementsManagement = () => {
             <button
               onClick={() => setFilter('active')}
               className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                filter === 'active' ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                filter === 'active' ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               Active
@@ -329,7 +329,7 @@ export const AgreementsManagement = () => {
                           <>
                             <button
                               onClick={() => handleRestore(agreement.id)}
-                              className="text-green-600 hover:text-green-800"
+                              className="text-amber-600 hover:text-amber-800"
                               title="Restore"
                             >
                               <RefreshCw className="w-5 h-5" />

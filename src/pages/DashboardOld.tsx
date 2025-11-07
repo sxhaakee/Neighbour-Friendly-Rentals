@@ -229,7 +229,7 @@ const Dashboard = () => {
                 <p className="font-semibold text-amber-600">₹{rental.totalEarned}</p>
                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                   rental.status === 'Completed' 
-                    ? 'bg-green-100 text-green-800' 
+                    ? 'bg-amber-100 text-amber-800' 
                     : rental.status === 'Active'
                     ? 'bg-yellow-100 text-yellow-800'
                     : 'bg-gray-100 text-gray-800'
@@ -290,7 +290,7 @@ const Dashboard = () => {
                     <h4 className="text-lg font-semibold text-gray-900">{rental.item}</h4>
                     <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                       rental.status === 'Completed' 
-                        ? 'bg-green-100 text-green-800' 
+                        ? 'bg-amber-100 text-amber-800' 
                         : rental.status === 'Active'
                         ? 'bg-yellow-100 text-yellow-800'
                         : 'bg-gray-100 text-gray-800'
@@ -379,7 +379,7 @@ const Dashboard = () => {
                         <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                           item.status === 'Available' 
-                            ? 'bg-green-100 text-green-800' 
+                            ? 'bg-amber-100 text-amber-800' 
                             : 'bg-yellow-100 text-yellow-800'
                         }`}>
                           {item.status}
@@ -448,7 +448,7 @@ const Dashboard = () => {
                       <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                         rental.status === 'Upcoming' 
                           ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-green-100 text-green-800'
+                          : 'bg-amber-100 text-amber-800'
                       }`}>
                         {rental.status}
                       </span>

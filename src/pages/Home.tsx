@@ -27,12 +27,12 @@ const Home = () => {
     { name: 'Sports & Fitness', icon: Dumbbell, color: 'bg-red-100 text-red-600' },
     { name: 'Musical Instruments', icon: Music, color: 'bg-pink-100 text-pink-600' },
     { name: 'Furniture', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
-    { name: 'Books', icon: Book, color: 'bg-green-100 text-green-600' },
-    { name: 'Media', icon: Book, color: 'bg-emerald-100 text-emerald-600' },
-    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+    { name: 'Books', icon: Book, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Media', icon: Book, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-amber-100 text-amber-600' },
     { name: 'Party & Events', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
     { name: 'Gaming & Consoles', icon: Gamepad2, color: 'bg-violet-100 text-violet-600' },
-    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-emerald-100 text-emerald-600' },
+    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-amber-100 text-amber-600' },
     { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
   ];
 
@@ -154,9 +154,9 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-300 px-5 py-2 rounded-full mb-8"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-amber-100 border-2 border-amber-300 px-5 py-2 rounded-full mb-8"
             >
-              <span className="text-green-700 text-base font-bold">💰 Neighbours earning ₹10K-₹50K/month</span>
+              <span className="text-amber-700 text-base font-bold">💰 Neighbours earning ₹10K-₹50K/month</span>
             </motion.div>
           
           {/* Premium Search Bar */}

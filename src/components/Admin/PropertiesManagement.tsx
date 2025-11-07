@@ -141,9 +141,9 @@ export const PropertiesManagement = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm">Approved</p>
-              <p className="text-3xl font-bold text-green-600 mt-1">{stats.approved}</p>
+              <p className="text-3xl font-bold text-amber-600 mt-1">{stats.approved}</p>
             </div>
-            <CheckCircle className="w-10 h-10 text-green-500" />
+            <CheckCircle className="w-10 h-10 text-amber-500" />
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export const PropertiesManagement = () => {
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       property.status === 'approved'
-                        ? 'bg-green-500 text-white'
+                        ? 'bg-amber-500 text-white'
                         : property.status === 'pending'
                         ? 'bg-yellow-500 text-white'
                         : 'bg-red-500 text-white'
@@ -258,7 +258,7 @@ export const PropertiesManagement = () => {
                     <>
                       <button
                         onClick={() => handleApprove(property.id)}
-                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approve
@@ -382,7 +382,7 @@ export const PropertiesManagement = () => {
                         handleApprove(selectedProperty.id);
                         setSelectedProperty(null);
                       }}
-                      className="flex-1 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                      className="flex-1 px-6 py-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
                     >
                       Approve Property
                     </button>

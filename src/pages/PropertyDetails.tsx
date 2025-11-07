@@ -170,7 +170,7 @@ const PropertyDetails = () => {
                     </span>
                   )}
                   {property.verified && (
-                    <span className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
+                    <span className="bg-amber-500 text-white px-3 py-1 rounded-lg text-sm font-semibold">
                       ✓ Verified
                     </span>
                   )}
@@ -327,7 +327,7 @@ const PropertyDetails = () => {
                     <span className="text-lg text-gray-500 font-normal">/month</span>
                   </div>
                   {property.negotiable && (
-                    <span className="text-sm text-green-600 font-semibold">Negotiable</span>
+                    <span className="text-sm text-amber-600 font-semibold">Negotiable</span>
                   )}
                 </div>
 
@@ -347,7 +347,7 @@ const PropertyDetails = () => {
                 <div className="space-y-3">
                   <button
                     onClick={() => window.open(generateWhatsAppLink(property.owner_phone, 'property', property.title), '_blank')}
-                    className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-colors flex items-center justify-center gap-2"
                   >
                     <Phone className="w-5 h-5" />
                     Contact on WhatsApp

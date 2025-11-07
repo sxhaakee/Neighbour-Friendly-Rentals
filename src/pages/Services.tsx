@@ -219,7 +219,7 @@ const Services = () => {
                       </span>
                     )}
                     {service.verified && (
-                      <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                      <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
                         ✓ Verified
                       </span>
                     )}

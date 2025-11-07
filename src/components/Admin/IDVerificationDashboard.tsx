@@ -148,7 +148,7 @@ export const IDVerificationDashboard = () => {
             onClick={() => setActiveTab('verified')}
             className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
               activeTab === 'verified'
-                ? 'bg-green-500 text-white'
+                ? 'bg-amber-500 text-white'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
@@ -361,7 +361,7 @@ export const IDVerificationDashboard = () => {
                   </button>
                   <button
                     onClick={() => handleApprove(selectedVerification.id)}
-                    className="flex-1 px-6 py-3 bg-green-500 text-white rounded-xl font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-3 bg-amber-500 text-white rounded-xl font-semibold hover:bg-amber-600 transition-colors flex items-center justify-center gap-2"
                     disabled={processing}
                   >
                     {processing ? (

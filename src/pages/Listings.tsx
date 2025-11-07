@@ -39,12 +39,12 @@ const Listings = () => {
     { name: 'Sports & Fitness', icon: Dumbbell, color: 'bg-red-100 text-red-600' },
     { name: 'Musical Instruments', icon: Music, color: 'bg-pink-100 text-pink-600' },
     { name: 'Furniture', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
-    { name: 'Books', icon: Book, color: 'bg-green-100 text-green-600' },
-    { name: 'Media', icon: Book, color: 'bg-emerald-100 text-emerald-600' },
-    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+    { name: 'Books', icon: Book, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Media', icon: Book, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-amber-100 text-amber-600' },
     { name: 'Party & Events', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
     { name: 'Gaming & Consoles', icon: Gamepad2, color: 'bg-violet-100 text-violet-600' },
-    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-emerald-100 text-emerald-600' },
+    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-amber-100 text-amber-600' },
     { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
   ];
 
@@ -56,7 +56,7 @@ const Listings = () => {
     { name: 'Event Planning', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
     { name: 'Music & Entertainment', icon: Music, color: 'bg-pink-100 text-pink-600' },
     { name: 'Home Services', icon: Tool, color: 'bg-blue-100 text-blue-600' },
-    { name: 'Beauty & Wellness', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+    { name: 'Beauty & Wellness', icon: Shirt, color: 'bg-amber-100 text-amber-600' },
   ];
 
 
@@ -465,7 +465,7 @@ const Listings = () => {
                   )}
                   {item.availability === 'Available' && (
                     <div className="absolute top-2 right-2">
-                      <span className="bg-green-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                      <span className="bg-amber-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
                         ✓
                       </span>
                     </div>

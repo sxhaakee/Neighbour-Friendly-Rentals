@@ -288,7 +288,7 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className={`flex items-center gap-2 p-3 rounded-lg mb-4 ${
-            available ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+            available ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-red-800'
           }`}
         >
           <AlertCircle className="w-5 h-5" />

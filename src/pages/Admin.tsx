@@ -311,7 +311,7 @@ const Admin = () => {
                 icon={CheckCircle}
                 label="Approved"
                 value={stats.approved}
-                color="bg-green-500"
+                color="bg-amber-500"
               />
               <StatCard
                 icon={XCircle}
@@ -460,7 +460,7 @@ const Admin = () => {
                         <span
                           className={`px-2 py-1 text-xs font-medium rounded-full ${
                             listing.status === 'approved'
-                              ? 'bg-green-100 text-green-800'
+                              ? 'bg-amber-100 text-amber-800'
                               : listing.status === 'rejected'
                               ? 'bg-red-100 text-red-800'
                               : 'bg-yellow-100 text-yellow-800'
@@ -485,7 +485,7 @@ const Admin = () => {
                             <>
                               <button
                                 onClick={() => handleApprove(listing.id)}
-                                className="text-green-600 hover:text-green-900"
+                                className="text-amber-600 hover:text-amber-900"
                                 title="Approve"
                               >
                                 <CheckCircle className="w-5 h-5" />
@@ -660,7 +660,7 @@ const Admin = () => {
                           <button
                             onClick={handleUpdateCategory}
                             disabled={!newCategory}
-                            className="px-3 py-1.5 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-amber-500 text-white text-sm rounded-lg hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Save
                           </button>
@@ -701,7 +701,7 @@ const Admin = () => {
                       <p className="text-sm text-gray-600">Status</p>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                         selectedListing.status === 'approved'
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-amber-100 text-amber-800'
                           : selectedListing.status === 'rejected'
                           ? 'bg-red-100 text-red-800'
                           : 'bg-yellow-100 text-yellow-800'
@@ -755,7 +755,7 @@ const Admin = () => {
                   <>
                     <button
                       onClick={() => handleApprove(selectedListing.id)}
-                      className="flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 bg-amber-500 text-white py-3 rounded-xl font-semibold hover:bg-amber-600 transition-colors flex items-center justify-center gap-2"
                     >
                       <CheckCircle className="w-5 h-5" />
                       Approve Listing

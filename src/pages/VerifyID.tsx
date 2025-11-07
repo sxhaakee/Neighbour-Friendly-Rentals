@@ -139,7 +139,7 @@ const VerifyID = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-lg"
         >
-          <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+          <CheckCircle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">ID Verified!</h2>
           <p className="text-gray-600 mb-6">
             Your ID has been verified. You can now book items.

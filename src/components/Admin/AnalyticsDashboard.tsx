@@ -188,7 +188,7 @@ export const AnalyticsDashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white shadow-lg"
+          className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-white shadow-lg"
         >
           <div className="flex items-center justify-between mb-4">
             <DollarSign className="w-8 h-8" />
@@ -197,7 +197,7 @@ export const AnalyticsDashboard = () => {
             </span>
           </div>
           <h3 className="text-3xl font-bold mb-1">₹{analytics.totalRevenue.toLocaleString()}</h3>
-          <p className="text-green-100">Total Revenue</p>
+          <p className="text-amber-100">Total Revenue</p>
         </motion.div>
 
         {/* Platform Commission */}
@@ -256,7 +256,7 @@ export const AnalyticsDashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg"
+          className="bg-gradient-to-br from-amber-500 to-cyan-600 rounded-2xl p-6 text-white shadow-lg"
         >
           <div className="flex items-center justify-between mb-4">
             <Package className="w-8 h-8" />
@@ -265,7 +265,7 @@ export const AnalyticsDashboard = () => {
             </span>
           </div>
           <h3 className="text-3xl font-bold mb-1">{analytics.totalListings}</h3>
-          <p className="text-teal-100">Total Listings</p>
+          <p className="text-amber-100">Total Listings</p>
         </motion.div>
 
         {/* Pending Approvals */}

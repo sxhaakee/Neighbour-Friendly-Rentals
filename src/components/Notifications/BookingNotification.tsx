@@ -219,7 +219,7 @@ export const BookingNotification = () => {
                     <button
                       onClick={() => handleApprove(booking.id)}
                       disabled={processing === booking.id}
-                      className="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg text-sm font-semibold hover:bg-green-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+                      className="flex-1 bg-amber-500 text-white py-2 px-3 rounded-lg text-sm font-semibold hover:bg-amber-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
                     >
                       {processing === booking.id ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

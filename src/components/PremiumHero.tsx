@@ -63,7 +63,7 @@ export const PremiumHero = () => {
         {/* Premium Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           {[
-            { icon: TrendingUp, label: 'Unlimited Listings', value: '∞', color: 'from-green-400 to-emerald-500' },
+            { icon: TrendingUp, label: 'Unlimited Listings', value: '∞', color: 'from-amber-400 to-amber-500' },
             { icon: Users, label: 'Priority Support', value: '24/7', color: 'from-blue-400 to-cyan-500' },
             { icon: Shield, label: 'Verified Badge', value: '✓', color: 'from-purple-400 to-pink-500' },
             { icon: Zap, label: 'Featured Spots', value: '3x', color: 'from-orange-400 to-red-500' },
@@ -116,7 +116,7 @@ export const PremiumHero = () => {
                   📍 {item.location}
                 </p>
                 <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-xs bg-green-500 text-white px-2 py-1 rounded-full">
+                  <span className="text-xs bg-amber-500 text-white px-2 py-1 rounded-full">
                     Active
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export const PremiumHero = () => {
                     <div className="text-sm text-gray-600">{story.city}</div>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-green-600 mb-1">{story.earning}</div>
+                <div className="text-2xl font-bold text-amber-600 mb-1">{story.earning}</div>
                 <div className="text-sm text-gray-600">from {story.item}</div>
               </div>
             ))}

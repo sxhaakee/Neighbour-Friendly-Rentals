@@ -102,7 +102,7 @@ const DashboardNew = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
-        return 'bg-green-100 text-green-800';
+        return 'bg-amber-100 text-amber-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'rejected':
@@ -110,7 +110,7 @@ const DashboardNew = () => {
       case 'confirmed':
         return 'bg-blue-100 text-blue-800';
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-amber-100 text-amber-800';
       case 'cancelled':
         return 'bg-gray-100 text-gray-800';
       default:
@@ -121,7 +121,7 @@ const DashboardNew = () => {
   const getPaymentStatusBadge = (paymentStatus: string) => {
     switch (paymentStatus) {
       case 'completed':
-        return 'bg-green-100 text-green-800';
+        return 'bg-amber-100 text-amber-800';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800';
       case 'failed':
@@ -468,7 +468,7 @@ const DashboardNew = () => {
                       <Clock className="w-4 h-4 inline mr-1" />
                       {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                     </span>
-                    <span className="font-semibold text-green-600">+₹{booking.total_price}</span>
+                    <span className="font-semibold text-amber-600">+₹{booking.total_price}</span>
                   </div>
                 </div>
                 <div className="text-right space-y-2">
@@ -503,14 +503,14 @@ const DashboardNew = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-amber-100 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-amber-600" />
               </div>
               <div>
-                <p className="text-sm text-green-600 font-medium">Total Earnings</p>
-                <p className="text-2xl font-bold text-green-800">₹{totalEarnings.toLocaleString()}</p>
+                <p className="text-sm text-amber-600 font-medium">Total Earnings</p>
+                <p className="text-2xl font-bold text-amber-800">₹{totalEarnings.toLocaleString()}</p>
               </div>
             </div>
           </div>
@@ -555,7 +555,7 @@ const DashboardNew = () => {
                 .filter(booking => booking.status === 'completed')
                 .slice(0, 5)
                 .map((booking) => (
-                  <div key={booking.id} className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+                  <div key={booking.id} className="flex items-center justify-between p-4 bg-amber-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <img
                         src={booking.listings?.images[0] || '/placeholder.jpg'}
@@ -568,7 +568,7 @@ const DashboardNew = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-green-600">+₹{booking.platform_commission || 0}</p>
+                      <p className="font-bold text-amber-600">+₹{booking.platform_commission || 0}</p>
                       <p className="text-xs text-gray-500">
                         {new Date(booking.end_date).toLocaleDateString()}
                       </p>
