@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Smartphone, Camera, PenTool as Tool, Dumbbell, Music, Sofa, Book, Shirt, PartyPopper, Gamepad2, Tent, Baby, Package } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
@@ -29,6 +29,23 @@ const Listings = () => {
   const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState<string>('');
   const [sortBy, setSortBy] = useState<'relevance' | 'price-low' | 'price-high' | 'distance'>('relevance');
+
+  const categories = [
+    { name: 'All', icon: Package, color: 'bg-amber-100 text-amber-600' },
+    { name: 'Electronics', icon: Smartphone, color: 'bg-purple-100 text-purple-600' },
+    { name: 'Cameras & Photography', icon: Camera, color: 'bg-indigo-100 text-indigo-600' },
+    { name: 'Tools & Equipment', icon: Tool, color: 'bg-blue-100 text-blue-600' },
+    { name: 'Sports & Fitness', icon: Dumbbell, color: 'bg-red-100 text-red-600' },
+    { name: 'Musical Instruments', icon: Music, color: 'bg-pink-100 text-pink-600' },
+    { name: 'Furniture', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
+    { name: 'Books', icon: Book, color: 'bg-green-100 text-green-600' },
+    { name: 'Media', icon: Book, color: 'bg-emerald-100 text-emerald-600' },
+    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-teal-100 text-teal-600' },
+    { name: 'Party & Events', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
+    { name: 'Gaming & Consoles', icon: Gamepad2, color: 'bg-violet-100 text-violet-600' },
+    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-emerald-100 text-emerald-600' },
+    { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
+  ];
 
 
   useEffect(() => {
@@ -258,6 +275,40 @@ const Listings = () => {
             🏠 Properties
           </button>
         </motion.div>
+
+        {/* Categories Section */}
+        {activeTab === 'items' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-8"
+          >
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Browse by Category</h3>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3">
+                {categories.map((category) => (
+                  <motion.button
+                    key={category.name}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setSelectedCategory(category.name)}
+                    className={`p-3 rounded-lg transition-all ${
+                      selectedCategory === category.name
+                        ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-md'
+                        : 'bg-white hover:bg-amber-50 border border-gray-200'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <category.icon className="w-5 h-5" />
+                      <span className="text-xs font-medium text-center line-clamp-2">{category.name}</span>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Search and Filters */}
         <motion.div
