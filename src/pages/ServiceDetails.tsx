@@ -79,6 +79,7 @@ const ServiceDetails = () => {
 
   const fetchReviews = async () => {
     try {
+      // First try with profiles join
       const { data, error } = await supabase
         .from('reviews')
         .select(`
@@ -88,7 +89,20 @@ const ServiceDetails = () => {
         .eq('service_id', id!)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        // If profiles relationship fails, fetch without it
+        console.warn('Profiles relationship error, fetching reviews without user data');
+        const { data: simpleData, error: simpleError } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('service_id', id!)
+          .order('created_at', { ascending: false });
+        
+        if (simpleError) throw simpleError;
+        setReviews(simpleData || []);
+        return;
+      }
+      
       setReviews(data || []);
     } catch (error) {
       console.error('Error fetching reviews:', error);
@@ -472,62 +486,95 @@ const ServiceDetails = () => {
           </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="mt-8 bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Reviews</h2>
+        {/* Reviews Section - Premium Theme */}
+        <div className="mt-8 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-2xl shadow-2xl border border-purple-200 p-8 backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Customer Reviews
+              </h2>
+              {reviewCount > 0 && (
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-5 h-5 ${
+                          star <= Math.round(averageRating)
+                            ? 'text-yellow-500 fill-current'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-lg font-semibold text-gray-700">
+                    {averageRating.toFixed(1)} out of 5
+                  </span>
+                  <span className="text-gray-500">({reviewCount} {reviewCount === 1 ? 'review' : 'reviews'})</span>
+                </div>
+              )}
+            </div>
             {user && (
               <button
                 onClick={() => setShowReviewForm(!showReviewForm)}
-                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 flex items-center gap-2"
               >
+                <Star className="w-5 h-5" />
                 Write a Review
               </button>
             )}
           </div>
 
-          {/* Review Form */}
+          {/* Review Form - Premium Style */}
           {showReviewForm && (
-            <div className="mb-6 p-4 bg-white rounded-lg border border-gray-200">
-              <h3 className="font-semibold text-gray-900 mb-4">Share your experience</h3>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl border-2 border-purple-200 shadow-xl"
+            >
+              <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
+                Share your experience
+              </h3>
               
               {/* Star Rating */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm text-gray-600">Rating:</span>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-sm font-medium text-gray-700">Your Rating:</span>
                 <div className="flex gap-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
                       key={star}
                       onClick={() => setNewReview({ ...newReview, rating: star })}
-                      className="focus:outline-none"
+                      className="focus:outline-none hover:scale-110 transition-transform"
                     >
                       <Star
-                        className={`w-6 h-6 ${
+                        className={`w-8 h-8 ${
                           star <= newReview.rating
-                            ? 'text-yellow-500 fill-current'
+                            ? 'text-yellow-500 fill-current drop-shadow-md'
                             : 'text-gray-300'
                         }`}
                       />
                     </button>
                   ))}
                 </div>
-                <span className="text-sm font-semibold text-gray-900">{newReview.rating}/5</span>
+                <span className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  {newReview.rating}/5
+                </span>
               </div>
 
               {/* Comment */}
               <textarea
                 value={newReview.comment}
                 onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                placeholder="Tell us about your experience..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                placeholder="Tell us about your experience with this service..."
+                className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none transition-all"
                 rows={4}
               />
 
               {/* Buttons */}
-              <div className="flex gap-2 mt-4">
+              <div className="flex gap-3 mt-6">
                 <button
                   onClick={handleSubmitReview}
-                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+                  className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200"
                 >
                   Submit Review
                 </button>
@@ -536,68 +583,82 @@ const ServiceDetails = () => {
                     setShowReviewForm(false);
                     setNewReview({ rating: 5, comment: '' });
                   }}
-                  className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="px-8 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
               </div>
-            </div>
+            </motion.div>
           )}
 
-          {/* Reviews List */}
+          {/* Reviews List - Premium Style */}
           {reviews.length === 0 ? (
-            <div className="text-center py-12">
-              <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">No reviews yet</p>
-              <p className="text-gray-400 text-sm">Be the first to review this service!</p>
+            <div className="text-center py-16 bg-white/50 backdrop-blur-sm rounded-xl">
+              <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full flex items-center justify-center">
+                <Star className="w-10 h-10 text-purple-400" />
+              </div>
+              <p className="text-gray-600 text-xl font-semibold mb-2">No reviews yet</p>
+              <p className="text-gray-400">Be the first to share your experience!</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {reviews.map((review) => (
-                <div key={review.id} className="p-4 bg-white rounded-lg border border-gray-200">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-3">
+              {reviews.map((review, index) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-6 bg-white/80 backdrop-blur-sm rounded-xl border-2 border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all duration-200"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-4">
                       {review.user?.avatar_url ? (
                         <img
                           src={review.user.avatar_url}
                           alt={review.user.full_name}
-                          className="w-10 h-10 rounded-full object-cover"
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-purple-200"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-primary font-semibold">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center ring-2 ring-purple-200">
+                          <span className="text-white font-bold text-lg">
                             {(review.user?.full_name || review.user_name || 'A')[0].toUpperCase()}
                           </span>
                         </div>
                       )}
                       <div>
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-bold text-gray-900 text-lg">
                           {review.user?.full_name || review.user_name || 'Anonymous'}
                         </p>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 mt-1">
                           <div className="flex">
                             {[1, 2, 3, 4, 5].map((star) => (
                               <Star
                                 key={star}
-                                className={`w-4 h-4 ${
+                                className={`w-5 h-5 ${
                                   star <= review.rating
-                                    ? 'text-yellow-500 fill-current'
+                                    ? 'text-yellow-500 fill-current drop-shadow-sm'
                                     : 'text-gray-300'
                                 }`}
                               />
                             ))}
                           </div>
-                          <span className="text-sm text-gray-500">
-                            {new Date(review.created_at).toLocaleDateString()}
+                          <span className="text-sm text-gray-500 font-medium">
+                            {new Date(review.created_at).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
                   {review.comment && (
-                    <p className="text-gray-700 mt-2 leading-relaxed">{review.comment}</p>
+                    <p className="text-gray-700 mt-4 leading-relaxed text-base pl-16">
+                      "{review.comment}"
+                    </p>
                   )}
-                </div>
+                </motion.div>
               ))}
             </div>
           )}
