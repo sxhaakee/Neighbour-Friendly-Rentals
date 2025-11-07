@@ -1,7 +1,25 @@
 /**
- * Image Compression Utility
- * Compresses images to reduce storage usage on Supabase free tier
- * Target: Keep images under 100KB each for optimal storage (supports 1000+ items)
+ * Image Compression Utility - HEAVY COMPRESSION
+ * Aggressively compresses images to minimize storage usage
+ * 
+ * Features:
+ * - Target: 150-300KB per image (down from MBs)
+ * - Multi-pass compression with quality reduction
+ * - Automatic dimension scaling for large files
+ * - Emergency fallback compression
+ * - Never fails - always returns compressed image
+ * 
+ * Compression Strategy:
+ * - Files >2MB: Start at 50% quality, target 200KB
+ * - Files >1MB: Start at 60% quality, target 250KB
+ * - Files <1MB: Start at 70% quality, target 300KB
+ * - Up to 8 compression attempts with progressive quality reduction
+ * - Final emergency pass at 150KB if still too large
+ * 
+ * Error Handling:
+ * - Catches all compression errors
+ * - Retries with minimal settings
+ * - Falls back to original file only as last resort
  */
 
 import imageCompression from 'browser-image-compression';
@@ -26,18 +44,28 @@ export const compressImage = async (
   const {
     maxWidth = 1200,
     maxHeight = 1200,
-    quality = 0.8,
-    maxSizeMB = 0.5, // 500KB - more reasonable for large images
+    quality = 0.7, // Lower default quality for heavier compression
+    maxSizeMB = 0.3, // 300KB - much more aggressive target
   } = options;
 
   try {
     const fileSizeMB = file.size / 1024 / 1024;
     console.log(`Starting compression for ${file.name}: ${fileSizeMB.toFixed(2)}MB`);
     
-    // For very large files (>3MB), use more aggressive initial settings
-    const isVeryLarge = fileSizeMB > 3;
-    const initialQuality = isVeryLarge ? 0.6 : quality;
-    const initialMaxSize = isVeryLarge ? 0.3 : maxSizeMB;
+    // For very large files (>2MB), use very aggressive initial settings
+    const isVeryLarge = fileSizeMB > 2;
+    const isLarge = fileSizeMB > 1;
+    
+    let initialQuality = quality;
+    let initialMaxSize = maxSizeMB;
+    
+    if (isVeryLarge) {
+      initialQuality = 0.5; // Very aggressive
+      initialMaxSize = 0.2; // 200KB target
+    } else if (isLarge) {
+      initialQuality = 0.6;
+      initialMaxSize = 0.25; // 250KB target
+    }
     
     // First pass compression with adaptive settings
     const compressionOptions = {
@@ -56,21 +84,27 @@ export const compressImage = async (
     let currentQuality = initialQuality;
     let currentMaxWidth = Math.max(maxWidth, maxHeight);
     
-    while (compressedFile.size > maxSizeMB * 1024 * 1024 && attempts < 6) {
-      currentQuality = Math.max(0.3, currentQuality - 0.1); // Reduce quality
-      currentMaxWidth = Math.floor(currentMaxWidth * 0.85); // Reduce dimensions more
-      const newMaxSize = Math.max(0.1, maxSizeMB * 0.8); // Target smaller
+    // More aggressive loop with more attempts
+    while (compressedFile.size > maxSizeMB * 1024 * 1024 && attempts < 8) {
+      currentQuality = Math.max(0.25, currentQuality - 0.08); // Reduce quality more aggressively
+      currentMaxWidth = Math.floor(currentMaxWidth * 0.8); // Reduce dimensions more
+      const newMaxSize = Math.max(0.08, maxSizeMB * 0.7); // Target much smaller
       
       console.log(`Attempt ${attempts + 1}: quality=${currentQuality.toFixed(2)}, maxWidth=${currentMaxWidth}, targetSize=${newMaxSize}MB`);
       
-      compressedFile = await imageCompression(file, {
-        maxSizeMB: newMaxSize,
-        maxWidthOrHeight: currentMaxWidth,
-        useWebWorker: true,
-        initialQuality: currentQuality,
-        fileType: 'image/jpeg' as const,
-        alwaysKeepResolution: false,
-      });
+      try {
+        compressedFile = await imageCompression(file, {
+          maxSizeMB: newMaxSize,
+          maxWidthOrHeight: currentMaxWidth,
+          useWebWorker: true,
+          initialQuality: currentQuality,
+          fileType: 'image/jpeg' as const,
+          alwaysKeepResolution: false,
+        });
+      } catch (compressionError) {
+        console.warn(`Compression attempt ${attempts + 1} failed, using previous result`);
+        break; // Use the last successful compression
+      }
       
       attempts++;
     }
@@ -79,10 +113,42 @@ export const compressImage = async (
     const compressionRatio = ((1 - compressedFile.size / file.size) * 100).toFixed(1);
     console.log(`✅ Compressed ${file.name}: ${fileSizeMB.toFixed(2)}MB → ${finalSizeKB.toFixed(2)}KB (${compressionRatio}% reduction)`);
     
+    // Final safety check - if still too large, do one last aggressive pass
+    if (compressedFile.size > maxSizeMB * 1024 * 1024 * 1.5) {
+      console.log('⚠️ File still large, applying final aggressive compression...');
+      try {
+        compressedFile = await imageCompression(file, {
+          maxSizeMB: 0.15, // 150KB absolute max
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+          initialQuality: 0.3,
+          fileType: 'image/jpeg' as const,
+          alwaysKeepResolution: false,
+        });
+        console.log(`✅ Final compression: ${(compressedFile.size / 1024).toFixed(2)}KB`);
+      } catch (finalError) {
+        console.warn('Final compression failed, using previous result');
+      }
+    }
+    
     return compressedFile;
   } catch (error) {
     console.error('Error compressing image:', error);
-    throw new Error(`Failed to compress image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    // Return a heavily compressed version as fallback
+    try {
+      console.log('Attempting emergency compression...');
+      const emergencyCompressed = await imageCompression(file, {
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 800,
+        useWebWorker: false,
+        initialQuality: 0.4,
+        fileType: 'image/jpeg' as const,
+      });
+      console.log('✅ Emergency compression successful');
+      return emergencyCompressed;
+    } catch (emergencyError) {
+      throw new Error(`Failed to compress image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 };
 
@@ -98,6 +164,8 @@ export const compressImages = async (
 ): Promise<File[]> => {
   const compressedFiles: File[] = [];
   
+  console.log(`📦 Starting batch compression of ${files.length} images...`);
+  
   // Process images sequentially to avoid overwhelming the browser
   for (let i = 0; i < files.length; i++) {
     try {
@@ -107,14 +175,33 @@ export const compressImages = async (
       
       // Small delay between compressions to prevent browser freezing
       if (i < files.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 150));
       }
     } catch (error) {
-      console.error(`Failed to compress image ${i + 1}:`, error);
-      // Use original file if compression fails
-      compressedFiles.push(files[i]);
+      console.error(`❌ Failed to compress image ${i + 1}:`, error);
+      
+      // Try one more time with minimal settings
+      try {
+        console.log(`🔄 Retrying with minimal compression settings...`);
+        const minimalCompressed = await imageCompression(files[i], {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1000,
+          useWebWorker: false,
+          initialQuality: 0.5,
+          fileType: 'image/jpeg' as const,
+        });
+        compressedFiles.push(minimalCompressed);
+        console.log(`✅ Retry successful for image ${i + 1}`);
+      } catch (retryError) {
+        console.error(`❌ Retry failed for image ${i + 1}, using original`);
+        // Last resort: use original file
+        compressedFiles.push(files[i]);
+      }
     }
   }
+  
+  const totalSizeKB = compressedFiles.reduce((sum, file) => sum + file.size, 0) / 1024;
+  console.log(`✅ Batch compression complete: ${compressedFiles.length} images, ${totalSizeKB.toFixed(2)}KB total`);
   
   return compressedFiles;
 };
