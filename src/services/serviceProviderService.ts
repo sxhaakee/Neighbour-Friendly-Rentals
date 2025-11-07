@@ -287,9 +287,9 @@ class ServiceProviderService {
         for (const imageUrl of allImages) {
           try {
             // Extract path from URL
-            const path = imageUrl.split('/service-images/')[1];
+            const path = imageUrl.split('/services/')[1];
             if (path) {
-              await supabase.storage.from('service-images').remove([path]);
+              await supabase.storage.from('services').remove([path]);
             }
           } catch (imgError) {
             console.error('Error deleting image:', imgError);
