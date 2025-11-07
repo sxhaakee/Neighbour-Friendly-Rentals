@@ -368,7 +368,9 @@ const ServiceDetails = () => {
                   <div>
                     <p className="text-sm text-gray-600">Service Areas</p>
                     <p className="text-gray-900 font-semibold">
-                      {service.service_areas?.join(', ') || `${service.city}, ${service.state}`}
+                      {service.service_areas && service.service_areas.length > 0 
+                        ? `${service.service_areas.join(', ')}, ${service.state}`
+                        : `${service.city}, ${service.state}`}
                     </p>
                   </div>
                 </div>
