@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { aiChatService } from '../services/aiChatService';
 
 interface Message {
   id: string;
@@ -51,65 +52,6 @@ export const AIChatbot = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const generateBotResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase();
-
-    // Navigation help
-    if (lowerMessage.includes('browse') || lowerMessage.includes('see items') || lowerMessage.includes('listings')) {
-      return "🔍 To browse items:\n\n1. Click 'Browse' in the navigation menu\n2. Use filters to narrow down by category, price, or location\n3. Click on any item to see full details\n\nYou can also search directly using the search bar at the top!";
-    }
-
-    if (lowerMessage.includes('search') || lowerMessage.includes('find')) {
-      return "🔎 Here's how to search:\n\n1. Use the search bar at the top of the page\n2. Enter keywords (e.g., 'camera', 'drill', 'furniture')\n3. Apply filters for category, price range, and location\n4. Sort results by newest, price, or popularity\n\nTry it now by clicking 'Browse' in the menu!";
-    }
-
-    if (lowerMessage.includes('list') || lowerMessage.includes('rent out') || lowerMessage.includes('add item')) {
-      return "📝 To list your item:\n\n1. Click 'Dashboard' in the menu\n2. Click the '+' button or 'Add Listing'\n3. Fill in details: title, description, price, category\n4. Upload clear photos (up to 10)\n5. Submit for admin approval\n\nYour listing will be live once approved (usually within 24 hours)!";
-    }
-
-    if (lowerMessage.includes('property') || lowerMessage.includes('properties') || lowerMessage.includes('house') || lowerMessage.includes('apartment')) {
-      return "🏢 Looking for properties?\n\n1. Click 'Properties' in the navigation menu\n2. Browse available rentals\n3. Filter by bedrooms, price, location\n4. Contact owners directly via WhatsApp\n\nWe have apartments, houses, PG accommodations, and commercial spaces!";
-    }
-
-    if (lowerMessage.includes('service') || lowerMessage.includes('services') || lowerMessage.includes('provider')) {
-      return "🛠️ Need services?\n\n1. Click 'Services' in the menu\n2. Browse categories: DJ, Catering, Photography, etc.\n3. View provider profiles and portfolios\n4. Contact directly via WhatsApp\n\nAll service providers are verified!";
-    }
-
-    if (lowerMessage.includes('price') || lowerMessage.includes('pricing') || lowerMessage.includes('cost') || lowerMessage.includes('fee')) {
-      return "💰 Pricing Information:\n\n• Listing items: FREE for basic users\n• Premium membership: ₹499/month\n  - Unlimited listings\n  - Priority support\n  - Featured listings\n  - Advanced analytics\n\n• Rental prices set by owners\n• No platform fees for renters\n• Secure payment options available";
-    }
-
-    if (lowerMessage.includes('premium') || lowerMessage.includes('upgrade')) {
-      return "⭐ Premium Benefits:\n\n✅ Unlimited listings\n✅ Featured placement\n✅ Priority support\n✅ Advanced analytics\n✅ Custom branding\n✅ Early access to new features\n\nOnly ₹499/month! Click 'Upgrade to Premium' in the menu to get started.";
-    }
-
-    if (lowerMessage.includes('contact') || lowerMessage.includes('support') || lowerMessage.includes('help')) {
-      return "📞 Need help?\n\n• Email: support@neighbourfriendly.com\n• WhatsApp: +91 9876543210\n• Response time: Within 24 hours\n\nYou can also check our FAQ section or use this chat for instant help!";
-    }
-
-    if (lowerMessage.includes('how') && lowerMessage.includes('work')) {
-      return "🎯 How NeighbourFriendly works:\n\n1. **List**: Post items you want to rent out\n2. **Browse**: Find items you need nearby\n3. **Connect**: Contact owners directly\n4. **Rent**: Agree on terms and rent!\n\nIt's that simple. We connect neighbors to share resources and save money!";
-    }
-
-    if (lowerMessage.includes('safe') || lowerMessage.includes('secure') || lowerMessage.includes('trust')) {
-      return "🔒 Your safety matters:\n\n✅ ID verification for all users\n✅ Admin approval for listings\n✅ User ratings and reviews\n✅ Secure messaging\n✅ Report & block features\n✅ 24/7 support\n\nWe verify all listings and users to ensure a safe community!";
-    }
-
-    if (lowerMessage.includes('payment') || lowerMessage.includes('pay')) {
-      return "💳 Payment Options:\n\n• Direct payment to owner (recommended)\n• UPI, Bank Transfer, Cash\n• Secure escrow coming soon!\n\nPayment terms are agreed between you and the owner. We recommend using secure payment methods.";
-    }
-
-    if (lowerMessage.includes('category') || lowerMessage.includes('categories')) {
-      return "📂 Available Categories:\n\n• Electronics & Cameras\n• Tools & Equipment\n• Furniture & Appliances\n• Sports & Fitness\n• Musical Instruments\n• Books & Media\n• Party & Events\n• Gaming & Consoles\n• Outdoor & Camping\n• And many more!\n\nClick 'Browse' to see all categories.";
-    }
-
-    if (lowerMessage.includes('dashboard') || lowerMessage.includes('my account')) {
-      return "👤 Your Dashboard:\n\nAccess your dashboard to:\n• View your listings\n• Manage bookings\n• Edit profile\n• Check notifications\n• View analytics (Premium)\n• Upgrade account\n\nClick 'Dashboard' in the menu to access!";
-    }
-
-    // Default response
-    return "I'm here to help! I can assist you with:\n\n• 🔍 Browsing and searching items\n• 📝 Listing your items\n• 🏢 Finding properties\n• 🛠️ Finding services\n• 💰 Pricing information\n• 🔒 Safety and security\n• 📞 Contact and support\n\nWhat would you like to know more about?";
-  };
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -121,21 +63,35 @@ export const AIChatbot = () => {
       timestamp: new Date(),
     };
 
+    const messageText = inputValue;
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate typing delay
-    setTimeout(() => {
+    try {
+      // Call real AI service
+      const response = await aiChatService.sendMessage(messageText);
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: generateBotResponse(inputValue),
+        text: response.message,
         sender: 'bot',
         timestamp: new Date(),
       };
+      
       setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm having trouble connecting right now. Please try again in a moment, or contact support@neighbourfriendly.in for help.",
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleQuickAction = (action: string) => {

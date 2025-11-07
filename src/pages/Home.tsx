@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { propertyService } from '../services/propertyService';
-import { AnimatedBackground } from '../components/AnimatedBackground';
 import { PremiumHero } from '../components/PremiumHero';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -52,7 +51,7 @@ const Home = () => {
         .eq('id', user.id)
         .single();
       
-      setIsPremium(data?.is_premium || false);
+      setIsPremium((data as any)?.is_premium || false);
     } catch (error) {
       console.error('Error checking premium status:', error);
     }
@@ -254,90 +253,6 @@ const Home = () => {
                 <h3 className="text-xs sm:text-sm font-semibold text-center text-gray-900 line-clamp-2">{category.name}</h3>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* New Platform Features */}
-      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Your Money-Making Machine</span></h2>
-            <p className="text-xl text-gray-600">List once. Earn forever. It's that simple.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Property Rentals */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              onClick={() => navigate('/properties')}
-              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <HomeIcon className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">💰 Properties That Pay</h3>
-              <p className="text-gray-600 mb-4">
-                Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn monthly passive income.
-              </p>
-              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
-                Browse Properties
-                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
-              </div>
-            </motion.div>
-
-            {/* Product Rentals */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-              onClick={() => navigate('/listings')}
-              className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-blue-100 transition-all duration-300 cursor-pointer group"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
-                <Package className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">🎯 The Smart Money Move</h3>
-              <p className="text-gray-600 mb-4">
-                That camera collecting dust? List it and earn daily. Need a drill for one day? Rent instead of buying. Everyone wins.
-              </p>
-              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
-                Browse Items
-                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
-              </div>
-            </motion.div>
-
-            {/* Service Providers */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              onClick={() => navigate('/services')}
-              className="bg-gradient-to-br from-white to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-orange-100 transition-all duration-300 cursor-pointer group"
-            >
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
-                <PartyPopper className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">💼 Turn Skills Into Cash</h3>
-              <p className="text-gray-600 mb-4">
-                DJ? Photographer? Caterer? Get booked daily. Customers save 40%, you earn more. No middlemen eating your profits.
-              </p>
-              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
-                Browse Services
-                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -570,6 +485,90 @@ const Home = () => {
           </div>
         </section>
       )}
+
+      {/* Your Money-Making Machine */}
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Your Money-Making Machine</span></h2>
+            <p className="text-xl text-gray-600">List once. Earn forever. It's that simple.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Property Rentals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              onClick={() => navigate('/properties')}
+              className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <HomeIcon className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">💰 Properties That Pay</h3>
+              <p className="text-gray-600 mb-4">
+                Stop wasting rent! Find verified homes, PGs, and spaces. Or list your property and earn monthly passive income.
+              </p>
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
+                Browse Properties
+                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
+              </div>
+            </motion.div>
+
+            {/* Product Rentals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              onClick={() => navigate('/listings')}
+              className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-blue-100 transition-all duration-300 cursor-pointer group"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
+                <Package className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">🎯 The Smart Money Move</h3>
+              <p className="text-gray-600 mb-4">
+                That camera collecting dust? List it and earn daily. Need a drill for one day? Rent instead of buying. Everyone wins.
+              </p>
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
+                Browse Items
+                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
+              </div>
+            </motion.div>
+
+            {/* Service Providers */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              onClick={() => navigate('/services')}
+              className="bg-gradient-to-br from-white to-orange-50 rounded-xl p-6 shadow-lg hover:shadow-2xl border border-orange-100 transition-all duration-300 cursor-pointer group"
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md">
+                <PartyPopper className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">💼 Turn Skills Into Cash</h3>
+              <p className="text-gray-600 mb-4">
+                DJ? Photographer? Caterer? Get booked daily. Customers save 40%, you earn more. No middlemen eating your profits.
+              </p>
+              <div className="flex items-center text-amber-600 font-semibold group-hover:gap-2 transition-all">
+                Browse Services
+                <span className="ml-2 group-hover:ml-0 transition-all">→</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Trust Section */}
       <section className="py-16 px-4">
