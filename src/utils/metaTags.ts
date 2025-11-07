@@ -48,6 +48,9 @@ export const updateMetaTags = (options: MetaTagsOptions) => {
   setMetaTag('og:title', title);
   setMetaTag('og:description', description);
   setMetaTag('og:image', image);
+  setMetaTag('og:image:width', '1200');
+  setMetaTag('og:image:height', '630');
+  setMetaTag('og:image:alt', title);
   setMetaTag('og:url', url);
   setMetaTag('og:type', type);
   setMetaTag('og:site_name', 'NeighbourFriendly Rentals');
@@ -58,6 +61,7 @@ export const updateMetaTags = (options: MetaTagsOptions) => {
   setMetaTag('twitter:title', title, true);
   setMetaTag('twitter:description', description, true);
   setMetaTag('twitter:image', image, true);
+  setMetaTag('twitter:image:alt', title, true);
   setMetaTag('twitter:url', url, true);
 
   // Product-specific tags (for items, properties, services)

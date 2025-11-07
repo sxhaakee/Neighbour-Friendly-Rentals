@@ -135,15 +135,20 @@ const EditService = () => {
       const uploadedUrls: string[] = [];
       for (const file of compressedFiles) {
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
-        const { data, error } = await supabase.storage
+        const filePath = `services/${fileName}`;
+
+        const { error } = await supabase.storage
           .from('services')
-          .upload(fileName, file);
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
 
         if (error) throw error;
 
         const { data: { publicUrl } } = supabase.storage
           .from('services')
-          .getPublicUrl(data.path);
+          .getPublicUrl(filePath);
 
         uploadedUrls.push(publicUrl);
       }

@@ -165,13 +165,13 @@ const AddService = () => {
         const filePath = `services/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
-          .from('listings')
+          .from('services')
           .upload(filePath, file);
 
         if (uploadError) throw uploadError;
 
         const { data: { publicUrl } } = supabase.storage
-          .from('listings')
+          .from('services')
           .getPublicUrl(filePath);
 
         return publicUrl;
