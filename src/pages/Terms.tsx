@@ -119,16 +119,29 @@ const Terms = () => {
               
               <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-6">6.1 Platform Fees</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>We may charge a service fee on transactions</li>
-                <li>Premium membership offers additional features</li>
-                <li>Fees are subject to change with notice</li>
+                <li><strong>Items:</strong> 20% platform commission (deducted from rental fee)</li>
+                <li><strong>Services:</strong> 0% commission (FREE for service providers)</li>
+                <li><strong>Properties:</strong> 0% commission (FREE for property owners)</li>
+                <li>Premium membership (₹99/month or ₹999/year) offers additional features</li>
+                <li>Fees are subject to change with 30 days notice</li>
               </ul>
 
               <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-6">6.2 Payment Processing</h3>
               <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>Payments are processed securely through third-party providers</li>
+                <li>Currently: Cash or UPI payment on delivery/pickup</li>
+                <li>Coming soon: Integrated payment gateway (Razorpay)</li>
+                <li>Security deposit (20% of rental fee) required for items</li>
                 <li>Refunds are subject to our refund policy</li>
                 <li>Disputes should be reported within 48 hours</li>
+              </ul>
+
+              <h3 className="text-xl font-semibold text-gray-800 mb-3 mt-6">6.3 Digital Rental Agreements</h3>
+              <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                <li>Automated digital agreements generated for each booking</li>
+                <li>Agreements include rental terms, dates, pricing, and conditions</li>
+                <li>Both parties must accept agreement terms before transaction</li>
+                <li>Agreements are legally binding documents</li>
+                <li>Access all your agreements through your dashboard</li>
               </ul>
             </section>
 
@@ -160,12 +173,13 @@ const Terms = () => {
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Intellectual Property</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                All platform content, including logos, designs, and code, is owned by NeighbourFriendly Rentals and protected by copyright and trademark laws.
+                All platform content, including logos, designs, and code, is owned by NeighbourFriendly Rentals. Trademark and copyright registration is in progress.
               </p>
               <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                <li>You retain ownership of content you upload</li>
-                <li>You grant us a license to display your content on the platform</li>
-                <li>You may not copy, modify, or distribute our platform code</li>
+                <li>You retain ownership of content you upload (photos, descriptions, etc.)</li>
+                <li>You grant us a non-exclusive license to display your content on the platform</li>
+                <li>You may not copy, modify, reverse engineer, or distribute our platform code</li>
+                <li>Unauthorized use of platform content may result in legal action</li>
               </ul>
             </section>
 

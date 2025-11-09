@@ -74,11 +74,13 @@ Rent residential and commercial spaces:
 
 ### Safety Features:
 - **ID Verification:** Government ID verification for trust
+- **Digital Rental Agreements:** Automated agreement generation for each booking
 - **User Ratings & Reviews:** 5-star rating system
 - **Report & Block:** Safety tools
 - **Admin Moderation:** 24/7 monitoring
-- **Secure Payments:** Protected transactions
+- **Secure Payments:** Cash/UPI on delivery (Razorpay integration coming soon)
 - **Insurance Recommendations:** Guidance on coverage
+- **Agreement Management:** Track all rental agreements in dashboard
 
 ---
 
@@ -174,15 +176,20 @@ Rent residential and commercial spaces:
 
 ## Commission Rates
 
-**Standard Users:**
-- Items: 5-10% platform fee
-- Services: 10-15% platform fee
-- Properties: 5-10% platform fee
+**ACCURATE RATES:**
+- **Items:** 20% platform commission (deducted from rental fee paid by renter)
+- **Services:** 0% commission (FREE for service providers)
+- **Properties:** 0% commission (FREE for property owners)
+
+**How It Works for Items:**
+- Customer pays: Full rental fee (e.g., ₹1000)
+- Platform takes: 20% (₹200)
+- Owner receives: 80% (₹800)
+- Security deposit: 20% of rental fee (refundable)
 
 **Premium Users:**
-- Reduced fees (3-5% less)
-- No hidden charges
-- Transparent pricing
+- Same commission rates
+- Additional benefits (featured listings, analytics, etc.)
 
 ---
 
@@ -318,7 +325,7 @@ Rent residential and commercial spaces:
 **A:** Yes, but cancellation policies vary by owner. Check the listing details.
 
 ### Q: What's the commission rate?
-**A:** 5-15% depending on category. Premium members get reduced rates.
+**A:** 20% for items only. Services and properties have 0% commission (completely FREE).
 
 ### Q: Do I need to verify my ID?
 **A:** Not mandatory, but highly recommended. Verified users get more bookings and trust.
@@ -359,9 +366,11 @@ Rent residential and commercial spaces:
 
 - **Privacy Policy:** https://neighbourfriendly.in/privacy
 - **Terms of Service:** https://neighbourfriendly.in/terms
-- **Data Protection:** Compliant with IT Act 2000 (India)
-- **Trademark:** Filing in progress
-- **Copyright:** © 2025 NeighbourFriendly Rentals
+- **Data Protection:** Compliant with IT Act 2000 (India) + GDPR principles
+- **Trademark:** Registration in progress (not yet registered)
+- **Copyright:** Registration in progress (not yet registered)
+- **Digital Agreements:** Automated rental agreements for all bookings
+- **Note:** Platform is operational but legal registrations are pending
 
 ---
 

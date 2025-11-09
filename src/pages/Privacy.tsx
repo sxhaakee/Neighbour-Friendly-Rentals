@@ -177,7 +177,7 @@ const Privacy = () => {
             {/* Compliance */}
             <section className="border-t border-gray-200 pt-6">
               <p className="text-sm text-gray-600 text-center">
-                This Privacy Policy complies with applicable data protection laws including the Information Technology Act, 2000 (India) and GDPR principles.
+                This Privacy Policy complies with applicable data protection laws including the Information Technology Act, 2000 (India) and GDPR principles. Trademark and copyright registration is in progress.
               </p>
             </section>
           </div>
