@@ -122,7 +122,7 @@ const Terms = () => {
                 <li><strong>Items:</strong> 20% platform commission (deducted from rental fee)</li>
                 <li><strong>Services:</strong> 0% commission (FREE for service providers)</li>
                 <li><strong>Properties:</strong> 0% commission (FREE for property owners)</li>
-                <li>Premium membership (₹99/month or ₹999/year) offers additional features</li>
+                <li>Premium membership (₹49/month or ₹499/year) offers additional features</li>
                 <li>Fees are subject to change with 30 days notice</li>
               </ul>
 

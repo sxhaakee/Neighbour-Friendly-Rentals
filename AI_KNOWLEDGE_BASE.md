@@ -127,7 +127,7 @@ Rent residential and commercial spaces:
 
 ## Premium Membership Benefits
 
-### ₹99/month or ₹999/year (Save 17%)
+### ₹49/month or ₹499/year (Save 17%)
 
 **What You Get:**
 - ✅ Unlimited listings
@@ -337,7 +337,7 @@ Rent residential and commercial spaces:
 **A:** Report to admin immediately. We'll help mediate. Consider police report for theft.
 
 ### Q: How do I become Premium?
-**A:** Go to Profile → Upgrade to Premium → Choose plan → Pay ₹99/month or ₹999/year.
+**A:** Go to Profile → Upgrade to Premium → Choose plan → Pay ₹49/month or ₹499/year.
 
 ---
 
