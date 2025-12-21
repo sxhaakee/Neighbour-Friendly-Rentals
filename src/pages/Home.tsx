@@ -284,27 +284,7 @@ const Home = () => {
                 ></motion.div>
 
 
-                {/* Floating Card 1 - DSLR */}
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.8 }}
-                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -200]) }}
-                  className="absolute top-32 left-0 bg-white p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-20 border border-gray-50 max-w-[200px]"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
-                      <Camera className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-900 text-sm">DSLR Camera</p>
-                      <p className="text-xs text-green-600 font-bold">Earned ₹5k</p>
-                    </div>
-                  </div>
-                  <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
-                    <div className="bg-amber-500 h-1.5 rounded-full w-[70%]"></div>
-                  </div>
-                </motion.div>
+
 
                 {/* Floating Card 2 - Banana Image (Large) */}
                 <motion.div
@@ -316,16 +296,16 @@ const Home = () => {
                     x: useTransform(useScroll().scrollY, [0, 500], [0, 40])
                   }}
                   whileHover={{ scale: 1.05, rotate: 2 }}
-                  className="absolute -bottom-10 -right-12 p-3 bg-white rounded-3xl shadow-2xl z-40 transform rotate-6 border border-gray-100 max-w-[280px]"
+                  className="absolute -bottom-20 -right-20 rounded-[2rem] shadow-2xl z-40 transform rotate-6 overflow-hidden border-4 border-white max-w-[320px]"
                 >
-                  <div className="w-60 h-60 rounded-2xl overflow-hidden relative bg-yellow-50">
+                  <div className="w-72 h-80 relative bg-yellow-50">
                     <img
-                      src="/images/gemini-banana-2.png"
+                      src="/images/gemini-banana-3.png"
                       alt="Gemini Nano Banana"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-x-0 bottom-0 bg-black/50 p-3 backdrop-blur-sm">
-                      <p className="text-white text-sm font-bold text-center">Renting for ₹50/day</p>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-20">
+                      <p className="text-white text-lg font-bold leading-tight">Renting for <br /> <span className="text-yellow-400">₹50/day</span></p>
                     </div>
                   </div>
                 </motion.div>
