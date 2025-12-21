@@ -227,7 +227,7 @@ const Home = () => {
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map(i => (
                       <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
-                        <img src={`https://source.unsplash.com/random/100x100/?portrait&${i}`} alt="User" className="w-full h-full object-cover" />
+                        <img src={i % 2 === 0 ? "/images/avatar-1.png" : "/images/avatar-2.png"} alt="User" className="w-full h-full object-cover" />
                         {/* Fallback if source.unsplash is tricky, using generic avatars or just colors */}
                       </div>
                     ))}
@@ -248,7 +248,7 @@ const Home = () => {
                   className="absolute top-10 right-10 w-[400px] h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10"
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1620247732009-173a388909c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8aW5kaWFuJTIwZmFtaWx5JTIwY29tbXVuaXR5fGVufDB8fHx8MTc2NjMwODc0OHww&ixlib=rb-4.0.3&q=80&w=1080"
+                    src="/images/hero-community.png"
                     alt="Happy Indian Community"
                     className="w-full h-full object-cover"
                   />
@@ -705,7 +705,7 @@ const Home = () => {
             >
               <div className="h-72 overflow-hidden relative">
                 <img
-                  src="https://images.unsplash.com/photo-1518171099680-0a9117a3a8e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8cGVyc29uJTIwaG9sZGluZyUyMGNhbWVyYXxlbnwwfHx8fDE3NjYzMDg4MDN8MA&ixlib=rb-4.0.3&q=80&w=1080"
+                  src="/images/owner-camera.png"
                   alt="Owner listing item"
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
@@ -758,7 +758,7 @@ const Home = () => {
             >
               <div className="h-72 overflow-hidden relative">
                 <img
-                  src="https://images.unsplash.com/photo-1595185931707-1c1a9ffb3b89?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8cGVyc29uJTIwcmlkaW5nJTIwYmlrZSUyMG91dGRvb3JzfGVufDB8fHx8MTc2NjMwODgyNnww&ixlib=rb-4.0.3&q=80&w=1080"
+                  src="/images/renter-bike.png"
                   alt="Renter enjoying item"
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
@@ -807,7 +807,7 @@ const Home = () => {
       <section className="relative py-32 px-4 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1601053229811-19d282361681?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8aW5kaWFuJTIwZmFtaWx5JTIwY29tbXVuaXR5fGVufDB8fHx8MTc2NjMwODc0OHww&ixlib=rb-4.0.3&q=80&w=1080"
+            src="/images/community-bg.png"
             alt="Community gathering"
             className="w-full h-full object-cover opacity-10 fixed-background"
           />
