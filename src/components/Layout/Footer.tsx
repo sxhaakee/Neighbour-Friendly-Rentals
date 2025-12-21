@@ -12,9 +12,9 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <img 
-                src="/LOGOOO.jpg" 
-                alt="NeighbourFriendly Rentals" 
+              <img
+                src="/LOGOOO.jpg"
+                alt="NeighbourFriendly Rentals"
                 className="w-8 h-8 object-contain rounded-lg"
               />
               <span className="font-bold text-xl text-white">
@@ -64,6 +64,11 @@ const Footer = () => {
               <li>
                 <Link to="/terms" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                  Contact Us
                 </Link>
               </li>
             </ul>

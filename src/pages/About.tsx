@@ -82,7 +82,7 @@ const About = () => {
           >
             <div className="absolute -inset-4 bg-amber-200/50 rounded-2xl transform -rotate-3 blur-sm"></div>
             <img
-              src="/images/owner-camera.png"
+              src="/images/indian-uncle-drill.png"
               alt="Community interaction"
               className="relative rounded-2xl shadow-2xl w-full object-cover transform rotate-2 hover:rotate-0 transition-all duration-500"
             />
