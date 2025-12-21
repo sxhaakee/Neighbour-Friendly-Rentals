@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, Shield, Users, Camera, MapPin, Search, Package, Book } from 'lucide-react';
 
-
-
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { propertyService } from '../services/propertyService';
@@ -68,7 +66,7 @@ const Home = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      navigate(`/ listings ? search = ${encodeURIComponent(searchQuery)} `);
+      navigate(`/listings?search=${encodeURIComponent(searchQuery)}`);
     } else {
       navigate('/listings');
     }
@@ -229,7 +227,7 @@ const Home = () => {
                         transition={{ delay: 0.8 + (i * 0.1) }}
                         className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
                       >
-                        <img src={`/ images / avatar - ${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                        <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
                       </motion.div>
                     ))}
                     <motion.div
@@ -247,13 +245,14 @@ const Home = () => {
 
               {/* Right Visuals - Dynamic Collage */}
               <div className="relative hidden lg:block h-[600px] w-full perspective-[1000px]">
-                {/* Main Image - Tilted */}
+                {/* Main Image - Tilted with Parallax */}
                 <motion.div
                   initial={{ opacity: 0, rotateY: 10, rotateZ: -5, y: 50 }}
                   animate={{ opacity: 1, rotateY: 0, rotateZ: 3, y: 0 }}
                   transition={{ duration: 1.2, type: "spring" }}
                   whileHover={{ rotateZ: 0, scale: 1.02, transition: { duration: 0.4 } }}
-                  className="absolute top-10 right-10 w-[400px] h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10"
+                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -100]) }}
+                  className="absolute top-10 right-10 w-[400px] h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group"
                 >
                   <img
                     src="/images/hero-community.png"
@@ -262,7 +261,7 @@ const Home = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
                   <div className="absolute bottom-6 left-6 right-6">
-                    <div className="bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg">
+                    <div className="bg-white/95 backdrop-blur-md p-4 rounded-xl shadow-lg">
                       <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="w-2 h-2 rounded-full bg-green-500"></div>
@@ -271,6 +270,16 @@ const Home = () => {
                     </div>
                   </div>
                 </motion.div>
+
+                {/* Stack Effect Wrapper for Hero */}
+                <motion.div
+                  initial={{ opacity: 0, rotateZ: -8, y: 50 }}
+                  animate={{ opacity: 1, rotateZ: -2, y: 10 }}
+                  transition={{ duration: 1.2, delay: 0.2 }}
+                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -50]) }}
+                  className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50"
+                ></motion.div>
+
 
                 {/* Floating Card 1 */}
                 <motion.div

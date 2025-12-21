@@ -28,9 +28,9 @@ const About = () => {
   const team = [
     {
       name: 'Mohammed Shakeeb',
-      role: 'CEO & Founder',
+      role: 'Founder',
       image: '/shakee.jpg', // Placeholder, user should update if they have it, or use generic
-      bio: 'Visionary leader from P.A. College of Engineering, turning neighborly trust into a global movement.'
+      bio: 'Visionary leader turning neighborly trust into a global movement.'
     },
     {
       name: 'Muhammad Haashid',
@@ -40,7 +40,7 @@ const About = () => {
     },
     {
       name: 'Mohammed Sinan',
-      role: 'Co-founder',
+      role: 'Co-Founder',
       image: '/chinnu.jpg',
       bio: 'Operations strategist ensuring every rental experience is seamless and secure.'
     }
