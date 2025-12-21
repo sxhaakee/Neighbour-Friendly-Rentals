@@ -203,10 +203,16 @@ const Home = () => {
                 >
                   <Link
                     to="/listings"
-                    className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-amber-200/50 hover:shadow-xl hover:scale-105 transition-all group"
+                    className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-amber-200/50 hover:shadow-xl hover:scale-105 transition-all group relative overflow-hidden"
                   >
-                    <span>Find Rentals</span>
-                    <MapPin className="w-5 h-5 group-hover:animate-bounce" />
+                    <span className="relative z-10">Find Rentals</span>
+                    <MapPin className="w-5 h-5 group-hover:animate-bounce relative z-10" />
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
+                      initial={{ x: '-100%' }}
+                      animate={{ x: '100%' }}
+                      transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3, ease: 'linear' }}
+                    />
                   </Link>
                   <Link
                     to="/add-item"
@@ -255,7 +261,7 @@ const Home = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="bg-white/90 backdrop-blur-md p-4 rounded-xl shadow-lg">
-                      <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFRR!"</p>
+                      <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="w-2 h-2 rounded-full bg-green-500"></div>
                         <p className="text-xs text-gray-500">Verified Rental • 2 days ago</p>
@@ -298,6 +304,29 @@ const Home = () => {
                   <p className="font-bold text-gray-800 text-sm">100% Insured</p>
                 </motion.div>
               </div>
+
+              {/* Mobile Only Hero Image */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="lg:hidden mt-8 relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl"
+              >
+                <img
+                  src="/images/hero-community.png"
+                  alt="Happy Neighbourhood"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-6 pt-20">
+                  <div className="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg">
+                    <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <p className="text-xs text-gray-500">Verified Rental • 2 days ago</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>

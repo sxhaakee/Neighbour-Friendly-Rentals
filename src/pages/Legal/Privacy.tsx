@@ -26,7 +26,7 @@ const Privacy = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Introduction</h2>
             <p className="text-gray-700 leading-relaxed">
-              Neighbour Friendly Rentals ("NFRR", "we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
+              Neighbour Friendly Rentals ("NFR", "we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
             </p>
           </section>
 
@@ -172,7 +172,7 @@ const Privacy = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">10. Children's Privacy</h2>
             <p className="text-gray-700 leading-relaxed">
-              NFRR is not intended for users under 18 years of age. We do not knowingly collect information from children. If you believe a child has provided us with personal information, please contact us immediately.
+              NFR is not intended for users under 18 years of age. We do not knowingly collect information from children. If you believe a child has provided us with personal information, please contact us immediately.
             </p>
           </section>
 

@@ -26,14 +26,14 @@ const Terms = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
             <p className="text-gray-700 leading-relaxed">
-              By accessing and using Neighbour Friendly Rentals ("NFRR", "we", "us", or "our"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these Terms & Conditions, please do not use our services.
+              By accessing and using Neighbour Friendly Rentals ("NFR", "we", "us", or "our"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these Terms & Conditions, please do not use our services.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Description of Service</h2>
             <p className="text-gray-700 leading-relaxed mb-3">
-              NFRR is a peer-to-peer rental marketplace platform that facilitates connections between item owners ("Lenders") and people who need to rent items ("Renters"). We act solely as a facilitator and are not a party to the rental transactions between users.
+              NFR is a peer-to-peer rental marketplace platform that facilitates connections between item owners ("Lenders") and people who need to rent items ("Renters"). We act solely as a facilitator and are not a party to the rental transactions between users.
             </p>
             <p className="text-gray-700 leading-relaxed">
               Our platform provides:
@@ -51,7 +51,7 @@ const Terms = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">3. User Eligibility</h2>
             <p className="text-gray-700 leading-relaxed">
-              You must be at least 18 years old to use NFRR. By using our services, you represent and warrant that you meet this age requirement and have the legal capacity to enter into binding contracts.
+              You must be at least 18 years old to use NFR. By using our services, you represent and warrant that you meet this age requirement and have the legal capacity to enter into binding contracts.
             </p>
           </section>
 
@@ -148,7 +148,7 @@ const Terms = () => {
             <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
               <li>Video recordings will be the primary evidence</li>
               <li>Users should attempt to resolve disputes amicably</li>
-              <li>NFRR may mediate but is not obligated to do so</li>
+              <li>NFR may mediate but is not obligated to do so</li>
               <li>Legal remedies are available under applicable law</li>
             </ul>
           </section>
@@ -156,7 +156,7 @@ const Terms = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">11. Limitation of Liability</h2>
             <p className="text-gray-700 leading-relaxed">
-              NFRR acts solely as a platform facilitator. We are not responsible for the quality, safety, legality, or availability of listed items. We are not liable for any damages, losses, or injuries arising from rental transactions. Users engage in transactions at their own risk.
+              NFR acts solely as a platform facilitator. We are not responsible for the quality, safety, legality, or availability of listed items. We are not liable for any damages, losses, or injuries arising from rental transactions. Users engage in transactions at their own risk.
             </p>
           </section>
 
@@ -185,7 +185,7 @@ const Terms = () => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">14. Intellectual Property</h2>
             <p className="text-gray-700 leading-relaxed">
-              All content on NFRR, including logos, designs, text, and software, is owned by us or our licensors. You may not copy, modify, or distribute our content without permission.
+              All content on NFR, including logos, designs, text, and software, is owned by us or our licensors. You may not copy, modify, or distribute our content without permission.
             </p>
           </section>
 
