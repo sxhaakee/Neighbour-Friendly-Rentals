@@ -80,7 +80,7 @@ const Home = () => {
       {isPremium ? (
         <PremiumHero />
       ) : (
-        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-20 px-4 overflow-hidden min-h-[90vh] flex items-center">
+        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 pt-32 pb-6 lg:py-20 px-4 overflow-hidden lg:min-h-[90vh] flex items-center">
           {/* Premium Background Pattern */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute inset-0" style={{
