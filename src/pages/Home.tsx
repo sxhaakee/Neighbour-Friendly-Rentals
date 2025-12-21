@@ -280,35 +280,23 @@ const Home = () => {
                     y: useTransform(useScroll().scrollY, [0, 500], [0, -150]),
                     rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -10])
                   }}
-                  className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50"
-                ></motion.div>
+                  className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50 overflow-hidden"
+                >
+                  <img
+                    src="/images/gemini-banana-3.png"
+                    alt="Gemini Nano Banana"
+                    className="w-full h-full object-cover opacity-90"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-20">
+                    <p className="text-white text-lg font-bold leading-tight text-right">Renting for <br /> <span className="text-yellow-400">₹50/day</span></p>
+                  </div>
+                </motion.div>
 
 
 
 
                 {/* Floating Card 2 - Banana Image (Large) */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 6 }}
-                  transition={{ duration: 0.8, delay: 1 }}
-                  style={{
-                    y: useTransform(useScroll().scrollY, [0, 500], [0, -250]),
-                    x: useTransform(useScroll().scrollY, [0, 500], [0, 40])
-                  }}
-                  whileHover={{ scale: 1.05, rotate: 2 }}
-                  className="absolute -bottom-20 -right-20 rounded-[2rem] shadow-2xl z-40 transform rotate-6 overflow-hidden border-4 border-white max-w-[320px]"
-                >
-                  <div className="w-72 h-80 relative bg-yellow-50">
-                    <img
-                      src="/images/gemini-banana-3.png"
-                      alt="Gemini Nano Banana"
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-20">
-                      <p className="text-white text-lg font-bold leading-tight">Renting for <br /> <span className="text-yellow-400">₹50/day</span></p>
-                    </div>
-                  </div>
-                </motion.div>
+
               </div>
 
               {/* Mobile Only Hero Image */}
