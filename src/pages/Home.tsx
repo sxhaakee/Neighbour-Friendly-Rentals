@@ -306,40 +306,26 @@ const Home = () => {
                   </div>
                 </motion.div>
 
-                {/* Floating Card 2 - 100% Insured */}
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 1 }}
-                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -150]) }}
-                  className="absolute bottom-32 right-60 bg-white px-4 py-3 rounded-xl shadow-xl z-30 flex items-center gap-3 border border-gray-50"
-                >
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <Shield className="w-4 h-4 text-green-600" />
-                  </div>
-                  <p className="font-bold text-gray-800 text-sm">100% Insured</p>
-                </motion.div>
-
-                {/* Floating Card 3 - Banana Image (New) */}
+                {/* Floating Card 2 - Banana Image (Large) */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
                   animate={{ opacity: 1, scale: 1, rotate: 6 }}
-                  transition={{ duration: 0.8, delay: 1.2 }}
+                  transition={{ duration: 0.8, delay: 1 }}
                   style={{
-                    y: useTransform(useScroll().scrollY, [0, 500], [0, -300]),
-                    x: useTransform(useScroll().scrollY, [0, 500], [0, 50])
+                    y: useTransform(useScroll().scrollY, [0, 500], [0, -250]),
+                    x: useTransform(useScroll().scrollY, [0, 500], [0, 40])
                   }}
-                  whileHover={{ scale: 1.1, rotate: 0 }}
-                  className="absolute bottom-10 -right-4 p-2 bg-white rounded-2xl shadow-2xl z-40 transform rotate-6 border border-gray-100"
+                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  className="absolute -bottom-10 -right-12 p-3 bg-white rounded-3xl shadow-2xl z-40 transform rotate-6 border border-gray-100 max-w-[280px]"
                 >
-                  <div className="w-32 h-32 rounded-xl overflow-hidden relative bg-yellow-50">
+                  <div className="w-60 h-60 rounded-2xl overflow-hidden relative bg-yellow-50">
                     <img
-                      src="/images/gemini-banana.png"
+                      src="/images/gemini-banana-2.png"
                       alt="Gemini Nano Banana"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-x-0 bottom-0 bg-black/50 p-2 backdrop-blur-sm">
-                      <p className="text-white text-[10px] font-bold text-center">Renting for ₹50/day</p>
+                    <div className="absolute inset-x-0 bottom-0 bg-black/50 p-3 backdrop-blur-sm">
+                      <p className="text-white text-sm font-bold text-center">Renting for ₹50/day</p>
                     </div>
                   </div>
                 </motion.div>
