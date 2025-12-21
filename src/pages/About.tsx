@@ -209,47 +209,22 @@ const About = () => {
 
       {/* Contact Section */}
       <section className="bg-gray-100 py-16 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h2>
-            <p className="text-xl text-gray-600">We'd love to hear from you</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Want to get in touch?</h2>
+            <p className="text-xl text-gray-600 mb-8">We'd love to hear your feedback and suggestions.</p>
+            <a
+              href="/contact"
+              className="inline-block bg-amber-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-amber-700 transition-colors shadow-lg"
+            >
+              Contact Us & Give Feedback
+            </a>
           </motion.div>
-
-          <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-8">
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">📧</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Contact Us</h3>
-              <div className="space-y-3 text-lg">
-                <p className="text-gray-700">
-                  <span className="font-semibold">Email:</span>{' '}
-                  <a href="mailto:friendlyrentals.mlr@gmail.com" className="text-amber-600 hover:underline">
-                    friendlyrentals.mlr@gmail.com
-                  </a>
-                </p>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Phone:</span>{' '}
-                  <a href="tel:+918746934346" className="text-amber-600 hover:underline">
-                    +91 87469 34346
-                  </a>
-                </p>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Instagram:</span>{' '}
-                  <a href="https://instagram.com/neighbour_friendly_rentals" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
-                    @neighbour_friendly_rentals
-                  </a>
-                </p>
-              </div>
-              <p className="text-gray-600 mt-6">
-                We typically respond within 24 hours
-              </p>
-            </div>
-          </div>
         </div>
       </section>
     </div>

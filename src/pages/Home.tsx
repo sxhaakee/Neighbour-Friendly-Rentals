@@ -230,14 +230,26 @@ const Home = () => {
                   transition={{ delay: 0.8 }}
                   className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium"
                 >
-                  <div className="flex -space-x-2">
+                  <div className="flex -space-x-3">
                     {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 overflow-hidden">
-                        <img src={i % 2 === 0 ? "/images/avatar-1.png" : "/images/avatar-2.png"} alt="User" className="w-full h-full object-cover" />
-                        {/* Fallback if source.unsplash is tricky, using generic avatars or just colors */}
-                      </div>
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8 + (i * 0.1) }}
+                        className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
+                      >
+                        <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                      </motion.div>
                     ))}
-                    <div className="w-8 h-8 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-xs text-amber-700 font-bold">+2k</div>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1.2 }}
+                      className="w-10 h-10 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-xs text-amber-700 font-bold shadow-sm"
+                    >
+                      +2k
+                    </motion.div>
                   </div>
                   <p>Trusted by verified neighbours</p>
                 </motion.div>
@@ -476,6 +488,25 @@ const Home = () => {
           >
             Renting should feel safe — not stressful.
           </motion.p>
+        </div>
+      </section>
+
+      {/* NEW: How It Works / Value Prop Interstitial */}
+      <section className="py-20 bg-gray-900 text-white overflow-hidden relative">
+        <div className="absolute inset-0 bg-[url('/images/community-bg.png')] opacity-10 bg-cover bg-center fixed-background"></div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-5xl font-bold mb-8">Join the Sharing Revolution</h2>
+            <p className="text-xl text-gray-300 leading-relaxed mb-12">
+              Every rental on NFR builds a stronger, more connected neighbourhood. Stop buying things you only use once. Start sharing today.
+            </p>
+          </motion.div>
         </div>
       </section>
 
