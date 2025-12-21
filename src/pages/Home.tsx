@@ -280,7 +280,8 @@ const Home = () => {
                     y: useTransform(useScroll().scrollY, [0, 500], [0, -150]),
                     rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -10])
                   }}
-                  className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden hover:z-50 hover:scale-105 transition-all duration-300 cursor-pointer group"
+                  whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
+                  className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"
                 >
                   <img
                     src="/images/hero-stack-s3.png"
