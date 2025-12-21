@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, Shield, Users, Camera, MapPin, Search, Package, Book } from 'lucide-react';
 
@@ -276,16 +276,20 @@ const Home = () => {
                   initial={{ opacity: 0, rotateZ: -8, y: 50 }}
                   animate={{ opacity: 1, rotateZ: -2, y: 10 }}
                   transition={{ duration: 1.2, delay: 0.2 }}
-                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -50]) }}
+                  style={{
+                    y: useTransform(useScroll().scrollY, [0, 500], [0, -150]),
+                    rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -10])
+                  }}
                   className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50"
                 ></motion.div>
 
 
-                {/* Floating Card 1 */}
+                {/* Floating Card 1 - DSLR */}
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.8 }}
+                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -200]) }}
                   className="absolute top-32 left-0 bg-white p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-20 border border-gray-50 max-w-[200px]"
                 >
                   <div className="flex items-center gap-3 mb-2">
@@ -302,17 +306,42 @@ const Home = () => {
                   </div>
                 </motion.div>
 
-                {/* Floating Card 2 */}
+                {/* Floating Card 2 - 100% Insured */}
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 1 }}
+                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -150]) }}
                   className="absolute bottom-32 right-60 bg-white px-4 py-3 rounded-xl shadow-xl z-30 flex items-center gap-3 border border-gray-50"
                 >
                   <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                     <Shield className="w-4 h-4 text-green-600" />
                   </div>
                   <p className="font-bold text-gray-800 text-sm">100% Insured</p>
+                </motion.div>
+
+                {/* Floating Card 3 - Banana Image (New) */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 6 }}
+                  transition={{ duration: 0.8, delay: 1.2 }}
+                  style={{
+                    y: useTransform(useScroll().scrollY, [0, 500], [0, -300]),
+                    x: useTransform(useScroll().scrollY, [0, 500], [0, 50])
+                  }}
+                  whileHover={{ scale: 1.1, rotate: 0 }}
+                  className="absolute bottom-10 -right-4 p-2 bg-white rounded-2xl shadow-2xl z-40 transform rotate-6 border border-gray-100"
+                >
+                  <div className="w-32 h-32 rounded-xl overflow-hidden relative bg-yellow-50">
+                    <img
+                      src="/images/gemini-banana.png"
+                      alt="Gemini Nano Banana"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-black/50 p-2 backdrop-blur-sm">
+                      <p className="text-white text-[10px] font-bold text-center">Renting for ₹50/day</p>
+                    </div>
+                  </div>
                 </motion.div>
               </div>
 
@@ -340,7 +369,7 @@ const Home = () => {
               </motion.div>
             </div>
           </div>
-        </section>
+        </section >
       )}
 
       {/* Trust Signals Section */}
@@ -363,7 +392,7 @@ const Home = () => {
               { icon: Star, label: 'Genuine transparent reviews', delay: 0.2 },
               { icon: MapPin, label: 'Hyper-local discovery', delay: 0.3 },
               { icon: Users, label: '24/7 Human Support', delay: 0.4 }
-            ].map((item, index) => (
+            ].map((item) => (
               <motion.div
                 key={item.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -597,146 +626,150 @@ const Home = () => {
       </section>
 
       {/* Featured Services */}
-      {featuredServices.length > 0 && (
-        <section className="py-16 px-4 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">⭐ Featured Services</span></h2>
-              <p className="text-xl text-gray-600">Top-rated service providers</p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {featuredServices.map((service: any, index: number) => (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/ services / ${service.id} `)}
-                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={service.images?.[0] || '/placeholder.jpg'}
-                      alt={service.business_name}
-                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        {service.category || 'Service'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{service.business_name}</h3>
-                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{service.description}</p>
-                    <div className="mt-auto">
-                      <span className="text-xs text-gray-500 truncate block flex items-center">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {service.city}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="text-center mt-12"
-            >
-              <Link
-                to="/listings?tab=services"
-                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+      {
+        featuredServices.length > 0 && (
+          <section className="py-16 px-4 bg-gray-50">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-12"
               >
-                View All Services
-              </Link>
-            </motion.div>
-          </div>
-        </section>
-      )}
+                <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">⭐ Featured Services</span></h2>
+                <p className="text-xl text-gray-600">Top-rated service providers</p>
+              </motion.div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {featuredServices.map((service: any, index: number) => (
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -3 }}
+                    onClick={() => navigate(`/ services / ${service.id} `)}
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={service.images?.[0] || '/placeholder.jpg'}
+                        alt={service.business_name}
+                        className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                          {service.category || 'Service'}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-3 flex flex-col flex-grow">
+                      <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{service.business_name}</h3>
+                      <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{service.description}</p>
+                      <div className="mt-auto">
+                        <span className="text-xs text-gray-500 truncate block flex items-center">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {service.city}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="text-center mt-12"
+              >
+                <Link
+                  to="/listings?tab=services"
+                  className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+                >
+                  View All Services
+                </Link>
+              </motion.div>
+            </div>
+          </section>
+        )
+      }
 
       {/* Featured Properties */}
-      {featuredProperties.length > 0 && (
-        <section className="py-16 px-4">
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center mb-12"
-            >
-              <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">🏠 Featured Properties</span></h2>
-              <p className="text-xl text-gray-600">Premium rental properties</p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {featuredProperties.map((property: any, index: number) => (
-                <motion.div
-                  key={property.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/ properties / ${property.id} `)}
-                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={property.images?.[0] || '/placeholder.jpg'}
-                      alt={property.title}
-                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-purple-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                        Property
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{property.title}</h3>
-                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">₹{property.rent_amount}/month</p>
-                    <div className="mt-auto">
-                      <span className="text-xs text-gray-500 truncate block flex items-center">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {property.city}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="text-center mt-12"
-            >
-              <Link
-                to="/listings"
-                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+      {
+        featuredProperties.length > 0 && (
+          <section className="py-16 px-4">
+            <div className="max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                className="text-center mb-12"
               >
-                View All Properties
-              </Link>
-            </motion.div>
-          </div>
-        </section>
-      )}
+                <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">🏠 Featured Properties</span></h2>
+                <p className="text-xl text-gray-600">Premium rental properties</p>
+              </motion.div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {featuredProperties.map((property: any, index: number) => (
+                  <motion.div
+                    key={property.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -3 }}
+                    onClick={() => navigate(`/ properties / ${property.id} `)}
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={property.images?.[0] || '/placeholder.jpg'}
+                        alt={property.title}
+                        className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-purple-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                          Property
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-3 flex flex-col flex-grow">
+                      <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{property.title}</h3>
+                      <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">₹{property.rent_amount}/month</p>
+                      <div className="mt-auto">
+                        <span className="text-xs text-gray-500 truncate block flex items-center">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {property.city}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+                className="text-center mt-12"
+              >
+                <Link
+                  to="/listings"
+                  className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+                >
+                  View All Properties
+                </Link>
+              </motion.div>
+            </div>
+          </section>
+        )
+      }
 
       {/* Two Paths: For Owners & Renters - World Class Cards */}
       <section className="bg-gray-50 py-24 px-4 overflow-hidden">
@@ -934,7 +967,7 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-    </div>
+    </div >
   );
 };
 
