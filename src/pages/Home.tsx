@@ -283,10 +283,11 @@ const Home = () => {
                   className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50 overflow-hidden"
                 >
                   <img
-                    src="/images/gemini-banana-3.png"
-                    alt="Gemini Nano Banana"
+                    src="/images/hero-stack-s3.png"
+                    alt="Happy neighbours sharing"
                     className="w-full h-full object-cover opacity-90"
                   />
+
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-20">
                     <p className="text-white text-lg font-bold leading-tight text-right">Renting for <br /> <span className="text-yellow-400">₹50/day</span></p>
                   </div>
