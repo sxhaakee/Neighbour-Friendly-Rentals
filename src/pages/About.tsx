@@ -50,7 +50,7 @@ const About = () => {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-600 via-orange-500 to-yellow-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-600 via-yellow-500 to-amber-400"></div>
         <div className="absolute inset-0 bg-[url('/images/community-bg.png')] opacity-20 bg-cover bg-center mix-blend-overlay"></div>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -164,7 +164,7 @@ const About = () => {
                 className="group relative"
               >
                 <div className="relative w-48 h-48 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-orange-500 rounded-full blur-lg opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-yellow-500 rounded-full blur-lg opacity-50 group-hover:opacity-80 transition-opacity"></div>
                   <img
                     src={member.image}
                     alt={member.name}

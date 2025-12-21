@@ -243,16 +243,16 @@ const Home = () => {
                 </motion.div>
               </div>
 
-              {/* Right Visuals - Dynamic Collage */}
-              <div className="relative hidden lg:block h-[600px] w-full perspective-[1000px]">
+              {/* Right Visuals - Dynamic Collage (Visible on Mobile now too, scaled) */}
+              <div className="relative h-[450px] md:h-[600px] w-full perspective-[1000px] mt-10 lg:mt-0 flex justify-center lg:block">
                 {/* Main Image - Tilted with Parallax */}
                 <motion.div
                   initial={{ opacity: 0, rotateY: 10, rotateZ: -5, y: 50 }}
                   animate={{ opacity: 1, rotateY: 0, rotateZ: 3, y: 0 }}
                   transition={{ duration: 1.2, type: "spring" }}
-                  whileHover={{ rotateZ: 0, scale: 1.02, transition: { duration: 0.4 } }}
+                  whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
                   style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -100]) }}
-                  className="absolute top-10 right-10 w-[400px] h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group"
+                  className="absolute top-10 right-10 w-[280px] md:w-[400px] h-[350px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
                 >
                   <img
                     src="/images/hero-community.png"
@@ -280,7 +280,7 @@ const Home = () => {
                     y: useTransform(useScroll().scrollY, [0, 500], [0, -150]),
                     rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -10])
                   }}
-                  className="absolute top-14 right-6 w-[400px] h-[500px] bg-amber-100 rounded-[2rem] -z-10 shadow-xl border-4 border-white/50 overflow-hidden"
+                  className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden hover:z-50 hover:scale-105 transition-all duration-300 cursor-pointer group"
                 >
                   <img
                     src="/images/hero-stack-s3.png"
@@ -300,28 +300,6 @@ const Home = () => {
 
               </div>
 
-              {/* Mobile Only Hero Image */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-                className="lg:hidden mt-8 relative w-full aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl"
-              >
-                <img
-                  src="/images/hero-community.png"
-                  alt="Happy Neighbourhood"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-6 pt-20">
-                  <div className="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg">
-                    <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <p className="text-xs text-gray-500">Verified Rental • 2 days ago</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
             </div>
           </div>
         </section >
@@ -476,7 +454,7 @@ const Home = () => {
 
       {/* NEW: How It Works / Value Prop Interstitial */}
       <section className="py-20 bg-gray-900 text-white overflow-hidden relative">
-        <div className="absolute inset-0 bg-[url('/images/community-bg.png')] opacity-10 bg-cover bg-center fixed-background"></div>
+        <div className="absolute inset-0 bg-[url('/images/community-bg.png')] opacity-20 bg-cover bg-center fixed-background"></div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}

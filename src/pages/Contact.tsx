@@ -13,8 +13,13 @@ const Contact = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // In a real app, this would send to backend
-        console.log('Feedback submitted:', formData);
+
+        // WhatsApp Logic
+        const text = `*New Feedback via Website* %0A%0A*Name:* ${formData.name}%0A*Email:* ${formData.email}%0A*Type:* ${formData.type}%0A*Message:* ${formData.message}`;
+        const whatsappUrl = `https://wa.me/918746934346?text=${text}`;
+
+        window.open(whatsappUrl, '_blank');
+
         setSubmitted(true);
         setTimeout(() => setSubmitted(false), 3000);
         setFormData({ name: '', email: '', type: 'general', message: '' });
@@ -73,8 +78,8 @@ const Contact = () => {
                             <div>
                                 <h3 className="font-bold text-gray-900 mb-1">Call Us</h3>
                                 <p className="text-gray-600 mb-1">Mon-Fri from 9am to 6pm:</p>
-                                <a href="tel:+918746934346" className="text-amber-600 font-medium hover:underline">
-                                    +91 87469 34346
+                                <a href="tel:+918197424986" className="text-amber-600 font-medium hover:underline">
+                                    +91 81974 24986
                                 </a>
                             </div>
                         </div>
@@ -166,16 +171,16 @@ const Contact = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                            className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                         >
                             {submitted ? (
                                 <>
-                                    <span>Sent Successfully!</span>
-                                    <span className="text-green-400">✓</span>
+                                    <span>Opened in WhatsApp!</span>
+                                    <span className="text-white">✓</span>
                                 </>
                             ) : (
                                 <>
-                                    <span>Send Message</span>
+                                    <span>Send via WhatsApp</span>
                                     <Send className="w-5 h-5" />
                                 </>
                             )}
