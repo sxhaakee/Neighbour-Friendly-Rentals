@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, PenTool as Tool, Smartphone, Sofa, Package, Shield, Users, Star, Book, Camera, Dumbbell, Music, Shirt, PartyPopper, Gamepad2, Tent, Baby, Home as HomeIcon, MapPin } from 'lucide-react';
+import { Star, Shield, Users, Camera, MapPin, Search, Package, Book } from 'lucide-react';
+
+
+
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
@@ -20,21 +23,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
 
-  const categories = [
-    { name: 'Electronics', icon: Smartphone, color: 'bg-purple-100 text-purple-600' },
-    { name: 'Cameras & Photography', icon: Camera, color: 'bg-indigo-100 text-indigo-600' },
-    { name: 'Tools & Equipment', icon: Tool, color: 'bg-blue-100 text-blue-600' },
-    { name: 'Sports & Fitness', icon: Dumbbell, color: 'bg-red-100 text-red-600' },
-    { name: 'Musical Instruments', icon: Music, color: 'bg-pink-100 text-pink-600' },
-    { name: 'Furniture', icon: Sofa, color: 'bg-orange-100 text-orange-600' },
-    { name: 'Books', icon: Book, color: 'bg-amber-100 text-amber-600' },
-    { name: 'Media', icon: Book, color: 'bg-amber-100 text-amber-600' },
-    { name: 'Clothing & Accessories', icon: Shirt, color: 'bg-amber-100 text-amber-600' },
-    { name: 'Party & Events', icon: PartyPopper, color: 'bg-yellow-100 text-yellow-600' },
-    { name: 'Gaming & Consoles', icon: Gamepad2, color: 'bg-violet-100 text-violet-600' },
-    { name: 'Outdoor & Camping', icon: Tent, color: 'bg-amber-100 text-amber-600' },
-    { name: 'Baby & Kids', icon: Baby, color: 'bg-rose-100 text-rose-600' },
-  ];
+
 
   useEffect(() => {
     fetchFeaturedListings();
@@ -79,7 +68,7 @@ const Home = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      navigate(`/listings?search=${encodeURIComponent(searchQuery)}`);
+      navigate(`/ listings ? search = ${encodeURIComponent(searchQuery)} `);
     } else {
       navigate('/listings');
     }
@@ -98,6 +87,7 @@ const Home = () => {
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute inset-0" style={{
               backgroundImage: `radial-gradient(circle at 2px 2px, gold 1px, transparent 0)`,
+
               backgroundSize: '40px 40px'
             }} />
           </div>
@@ -108,8 +98,8 @@ const Home = () => {
               key={i}
               className="absolute w-2 h-2 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full blur-[1px]"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}% `,
+                top: `${Math.random() * 100}% `,
               }}
               animate={{
                 y: [0, -40, 0],
@@ -239,7 +229,7 @@ const Home = () => {
                         transition={{ delay: 0.8 + (i * 0.1) }}
                         className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
                       >
-                        <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                        <img src={`/ images / avatar - ${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
                       </motion.div>
                     ))}
                     <motion.div
@@ -548,7 +538,7 @@ const Home = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/item/${item.id}`)}
+                  onClick={() => navigate(`/ item / ${item.id} `)}
                   className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
@@ -621,7 +611,7 @@ const Home = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/services/${service.id}`)}
+                  onClick={() => navigate(`/ services / ${service.id} `)}
                   className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
@@ -692,7 +682,7 @@ const Home = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/properties/${property.id}`)}
+                  onClick={() => navigate(`/ properties / ${property.id} `)}
                   className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
                 >
                   <div className="relative overflow-hidden">
@@ -753,112 +743,121 @@ const Home = () => {
             <p className="text-xl text-gray-500">Whether you have things or need things — we've got you.</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 px-4">
             {/* LEFT - FOR OWNERS */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10 }}
-              className="bg-white rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 flex flex-col group"
-            >
-              <div className="h-72 overflow-hidden relative">
-                <img
-                  src="/images/owner-camera.png"
-                  alt="Owner listing item"
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
-                  <div>
-                    <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Listers</span>
-                    <h3 className="text-3xl font-bold text-white leading-tight">Turn clutter into cash.</h3>
+            <div className="relative group">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 flex flex-col relative z-10"
+              >
+                <div className="h-72 overflow-hidden relative">
+                  <img
+                    src="/images/owner-camera.png"
+                    alt="Owner listing item"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                    <div>
+                      <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Listers</span>
+                      <h3 className="text-3xl font-bold text-white leading-tight">Turn clutter into cash.</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-8 md:p-10 flex-1 flex flex-col">
-                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                  Have a camera, drill, or party speaker gathering dust? List it in seconds and let your neighbours rent it safely.
-                </p>
+                <div className="p-8 md:p-10 flex-1 flex flex-col">
+                  <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                    Have a camera, drill, or party speaker gathering dust? List it in seconds and let your neighbours rent it safely.
+                  </p>
 
-                <ul className="space-y-4 mb-10 flex-1">
-                  {[
-                    'You control the price & availability',
-                    'Verified renters only',
-                    'Insurance coverage included',
-                    'Digital condition reports'
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-green-600 font-bold text-xs">✓</span>
-                      </div>
-                      <span className="text-gray-700 font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="space-y-4 mb-10 flex-1">
+                    {[
+                      'You control the price & availability',
+                      'Verified renters only',
+                      'Insurance coverage included',
+                      'Digital condition reports'
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start gap-4">
+                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-green-600 font-bold text-xs">✓</span>
+                        </div>
+                        <span className="text-gray-700 font-medium">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                <Link
-                  to="/add-item"
-                  className="block w-full bg-gray-900 text-white px-6 py-4 rounded-xl font-bold text-center hover:bg-black transition-all text-lg shadow-lg"
-                >
-                  Start Earning
-                </Link>
-              </div>
-            </motion.div>
+                  <Link
+                    to="/add-item"
+                    className="block w-full bg-gray-900 text-white px-6 py-4 rounded-xl font-bold text-center hover:bg-black transition-all text-lg shadow-lg"
+                  >
+                    Start Earning
+                  </Link>
+                </div>
+              </motion.div>
+
+              {/* Stack Effect Wrapper */}
+              <div className="absolute top-4 -right-4 w-full h-full bg-gray-200 rounded-[2rem] -z-10 transform rotate-3"></div>
+            </div>
 
             {/* RIGHT - FOR RENTERS */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -10 }}
-              className="bg-white rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 flex flex-col group"
-            >
-              <div className="h-72 overflow-hidden relative">
-                <img
-                  src="/images/renter-bike.png"
-                  alt="Renter enjoying item"
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
-                  <div>
-                    <span className="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Renters</span>
-                    <h3 className="text-3xl font-bold text-white leading-tight">Own the experience, not the thing.</h3>
+            <div className="relative group">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[2rem] overflow-hidden shadow-2xl ring-1 ring-black/5 flex flex-col relative z-10"
+              >
+                <div className="h-72 overflow-hidden relative">
+                  <img
+                    src="/images/renter-bike.png"
+                    alt="Renter enjoying item"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
+                    <div>
+                      <span className="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Renters</span>
+                      <h3 className="text-3xl font-bold text-white leading-tight">Own the experience, not the thing.</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-8 md:p-10 flex-1 flex flex-col">
-                <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                  Why buy a tent for one weekend? Rent high-quality items from neighbours near you for a fraction of the cost.
-                </p>
+                <div className="p-8 md:p-10 flex-1 flex flex-col">
+                  <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                    Why buy a tent for one weekend? Rent high-quality items from neighbours near you for a fraction of the cost.
+                  </p>
 
-                <ul className="space-y-4 mb-10 flex-1">
-                  {[
-                    'Save 90% compared to buying',
-                    'No storage hassle',
-                    'Meet cool neighbours',
-                    'Eco-friendly consumption'
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-start gap-4">
-                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-blue-600 font-bold text-xs">✓</span>
-                      </div>
-                      <span className="text-gray-700 font-medium">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="space-y-4 mb-10 flex-1">
+                    {[
+                      'Save 90% compared to buying',
+                      'No storage hassle',
+                      'Meet cool neighbours',
+                      'Eco-friendly consumption'
+                    ].map((item, index) => (
+                      <li key={index} className="flex items-start gap-4">
+                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-blue-600 font-bold text-xs">✓</span>
+                        </div>
+                        <span className="text-gray-700 font-medium">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
 
-                <Link
-                  to="/listings"
-                  className="block w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white px-6 py-4 rounded-xl font-bold text-center hover:shadow-xl hover:scale-105 transition-all text-lg shadow-lg"
-                >
-                  Explore Rentals
-                </Link>
-              </div>
-            </motion.div>
+                  <Link
+                    to="/listings"
+                    className="block w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white px-6 py-4 rounded-xl font-bold text-center hover:shadow-xl hover:scale-105 transition-all text-lg shadow-lg"
+                  >
+                    Explore Rentals
+                  </Link>
+                </div>
+              </motion.div>
+              {/* Stack Effect Wrapper */}
+              <div className="absolute top-4 -left-4 w-full h-full bg-amber-100 rounded-[2rem] -z-10 transform -rotate-2"></div>
+            </div>
           </div>
         </div>
       </section>
