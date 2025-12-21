@@ -216,7 +216,7 @@ const Home = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
-                  className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium"
+                  className="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 font-medium relative z-30"
                 >
                   <div className="flex -space-x-3">
                     {[1, 2, 3, 4].map(i => (
@@ -244,7 +244,7 @@ const Home = () => {
               </div>
 
               {/* Right Visuals - Dynamic Collage (Visible on Mobile now too, scaled) */}
-              <div className="relative h-[450px] md:h-[600px] w-full perspective-[1000px] mt-10 lg:mt-0 flex justify-center lg:block">
+              <div className="relative h-[450px] md:h-[600px] w-full perspective-[1000px] mt-20 mb-10 lg:mt-0 lg:mb-0 flex justify-center lg:block z-0">
                 {/* Main Image - Tilted with Parallax */}
                 <motion.div
                   initial={{ opacity: 0, rotateY: 10, rotateZ: -5, y: 50 }}
@@ -304,7 +304,8 @@ const Home = () => {
             </div>
           </div>
         </section >
-      )}
+      )
+      }
 
       {/* Trust Signals Section */}
       <section className="py-16 px-4 bg-white">
