@@ -414,13 +414,13 @@ const Home = () => {
                 >
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-6">
-                      <div className={`w-36 h-36 rounded-full bg-gradient-to-br ${step.color} p-[2px] shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${step.color} p-[2px] shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center relative overflow-hidden">
                           <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
-                          <step.icon className={`w-16 h-16 text-gray-700`} strokeWidth={1.5} />
+                          <step.icon className={`w-8 h-8 text-gray-700`} strokeWidth={1.5} />
                         </div>
                       </div>
-                      <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center font-bold text-gray-400 text-sm border border-gray-100">
+                      <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center font-bold text-gray-400 text-xs border border-gray-100">
                         {index + 1}
                       </div>
                     </div>
