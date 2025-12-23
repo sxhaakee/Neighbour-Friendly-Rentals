@@ -80,7 +80,7 @@ const Home = () => {
       {isPremium ? (
         <PremiumHero />
       ) : (
-        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 pt-32 pb-6 lg:py-20 px-4 overflow-hidden lg:min-h-[90vh] flex items-center">
+        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 pt-24 pb-6 lg:py-20 px-4 overflow-hidden lg:min-h-[90vh] flex items-center">
           {/* Premium Background Pattern */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute inset-0" style={{
@@ -384,12 +384,13 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl p-6 shadow-md text-center"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
-                  {step.num}
+                <div className="bg-white/60 backdrop-blur-md rounded-2xl p-8 shadow-sm border border-white hover:shadow-xl hover:border-amber-200 transition-all duration-300 group h-full">
+                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform flex items-center justify-center mx-auto mb-6 shadow-lg shadow-amber-200/50">
+                    <span className="text-white font-black text-2xl">{step.num}</span>
+                  </div>
+                  <p className="text-gray-800 font-bold text-lg leading-tight">{step.text}</p>
                 </div>
-                <p className="text-gray-700 font-medium">{step.text}</p>
               </motion.div>
             ))}
           </div>

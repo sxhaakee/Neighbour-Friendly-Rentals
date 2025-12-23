@@ -35,7 +35,7 @@ const ItemDetails = () => {
       fetchReviews();
       fetchAverageRating();
     }
-    
+
     // Reset meta tags when component unmounts
     return () => {
       resetMetaTags();
@@ -47,7 +47,7 @@ const ItemDetails = () => {
       setLoading(true);
       const data = await listingService.getListingById(id!);
       setListing(data);
-      
+
       // Update meta tags for social media sharing
       if (data) {
         updateMetaTags({
@@ -204,7 +204,7 @@ const ItemDetails = () => {
           >
             {/* Main Image - Smaller */}
             <div className="relative aspect-square max-w-md rounded-lg overflow-hidden bg-white shadow-md cursor-pointer"
-                 onClick={() => setShowFullImage(true)}>
+              onClick={() => setShowFullImage(true)}>
               <img
                 src={listing.images[selectedImage] || '/placeholder.jpg'}
                 alt={listing.title}
@@ -222,9 +222,8 @@ const ItemDetails = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${
-                      selectedImage === index ? 'border-primary' : 'border-gray-200'
-                    }`}
+                    className={`flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all ${selectedImage === index ? 'border-primary' : 'border-gray-200'
+                      }`}
                   >
                     <img
                       src={image}
@@ -252,11 +251,10 @@ const ItemDetails = () => {
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 ${
-                            i < Math.round(averageRating)
+                          className={`w-5 h-5 ${i < Math.round(averageRating)
                               ? 'fill-yellow-400 text-yellow-400'
                               : 'text-gray-300'
-                          }`}
+                            }`}
                         />
                       ))}
                     </div>
@@ -296,11 +294,10 @@ const ItemDetails = () => {
                           className="focus:outline-none"
                         >
                           <Star
-                            className={`w-8 h-8 ${
-                              rating <= newReview.rating
+                            className={`w-8 h-8 ${rating <= newReview.rating
                                 ? 'fill-yellow-400 text-yellow-400'
                                 : 'text-gray-300'
-                            }`}
+                              }`}
                           />
                         </button>
                       ))}
@@ -349,11 +346,10 @@ const ItemDetails = () => {
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`w-4 h-4 ${
-                                  i < review.rating
+                                className={`w-4 h-4 ${i < review.rating
                                     ? 'fill-yellow-400 text-yellow-400'
                                     : 'text-gray-300'
-                                }`}
+                                  }`}
                               />
                             ))}
                           </div>
@@ -409,11 +405,10 @@ const ItemDetails = () => {
                   <span className="text-lg text-gray-600 font-normal">{formatPricingModel(listing.pricing_model)}</span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    listing.availability === 'Available' 
-                      ? 'bg-amber-100 text-amber-800' 
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${listing.availability === 'Available'
+                      ? 'bg-amber-100 text-amber-800'
                       : 'bg-yellow-100 text-yellow-800'
-                  }`}>
+                    }`}>
                     {listing.availability}
                   </span>
                   <span>Condition: {listing.condition}</span>
@@ -430,7 +425,7 @@ const ItemDetails = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate(`/edit-item/${listing.id}`)}
-                    className="w-full bg-gradient-to-r from-primary to-accent text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Calendar className="w-5 h-5" />
                     Edit Listing
@@ -461,12 +456,12 @@ const ItemDetails = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBookNow}
-                    className="w-full bg-gradient-to-r from-primary to-accent text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Calendar className="w-5 h-5" />
                     Book Now
                   </motion.button>
-                  
+
                   {user && (
                     <motion.button
                       whileHover={{ scale: 1.02 }}
@@ -493,7 +488,7 @@ const ItemDetails = () => {
                   <span className="font-medium text-gray-700">Name:</span>
                   <span className="text-gray-600">{listing.owner_name}</span>
                 </div>
-                
+
                 {/* Show contact info only to admins */}
                 {isAdmin ? (
                   <>
@@ -536,7 +531,7 @@ const ItemDetails = () => {
 
       {/* Fullscreen Image Modal */}
       {showFullImage && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
           onClick={() => setShowFullImage(false)}
         >
@@ -563,9 +558,8 @@ const ItemDetails = () => {
                     e.stopPropagation();
                     setSelectedImage(index);
                   }}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    selectedImage === index ? 'bg-white w-8' : 'bg-white/50'
-                  }`}
+                  className={`w-2 h-2 rounded-full transition-all ${selectedImage === index ? 'bg-white w-8' : 'bg-white/50'
+                    }`}
                 />
               ))}
             </div>
