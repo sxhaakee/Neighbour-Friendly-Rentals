@@ -351,11 +351,9 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-center text-gray-600 italic text-sm"
+            className="text-center text-black italic text-sm font-medium"
           >
-            <p className="text-center text-black italic text-sm font-medium">
-              Trust isn't claimed. It's built into the system.
-            </p>
+            Trust isn't claimed. It's built into the system.
           </motion.p>
         </div>
       </section>
