@@ -443,54 +443,31 @@ const Home = () => {
               </div>
             </motion.div>
           </div>
-        </div>
-      </section>
 
-      {/* Fear Handling Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
+          {/* Safety Guarantee Strip - Sleek Design */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ delay: 0.8 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="mt-16 pt-10 border-t border-amber-100"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8">We've already thought about that.</h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            {[
-              'Digital agreements give clarity to both sides',
-              'Clear communication at every step',
-              'Support if an issue arises',
-              'Post-rental follow-ups for peace of mind'
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-start gap-3"
-              >
-                <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-white font-bold text-sm">✓</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+              {[
+                { title: 'Verified Profiles', text: 'Real neighbours, verified identities.' },
+                { title: 'Secure Payments', text: 'Money held safely until you approve.' },
+                { title: 'Support is here', text: 'Issues? We mediate so you don\'t have to.' }
+              ].map((feature, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="w-5 h-5 text-amber-500" />
+                    <h4 className="font-bold text-gray-900">{feature.title}</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">{feature.text}</p>
                 </div>
-                <p className="text-gray-700 font-medium">{item}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center text-2xl md:text-3xl font-bold text-gray-900"
-          >
-            Renting should feel safe — not stressful.
-          </motion.p>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -511,10 +488,10 @@ const Home = () => {
             </p>
           </motion.div>
         </div>
-      </section>
+      </section >
 
       {/* Featured Items */}
-      <section className="bg-gradient-to-br from-white via-amber-50/20 to-white py-16 px-4">
+      < section className="bg-gradient-to-br from-white via-amber-50/20 to-white py-16 px-4" >
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -598,7 +575,7 @@ const Home = () => {
             </Link>
           </motion.div>
         </div>
-      </section>
+      </section >
 
       {/* Featured Services */}
       {
