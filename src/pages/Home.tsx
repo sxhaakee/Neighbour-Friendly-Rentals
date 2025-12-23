@@ -353,7 +353,12 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center text-gray-600 italic text-sm"
           >
-            Trust isn't claimed. It's built into the system.
+            <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">
+              Trust isn't claimed. <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600">
+                It's built into the system.
+              </span>
+            </h3>
           </motion.p>
         </div>
       </section>

@@ -73,7 +73,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-white flex overflow-hidden">
       {/* Left Side - Brand Showcase (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-900 overflow-hidden text-white flex-col justify-between p-16">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-900 overflow-hidden text-white flex-col justify-center p-16">
         {/* Background Image & Overlay */}
         <div className="absolute inset-0 z-0">
           <img
@@ -88,14 +88,7 @@ const Login = () => {
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
         </div>
 
-        {/* Brand Content */}
-        <div className="relative z-10">
-          <Link to="/" className="inline-flex items-center gap-2 text-white hover:text-amber-200 transition-colors group">
-            <span className="font-bold tracking-wide text-2xl">NFR</span>
-          </Link>
-        </div>
-
-        <div className="relative z-10 max-w-lg">
+        <div className="relative z-10 max-w-lg mb-20">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -116,12 +109,6 @@ const Login = () => {
             It feels good to be home. Connect with verified neighbours and share the things that matter.
           </motion.p>
         </div>
-
-        <div className="relative z-10 flex items-center gap-4 text-sm text-gray-300 font-medium">
-          <span>© 2025 NFR Inc.</span>
-          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-          <span>Trusted by 10,000+ Neighbours</span>
-        </div>
       </div>
 
       {/* Right Side - Form */}
@@ -136,7 +123,7 @@ const Login = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">
             <h2 className="text-3xl font-black text-gray-900 mb-2">
-              {isLogin ? 'Go back to neighbourhood' : 'Join the neighbourhood'}
+              {isLogin ? 'Enter your neighbourhood' : 'Join the neighbourhood'}
             </h2>
             <p className="text-gray-500">
               {isLogin ? 'Great to see you again.' : 'Become part of the circle.'}
