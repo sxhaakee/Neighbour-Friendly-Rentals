@@ -141,7 +141,7 @@ const Home = () => {
                     you can trust
                   </span>
                   <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent block text-4xl md:text-6xl mt-2 pb-2">
-                    — right in your neighbourhood.
+                    — right next door.
                   </span>
                 </motion.h1>
 
@@ -308,8 +308,9 @@ const Home = () => {
       }
 
       {/* Trust Signals Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-20 px-4 relative bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/images/neighbours-bg.png')" }}>
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
