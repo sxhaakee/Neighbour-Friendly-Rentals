@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, Shield } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
@@ -79,9 +79,9 @@ const Login = () => {
           <img
             src="/images/neighbours-bg.png"
             alt="Neighbourhood"
-            className="w-full h-full object-cover opacity-40 mix-blend-overlay"
+            className="w-full h-full object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900/90 to-amber-900/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/40 to-amber-900/30"></div>
 
           {/* Animated Orbs */}
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/20 rounded-full blur-[120px] animate-pulse"></div>
@@ -90,11 +90,8 @@ const Login = () => {
 
         {/* Brand Content */}
         <div className="relative z-10">
-          <Link to="/" className="inline-flex items-center gap-3 text-white hover:text-amber-400 transition-colors group">
-            <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 group-hover:bg-white/20">
-              <Shield className="w-5 h-5 text-amber-400" />
-            </div>
-            <span className="font-bold tracking-wide">NFR</span>
+          <Link to="/" className="inline-flex items-center gap-2 text-white hover:text-amber-200 transition-colors group">
+            <span className="font-bold tracking-wide text-2xl">NFR</span>
           </Link>
         </div>
 
@@ -105,25 +102,25 @@ const Login = () => {
             transition={{ delay: 0.2 }}
             className="text-5xl font-black mb-6 leading-tight"
           >
-            Rent inside your <br />
+            Welcome to your <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">
-              Trust Circle
+              Neighbourhood
             </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-gray-400 text-lg leading-relaxed"
+            className="text-gray-200 text-lg leading-relaxed font-medium"
           >
-            Join thousands of neighbours who are already sharing items safely, verified by digital agreements and community trust.
+            It feels good to be home. Connect with verified neighbours and share the things that matter.
           </motion.p>
         </div>
 
-        <div className="relative z-10 flex items-center gap-4 text-sm text-gray-500 font-medium">
+        <div className="relative z-10 flex items-center gap-4 text-sm text-gray-300 font-medium">
           <span>© 2025 NFR Inc.</span>
-          <div className="w-1 h-1 bg-gray-700 rounded-full"></div>
-          <span>Trusted by 10,000+ Users</span>
+          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+          <span>Trusted by 10,000+ Neighbours</span>
         </div>
       </div>
 
@@ -139,10 +136,10 @@ const Login = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center lg:text-left">
             <h2 className="text-3xl font-black text-gray-900 mb-2">
-              {isLogin ? 'Welcome back' : 'Create an account'}
+              {isLogin ? 'Go back to neighbourhood' : 'Join the neighbourhood'}
             </h2>
             <p className="text-gray-500">
-              {isLogin ? 'Please enter your details to sign in.' : 'Start your trusted rental journey today.'}
+              {isLogin ? 'Great to see you again.' : 'Become part of the circle.'}
             </p>
           </div>
 
