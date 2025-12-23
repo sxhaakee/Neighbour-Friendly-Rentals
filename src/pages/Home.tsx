@@ -351,11 +351,11 @@ const Home = () => {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-center text-gray-600 italic text-sm"
+            className="text-center text-white italic text-sm"
           >
-            <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight">
+            <h3 className="text-2xl md:text-3xl font-black mb-4 leading-tight text-white">
               Trust isn't claimed. <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600">
+              <span className="text-white">
                 It's built into the system.
               </span>
             </h3>
