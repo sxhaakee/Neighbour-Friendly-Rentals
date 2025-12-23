@@ -95,7 +95,7 @@ const Login = () => {
           <ArrowLeft className="w-4 h-4" /> Back
         </Link>
 
-        <div className="w-full max-w-md bg-white p-8 lg:p-10 rounded-3xl shadow-2xl border border-gray-100">
+        <div className="w-full max-w-md bg-white/40 backdrop-blur-xl p-8 lg:p-10 rounded-3xl shadow-2xl border border-white/20">
           <div className="space-y-8">
             <div className="text-center lg:text-left">
               <h2 className="text-3xl font-black text-gray-900 mb-2">
