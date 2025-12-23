@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw, HandHeart } from 'lucide-react';
+import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw } from 'lucide-react';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { listingService } from '../services/listingService';
@@ -135,13 +135,13 @@ const Home = () => {
                   className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight"
                 >
                   <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent block">
-                    Rent from
+                    Rent from people
                   </span>
                   <span className="text-gray-900 block">
-                    people you trust
+                    you can trust
                   </span>
                   <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent block text-4xl md:text-6xl mt-2 pb-2">
-                    — right next door.
+                    — right in your neighbourhood.
                   </span>
                 </motion.h1>
 
@@ -151,7 +151,7 @@ const Home = () => {
                   transition={{ delay: 0.3, duration: 0.8 }}
                   className="text-lg md:text-xl mb-10 text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed"
                 >
-                  Experience the joy of sharing. A trust-first marketplace with verified users, secure digital agreements, and a community that cares.
+                  A trust-first rental marketplace with verified users, digital agreements, and local discovery.
                 </motion.p>
 
                 {/* Premium Search Bar */}
@@ -323,10 +323,10 @@ const Home = () => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-8">
             {[
               { icon: Shield, label: 'Verified renters & listers', delay: 0 },
-              { icon: Book, label: 'Secure digital agreements', delay: 0.1 },
-              { icon: Star, label: 'Genuine transparent reviews', delay: 0.2 },
-              { icon: MapPin, label: 'Hyper-local discovery', delay: 0.3 },
-              { icon: Users, label: '24/7 Human Support', delay: 0.4 }
+              { icon: Book, label: 'Secure digital rental agreements', delay: 0.1 },
+              { icon: Star, label: 'Transparent reviews after every rental', delay: 0.2 },
+              { icon: MapPin, label: 'Neighbourhood-based discovery', delay: 0.3 },
+              { icon: Users, label: 'Support before & after rental', delay: 0.4 }
             ].map((item) => (
               <motion.div
                 key={item.label}
@@ -500,24 +500,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* NEW: How It Works / Value Prop Interstitial */}
-      <section className="py-20 bg-gray-900 text-white overflow-hidden relative">
-        <div className="absolute inset-0 bg-[url('/images/community-bg.png')] opacity-20 bg-cover bg-center fixed-background"></div>
-        <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h2 className="text-3xl md:text-5xl font-bold mb-8">Join the Sharing Revolution</h2>
-            <p className="text-xl text-gray-300 leading-relaxed mb-12">
-              Every rental on NFR builds a stronger, more connected neighbourhood. Stop buying things you only use once. Start sharing today.
-            </p>
-          </motion.div>
-        </div>
-      </section >
+
 
       {/* Featured Items */}
       < section className="bg-gradient-to-br from-white via-amber-50/20 to-white py-16 px-4" >
@@ -786,7 +769,7 @@ const Home = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                     <div>
                       <span className="bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Listers</span>
-                      <h3 className="text-3xl font-bold text-white leading-tight">Turn clutter into cash.</h3>
+                      <h3 className="text-3xl font-bold text-white leading-tight">Turn unused items into income — safely</h3>
                     </div>
                   </div>
                 </div>
@@ -798,25 +781,25 @@ const Home = () => {
 
                   <ul className="space-y-4 mb-10 flex-1">
                     {[
-                      'You control the price & availability',
-                      'Verified renters only',
-                      'Insurance coverage included',
-                      'Digital condition reports'
-                    ].map((item, index) => (
-                      <li key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-green-600 font-bold text-xs">✓</span>
+                      { text: 'Rent only to verified users' },
+                      { text: 'Clear terms & digital proof' },
+                      { text: 'You decide availability & pricing' },
+                      { text: 'Earn from what you already own' }
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-gray-700 font-medium">
+                        <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-amber-600 text-sm font-bold">✓</span>
                         </div>
-                        <span className="text-gray-700 font-medium">{item}</span>
+                        {item.text}
                       </li>
                     ))}
                   </ul>
 
                   <Link
                     to="/add-item"
-                    className="block w-full bg-gray-900 text-white px-6 py-4 rounded-xl font-bold text-center hover:bg-black transition-all text-lg shadow-lg"
+                    className="w-full block text-center bg-gray-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-black hover:shadow-lg transition-all"
                   >
-                    Start Earning
+                    List Your Item
                   </Link>
                 </div>
               </motion.div>
@@ -844,7 +827,7 @@ const Home = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                     <div>
                       <span className="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Renters</span>
-                      <h3 className="text-3xl font-bold text-white leading-tight">Own the experience, not the thing.</h3>
+                      <h3 className="text-3xl font-bold text-white leading-tight">Get what you need, without buying</h3>
                     </div>
                   </div>
                 </div>
@@ -856,16 +839,16 @@ const Home = () => {
 
                   <ul className="space-y-4 mb-10 flex-1">
                     {[
-                      'Save 90% compared to buying',
-                      'No storage hassle',
-                      'Meet cool neighbours',
-                      'Eco-friendly consumption'
+                      { text: 'Affordable local rentals' },
+                      { text: 'Faster than online shopping' },
+                      { text: 'Better for the planet' },
+                      { text: 'No long-term commitment' }
                     ].map((item, index) => (
                       <li key={index} className="flex items-start gap-4">
                         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                           <span className="text-blue-600 font-bold text-xs">✓</span>
                         </div>
-                        <span className="text-gray-700 font-medium">{item}</span>
+                        <span className="text-gray-700 font-medium">{item.text}</span>
                       </li>
                     ))}
                   </ul>
@@ -904,15 +887,12 @@ const Home = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-8 tracking-tight">
-              We're not just building a platform.
+              We're not just building a rental platform.
               <br />
               <span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
-                We're building trust.
+                We're building neighbourhood trust at scale.
               </span>
             </h2>
-            <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto font-medium leading-relaxed">
-              Behind every rental is a neighbour. Behind every transaction is a connection. Join 5,000+ others who are sharing more, buying less, and trusting their community again.
-            </p>
           </motion.div>
         </div>
       </section>
