@@ -71,23 +71,48 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center overflow-hidden relative">
-      {/* Background Image & Overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/images/neighbours-bg.png"
-          alt="Neighbourhood"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-amber-900/20"></div>
+    <div className="min-h-screen bg-white flex overflow-hidden">
+      {/* Left Side - Brand Showcase (Hidden on Mobile) */}
+      <div className="hidden lg:flex lg:w-[60%] relative bg-gray-900 overflow-hidden text-white flex-col justify-center p-16">
+        {/* Background Image & Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/neighbours-bg.png"
+            alt="Neighbourhood"
+            className="w-full h-full object-cover opacity-80"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/40 to-amber-900/30"></div>
 
-        {/* Animated Orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
+          {/* Animated Orbs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/20 rounded-full blur-[120px] animate-pulse"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div className="relative z-10 max-w-lg mb-40">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl font-black mb-6 leading-tight"
+          >
+            Welcome to your <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">
+              Neighbourhood
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-gray-200 text-lg leading-relaxed font-medium"
+          >
+            It feels good to be home. Connect with verified neighbours and share the things that matter.
+          </motion.p>
+        </div>
       </div>
 
-      {/* Login Box Container */}
-      <div className="relative z-10 w-full max-w-md px-4">
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-[40%] relative flex items-center justify-center p-6 lg:p-12 overflow-y-auto bg-gray-50">
         <Link
           to="/"
           className="absolute top-8 left-6 lg:hidden flex items-center gap-2 text-gray-500 font-bold text-sm"
@@ -95,13 +120,13 @@ const Login = () => {
           <ArrowLeft className="w-4 h-4" /> Back
         </Link>
 
-        <div className="w-full max-w-md bg-white/10 backdrop-blur-3xl p-8 lg:p-10 rounded-3xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+        <div className="w-full max-w-md bg-white p-8 lg:p-10 rounded-3xl shadow-2xl border border-gray-100">
           <div className="space-y-8">
             <div className="text-center lg:text-left">
-              <h2 className="text-3xl font-black text-white mb-2">
+              <h2 className="text-3xl font-black text-gray-900 mb-2">
                 {isLogin ? 'Enter your neighbourhood' : 'Join the neighbourhood'}
               </h2>
-              <p className="text-gray-300">
+              <p className="text-gray-500">
                 {isLogin ? 'Great to see you again.' : 'Become part of the circle.'}
               </p>
             </div>
@@ -119,7 +144,7 @@ const Login = () => {
                   }
                 }}
                 disabled={loading}
-                className="w-full h-14 bg-white/10 border border-white/20 text-white rounded-xl font-bold hover:bg-white/20 hover:border-white/30 transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md disabled:opacity-50 relative overflow-hidden group"
+                className="w-full h-14 bg-white border border-gray-200 text-gray-900 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center gap-3 shadow-sm hover:shadow-md disabled:opacity-50 relative overflow-hidden group"
               >
                 <svg className="w-5 h-5 relative z-10" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -132,7 +157,7 @@ const Login = () => {
 
               <div className="relative flex items-center">
                 <div className="flex-grow border-t border-gray-100"></div>
-                <span className="flex-shrink mx-4 text-xs font-bold text-gray-300 uppercase tracking-widest">Or with email</span>
+                <span className="flex-shrink mx-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Or with email</span>
                 <div className="flex-grow border-t border-gray-100"></div>
               </div>
             </div>
@@ -154,7 +179,7 @@ const Login = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/10 rounded-xl focus:bg-white/20 focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium text-white placeholder:text-gray-400"
+                      className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium"
                       placeholder="Full Name"
                       required
                     />
@@ -169,7 +194,7 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/10 rounded-xl focus:bg-white/20 focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium text-white placeholder:text-gray-400"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium"
                   placeholder="Email Address"
                   required
                 />
@@ -182,7 +207,7 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full pl-12 pr-12 py-4 bg-white/10 border border-white/10 rounded-xl focus:bg-white/20 focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium text-white placeholder:text-gray-400"
+                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium"
                   placeholder="Password"
                   required
                 />
@@ -204,7 +229,7 @@ const Login = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/10 rounded-xl focus:bg-white/20 focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium text-white placeholder:text-gray-400"
+                      className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:border-amber-400 focus:ring-4 focus:ring-amber-500/10 outline-none transition-all font-medium"
                       placeholder="Confirm Password"
                       required
                     />
@@ -229,11 +254,11 @@ const Login = () => {
               </button>
             </form>
 
-            <p className="text-center text-gray-300 text-sm">
+            <p className="text-center text-gray-500 text-sm">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="font-bold text-amber-400 hover:text-amber-500 hover:underline transition-all"
+                className="font-bold text-amber-600 hover:text-amber-700 hover:underline transition-all"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
