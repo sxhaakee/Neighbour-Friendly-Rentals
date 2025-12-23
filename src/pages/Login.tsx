@@ -71,48 +71,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex overflow-hidden">
-      {/* Left Side - Brand Showcase (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:w-[60%] relative bg-gray-900 overflow-hidden text-white flex-col justify-center p-16">
-        {/* Background Image & Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/neighbours-bg.png"
-            alt="Neighbourhood"
-            className="w-full h-full object-cover opacity-80"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-900/40 to-amber-900/30"></div>
+    <div className="min-h-screen bg-white flex items-center justify-center overflow-hidden relative">
+      {/* Background Image & Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/images/neighbours-bg.png"
+          alt="Neighbourhood"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/60 via-gray-900/40 to-amber-900/20"></div>
 
-          {/* Animated Orbs */}
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/20 rounded-full blur-[120px] animate-pulse"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
-        </div>
-
-        <div className="relative z-10 max-w-lg mb-40">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-5xl font-black mb-6 leading-tight"
-          >
-            Welcome to your <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">
-              Neighbourhood
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-gray-200 text-lg leading-relaxed font-medium"
-          >
-            It feels good to be home. Connect with verified neighbours and share the things that matter.
-          </motion.p>
-        </div>
+        {/* Animated Orbs */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-amber-500/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
       </div>
 
-      {/* Right Side - Form */}
-      <div className="w-full lg:w-[40%] relative flex items-center justify-center p-6 lg:p-12 overflow-y-auto bg-gray-50">
+      {/* Login Box Container */}
+      <div className="relative z-10 w-full max-w-md px-4">
         <Link
           to="/"
           className="absolute top-8 left-6 lg:hidden flex items-center gap-2 text-gray-500 font-bold text-sm"
