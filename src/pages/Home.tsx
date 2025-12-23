@@ -175,7 +175,7 @@ const Home = () => {
                     </div>
                     <button
                       onClick={handleSearch}
-                      className="h-14 px-8 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl font-bold hover:shadow-lg hover:from-black hover:to-gray-900 transition-all active:scale-95"
+                      className="h-14 px-8 bg-gradient-to-r from-gray-900 to-black text-white rounded-xl font-bold hover:shadow-xl transition-all active:scale-95 whitespace-nowrap"
                     >
                       Search
                     </button>
@@ -264,7 +264,7 @@ const Home = () => {
                     <div className="bg-white/95 backdrop-blur-md p-4 rounded-xl shadow-lg">
                       <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                         <p className="text-xs text-gray-500">Verified Rental • 2 days ago</p>
                       </div>
                     </div>
@@ -518,54 +518,70 @@ const Home = () => {
           </motion.div>
 
           {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <div className="flex justify-center py-20">
+              <div className="w-16 h-16 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin"></div>
             </div>
           ) : featuredListings.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600 text-lg mb-6">No listings available yet. Be the first to list an item!</p>
+            <div className="text-center py-20 bg-amber-50/50 rounded-3xl border border-amber-100">
+              <Package className="w-16 h-16 text-amber-300 mx-auto mb-4" />
+              <p className="text-gray-600 text-lg mb-8">No listings available yet. Be the first to list an item!</p>
               <Link
                 to="/add-item"
-                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg inline-block"
+                className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all shadow-lg inline-block"
               >
                 Add Your First Item
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
               {featuredListings.map((item: any, index: number) => (
                 <motion.div
                   key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -3 }}
-                  onClick={() => navigate(`/ item / ${item.id} `)}
-                  className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                  onClick={() => navigate(`/item/${item.id}`)}
+                  className="group cursor-pointer"
                 >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={item.images[0] || '/placeholder.jpg'}
-                      alt={item.title}
-                      className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                        {item.category}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-3 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{item.title}</h3>
-                    <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{item.description}</p>
-                    <div className="mt-auto">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-lg font-bold text-amber-600">
-                          ₹{item.price}<span className="text-xs text-gray-500">{formatPricingModel(item.pricing_model)}</span>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col relative">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img
+                        src={item.images[0] || '/placeholder.jpg'}
+                        alt={item.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <span className="bg-white/90 backdrop-blur-md text-gray-900 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border border-gray-100">
+                          {item.category}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500 truncate block">{item.location}</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+
+                    <div className="p-5 flex flex-col flex-grow">
+                      <h3 className="font-bold text-gray-900 group-hover:text-amber-600 transition-colors line-clamp-1 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-4 leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-gray-400 uppercase tracking-tighter text-[10px]">Price</span>
+                          <span className="text-xl font-black text-amber-600">
+                            ₹{item.price}<span className="text-xs font-medium text-gray-400">/{formatPricingModel(item.pricing_model)}</span>
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-[10px] text-gray-400 uppercase block mb-1">Location</span>
+                          <span className="text-xs font-bold text-gray-900 flex items-center justify-end">
+                            <MapPin className="w-3 h-3 mr-1 text-amber-500" />
+                            {item.location.split(',')[0]}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -574,17 +590,18 @@ const Home = () => {
           )}
 
           <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
             viewport={{ once: true }}
-            className="text-center mt-12"
+            className="text-center mt-16"
           >
             <Link
               to="/listings"
-              className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+              className="bg-white text-gray-900 px-12 py-4 rounded-xl font-bold text-lg hover:shadow-xl border-2 border-gray-100 hover:border-amber-200 transition-all inline-flex items-center gap-2 group"
             >
-              View All Listings
+              Explore All Items
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
             </Link>
           </motion.div>
         </div>
@@ -593,51 +610,68 @@ const Home = () => {
       {/* Featured Services */}
       {
         featuredServices.length > 0 && (
-          <section className="py-16 px-4 bg-gray-50">
+          <section className="py-24 px-4 bg-gray-50/50 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100/30 rounded-full blur-3xl -z-10"></div>
             <div className="max-w-6xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="text-center mb-12"
+                className="text-center mb-16"
               >
-                <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">⭐ Featured Services</span></h2>
-                <p className="text-xl text-gray-600">Top-rated service providers</p>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm">
+                  <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
+                  Verified Experts
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Featured Services</h2>
+                <p className="text-xl text-gray-600">Top-rated service providers in your vicinity</p>
               </motion.div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {featuredServices.map((service: any, index: number) => (
                   <motion.div
                     key={service.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    whileHover={{ y: -3 }}
-                    onClick={() => navigate(`/ services / ${service.id} `)}
-                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                    onClick={() => navigate(`/services/${service.id}`)}
+                    className="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
                   >
-                    <div className="relative overflow-hidden">
+                    <div className="relative aspect-video overflow-hidden">
                       <img
                         src={service.images?.[0] || '/placeholder.jpg'}
                         alt={service.business_name}
-                        className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
-                      <div className="absolute top-2 left-2">
-                        <span className="bg-amber-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                          {service.category || 'Service'}
-                        </span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute top-3 right-3">
+                        <div className="bg-amber-500 text-white p-2 rounded-full shadow-lg transform -rotate-12 group-hover:rotate-0 transition-transform font-black">
+                          <Star className="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
-                    <div className="p-3 flex flex-col flex-grow">
-                      <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{service.business_name}</h3>
-                      <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">{service.description}</p>
-                      <div className="mt-auto">
-                        <span className="text-xs text-gray-500 truncate block flex items-center">
-                          <MapPin className="w-3 h-3 mr-1" />
+
+                    <div className="p-6 flex flex-col flex-grow">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
+                          {service.category || 'Expert'}
+                        </span>
+                      </div>
+                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-amber-600 transition-colors mb-2 line-clamp-1">
+                        {service.business_name}
+                      </h3>
+                      <p className="text-sm text-gray-500 line-clamp-2 mb-6 leading-relaxed">
+                        {service.description}
+                      </p>
+
+                      <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between text-gray-400">
+                        <span className="text-xs font-bold flex items-center">
+                          <MapPin className="w-3.5 h-3.5 mr-1 text-amber-500" />
                           {service.city}
                         </span>
+                        <span className="text-[10px] font-bold uppercase tracking-tighter">View Profile →</span>
                       </div>
                     </div>
                   </motion.div>
@@ -645,17 +679,17 @@ const Home = () => {
               </div>
 
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
                 viewport={{ once: true }}
-                className="text-center mt-12"
+                className="text-center mt-16"
               >
                 <Link
                   to="/listings?tab=services"
-                  className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+                  className="bg-gray-900 text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-black transition-all shadow-xl hover:shadow-2xl"
                 >
-                  View All Services
+                  Browse Service Directory
                 </Link>
               </motion.div>
             </div>
@@ -666,51 +700,65 @@ const Home = () => {
       {/* Featured Properties */}
       {
         featuredProperties.length > 0 && (
-          <section className="py-16 px-4">
+          <section className="py-24 px-4 bg-white">
             <div className="max-w-6xl mx-auto">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="text-center mb-12"
+                className="text-center mb-16"
               >
-                <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">🏠 Featured Properties</span></h2>
-                <p className="text-xl text-gray-600">Premium rental properties</p>
+                <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Premium Properties</h2>
+                <p className="text-xl text-gray-500">Curated living spaces for your next move</p>
               </motion.div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {featuredProperties.map((property: any, index: number) => (
                   <motion.div
                     key={property.id}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    whileHover={{ y: -3 }}
-                    onClick={() => navigate(`/ properties / ${property.id} `)}
-                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden group cursor-pointer flex flex-col"
+                    onClick={() => navigate(`/properties/${property.id}`)}
+                    className="group cursor-pointer"
                   >
-                    <div className="relative overflow-hidden">
-                      <img
-                        src={property.images?.[0] || '/placeholder.jpg'}
-                        alt={property.title}
-                        className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute top-2 left-2">
-                        <span className="bg-purple-500 text-white px-2 py-1 rounded text-xs font-semibold">
-                          Property
-                        </span>
+                    <div className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col">
+                      <div className="relative aspect-[16/10] overflow-hidden">
+                        <img
+                          src={property.images?.[0] || '/placeholder.jpg'}
+                          alt={property.title}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                          <div className="text-white">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 mb-1 block">Luxury Stay</span>
+                            <span className="text-2xl font-black">₹{property.rent_amount}<span className="text-xs font-normal opacity-80">/mo</span></span>
+                          </div>
+                          <span className="bg-white/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-bold border border-white/30 uppercase tracking-tighter">
+                            {property.property_type || 'Property'}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="p-3 flex flex-col flex-grow">
-                      <h3 className="font-semibold text-sm text-gray-900 mb-2 line-clamp-2 h-10 group-hover:text-amber-600 transition-colors">{property.title}</h3>
-                      <p className="text-xs text-gray-500 mb-3 line-clamp-2 h-8">₹{property.rent_amount}/month</p>
-                      <div className="mt-auto">
-                        <span className="text-xs text-gray-500 truncate block flex items-center">
-                          <MapPin className="w-3 h-3 mr-1" />
-                          {property.city}
-                        </span>
+
+                      <div className="p-8 flex flex-col flex-grow">
+                        <h3 className="font-bold text-xl text-gray-900 group-hover:text-amber-600 transition-colors mb-2">
+                          {property.title}
+                        </h3>
+                        <div className="flex items-center gap-4 text-gray-400 text-sm mb-6">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-4 h-4 text-amber-500" />
+                            {property.city}
+                          </span>
+                        </div>
+                        <Link
+                          to={`/properties/${property.id}`}
+                          className="mt-auto w-full py-3 rounded-xl border border-gray-100 group-hover:border-amber-500 group-hover:bg-amber-50 transition-all text-center font-bold text-gray-900"
+                        >
+                          Discover Details
+                        </Link>
                       </div>
                     </div>
                   </motion.div>
@@ -718,17 +766,17 @@ const Home = () => {
               </div>
 
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
                 viewport={{ once: true }}
-                className="text-center mt-12"
+                className="text-center mt-20"
               >
                 <Link
-                  to="/listings"
-                  className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:shadow-xl hover:scale-105 transition-colors shadow-lg"
+                  to="/listings?tab=properties"
+                  className="inline-flex items-center gap-2 text-amber-600 font-black text-xl hover:translate-x-2 transition-transform"
                 >
-                  View All Properties
+                  Explore All Residential Listings <span>→</span>
                 </Link>
               </motion.div>
             </div>
@@ -882,13 +930,17 @@ const Home = () => {
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, scale: 0.8, y: 50 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 1.2,
+              ease: [0.22, 1, 0.36, 1], // Premium quint ease
+              delay: 0.1
+            }}
+            viewport={{ once: true, margin: "-100px" }}
           >
-            <h2 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-8 tracking-tight">
-              We're not just building a rental platform.
+            <h2 className="text-5xl md:text-8xl font-black text-gray-900 leading-tight mb-8 tracking-tighter">
+              We're not just building <br className="hidden md:block" /> a rental platform.
               <br />
               <span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">
                 We're building neighbourhood trust at scale.

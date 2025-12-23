@@ -171,7 +171,7 @@ const Contact = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                            className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white font-black py-4 rounded-xl hover:shadow-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 shadow-lg"
                         >
                             {submitted ? (
                                 <>
