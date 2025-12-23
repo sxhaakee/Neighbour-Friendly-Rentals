@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X, Plus, MapPin, Tag, DollarSign } from 'lucide-react';
+import { Upload, X, Plus, Tag, DollarSign } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
-import { compressImages, getEstimatedSize } from '../utils/imageCompression';
+import { compressImages } from '../utils/imageCompression';
 import { showToast } from '../utils/toast';
 import { PremiumUpgradeModal } from '../components/PremiumUpgradeModal';
 import { notificationService } from '../services/notificationService';
@@ -27,9 +27,7 @@ const AddItem = () => {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [compressing, setCompressing] = useState(false);
   const [error, setError] = useState('');
-  const [estimatedSize, setEstimatedSize] = useState(0);
 
   useEffect(() => {
     // Redirect if not logged in
@@ -76,17 +74,16 @@ const AddItem = () => {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    
+
     if (files.length === 0) return;
-    
+
     if (images.length + files.length > 10) {
       showToast.error('Maximum 10 images allowed per listing');
       return;
     }
-    
-    setCompressing(true);
+
     const toastId = showToast.loading('Compressing images...');
-    
+
     try {
       // Compress images to save storage (100KB max per image)
       const compressedFiles = await compressImages(files, {
@@ -95,26 +92,22 @@ const AddItem = () => {
         quality: 0.7,
         maxSizeMB: 0.1, // 100KB max per image for better storage optimization
       });
-      
+
       const newImages = [...images, ...compressedFiles];
       setImages(newImages);
-      
-      // Update estimated size
-      const totalSize = getEstimatedSize(newImages);
-      setEstimatedSize(totalSize);
+
+
 
       // Create previews
       const newPreviews = compressedFiles.map(file => URL.createObjectURL(file));
       setImagePreviews(prev => [...prev, ...newPreviews]);
-      
+
       showToast.dismiss(toastId);
-      showToast.success(`${compressedFiles.length} image(s) compressed successfully! Total: ${totalSize.toFixed(2)}MB`);
+      showToast.success(`${compressedFiles.length} image(s) compressed successfully!`);
     } catch (error) {
       console.error('Error compressing images:', error);
       showToast.dismiss(toastId);
       showToast.error('Failed to compress images. Please try again.');
-    } finally {
-      setCompressing(false);
     }
   };
 
@@ -127,13 +120,13 @@ const AddItem = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Check listing limit before proceeding
     if (!canAddListing('item')) {
       setShowPremiumModal(true);
       return;
     }
-    
+
     setLoading(true);
     setError('');
 
@@ -189,7 +182,7 @@ const AddItem = () => {
 
       showToast.dismiss(toastId);
       showToast.success('Item added successfully! It will be visible after admin approval.');
-      
+
       // Navigate after a short delay to show the success message
       setTimeout(() => navigate('/dashboard'), 1500);
     } catch (err) {
@@ -455,7 +448,7 @@ const AddItem = () => {
                 disabled={loading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-semibold hover:from-primary/90 hover:to-accent/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
+                className="px-8 py-3 bg-gradient-to-r from-amber-400 via-yellow-500 to-orange-500 text-white rounded-lg font-semibold hover:from-amber-500 hover:to-orange-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-lg"
               >
                 {loading ? (
                   <>

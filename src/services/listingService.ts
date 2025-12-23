@@ -66,7 +66,7 @@ export const listingService = {
   },
 
   // Create listing
-  async createListing(listing: ListingInsert) {
+  async createListing(listing: ListingInsert): Promise<Listing> {
     const { data, error } = await supabase
       .from('listings')
       .insert(listing)
@@ -74,7 +74,7 @@ export const listingService = {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as Listing;
   },
 
   // Update listing

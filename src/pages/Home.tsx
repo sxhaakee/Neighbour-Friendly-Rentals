@@ -227,7 +227,7 @@ const Home = () => {
                         transition={{ delay: 0.8 + (i * 0.1) }}
                         className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
                       >
-                        <img src={`/ images / avatar - ${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                        <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
                       </motion.div>
                     ))}
                     <motion.div
@@ -366,10 +366,11 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">First time here?</h2>
-            <p className="text-xl text-gray-600">Renting is simple:</p>
+            <span className="text-amber-600 font-bold uppercase tracking-wider text-sm mb-2 block">How it works</span>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">First time here?</h2>
+            <p className="text-xl text-gray-600 font-bold">Renting is simple:</p>
           </motion.div>
 
           <div className="relative">
@@ -413,10 +414,10 @@ const Home = () => {
                 >
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-6">
-                      <div className={`w - 24 h - 24 rounded - full bg - gradient - to - br ${step.color} p - [2px] shadow - lg shadow - gray - 200 group - hover: scale - 110 transition - transform duration - 300`}>
+                      <div className={`w-36 h-36 rounded-full bg-gradient-to-br ${step.color} p-[2px] shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center relative overflow-hidden">
-                          <div className={`absolute inset - 0 bg - gradient - to - br ${step.color} opacity - 10 group - hover: opacity - 20 transition - opacity`}></div>
-                          <step.icon className={`w - 10 h - 10 text - gray - 700`} strokeWidth={1.5} />
+                          <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
+                          <step.icon className={`w-16 h-16 text-gray-700`} strokeWidth={1.5} />
                         </div>
                       </div>
                       <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center font-bold text-gray-400 text-sm border border-gray-100">
@@ -504,16 +505,20 @@ const Home = () => {
 
 
       {/* Featured Items */}
-      < section className="bg-gradient-to-br from-white via-amber-50/20 to-white py-16 px-4" >
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Featured Items</span></h2>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm">
+              <Package className="w-4 h-4 fill-amber-500 text-amber-500" />
+              Top Rated Items
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Featured Items</h2>
             <p className="text-xl text-gray-600">Popular rentals in your area</p>
           </motion.div>
 
@@ -687,9 +692,10 @@ const Home = () => {
               >
                 <Link
                   to="/listings?tab=services"
-                  className="bg-gray-900 text-white px-12 py-4 rounded-xl font-bold text-lg hover:bg-black transition-all shadow-xl hover:shadow-2xl"
+                  className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-12 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all inline-flex items-center gap-2 group shimmer-gold"
                 >
                   Browse Service Directory
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </motion.div>
             </div>
