@@ -88,7 +88,7 @@ const Login = () => {
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-yellow-500/10 rounded-full blur-[120px]"></div>
         </div>
 
-        <div className="relative z-10 max-w-lg mb-20">
+        <div className="relative z-10 max-w-lg mb-40">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
