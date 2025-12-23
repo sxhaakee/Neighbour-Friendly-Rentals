@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, Shield, Users, Camera, MapPin, Search, Package, Book } from 'lucide-react';
+import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw, HandHeart } from 'lucide-react';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { listingService } from '../services/listingService';
@@ -371,39 +371,78 @@ const Home = () => {
             <p className="text-xl text-gray-600">Renting is simple:</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            {[
-              { num: '1', text: 'Browse items & services near you' },
-              { num: '2', text: 'Chat and confirm securely' },
-              { num: '3', text: 'Digital agreement protects both sides' },
-              { num: '4', text: 'Rent → Return → Review' }
-            ].map((step, index) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="bg-white/60 backdrop-blur-md rounded-2xl p-8 shadow-sm border border-white hover:shadow-xl hover:border-amber-200 transition-all duration-300 group h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-2xl rotate-3 group-hover:rotate-6 transition-transform flex items-center justify-center mx-auto mb-6 shadow-lg shadow-amber-200/50">
-                    <span className="text-white font-black text-2xl">{step.num}</span>
-                  </div>
-                  <p className="text-gray-800 font-bold text-lg leading-tight">{step.text}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <div className="relative">
+            {/* Desktop Connecting Line */}
+            <div className="hidden md:block absolute top-12 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-200 to-transparent z-0"></div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center text-gray-700 font-semibold"
-          >
-            No paperwork. No awkward follow-ups. No confusion.
-          </motion.p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12 relative z-10">
+              {[
+                {
+                  icon: Search,
+                  title: 'Search',
+                  text: 'Browse items near you',
+                  color: 'from-blue-400 to-blue-600'
+                },
+                {
+                  icon: MessageCircle,
+                  title: 'Chat',
+                  text: 'Connect securely',
+                  color: 'from-amber-400 to-orange-500'
+                },
+                {
+                  icon: FileCheck,
+                  title: 'Verify',
+                  text: 'Digital Agreement',
+                  color: 'from-green-400 to-emerald-600'
+                },
+                {
+                  icon: RefreshCw,
+                  title: 'Return',
+                  text: 'Hand back & Review',
+                  color: 'from-purple-400 to-indigo-600'
+                }
+              ].map((step, index) => (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  viewport={{ once: true }}
+                  className="group relative"
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative mb-6">
+                      <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${step.color} p-[2px] shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
+                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center relative overflow-hidden">
+                          <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
+                          <step.icon className={`w-10 h-10 text-gray-700`} strokeWidth={1.5} />
+                        </div>
+                      </div>
+                      <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center font-bold text-gray-400 text-sm border border-gray-100">
+                        {index + 1}
+                      </div>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
+                    <p className="text-gray-600 text-sm font-medium leading-relaxed max-w-[200px]">{step.text}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 }}
+              viewport={{ once: true }}
+              className="mt-12 text-center"
+            >
+              <div className="inline-flex items-center gap-2 bg-white px-6 py-2 rounded-full shadow-sm border border-gray-100 text-gray-500 text-sm font-medium">
+                <HandHeart className="w-4 h-4 text-amber-500" />
+                <span>Simple. Secure. Neighbourly.</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
