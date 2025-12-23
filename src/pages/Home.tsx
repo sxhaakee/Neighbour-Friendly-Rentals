@@ -309,7 +309,7 @@ const Home = () => {
 
       {/* Trust Signals Section */}
       <section className="py-20 px-4 relative bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/images/neighbours-bg.png')" }}>
-        <div className="absolute inset-0 bg-white/90 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -459,8 +459,8 @@ const Home = () => {
             className="text-center mb-16"
           >
             <span className="text-amber-600 font-bold uppercase tracking-wider text-sm mb-2 block">Peace of Mind</span>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">We've already thought about that.</h2>
-            <p className="text-xl text-gray-500">What if something goes wrong?</p>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">What if something goes wrong?</h2>
+            <p className="text-xl text-gray-600 font-bold">We've already thought about that.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
