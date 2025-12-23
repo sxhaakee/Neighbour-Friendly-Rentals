@@ -381,25 +381,25 @@ const Home = () => {
                   icon: Search,
                   title: 'Browse',
                   text: 'Browse items & services near you',
-                  color: 'from-blue-400 to-blue-600'
+                  color: 'from-amber-400 to-yellow-600'
                 },
                 {
                   icon: MessageCircle,
                   title: 'Chat',
                   text: 'Chat and confirm securely',
-                  color: 'from-amber-400 to-orange-500'
+                  color: 'from-yellow-400 to-orange-500'
                 },
                 {
                   icon: FileCheck,
                   title: 'Verify',
                   text: 'Digital agreement protects both sides',
-                  color: 'from-green-400 to-emerald-600'
+                  color: 'from-amber-500 to-yellow-500'
                 },
                 {
                   icon: RefreshCw,
                   title: 'Review',
                   text: 'Rent → Return → Review',
-                  color: 'from-purple-400 to-indigo-600'
+                  color: 'from-orange-400 to-amber-600'
                 }
               ].map((step, index) => (
                 <motion.div
@@ -826,7 +826,7 @@ const Home = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8">
                     <div>
-                      <span className="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Renters</span>
+                      <span className="bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">For Renters</span>
                       <h3 className="text-3xl font-bold text-white leading-tight">Get what you need, without buying</h3>
                     </div>
                   </div>
@@ -845,8 +845,8 @@ const Home = () => {
                       { text: 'No long-term commitment' }
                     ].map((item, index) => (
                       <li key={index} className="flex items-start gap-4">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-blue-600 font-bold text-xs">✓</span>
+                        <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-gray-600 font-bold text-xs">✓</span>
                         </div>
                         <span className="text-gray-700 font-medium">{item.text}</span>
                       </li>
