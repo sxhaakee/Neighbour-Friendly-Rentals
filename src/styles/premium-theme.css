@@ -137,3 +137,31 @@ section {
 .premium-card-hover:hover {
   box-shadow: 0 20px 60px -15px rgba(251, 191, 36, 0.4);
 }
+
+/* Premium button shimmer effect */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+.shimmer-gold {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: shimmer-sweep 3s infinite;
+  pointer-events: none;
+}

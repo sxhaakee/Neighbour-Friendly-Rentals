@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw } from 'lucide-react';
+import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw, ArrowRight } from 'lucide-react';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { listingService } from '../services/listingService';
@@ -96,7 +96,7 @@ const Home = () => {
               key={i}
               className="absolute w-2 h-2 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full blur-[1px]"
               style={{
-                left: `${Math.random() * 100}% `,
+                left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}% `,
               }}
               animate={{
@@ -227,7 +227,7 @@ const Home = () => {
                         transition={{ delay: 0.8 + (i * 0.1) }}
                         className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
                       >
-                        <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                        <img src={`/ images / avatar - ${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
                       </motion.div>
                     ))}
                     <motion.div
@@ -336,12 +336,12 @@ const Home = () => {
                 transition={{ duration: 0.5, delay: item.delay }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5, scale: 1.05 }}
-                className="text-center group cursor-default"
+                className="text-center group cursor-default p-4 rounded-2xl transition-all duration-300 hover:bg-white/40 hover:backdrop-blur-sm hover:shadow-lg"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-white to-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-yellow-100 shadow-sm group-hover:shadow-md group-hover:border-amber-200 transition-all duration-300">
+                <div className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/50 shadow-sm group-hover:shadow-md group-hover:bg-white group-hover:border-amber-200 transition-all duration-300">
                   <item.icon className="w-8 h-8 text-amber-500 group-hover:text-amber-600 transition-colors" />
                 </div>
-                <p className="text-sm text-gray-700 font-bold leading-tight group-hover:text-amber-800 transition-colors">{item.label}</p>
+                <p className="text-sm text-gray-900 font-bold leading-tight group-hover:text-amber-900 transition-colors drop-shadow-sm">{item.label}</p>
               </motion.div>
             ))}
           </div>
@@ -413,10 +413,10 @@ const Home = () => {
                 >
                   <div className="flex flex-col items-center text-center">
                     <div className="relative mb-6">
-                      <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${step.color} p-[2px] shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`w - 24 h - 24 rounded - full bg - gradient - to - br ${step.color} p - [2px] shadow - lg shadow - gray - 200 group - hover: scale - 110 transition - transform duration - 300`}>
                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center relative overflow-hidden">
-                          <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
-                          <step.icon className={`w-10 h-10 text-gray-700`} strokeWidth={1.5} />
+                          <div className={`absolute inset - 0 bg - gradient - to - br ${step.color} opacity - 10 group - hover: opacity - 20 transition - opacity`}></div>
+                          <step.icon className={`w - 10 h - 10 text - gray - 700`} strokeWidth={1.5} />
                         </div>
                       </div>
                       <div className="absolute -bottom-3 -right-3 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center font-bold text-gray-400 text-sm border border-gray-100">
@@ -541,7 +541,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  onClick={() => navigate(`/item/${item.id}`)}
+                  onClick={() => navigate(`/ item / ${item.id} `)}
                   className="group cursor-pointer"
                 >
                   <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col relative">
@@ -598,10 +598,10 @@ const Home = () => {
           >
             <Link
               to="/listings"
-              className="bg-white text-gray-900 px-12 py-4 rounded-xl font-bold text-lg hover:shadow-xl border-2 border-gray-100 hover:border-amber-200 transition-all inline-flex items-center gap-2 group"
+              className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-12 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl hover:scale-105 transition-all inline-flex items-center gap-2 group shimmer-gold"
             >
               Explore All Items
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
         </div>
@@ -636,7 +636,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    onClick={() => navigate(`/services/${service.id}`)}
+                    onClick={() => navigate(`/ services / ${service.id} `)}
                     className="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
                   >
                     <div className="relative aspect-video overflow-hidden">
@@ -721,7 +721,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    onClick={() => navigate(`/properties/${property.id}`)}
+                    onClick={() => navigate(`/ properties / ${property.id} `)}
                     className="group cursor-pointer"
                   >
                     <div className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col">
@@ -754,7 +754,7 @@ const Home = () => {
                           </span>
                         </div>
                         <Link
-                          to={`/properties/${property.id}`}
+                          to={`/ properties / ${property.id} `}
                           className="mt-auto w-full py-3 rounded-xl border border-gray-100 group-hover:border-amber-500 group-hover:bg-amber-50 transition-all text-center font-bold text-gray-900"
                         >
                           Discover Details
