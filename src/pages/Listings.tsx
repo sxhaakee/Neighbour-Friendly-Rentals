@@ -128,14 +128,14 @@ const Listings = () => {
     // Simple string similarity for demo - in production use actual geocoding
     const loc1 = location1.toLowerCase();
     const loc2 = location2.toLowerCase();
-    
+
     if (loc1 === loc2) return 0;
     if (loc1.includes(loc2) || loc2.includes(loc1)) return 1;
-    
+
     // Extract city names and compare
     const city1 = loc1.split(',')[0].trim();
     const city2 = loc2.split(',')[0].trim();
-    
+
     if (city1 === city2) return 2;
     return 10;
   };
@@ -162,10 +162,10 @@ const Listings = () => {
       // First priority: Featured items come first
       const aFeatured = (a as any).featured || false;
       const bFeatured = (b as any).featured || false;
-      
+
       if (aFeatured && !bFeatured) return -1;
       if (!aFeatured && bFeatured) return 1;
-      
+
       // Second priority: Apply user's selected sort
       if (sortBy === 'price-low') {
         return a.price - b.price;
@@ -176,7 +176,7 @@ const Listings = () => {
         const distB = calculateDistance(userLocation, b.location);
         return distA - distB;
       }
-      
+
       // Default: Most recent first
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
@@ -205,10 +205,10 @@ const Listings = () => {
     filtered.sort((a, b) => {
       const aFeatured = (a as any).featured || false;
       const bFeatured = (b as any).featured || false;
-      
+
       if (aFeatured && !bFeatured) return -1;
       if (!aFeatured && bFeatured) return 1;
-      
+
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
@@ -232,10 +232,10 @@ const Listings = () => {
     filtered.sort((a, b) => {
       const aFeatured = (a as any).featured || false;
       const bFeatured = (b as any).featured || false;
-      
+
       if (aFeatured && !bFeatured) return -1;
       if (!aFeatured && bFeatured) return 1;
-      
+
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
@@ -244,15 +244,15 @@ const Listings = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 lg:py-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-4 lg:mb-12"
         >
-          <h1 className="text-4xl font-bold mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Browse</span> Rentals</h1>
-          <p className="text-xl text-gray-600">Find the perfect item to rent from your neighbors</p>
+          <h1 className="text-2xl lg:text-4xl font-bold mb-2 lg:mb-4"><span className="bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent">Browse</span> Rentals</h1>
+          <p className="text-lg lg:text-xl text-gray-600">Find the perfect item to rent from your neighbors</p>
         </motion.div>
 
         {/* Tabs */}
@@ -260,35 +260,32 @@ const Listings = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="flex justify-center gap-2 mb-8"
+          className="flex justify-center gap-2 mb-4 lg:mb-8"
         >
           <button
             onClick={() => { setActiveTab('items'); setSelectedCategory('All'); }}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === 'items'
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === 'items'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
                 : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
-            }`}
+              }`}
           >
             📦 Items
           </button>
           <button
             onClick={() => { setActiveTab('services'); setSelectedCategory('All'); }}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === 'services'
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === 'services'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
                 : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
-            }`}
+              }`}
           >
             🛠️ Services
           </button>
           <button
             onClick={() => { setActiveTab('properties'); setSelectedCategory('All'); }}
-            className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-              activeTab === 'properties'
+            className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTab === 'properties'
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white shadow-lg hover:shadow-xl'
                 : 'bg-white text-gray-700 hover:bg-amber-50 border border-yellow-200'
-            }`}
+              }`}
           >
             🏠 Properties
           </button>
@@ -300,22 +297,21 @@ const Listings = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="mb-8"
+            className="mb-4 lg:mb-8"
           >
-            <div className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Browse by Category</h3>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-3">
+            <div className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-4 lg:p-6">
+              <h3 className="text-base lg:text-lg font-semibold text-gray-900 mb-3 lg:mb-4">Browse by Category</h3>
+              <div className="flex lg:grid lg:grid-cols-7 overflow-x-auto lg:overflow-visible gap-3 pb-2 lg:pb-0 scrollbar-hide -mx-2 px-2 lg:mx-0 lg:px-0">
                 {(activeTab === 'items' ? itemCategories : serviceCategories).map((category) => (
                   <motion.button
                     key={category.name}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedCategory(category.name)}
-                    className={`p-3 rounded-lg transition-all ${
-                      selectedCategory === category.name
+                    className={`p-3 rounded-lg transition-all flex-shrink-0 min-w-[100px] lg:min-w-0 ${selectedCategory === category.name
                         ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-md'
                         : 'bg-white hover:bg-amber-50 border border-gray-200'
-                    }`}
+                      }`}
                   >
                     <div className="flex flex-col items-center gap-2">
                       <category.icon className="w-5 h-5" />
@@ -333,9 +329,9 @@ const Listings = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-6 mb-8"
+          className="bg-gradient-to-br from-white to-amber-50 rounded-2xl shadow-lg border border-yellow-100 p-4 lg:p-6 mb-4 lg:mb-8"
         >
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-4 lg:mb-6">
             {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -373,8 +369,8 @@ const Listings = () => {
             />
           </div>
 
-          {/* Price Range */}
-          <div>
+          {/* Price Range - Hidden on Mobile to save space (accessible via Filters) */}
+          <div className="hidden md:block">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Max Price: ₹{maxPrice}
             </label>
@@ -394,13 +390,13 @@ const Listings = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-6"
+          className="mb-4"
         >
           <p className="text-gray-600">
             Showing <span className="font-semibold">
-              {activeTab === 'items' ? filteredListings.length : 
-               activeTab === 'services' ? filteredServices.length : 
-               filteredProperties.length}
+              {activeTab === 'items' ? filteredListings.length :
+                activeTab === 'services' ? filteredServices.length :
+                  filteredProperties.length}
             </span> {activeTab === 'items' ? 'items' : activeTab === 'services' ? 'services' : 'properties'}
           </p>
         </motion.div>
@@ -433,74 +429,74 @@ const Listings = () => {
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3"
               >
                 {filteredListings.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
-                whileHover={{ y: -3 }}
-                onClick={() => navigate(`/item/${item.id}`)}
-                className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group flex flex-col"
-              >
-                <div className="relative overflow-hidden">
-                  <img
-                    src={item.images[0] || '/placeholder.jpg'}
-                    alt={item.title}
-                    className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  {/* Featured Badge - OLX/JustDial Style */}
-                  {(item as any).featured && (
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg flex items-center gap-1">
-                        ⭐ FEATURED
-                      </span>
-                    </div>
-                  )}
-                  {!(item as any).featured && (
-                    <div className="absolute top-2 left-2">
-                      <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
-                        {item.category}
-                      </span>
-                    </div>
-                  )}
-                  {item.availability === 'Available' && (
-                    <div className="absolute top-2 right-2">
-                      <span className="bg-amber-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
-                        ✓
-                      </span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-2 sm:p-3 flex flex-col h-full">
-                  <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-amber-600 transition-colors min-h-[2.5rem]">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 mb-2 truncate">by {item.owner_name}</p>
-                  
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-base sm:text-lg font-bold text-amber-600">
-                      ₹{item.price}<span className="text-xs text-gray-500">{formatPricingModel(item.pricing_model)}</span>
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center text-gray-500 mb-3">
-                    <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-                    <span className="text-xs truncate">{item.location}</span>
-                  </div>
-                  
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/item/${item.id}`);
-                    }}
-                    className="w-full bg-secondary text-gray-900 py-1.5 sm:py-2 rounded text-xs sm:text-sm font-semibold hover:bg-secondary/80 transition-colors mt-auto"
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.5) }}
+                    whileHover={{ y: -3 }}
+                    onClick={() => navigate(`/item/${item.id}`)}
+                    className="bg-gradient-to-br from-white to-amber-50 rounded-lg shadow-md border border-yellow-100-md hover:shadow-lg transition-all duration-200 overflow-hidden cursor-pointer group flex flex-col"
                   >
-                    View
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={item.images[0] || '/placeholder.jpg'}
+                        alt={item.title}
+                        className="w-full h-32 sm:h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      {/* Featured Badge - OLX/JustDial Style */}
+                      {(item as any).featured && (
+                        <div className="absolute top-2 left-2">
+                          <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded text-xs font-bold shadow-lg flex items-center gap-1">
+                            ⭐ FEATURED
+                          </span>
+                        </div>
+                      )}
+                      {!(item as any).featured && (
+                        <div className="absolute top-2 left-2">
+                          <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                            {item.category}
+                          </span>
+                        </div>
+                      )}
+                      {item.availability === 'Available' && (
+                        <div className="absolute top-2 right-2">
+                          <span className="bg-amber-500 text-white px-1.5 py-0.5 rounded text-xs font-semibold">
+                            ✓
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-2 sm:p-3 flex flex-col h-full">
+                      <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2 group-hover:text-amber-600 transition-colors min-h-[2.5rem]">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-gray-500 mb-2 truncate">by {item.owner_name}</p>
+
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-base sm:text-lg font-bold text-amber-600">
+                          ₹{item.price}<span className="text-xs text-gray-500">{formatPricingModel(item.pricing_model)}</span>
+                        </span>
+                      </div>
+
+                      <div className="flex items-center text-gray-500 mb-3">
+                        <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+                        <span className="text-xs truncate">{item.location}</span>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/item/${item.id}`);
+                        }}
+                        className="w-full bg-secondary text-gray-900 py-1.5 sm:py-2 rounded text-xs sm:text-sm font-semibold hover:bg-secondary/80 transition-colors mt-auto"
+                      >
+                        View
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
             )}
 

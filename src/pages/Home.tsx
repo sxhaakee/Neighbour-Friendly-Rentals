@@ -80,7 +80,7 @@ const Home = () => {
       {isPremium ? (
         <PremiumHero />
       ) : (
-        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 pt-24 pb-6 lg:py-20 px-4 overflow-hidden lg:min-h-[90vh] flex items-center">
+        <section className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 pt-16 pb-2 lg:py-24 px-4 overflow-hidden lg:min-h-[90vh] flex items-center">
           {/* Premium Background Pattern */}
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute inset-0" style={{
@@ -132,7 +132,7 @@ const Home = () => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
-                  className="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight"
+                  className="text-3xl md:text-7xl font-black mb-4 lg:mb-6 leading-tight tracking-tight"
                 >
                   <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent block">
                     Rent from people
@@ -140,7 +140,7 @@ const Home = () => {
                   <span className="text-gray-900 block">
                     you can trust
                   </span>
-                  <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent block text-4xl md:text-6xl mt-2 pb-2">
+                  <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent block text-2xl md:text-6xl mt-2 pb-2">
                     — right next door.
                   </span>
                 </motion.h1>
@@ -149,7 +149,7 @@ const Home = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.8 }}
-                  className="text-lg md:text-xl mb-10 text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed"
+                  className="text-base md:text-xl mb-6 lg:mb-10 text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed"
                 >
                   A trust-first rental marketplace with verified users, digital agreements, and local discovery.
                 </motion.p>
@@ -308,7 +308,7 @@ const Home = () => {
       }
 
       {/* Trust Signals Section */}
-      <section className="py-20 px-4 relative bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/images/neighbours-bg.png')" }}>
+      <section className="py-10 lg:py-20 px-4 relative bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('/images/neighbours-bg.png')" }}>
         <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div
@@ -316,9 +316,9 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-6 lg:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Why Neighbour Friendly Rentals works</h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 lg:mb-6">Why Neighbour Friendly Rentals works</h2>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mb-8">
@@ -359,18 +359,18 @@ const Home = () => {
       </section>
 
       {/* First Time Here Section */}
-      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-10 lg:py-16 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 lg:mb-16"
           >
             <span className="text-amber-600 font-bold uppercase tracking-wider text-sm mb-2 block">How it works</span>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">First time here?</h2>
-            <p className="text-xl text-gray-600 font-bold">Renting is simple:</p>
+            <h2 className="text-2xl md:text-5xl font-black text-gray-900 mb-4 lg:mb-6">First time here?</h2>
+            <p className="text-lg text-gray-600 font-bold">Renting is simple:</p>
           </motion.div>
 
           <div className="relative">
@@ -446,7 +446,7 @@ const Home = () => {
       </section>
 
       {/* Fear Handling Section - World Class Design */}
-      <section className="py-20 px-4 bg-white relative overflow-hidden">
+      <section className="py-10 lg:py-20 px-4 bg-white relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-50 -z-10"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-50 rounded-full blur-3xl opacity-50 -z-10"></div>
@@ -457,11 +457,11 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 lg:mb-16"
           >
             <span className="text-amber-600 font-bold uppercase tracking-wider text-sm mb-2 block">Peace of Mind</span>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-6">What if something goes wrong?</h2>
-            <p className="text-xl text-gray-600 font-bold">We've already thought about that.</p>
+            <h2 className="text-2xl md:text-5xl font-black text-gray-900 mb-4 lg:mb-6">What if something goes wrong?</h2>
+            <p className="text-lg text-gray-600 font-bold">We've already thought about that.</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
@@ -505,21 +505,21 @@ const Home = () => {
 
 
       {/* Featured Items */}
-      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-16 px-4">
+      <section className="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-10 lg:py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-8 lg:mb-16"
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm">
               <Package className="w-4 h-4 fill-amber-500 text-amber-500" />
               Top Rated Items
             </div>
-            <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Featured Items</h2>
-            <p className="text-xl text-gray-600">Popular rentals in your area</p>
+            <h2 className="text-2xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">Featured Items</h2>
+            <p className="text-lg text-gray-600">Popular rentals in your area</p>
           </motion.div>
 
           {loading ? (
@@ -615,7 +615,7 @@ const Home = () => {
       {/* Featured Services */}
       {
         featuredServices.length > 0 && (
-          <section className="py-24 px-4 bg-gray-50/50 relative overflow-hidden">
+          <section className="py-12 lg:py-24 px-4 bg-gray-50/50 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-amber-100/30 rounded-full blur-3xl -z-10"></div>
             <div className="max-w-6xl mx-auto">
               <motion.div
@@ -623,14 +623,14 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="text-center mb-16"
+                className="text-center mb-8 lg:mb-16"
               >
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 text-sm font-bold mb-4 shadow-sm">
                   <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                   Verified Experts
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Featured Services</h2>
-                <p className="text-xl text-gray-600">Top-rated service providers in your vicinity</p>
+                <h2 className="text-3xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">Featured Services</h2>
+                <p className="text-lg text-gray-600">Top-rated service providers in your vicinity</p>
               </motion.div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

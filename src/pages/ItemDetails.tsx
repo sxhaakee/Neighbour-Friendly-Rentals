@@ -183,13 +183,13 @@ const ItemDetails = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 lg:py-8">
         {/* Back Button */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 transition-colors"
+          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} />
           Back to Listings
@@ -252,8 +252,8 @@ const ItemDetails = () => {
                         <Star
                           key={i}
                           className={`w-5 h-5 ${i < Math.round(averageRating)
-                              ? 'fill-yellow-400 text-yellow-400'
-                              : 'text-gray-300'
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-gray-300'
                             }`}
                         />
                       ))}
@@ -295,8 +295,8 @@ const ItemDetails = () => {
                         >
                           <Star
                             className={`w-8 h-8 ${rating <= newReview.rating
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'text-gray-300'
                               }`}
                           />
                         </button>
@@ -347,8 +347,8 @@ const ItemDetails = () => {
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${i < review.rating
-                                    ? 'fill-yellow-400 text-yellow-400'
-                                    : 'text-gray-300'
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-gray-300'
                                   }`}
                               />
                             ))}
@@ -379,7 +379,7 @@ const ItemDetails = () => {
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <div className="mb-4">
                 <div className="flex items-start justify-between gap-4 mb-2">
-                  <h1 className="text-3xl font-bold text-gray-900">{listing.title}</h1>
+                  <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{listing.title}</h1>
                   <ShareButton
                     url={window.location.href}
                     title={listing.title}
@@ -400,14 +400,14 @@ const ItemDetails = () => {
 
               {/* Price */}
               <div className="border-t border-gray-200 pt-4">
-                <div className="text-4xl font-bold text-amber-600 mb-2">
+                <div className="text-3xl lg:text-4xl font-bold text-amber-600 mb-2">
                   ₹{listing.price}
                   <span className="text-lg text-gray-600 font-normal">{formatPricingModel(listing.pricing_model)}</span>
                 </div>
                 <div className="flex items-center gap-4 text-sm text-gray-600">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${listing.availability === 'Available'
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                    ? 'bg-amber-100 text-amber-800'
+                    : 'bg-yellow-100 text-yellow-800'
                     }`}>
                     {listing.availability}
                   </span>
@@ -425,7 +425,7 @@ const ItemDetails = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate(`/edit-item/${listing.id}`)}
-                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 lg:py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Calendar className="w-5 h-5" />
                     Edit Listing
@@ -444,7 +444,7 @@ const ItemDetails = () => {
                         }
                       }
                     }}
-                    className="w-full bg-red-500 text-white py-4 rounded-xl font-semibold text-lg hover:bg-red-600 transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-red-500 text-white py-3 lg:py-4 rounded-xl font-semibold text-lg hover:bg-red-600 transition-all flex items-center justify-center gap-2"
                   >
                     Delete Listing
                   </motion.button>
@@ -456,7 +456,7 @@ const ItemDetails = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBookNow}
-                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white py-3 lg:py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Calendar className="w-5 h-5" />
                     Book Now
@@ -467,7 +467,7 @@ const ItemDetails = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleContactOwner}
-                      className="w-full bg-white border-2 border-amber-500 text-amber-600 py-4 rounded-xl font-semibold text-lg hover:bg-amber-600/5 transition-all flex items-center justify-center gap-2"
+                      className="w-full bg-white border-2 border-amber-500 text-amber-600 py-3 lg:py-4 rounded-xl font-semibold text-lg hover:bg-amber-600/5 transition-all flex items-center justify-center gap-2"
                     >
                       <MessageCircle className="w-5 h-5" />
                       Contact Owner

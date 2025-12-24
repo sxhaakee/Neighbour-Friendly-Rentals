@@ -14,16 +14,34 @@ interface ChatResponse {
 }
 
 // Note: Direct API calls to Hugging Face are blocked by CORS in browsers
-// This implementation uses intelligent keyword-based responses
-// For true AI integration, you'll need a backend proxy server
+// This implementation uses a real fetch call with intelligent fallback
+const HUGGINGFACE_API_URL = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2';
+const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+
+const SYSTEM_PROMPT = `You are a helpful, friendly AI assistant for "NeighbourFriendly", India's premier P2P rental marketplace.
+Your goal is to help users navigate the platform, find items/properties/services, and understand how renting works.
+
+Platform Knowledge:
+- Browse Items: /listings
+- Add/List an Item: /add-item
+- Find Properties: /properties
+- Find Services: /services
+- About Us: /about
+- Contact Support: support@neighbourfriendly.in
+- Pricing: Per hour, day, week, month, or event. Owners set prices.
+- Trust: Verified users, ID checks, and platform reviews.
+
+Guidelines:
+- If a user wants to find something, guide them to /listings, /properties, or /services.
+- If a user wants to earn money, guide them to /add-item.
+- Keep responses concise and use emojis for a friendly tone.
+- If unsure, provide the support email.
+`;
 
 class AIChatService {
   private conversationHistory: ChatMessage[] = [];
-  private maxHistoryLength = 10; // Keep last 10 messages for context
+  private maxHistoryLength = 8;
 
-  /**
-   * Send a message to the AI and get a response
-   */
   async sendMessage(userMessage: string): Promise<ChatResponse> {
     // Add user message to history
     this.conversationHistory.push({
@@ -31,128 +49,121 @@ class AIChatService {
       content: userMessage
     });
 
-    // Keep only recent messages to avoid token limits
     if (this.conversationHistory.length > this.maxHistoryLength) {
       this.conversationHistory = this.conversationHistory.slice(-this.maxHistoryLength);
     }
 
-    // For now, use intelligent fallback responses
-    // API integration requires backend proxy to avoid CORS
-    const aiMessage = this.getIntelligentResponse(userMessage);
+    // Try Real AI API First
+    if (API_KEY && !API_KEY.includes('your_actual_token')) {
+      try {
+        const fullPrompt = `${SYSTEM_PROMPT}\n\n${this.conversationHistory
+          .map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+          .join('\n')}\nAssistant:`;
 
-    // Add AI response to history
+        const response = await fetch(HUGGINGFACE_API_URL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            inputs: fullPrompt,
+            parameters: {
+              max_new_tokens: 300,
+              temperature: 0.7,
+              return_full_text: false,
+            }
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        let aiMessage = '';
+
+        if (Array.isArray(data) && data[0]?.generated_text) {
+          aiMessage = data[0].generated_text.split('User:')[0].split('Assistant:')[0].trim();
+        } else if (data.generated_text) {
+          aiMessage = data.generated_text.split('User:')[0].split('Assistant:')[0].trim();
+        }
+
+        if (aiMessage) {
+          this.conversationHistory.push({
+            role: 'assistant',
+            content: aiMessage
+          });
+          return { message: aiMessage };
+        }
+      } catch (error) {
+        console.error('Hugging Face API failed, falling back:', error);
+      }
+    }
+
+    // Fallback to intelligent pattern matching if API fails or no key
+    const fallbackMessage = this.getIntelligentResponse(userMessage);
     this.conversationHistory.push({
       role: 'assistant',
-      content: aiMessage
+      content: fallbackMessage
     });
 
-    return {
-      message: aiMessage
-    };
+    return { message: fallbackMessage };
   }
 
-  /**
-   * Get an intelligent context-aware response
-   */
   private getIntelligentResponse(userMessage: string): string {
     const lowerMessage = userMessage.toLowerCase();
 
-    // Greetings
     if (lowerMessage.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)) {
-      return "Hi! 👋 I'm your NeighbourFriendly assistant. I can help you:\n\n• Browse and search items\n• Find properties and services\n• List your items for rent\n• Answer questions about the platform\n\nWhat can I help you with today?";
+      return "Hi! 👋 I'm your NeighbourFriendly assistant. I can help you browse items, list your own, or find properties and services. What can I help you with today?";
     }
 
-    // Camera and photography
     if (lowerMessage.includes('camera') || lowerMessage.includes('photo')) {
-      return "I can help you find cameras! 📷\n\nHere's what to do:\n1. Go to /listings and search for 'camera'\n2. Filter by your location for nearby options\n3. Check pricing (usually ₹500-2000/day)\n4. Contact the owner directly via WhatsApp\n5. Arrange pickup and rental\n\nNeed help with anything specific about camera rentals?";
+      return "I can help you find cameras! 📷\n\nGo to /listings and search for 'camera' to see what's available nearby. Most rentals are ₹500-2000/day. You can contact owners directly via WhatsApp!";
     }
     
-    // Properties
     if (lowerMessage.includes('property') || lowerMessage.includes('properties') || lowerMessage.includes('house') || lowerMessage.includes('flat') || lowerMessage.includes('apartment') || lowerMessage.includes('pg') || lowerMessage.includes('room')) {
-      return "Looking for a property? 🏠\n\nHere's how to find one:\n1. Visit /properties to browse available rentals\n2. Filter by bedrooms, price, and location\n3. View photos and details\n4. Contact owners directly via WhatsApp\n\nWe have flats, houses, PG accommodations, and commercial spaces. What type of property are you looking for?";
+      return "Looking for a property? 🏠 Visit /properties to browse flats, houses, and PG accommodations. You can filter by price and location.";
     }
     
-    // Services
-    if (lowerMessage.includes('service') || lowerMessage.includes('services') || lowerMessage.includes('dj') || lowerMessage.includes('caterer') || lowerMessage.includes('photographer') || lowerMessage.includes('wedding') || lowerMessage.includes('event')) {
-      return "Need a service provider? 🎉\n\nHere's how:\n1. Visit /services to browse categories\n2. Check out DJ, Catering, Photography, and more\n3. View provider profiles and portfolios\n4. Contact them directly via WhatsApp\n\nAll service providers are verified! What service do you need?";
+    if (lowerMessage.includes('service') || lowerMessage.includes('services') || lowerMessage.includes('dj') || lowerMessage.includes('caterer') || lowerMessage.includes('photographer')) {
+      return "Need a service provider? 🎉 Visit /services to find DJs, caterers, and photographers in your area. All providers are verified!";
     }
     
-    // Pricing
-    if (lowerMessage.includes('price') || lowerMessage.includes('pricing') || lowerMessage.includes('cost') || lowerMessage.includes('fee') || lowerMessage.includes('charge')) {
-      return "💰 Pricing Information:\n\n**For Renters:**\n• No platform fees\n• Pay directly to owners\n• Flexible pricing models (hourly, daily, weekly, monthly)\n\n**For Listers:**\n• FREE to list items\n• Premium: ₹499/month for unlimited listings\n• Set your own rental prices\n\nEach listing shows its specific pricing. Browse /listings to see current prices!";
+    if (lowerMessage.includes('price') || lowerMessage.includes('pricing') || lowerMessage.includes('cost') || lowerMessage.includes('fee')) {
+      return "💰 Pricing is flexible! Renters pay owners directly with no platform fees. Listers can list for free, or get Premium for ₹499/month. Check individual listings for specific rates.";
     }
     
-    // How it works
-    if ((lowerMessage.includes('how') && lowerMessage.includes('work')) || lowerMessage.includes('start') || lowerMessage.includes('begin')) {
-      return "🎯 How NeighbourFriendly works:\n\n**To Rent:**\n1. Browse listings at /listings\n2. View details, photos, and pricing\n3. Contact owner via WhatsApp\n4. Arrange pickup and rental terms\n5. Leave a review after use\n\n**To List:**\n1. Go to /add-item\n2. Fill in details and upload photos\n3. Set your price and availability\n4. Wait for admin approval (24 hours)\n5. Start earning!\n\nIt's that simple! What would you like to do?";
+    if (lowerMessage.includes('how') && lowerMessage.includes('work')) {
+      return "🎯 It's easy! Renters browse /listings and contact owners via WhatsApp. Listers add items at /add-item and wait for admin approval (24h).";
     }
 
-    // Listing items
-    if (lowerMessage.includes('list') || lowerMessage.includes('add item') || lowerMessage.includes('rent out') || lowerMessage.includes('earn')) {
-      return "📝 Want to list your item and earn money?\n\nHere's how:\n1. Click /add-item\n2. Fill in: title, description, category, price\n3. Upload clear photos (up to 10)\n4. Set availability and pricing model\n5. Submit for approval\n\nYour listing goes live within 24 hours! What would you like to rent out?";
+    if (lowerMessage.includes('list') || lowerMessage.includes('add item') || lowerMessage.includes('earn')) {
+      return "📝 Want to list your item? Go to /add-item, fill in the details and photos, and set your price. Your listing will be live within 24 hours!";
     }
 
-    // Browsing
-    if (lowerMessage.includes('browse') || lowerMessage.includes('search') || lowerMessage.includes('find') || lowerMessage.includes('look')) {
-      return "🔍 Looking for something?\n\nHere's how to search:\n1. Use the search bar at the top\n2. Or go to /browse to see categories\n3. Filter by category, price, location\n4. Click any item for full details\n\nPopular categories: Cameras, Tools, Furniture, Electronics, Party Supplies. What are you looking for?";
+    if (lowerMessage.includes('safe') || lowerMessage.includes('secure') || lowerMessage.includes('trust') || lowerMessage.includes('verify')) {
+      return "🔒 Safety first! We use ID verification, admin approval for listings, and user reviews. We recommend checking ratings and meeting in public places for handovers.";
     }
 
-    // Safety and trust - General
-    if (lowerMessage.includes('safe') || lowerMessage.includes('secure') || lowerMessage.includes('trust') || lowerMessage.includes('verify') || lowerMessage.includes('security')) {
-      // Check if asking about item security specifically
-      if (lowerMessage.includes('item') || lowerMessage.includes('my') || lowerMessage.includes('stuff') || lowerMessage.includes('thing')) {
-        return "🔒 **Security for Your Items:**\n\n**When Renting Out Your Items:**\n✅ Verify renter's ID before handover\n✅ Check their ratings and reviews\n✅ Take photos/videos before rental\n✅ Get security deposit (recommended)\n✅ Use written rental agreement\n✅ Keep communication on platform\n✅ Get renter's contact details\n\n**Insurance Options:**\n• Consider item insurance\n• Check if renter has insurance\n• Document item condition\n\n**If Something Goes Wrong:**\n• Report to admin immediately\n• Use our dispute resolution\n• Contact support: support@neighbourfriendly.in\n\n**Tips:**\n• Meet in person for handover\n• Don't share personal address initially\n• Trust your instincts\n• Start with shorter rentals\n\nYour items are valuable - we help you protect them!";
-      }
-      
-      // General safety
-      return "🔒 Your safety is our priority!\n\n**Safety Features:**\n✅ ID verification for all users\n✅ Admin approval for listings\n✅ User ratings and reviews\n✅ Direct communication with owners\n✅ Report & block features\n✅ 24/7 support\n\n**Tips:**\n• Check user ratings before renting\n• Meet in public places\n• Inspect items before renting\n• Keep communication on platform\n\nFeel safe renting with us!";
+    if (lowerMessage.includes('contact') || lowerMessage.includes('support') || lowerMessage.includes('help')) {
+      return "📞 Need help? You can email us at support@neighbourfriendly.in and we'll get back to you within 24 hours!";
     }
 
-    // Contact and support
-    if (lowerMessage.includes('contact') || lowerMessage.includes('support') || lowerMessage.includes('help') || lowerMessage.includes('email') || lowerMessage.includes('phone')) {
-      return "📞 Need help?\n\n**Contact Us:**\n• Email: support@neighbourfriendly.in\n• Response time: Within 24 hours\n\n**Or:**\n• Use this chat for instant help\n• Check our FAQ section\n• Visit /about for more info\n\nI'm here to help! What do you need assistance with?";
-    }
-
-    // Premium
-    if (lowerMessage.includes('premium') || lowerMessage.includes('upgrade') || lowerMessage.includes('subscription')) {
-      return "⭐ Premium Benefits:\n\n✅ Unlimited listings\n✅ Featured placement (top of search)\n✅ Priority support\n✅ Advanced analytics\n✅ Custom branding\n✅ Early access to new features\n\n**Only ₹499/month!**\n\nClick 'Upgrade to Premium' in the menu to get started. Want to know more?";
-    }
-
-    // Categories
-    if (lowerMessage.includes('category') || lowerMessage.includes('categories') || lowerMessage.includes('what can')) {
-      return "📂 Available Categories:\n\n• 📱 Electronics & Cameras\n• 🔧 Tools & Equipment\n• 🛋️ Furniture & Appliances\n• 🏋️ Sports & Fitness\n• 🎸 Musical Instruments\n• 📚 Books & Media\n• 🎉 Party & Events\n• 🎮 Gaming & Consoles\n• ⛺ Outdoor & Camping\n• 👶 Baby & Kids\n• And many more!\n\nClick /browse to see all categories. What are you interested in?";
-    }
-
-    // Thank you
     if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-      return "You're welcome! 😊 Happy to help!\n\nIf you need anything else, just ask. Enjoy using NeighbourFriendly!";
+      return "You're welcome! 😊 Enjoy using NeighbourFriendly!";
     }
 
-    // Default response with context awareness
-    const recentMessages = this.conversationHistory.slice(-3);
-    const hasAskedBefore = recentMessages.some(msg => msg.role === 'user');
-    
-    if (hasAskedBefore) {
-      return "I'm here to help! Could you please tell me more about what you're looking for? I can assist with:\n\n• Finding items to rent\n• Listing your items\n• Properties and services\n• Platform questions\n\nWhat would you like to know?";
-    }
-
-    return "Hi! I'm your NeighbourFriendly assistant. 👋\n\nI can help you:\n• 🔍 Browse and search items\n• 🏠 Find properties\n• 🛠️ Find services\n• 📝 List your items for rent\n• 💰 Learn about pricing\n• 🔒 Safety and security\n\nWhat are you looking for today?";
+    return "I'm here to help! 👋 I can assist with finding items, listing your own stuff, or answering questions about the platform. What's on your mind?";
   }
 
-  /**
-   * Clear conversation history
-   */
   clearHistory(): void {
     this.conversationHistory = [];
   }
 
-  /**
-   * Get conversation history
-   */
   getHistory(): ChatMessage[] {
     return [...this.conversationHistory];
   }
 }
 
-// Export singleton instance
 export const aiChatService = new AIChatService();

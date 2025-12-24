@@ -71,14 +71,14 @@ export const AIChatbot = () => {
     try {
       // Call real AI service
       const response = await aiChatService.sendMessage(messageText);
-      
+
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
         text: response.message,
         sender: 'bot',
         timestamp: new Date(),
       };
-      
+
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
       console.error('Chat error:', error);
@@ -166,15 +166,31 @@ export const AIChatbot = () => {
                 </div>
                 <div>
                   <h3 className="font-bold">AI Assistant</h3>
-                  <p className="text-xs text-white/80">Always here to help</p>
+                  <p className="text-xs text-white/80">Powered by Mistral AI</p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="hover:bg-white/20 p-2 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    aiChatService.clearHistory();
+                    setMessages([{
+                      id: Date.now().toString(),
+                      text: "Chat history cleared. How else can I help you?",
+                      sender: 'bot',
+                      timestamp: new Date()
+                    }]);
+                  }}
+                  className="hover:bg-white/20 px-2 py-1 rounded text-xs transition-colors"
+                >
+                  Clear
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="hover:bg-white/20 p-2 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -190,11 +206,10 @@ export const AIChatbot = () => {
                     </div>
                   )}
                   <div
-                    className={`max-w-[80%] sm:max-w-[75%] rounded-2xl px-3 sm:px-4 py-2 ${
-                      message.sender === 'user'
+                    className={`max-w-[80%] sm:max-w-[75%] rounded-2xl px-3 sm:px-4 py-2 ${message.sender === 'user'
                         ? 'bg-amber-500 text-white rounded-br-none'
                         : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
-                    }`}
+                      }`}
                   >
                     <p className="text-xs sm:text-sm whitespace-pre-line leading-relaxed">{message.text}</p>
                     <p className="text-[10px] sm:text-xs mt-1 opacity-70">
