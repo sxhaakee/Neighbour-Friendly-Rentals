@@ -332,13 +332,19 @@ class ServiceProviderService {
   }
 
   // Get featured providers
-  async getFeaturedProviders(limit: number = 6): Promise<ServiceProvider[]> {
+  async getFeaturedProviders(limit: number = 6, city?: string): Promise<ServiceProvider[]> {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('service_providers')
         .select('*')
         .eq('status', 'approved')
-        .eq('featured', true)
+        .eq('featured', true);
+
+      if (city) {
+        query = query.ilike('city', `%${city}%`);
+      }
+
+      const { data, error } = await query
         .order('rating', { ascending: false })
         .limit(limit);
 

@@ -20,13 +20,49 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
+  const [userCity, setUserCity] = useState<string | undefined>(undefined);
+  const [locationLoading, setLocationLoading] = useState(false);
 
 
 
   useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  useEffect(() => {
     fetchFeaturedListings();
     checkPremiumStatus();
-  }, [user]);
+  }, [user, userCity]);
+
+  const getUserLocation = () => {
+    if (!navigator.geolocation) return;
+
+    setLocationLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await response.json();
+          // Address usually has city, town, village, or county
+          const city = data.address.city || data.address.town || data.address.village || data.address.state_district;
+          if (city) {
+            setUserCity(city);
+          }
+        } catch (error) {
+          console.error('Error getting location name:', error);
+        } finally {
+          setLocationLoading(false);
+        }
+      },
+      (error) => {
+        console.error('Error getting location:', error);
+        setLocationLoading(false);
+      }
+    );
+  };
 
   const checkPremiumStatus = async () => {
     if (!user) return;
@@ -49,9 +85,9 @@ const Home = () => {
       setLoading(true);
       // Fetch featured items, services, and properties
       const [items, services, properties] = await Promise.all([
-        listingService.getFeaturedListings(6),
-        serviceProviderService.getFeaturedProviders(6),
-        propertyService.getFeaturedProperties(6)
+        listingService.getFeaturedListings(6, userCity),
+        serviceProviderService.getFeaturedProviders(6, userCity),
+        propertyService.getFeaturedProperties(6, userCity)
       ]);
 
       setFeaturedListings(items);
@@ -518,8 +554,10 @@ const Home = () => {
               <Package className="w-4 h-4 fill-amber-500 text-amber-500" />
               Top Rated Items
             </div>
-            <h2 className="text-2xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">Featured Items</h2>
-            <p className="text-lg text-gray-600">Popular rentals in your area</p>
+            <h2 className="text-2xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">
+              Featured Items {userCity && <span className="text-amber-600">in {userCity}</span>}
+            </h2>
+            <p className="text-lg text-gray-600">Popular rentals {userCity ? 'near you' : 'in your area'}</p>
           </motion.div>
 
           {loading ? (
@@ -529,7 +567,11 @@ const Home = () => {
           ) : featuredListings.length === 0 ? (
             <div className="text-center py-20 bg-amber-50/50 rounded-3xl border border-amber-100">
               <Package className="w-16 h-16 text-amber-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg mb-8">No listings available yet. Be the first to list an item!</p>
+              <p className="text-gray-600 text-lg mb-8">
+                {userCity
+                  ? `No listings available in ${userCity} yet. Be the first to list an item!`
+                  : 'No listings available yet. Be the first to list an item!'}
+              </p>
               <Link
                 to="/add-item"
                 className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all shadow-lg inline-block"
@@ -629,8 +671,10 @@ const Home = () => {
                   <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
                   Verified Experts
                 </div>
-                <h2 className="text-3xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">Featured Services</h2>
-                <p className="text-lg text-gray-600">Top-rated service providers in your vicinity</p>
+                <h2 className="text-3xl md:text-5xl font-black mb-2 lg:mb-4 text-gray-900 tracking-tight">
+                  Featured Services {userCity && <span className="text-amber-600">in {userCity}</span>}
+                </h2>
+                <p className="text-lg text-gray-600">Top-rated service providers {userCity ? 'near you' : 'in your vicinity'}</p>
               </motion.div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -715,8 +759,10 @@ const Home = () => {
                 viewport={{ once: true }}
                 className="text-center mb-16"
               >
-                <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">Premium Properties</h2>
-                <p className="text-xl text-gray-500">Curated living spaces for your next move</p>
+                <h2 className="text-4xl md:text-5xl font-black mb-4 text-gray-900 tracking-tight">
+                  Premium Properties {userCity && <span className="text-amber-600">in {userCity}</span>}
+                </h2>
+                <p className="text-xl text-gray-500">Curated living spaces {userCity ? 'near you' : 'for your next move'}</p>
               </motion.div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

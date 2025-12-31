@@ -304,13 +304,19 @@ class PropertyService {
   }
 
   // Get featured properties
-  async getFeaturedProperties(limit: number = 6): Promise<Property[]> {
+  async getFeaturedProperties(limit: number = 6, city?: string): Promise<Property[]> {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('properties')
         .select('*')
         .eq('status', 'approved')
-        .eq('featured', true)
+        .eq('featured', true);
+
+      if (city) {
+          query = query.ilike('city', `%${city}%`);
+      }
+
+      const { data, error } = await query
         .order('created_at', { ascending: false })
         .limit(limit);
 

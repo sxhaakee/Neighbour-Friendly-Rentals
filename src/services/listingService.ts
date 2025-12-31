@@ -5,6 +5,7 @@ type Listing = Database['public']['Tables']['listings']['Row'];
 type ListingInsert = Database['public']['Tables']['listings']['Insert'];
 type ListingUpdate = Database['public']['Tables']['listings']['Update'];
 
+
 export const listingService = {
   // Get all approved listings
   async getApprovedListings() {
@@ -104,12 +105,18 @@ export const listingService = {
   },
 
   // Get featured listings for home page
-  async getFeaturedListings(limit: number = 6) {
-    const { data, error } = await supabase
+  async getFeaturedListings(limit: number = 6, location?: string) {
+    let query = supabase
       .from('listings')
       .select('*')
       .eq('featured', true)
-      .eq('status', 'approved')
+      .eq('status', 'approved');
+
+    if (location) {
+      query = query.ilike('location', `%${location}%`);
+    }
+
+    const { data, error } = await query
       .order('created_at', { ascending: false })
       .limit(limit);
 
