@@ -28,6 +28,7 @@ import Privacy from './pages/Privacy';
 import Premium from './pages/Premium';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
+import ResetPassword from './pages/ResetPassword';
 import FAB from './components/Common/FAB';
 import { ToastContainer } from './components/Common/Toast';
 import { AIChatbot } from './components/AIChatbot';
@@ -85,6 +86,7 @@ function AppContent() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>

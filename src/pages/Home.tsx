@@ -709,11 +709,11 @@ const Home = () => {
                       </p>
 
                       <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between text-gray-400">
-                        <span className="text-xs font-bold flex items-center">
-                          <MapPin className="w-3.5 h-3.5 mr-1 text-amber-500" />
-                          {service.city}
+                        <span className="text-xs font-bold flex items-center max-w-[60%] truncate">
+                          <MapPin className="w-3.5 h-3.5 mr-1 text-amber-500 flex-shrink-0" />
+                          <span className="truncate">{service.city}</span>
                         </span>
-                        <span className="text-[10px] font-bold uppercase tracking-tighter">View Profile →</span>
+                        <span className="text-[10px] font-bold uppercase tracking-tighter flex-shrink-0">View Profile →</span>
                       </div>
                     </div>
                   </motion.div>

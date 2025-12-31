@@ -20,9 +20,6 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signInWithGoogle: () => Promise<{ error: AuthError | null }>;
-  signInWithApple: () => Promise<{ error: AuthError | null }>;
-  signInWithOtp: (phone: string) => Promise<{ error: AuthError | null }>;
-  verifyOtp: (phone: string, token: string) => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -249,44 +246,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signInWithApple = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'apple',
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-      return { error };
-    } catch (error) {
-      return { error: error as AuthError };
-    }
-  };
-
-  const signInWithOtp = async (phone: string) => {
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        phone,
-      });
-      return { error };
-    } catch (error) {
-      return { error: error as AuthError };
-    }
-  };
-
-  const verifyOtp = async (phone: string, token: string) => {
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        phone,
-        token,
-        type: 'sms',
-      });
-      return { error };
-    } catch (error) {
-      return { error: error as AuthError };
-    }
-  };
-
   const resetPassword = async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -321,9 +280,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signIn,
     signInWithGoogle,
-    signInWithApple,
-    signInWithOtp,
-    verifyOtp,
     resetPassword,
     signOut,
     refreshProfile,
