@@ -172,7 +172,7 @@ const Home = () => {
                   transition={{ duration: 0.6 }}
                   className="inline-block bg-white/80 backdrop-blur-sm border border-yellow-200 px-4 py-1.5 rounded-full mb-6 shadow-sm"
                 >
-                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">✨ The #1 Neighbourhood Marketplace in India</span>
+                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">✨ The #1 Neighbourhood Marketplace</span>
                 </motion.div>
 
                 <motion.h1
