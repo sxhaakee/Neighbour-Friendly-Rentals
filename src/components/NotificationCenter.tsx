@@ -40,7 +40,7 @@ export const NotificationCenter = () => {
       setLoading(true);
       const data = await notificationService.getUserNotifications(user.id);
       setNotifications(data);
-      
+
       // Calculate unread count from fetched notifications to match what's displayed
       const unread = data.filter(n => !n.read).length;
       setUnreadCount(unread);
@@ -100,10 +100,10 @@ export const NotificationCenter = () => {
       // Check if the notification being deleted is unread
       const notification = notifications.find(n => n.id === id);
       const wasUnread = notification && !notification.read;
-      
+
       await notificationService.deleteNotification(id);
       setNotifications((prev) => prev.filter((n) => n.id !== id));
-      
+
       // Update unread count if the deleted notification was unread
       if (wasUnread) {
         setUnreadCount((prev) => Math.max(0, prev - 1));
@@ -195,7 +195,7 @@ export const NotificationCenter = () => {
                 <div className="p-3 sm:p-4 border-b border-gray-200 flex gap-2">
                   <button
                     onClick={handleMarkAllRead}
-                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-blue-100 transition-colors active:scale-95"
+                    className="flex-1 sm:flex-initial flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-xs sm:text-sm font-semibold hover:bg-amber-100 transition-colors active:scale-95"
                   >
                     <CheckCheck className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span className="hidden sm:inline">Mark all read</span>
@@ -232,9 +232,8 @@ export const NotificationCenter = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         onClick={() => handleNotificationClick(notification)}
-                        className={`p-4 cursor-pointer transition-colors ${
-                          notification.read ? 'bg-white hover:bg-gray-50' : 'bg-blue-50 hover:bg-blue-100'
-                        }`}
+                        className={`p-4 cursor-pointer transition-colors ${notification.read ? 'bg-white hover:bg-gray-50' : 'bg-amber-50 hover:bg-amber-100'
+                          }`}
                       >
                         <div className="flex items-start gap-3">
                           <span className="text-2xl">{getNotificationIcon(notification.type)}</span>
@@ -256,7 +255,7 @@ export const NotificationCenter = () => {
                             </p>
                           </div>
                           {!notification.read && (
-                            <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                            <div className="w-2 h-2 bg-amber-500 rounded-full mt-2"></div>
                           )}
                         </div>
                       </motion.div>

@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2C7A7B', // Teal Green (keeping for compatibility)
+        primary: '#D97706', // Warm Amber (Amber-600)
         secondary: '#FFB703', // Warm Yellow
-        accent: '#38B2AC', // Bright Teal
+        accent: '#F59E0B', // Bright Amber (Amber-500)
         premium: {
           50: '#FFFBEB',   // Lightest gold
           100: '#FEF3C7',  // Very light gold
