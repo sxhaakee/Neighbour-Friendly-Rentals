@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X } from 'lucide-react';
+import { ArrowLeft, Upload, X, Smartphone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { propertyService } from '../services/propertyService';
@@ -17,14 +17,56 @@ const AddProperty = () => {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
 
   // Require login
   useEffect(() => {
     if (!user) {
       showToast.error('Please login to list a property');
       navigate('/login');
+    } else {
+      detectLocation();
     }
   }, [user, navigate]);
+
+  const detectLocation = () => {
+    if ("geolocation" in navigator) {
+      setLocationLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setFormData(prev => ({ ...prev, latitude, longitude }));
+
+          try {
+            // Reverse geocode to get city/state
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`);
+            const data = await response.json();
+
+            if (data.address) {
+              const city = data.address.city || data.address.town || data.address.village || '';
+              const state = data.address.state || '';
+              const pincode = data.address.postcode || '';
+
+              setFormData(prev => ({
+                ...prev,
+                city: city || prev.city,
+                state: state || prev.state,
+                pincode: pincode || prev.pincode
+              }));
+            }
+          } catch (error) {
+            console.error('Error reverse geocoding:', error);
+          } finally {
+            setLocationLoading(false);
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          setLocationLoading(false);
+        }
+      );
+    }
+  };
 
   const [formData, setFormData] = useState({
     type: 'flat',
@@ -54,6 +96,8 @@ const AddProperty = () => {
     available_from: '',
     lease_duration: '11-months',
     minimum_stay_months: '11',
+    latitude: null as number | null,
+    longitude: null as number | null,
   });
 
   const propertyTypes = [
@@ -70,7 +114,7 @@ const AddProperty = () => {
     const residential = ['Parking', 'Lift', 'Power Backup', 'Security', 'Gym', 'Swimming Pool', 'Garden', 'Play Area', 'WiFi', 'Water Supply', 'Gas Pipeline'];
     const commercial = ['Parking', 'Lift', 'Power Backup', 'Security', 'WiFi', 'Conference Room', 'Cafeteria', 'Reception'];
     const pg = ['WiFi', 'Power Backup', 'Security', 'Laundry', 'Meals Included', 'AC Rooms', 'Cleaning Service'];
-    
+
     if (type === 'office' || type === 'shop' || type === 'commercial') return commercial;
     if (type === 'pg' || type === 'hostel') return pg;
     return residential;
@@ -120,8 +164,8 @@ const AddProperty = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    if (images.length + files.length > 10) {
-      showToast.error('Maximum 10 images allowed');
+    if (images.length + files.length > 6) {
+      showToast.error('Maximum 6 images allowed');
       return;
     }
 
@@ -131,7 +175,7 @@ const AddProperty = () => {
       const loadingToast = showToast.loading('Compressing images...');
       const compressedFiles = await compressImages(Array.from(files));
       showToast.dismiss(loadingToast);
-      
+
       const uploadPromises = compressedFiles.map(async (file) => {
         const fileExt = 'jpg'; // Always use jpg after compression
         const fileName = `${user!.id}-${Date.now()}-${Math.random()}.${fileExt}`;
@@ -201,6 +245,8 @@ const AddProperty = () => {
         state: formData.state,
         pincode: formData.pincode,
         locality: formData.locality || undefined,
+        latitude: formData.latitude ?? undefined,
+        longitude: formData.longitude ?? undefined,
         rent_amount: parseInt(formData.rent_amount),
         deposit_amount: parseInt(formData.deposit_amount),
         maintenance_charges: parseInt(formData.maintenance_charges),
@@ -305,7 +351,7 @@ const AddProperty = () => {
                 <input type="text" name="locality" value={formData.locality} onChange={handleInputChange} placeholder="e.g., Koramangala" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">City * {locationLoading && <span className="text-amber-500 animate-pulse">(Detecting...)</span>}</label>
                 <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="e.g., Bangalore" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
               </div>
               <div>
@@ -444,7 +490,7 @@ const AddProperty = () => {
               <Upload className="w-5 h-5" />
               Property Images *
             </h2>
-            <p className="text-sm text-gray-600 mb-4">Upload up to 10 images (first image will be the cover photo)</p>
+            <p className="text-sm text-gray-600 mb-4">Upload up to 6 images (first image will be the cover photo)</p>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 mb-4">
               {images.map((image, index) => (
@@ -460,12 +506,19 @@ const AddProperty = () => {
               ))}
             </div>
 
-            {images.length < 10 && (
-              <label className="flex flex-col items-center justify-center w-full h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary transition-colors">
-                <Upload className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mb-2" />
-                <span className="text-xs md:text-sm text-gray-600">{uploading ? 'Uploading...' : 'Click to upload'}</span>
-                <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
-              </label>
+            {images.length < 6 && (
+              <div className="flex gap-4">
+                <label className="flex-1 flex flex-col items-center justify-center h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-amber-500 transition-colors bg-gray-50/50">
+                  <Upload className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mb-2" />
+                  <span className="text-xs md:text-sm text-gray-600">Gallery</span>
+                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
+                </label>
+                <label className="flex-1 flex flex-col items-center justify-center h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-amber-500 transition-colors bg-amber-50/30">
+                  <Smartphone className="w-6 h-6 md:w-8 md:h-8 text-amber-600 mb-2" />
+                  <span className="text-xs md:text-sm text-amber-700 font-medium">Take Photo</span>
+                  <input type="file" accept="image/*" capture="environment" onChange={handleImageUpload} disabled={uploading} className="hidden" />
+                </label>
+              </div>
             )}
           </div>
 

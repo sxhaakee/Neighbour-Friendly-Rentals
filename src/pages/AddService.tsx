@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Upload, X } from 'lucide-react';
+import { ArrowLeft, Upload, X, Smartphone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { serviceProviderService } from '../services/serviceProviderService';
@@ -17,14 +17,54 @@ const AddService = () => {
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
 
   // Require login
   useEffect(() => {
     if (!user) {
       showToast.error('Please login to list a service');
       navigate('/login');
+    } else {
+      detectLocation();
     }
   }, [user, navigate]);
+
+  const detectLocation = () => {
+    if ("geolocation" in navigator) {
+      setLocationLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setFormData(prev => ({ ...prev, latitude, longitude }));
+
+          try {
+            // Reverse geocode to get city/state
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`);
+            const data = await response.json();
+
+            if (data.address) {
+              const city = data.address.city || data.address.town || data.address.village || '';
+              const state = data.address.state || '';
+
+              setFormData(prev => ({
+                ...prev,
+                city: city || prev.city,
+                state: state || prev.state
+              }));
+            }
+          } catch (error) {
+            console.error('Error reverse geocoding:', error);
+          } finally {
+            setLocationLoading(false);
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          setLocationLoading(false);
+        }
+      );
+    }
+  };
 
   const [formData, setFormData] = useState({
     business_name: '',
@@ -51,6 +91,8 @@ const AddService = () => {
     linkedin_url: '',
     twitter_url: '',
     website_url: '',
+    latitude: null as number | null,
+    longitude: null as number | null,
   });
 
   const categories = [
@@ -147,8 +189,8 @@ const AddService = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    if (images.length + files.length > 10) {
-      showToast.error('Maximum 10 images allowed');
+    if (images.length + files.length > 6) {
+      showToast.error('Maximum 6 images allowed');
       return;
     }
 
@@ -158,7 +200,7 @@ const AddService = () => {
       const loadingToast = showToast.loading('Compressing images...');
       const compressedFiles = await compressImages(Array.from(files));
       showToast.dismiss(loadingToast);
-      
+
       const uploadPromises = compressedFiles.map(async (file) => {
         const fileExt = 'jpg'; // Always use jpg after compression
         const fileName = `${user!.id}-${Date.now()}-${Math.random()}.${fileExt}`;
@@ -225,6 +267,8 @@ const AddService = () => {
         city: formData.city,
         state: formData.state,
         service_areas: formData.service_areas.length > 0 ? formData.service_areas : [formData.city],
+        latitude: formData.latitude ?? undefined,
+        longitude: formData.longitude ?? undefined,
         owner_id: user.id,
         contact_person: formData.contact_person,
         phone: formData.phone,
@@ -263,7 +307,7 @@ const AddService = () => {
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Error adding service:', error);
-      
+
       // Handle specific database constraint errors
       if (error.message && error.message.includes('category_check')) {
         showToast.error('Category validation error. Please contact support or try a different category.');
@@ -316,14 +360,14 @@ const AddService = () => {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     🔧 Specify Your Service Category *
                   </label>
-                  <input 
-                    type="text" 
-                    name="custom_category" 
-                    value={formData.custom_category} 
-                    onChange={handleInputChange} 
-                    placeholder="e.g., Mobile Repair, Astrology, Pet Grooming, etc." 
+                  <input
+                    type="text"
+                    name="custom_category"
+                    value={formData.custom_category}
+                    onChange={handleInputChange}
+                    placeholder="e.g., Mobile Repair, Astrology, Pet Grooming, etc."
                     required={formData.category === 'other'}
-                    className="w-full px-4 py-3 border border-yellow-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white" 
+                    className="w-full px-4 py-3 border border-yellow-400 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white"
                   />
                   <p className="text-xs text-gray-600 mt-2">
                     💡 Be specific! This helps customers find your service easily.
@@ -383,7 +427,7 @@ const AddService = () => {
             <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Location</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">City * {locationLoading && <span className="text-amber-500 animate-pulse">(Detecting...)</span>}</label>
                 <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="e.g., Bangalore" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
               </div>
 
@@ -479,7 +523,7 @@ const AddService = () => {
               <Upload className="w-5 h-5" />
               Portfolio Images *
             </h2>
-            <p className="text-sm text-gray-600 mb-4">Upload up to 10 images of your work</p>
+            <p className="text-sm text-gray-600 mb-4">Upload up to 6 images of your work</p>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-4 mb-4">
               {images.map((image, index) => (
@@ -492,12 +536,19 @@ const AddService = () => {
               ))}
             </div>
 
-            {images.length < 10 && (
-              <label className="flex flex-col items-center justify-center w-full h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-orange-500 transition-colors">
-                <Upload className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mb-2" />
-                <span className="text-xs md:text-sm text-gray-600">{uploading ? 'Uploading...' : 'Click to upload'}</span>
-                <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
-              </label>
+            {images.length < 6 && (
+              <div className="flex gap-4">
+                <label className="flex-1 flex flex-col items-center justify-center h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-orange-500 transition-colors bg-gray-50/50">
+                  <Upload className="w-6 h-6 md:w-8 md:h-8 text-gray-400 mb-2" />
+                  <span className="text-xs md:text-sm text-gray-600">Gallery</span>
+                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading} className="hidden" />
+                </label>
+                <label className="flex-1 flex flex-col items-center justify-center h-24 md:h-32 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer hover:border-orange-500 transition-colors bg-orange-50/30">
+                  <Smartphone className="w-6 h-6 md:w-8 md:h-8 text-orange-600 mb-2" />
+                  <span className="text-xs md:text-sm text-orange-700 font-medium">Take Photo</span>
+                  <input type="file" accept="image/*" capture="environment" onChange={handleImageUpload} disabled={uploading} className="hidden" />
+                </label>
+              </div>
             )}
           </div>
 

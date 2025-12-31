@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, X, Plus, Tag, DollarSign } from 'lucide-react';
+import { Upload, X, Plus, Tag, DollarSign, Smartphone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { listingService } from '../services/listingService';
@@ -107,8 +107,8 @@ const AddItem = () => {
 
     if (files.length === 0) return;
 
-    if (images.length + files.length > 10) {
-      showToast.error('Maximum 10 images allowed per listing');
+    if (images.length + files.length > 4) {
+      showToast.error('Maximum 4 images allowed per listing');
       return;
     }
 
@@ -421,8 +421,23 @@ const AddItem = () => {
                 Photos
               </h2>
               <div className="space-y-4">
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary transition-colors">
+                <div className="border-2 border-dashed border-gray-300 rounded-[2rem] p-8 text-center hover:border-amber-500 transition-all bg-gray-50/50">
                   <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <label
+                      htmlFor="image-upload"
+                      className="cursor-pointer bg-white border border-gray-200 px-6 py-2 rounded-xl text-gray-700 font-bold hover:bg-gray-50 transition-all shadow-sm"
+                    >
+                      Gallery
+                    </label>
+                    <label
+                      htmlFor="camera-upload"
+                      className="cursor-pointer bg-amber-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-amber-700 transition-all shadow-lg flex items-center gap-2"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      Take Photo
+                    </label>
+                  </div>
                   <input
                     type="file"
                     accept="image/*"
@@ -431,14 +446,16 @@ const AddItem = () => {
                     className="hidden"
                     id="image-upload"
                   />
-                  <label
-                    htmlFor="image-upload"
-                    className="cursor-pointer text-amber-600 hover:text-amber-600/80 font-medium"
-                  >
-                    Click to upload photos or drag and drop
-                  </label>
-                  <p className="text-sm text-gray-500 mt-2">
-                    Upload up to 10 photos (PNG, JPG, JPEG)
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="camera-upload"
+                  />
+                  <p className="text-sm text-gray-400 mt-6">
+                    Professional photos help you rent 3x faster. Upload up to 4 photos.
                   </p>
                 </div>
 

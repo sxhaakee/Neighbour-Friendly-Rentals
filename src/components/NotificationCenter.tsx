@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Bell, X, Check, Trash2, CheckCheck } from 'lucide-react';
+import { Bell, X, Trash2, CheckCheck } from 'lucide-react';
 import { notificationService, Notification } from '../services/notificationService';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +21,13 @@ export const NotificationCenter = () => {
       const unsubscribe = notificationService.subscribeToNotifications(user.id, (notification) => {
         setNotifications((prev) => [notification, ...prev]);
         setUnreadCount((prev) => prev + 1);
+
+        // Show toast for new notification
+        import('../utils/toast').then(m => {
+          m.showToast.custom(notification.title, getNotificationIcon(notification.type), {
+            duration: 5000,
+          });
+        });
       });
 
       return () => unsubscribe();

@@ -20,6 +20,10 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signInWithGoogle: () => Promise<{ error: AuthError | null }>;
+  signInWithApple: () => Promise<{ error: AuthError | null }>;
+  signInWithOtp: (phone: string) => Promise<{ error: AuthError | null }>;
+  verifyOtp: (phone: string, token: string) => Promise<{ error: AuthError | null }>;
+  resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   isAdmin: boolean;
@@ -50,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     properties: 0,
     services: 0,
   });
-  
+
   // Track users who already received welcome emails (prevent duplicates)
   const welcomeEmailSentRef = React.useRef<Set<string>>(new Set());
 
@@ -72,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       // Send welcome email ONLY when user confirms their email (not on regular login)
       // Check if this is a new user by looking at created_at timestamp
       if (event === 'SIGNED_IN' && session?.user) {
@@ -81,16 +85,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const now = new Date();
         const timeSinceCreation = now.getTime() - userCreatedAt.getTime();
         const isNewUser = timeSinceCreation < 60000; // Less than 1 minute old = new user
-        
+
         // Check if we already sent welcome email to this user
         const alreadySent = welcomeEmailSentRef.current.has(userId);
-        
+
         if (isNewUser && !alreadySent) {
           const metadata = session.user.user_metadata;
-          
+
           // Mark as sent BEFORE sending to prevent race conditions
           welcomeEmailSentRef.current.add(userId);
-          
+
           // Send welcome email via Edge Function
           try {
             const result = await emailService.sendWelcomeEmail({
@@ -98,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               userName: metadata?.full_name || 'User',
               dashboardUrl: `${window.location.origin}/dashboard`,
             });
-            
+
             if (result.success) {
               console.log('✅ Welcome email sent to new user');
             } else {
@@ -114,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.log('⏭️ Welcome email already sent to this user, skipping');
         }
       }
-      
+
       if (session?.user) {
         fetchProfile(session.user.id);
       } else {
@@ -136,7 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) throw error;
       setProfile(data);
-      
+
       // Fetch listing counts when profile is loaded
       await refreshListingCounts();
     } catch (error) {
@@ -148,7 +152,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const refreshListingCounts = async () => {
     if (!user) return;
-    
+
     try {
       // Fetch counts for all listing types
       const [itemsData, propertiesData, servicesData] = await Promise.all([
@@ -168,7 +172,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Check if user is premium
-  const isPremium = profile?.is_premium === true && 
+  const isPremium = profile?.is_premium === true &&
     (profile?.premium_expires_at === null || new Date(profile.premium_expires_at) > new Date());
 
   // Check if user is verified (using id_verified field from database)
@@ -177,7 +181,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Check if user can add a listing of specific type
   const canAddListing = (type: 'item' | 'property' | 'service'): boolean => {
     if (isPremium) return true; // Premium users have unlimited listings
-    
+
     const limits = {
       item: 3,
       property: 2,
@@ -209,7 +213,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       // Note: Welcome email will be sent automatically when user confirms their email
       // via the onAuthStateChange listener (SIGNED_IN event)
-      
+
       // Wait a moment for database trigger to create profile
       // If trigger fails, profile will be created on first login
       return { error: null };
@@ -237,13 +241,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
         },
       });
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
 
+  const signInWithApple = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'apple',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
+  const signInWithOtp = async (phone: string) => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone,
+      });
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
+  const verifyOtp = async (phone: string, token: string) => {
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        phone,
+        token,
+        type: 'sms',
+      });
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
       return { error };
     } catch (error) {
       return { error: error as AuthError };
@@ -273,6 +321,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signIn,
     signInWithGoogle,
+    signInWithApple,
+    signInWithOtp,
+    verifyOtp,
+    resetPassword,
     signOut,
     refreshProfile,
     isAdmin,

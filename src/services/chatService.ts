@@ -175,6 +175,27 @@ export const chatService = {
       })
       .eq('id', conversationId);
 
+    // Create notification for the receiver
+    try {
+      const { notificationService } = await import('./notificationService');
+      const { data: sender } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', senderId)
+        .single();
+
+      await notificationService.createNotification({
+        user_id: receiverId,
+        type: 'message',
+        title: `New message from ${sender?.full_name || 'User'}`,
+        message: message.length > 50 ? message.substring(0, 47) + '...' : message,
+        link: `/chat?conversation=${conversationId}`,
+        data: { conversation_id: conversationId, sender_id: senderId }
+      });
+    } catch (notifErr) {
+      console.error('Error creating message notification:', notifErr);
+    }
+
     return data;
   },
 

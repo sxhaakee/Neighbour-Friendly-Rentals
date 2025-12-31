@@ -56,6 +56,7 @@ const About = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
+          viewport={{ once: true }}
           className="relative z-10 text-center px-4 max-w-5xl mx-auto"
         >
           <span className="inline-block py-1 px-3 border border-white/30 rounded-full text-white/90 text-sm font-medium mb-6 backdrop-blur-sm">
@@ -139,43 +140,61 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 px-4 bg-gray-900 text-white overflow-hidden">
+      {/* Team Section - Re-designed */}
+      <section className="py-24 px-4 bg-gray-50 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            viewport={{ once: true }}
+            className="text-center mb-20"
           >
-            <h2 className="text-4xl font-bold mb-6">Meet the Builders</h2>
-            <p className="text-gray-400 text-xl max-w-2xl mx-auto">
-              Students by day, entrepreneurs by night. We're a team of engineers from Mangalore passionate about solving real-world problems.
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 tracking-tight">Meet the <span className="text-amber-600">Builders</span></h2>
+            <p className="text-gray-500 text-xl max-w-2xl mx-auto font-medium">
+              A team of passionate engineers from Mangalore dedicated to building trust and sustainability in local communities.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {team.map((member, index) => (
               <motion.div
                 key={member.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="group relative"
+                className="group relative bg-white rounded-[2.5rem] p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col items-center text-center"
               >
-                <div className="relative w-48 h-48 mx-auto mb-6">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-amber-500 to-yellow-500 rounded-full blur-lg opacity-50 group-hover:opacity-80 transition-opacity"></div>
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="relative w-full h-full object-cover rounded-full border-4 border-gray-800 group-hover:border-amber-500 transition-colors bg-gray-800"
-                  />
+                <div className="relative mb-8 pt-4">
+                  <div className="absolute -inset-2 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                  <div className="relative w-40 h-40 rounded-[2rem] overflow-hidden border-4 border-white shadow-lg">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=f59e0b&color=fff&size=200`;
+                      }}
+                    />
+                  </div>
+                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-amber-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-md transform group-hover:scale-110 transition-transform">
+                    {member.role}
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
-                <p className="text-amber-500 font-medium mb-4 uppercase tracking-wider text-sm">{member.role}</p>
-                <p className="text-gray-400 leading-relaxed max-w-xs mx-auto text-sm">
+
+                <h3 className="text-2xl font-black text-gray-900 mb-3">{member.name}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-8 flex-grow">
                   {member.bio}
                 </p>
+
+                <div className="flex gap-4 pt-6 border-t border-gray-50 w-full justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer">
+                    <Shield className="w-4 h-4" />
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>

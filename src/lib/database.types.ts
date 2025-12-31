@@ -152,6 +152,10 @@ export interface Database {
           phone: string
           address: string
           is_admin: boolean
+          role: string
+          is_premium: boolean
+          premium_expires_at: string | null
+          id_verified: boolean
           created_at: string
           updated_at: string
         }
@@ -162,6 +166,10 @@ export interface Database {
           phone?: string
           address?: string
           is_admin?: boolean
+          role?: string
+          is_premium?: boolean
+          premium_expires_at?: string | null
+          id_verified?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -172,8 +180,211 @@ export interface Database {
           phone?: string
           address?: string
           is_admin?: boolean
+          role?: string
+          is_premium?: boolean
+          premium_expires_at?: string | null
+          id_verified?: boolean
           created_at?: string
           updated_at?: string
+        }
+      }
+      properties: {
+        Row: {
+          id: string
+          type: string
+          title: string
+          description: string
+          address: string
+          city: string
+          state: string
+          pincode: string
+          latitude: number | null
+          longitude: number | null
+          rent_amount: number
+          deposit_amount: number
+          area_sqft: number
+          owner_id: string
+          status: string
+          featured: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          type: string
+          title: string
+          description: string
+          address: string
+          city: string
+          state: string
+          pincode: string
+          latitude?: number | null
+          longitude?: number | null
+          rent_amount: number
+          deposit_amount: number
+          area_sqft: number
+          owner_id: string
+          status?: string
+          featured?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          type?: string
+          title?: string
+          description?: string
+          address?: string
+          city?: string
+          state?: string
+          pincode?: string
+          latitude?: number | null
+          longitude?: number | null
+          rent_amount?: number
+          deposit_amount?: number
+          area_sqft?: number
+          owner_id?: string
+          status?: string
+          featured?: boolean
+          created_at?: string
+        }
+      }
+      service_providers: {
+        Row: {
+          id: string
+          business_name: string
+          category: string
+          description: string
+          city: string
+          state: string
+          latitude: number | null
+          longitude: number | null
+          owner_id: string
+          status: string
+          featured: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          business_name: string
+          category: string
+          description: string
+          city: string
+          state: string
+          latitude?: number | null
+          longitude?: number | null
+          owner_id: string
+          status?: string
+          featured?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          business_name?: string
+          category?: string
+          description?: string
+          city?: string
+          state?: string
+          latitude?: number | null
+          longitude?: number | null
+          owner_id?: string
+          status?: string
+          featured?: boolean
+          created_at?: string
+        }
+      }
+      conversations: {
+        Row: {
+          id: string
+          listing_id: string
+          user1_id: string
+          user2_id: string
+          last_message: string | null
+          last_message_at: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          listing_id: string
+          user1_id: string
+          user2_id: string
+          last_message?: string | null
+          last_message_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          listing_id?: string
+          user1_id?: string
+          user2_id?: string
+          last_message?: string | null
+          last_message_at?: string
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      messages: {
+        Row: {
+          id: string
+          conversation_id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          conversation_id: string
+          sender_id: string
+          receiver_id: string
+          content: string
+          read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          conversation_id?: string
+          sender_id?: string
+          receiver_id?: string
+          content?: string
+          read?: boolean
+          created_at?: string
+        }
+      }
+      notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: string
+          title: string
+          message: string
+          link: string | null
+          read: boolean
+          data: Json | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: string
+          title: string
+          message: string
+          link?: string | null
+          read?: boolean
+          data?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: string
+          title?: string
+          message?: string
+          link?: string | null
+          read?: boolean
+          data?: Json | null
+          created_at?: string
         }
       }
       favorites: {
@@ -204,7 +415,14 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_or_create_conversation: {
+        Args: {
+          p_listing_id: string
+          p_user1_id: string
+          p_user2_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
