@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw, ArrowRight } from 'lucide-react';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
 import { serviceProviderService } from '../services/serviceProviderService';
 import { propertyService } from '../services/propertyService';
@@ -83,12 +83,28 @@ const Home = () => {
   const fetchFeaturedListings = async () => {
     try {
       setLoading(true);
-      // Fetch featured items, services, and properties
-      const [items, services, properties] = await Promise.all([
+
+      // Attempt to fetch with city filter first
+      let [items, services, properties] = await Promise.all([
         listingService.getFeaturedListings(6, userCity),
         serviceProviderService.getFeaturedProviders(6, userCity),
         propertyService.getFeaturedProperties(6, userCity)
       ]);
+
+      // If no items found in user's city, fall back to all featured items
+      if (userCity && items.length === 0) {
+        items = await listingService.getFeaturedListings(6);
+      }
+
+      // Fallback for services if none in city
+      if (userCity && services.length === 0) {
+        services = await serviceProviderService.getFeaturedProviders(6);
+      }
+
+      // Fallback for properties if none in city
+      if (userCity && properties.length === 0) {
+        properties = await propertyService.getFeaturedProperties(6);
+      }
 
       setFeaturedListings(items);
       setFeaturedServices(services);
@@ -126,11 +142,11 @@ const Home = () => {
             }} />
           </div>
 
-          {/* Floating Gold Particles with different speeds */}
-          {[...Array(15)].map((_, i) => (
+          {/* Reduced gold particles to fix stuttering/flickering */}
+          {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full blur-[1px]"
+              className="absolute w-2 h-2 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full blur-[1px] pointer-events-none"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}% `,
@@ -161,7 +177,9 @@ const Home = () => {
                   transition={{ duration: 0.6 }}
                   className="inline-block bg-white/80 backdrop-blur-sm border border-yellow-200 px-4 py-1.5 rounded-full mb-6 shadow-sm"
                 >
-                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">✨ The #1 Neighbourhood Marketplace</span>
+                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">
+                    {locationLoading ? '📍 Finding your location...' : `✨ The #1 Neighbourhood Marketplace ${userCity ? `in ${userCity}` : ''}`}
+                  </span>
                 </motion.div>
 
                 <motion.h1
@@ -283,11 +301,10 @@ const Home = () => {
               <div className="relative h-[380px] md:h-[600px] w-full perspective-[1000px] mt-20 mb-4 lg:mt-0 lg:mb-0 flex justify-center lg:block z-0">
                 {/* Main Image - Tilted with Parallax */}
                 <motion.div
-                  initial={{ opacity: 0, rotateY: 5, rotateZ: -2, y: 30 }}
-                  animate={{ opacity: 1, rotateY: 0, rotateZ: 2, y: 0 }}
+                  initial={{ opacity: 0, rotateZ: -2, y: 30 }}
+                  animate={{ opacity: 1, rotateZ: 2, y: 0 }}
                   transition={{ duration: 1, type: "spring" }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
-                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -30]) }}
                   className="absolute top-10 right-4 lg:right-10 w-[280px] md:w-[400px] h-[350px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
                 >
                   <img
@@ -312,10 +329,6 @@ const Home = () => {
                   initial={{ opacity: 0, rotateZ: -8, y: 50 }}
                   animate={{ opacity: 1, rotateZ: -2, y: 10 }}
                   transition={{ duration: 1.2, delay: 0.2 }}
-                  style={{
-                    y: useTransform(useScroll().scrollY, [0, 500], [0, -50]),
-                    rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -5])
-                  }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
                   className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"
                 >
@@ -481,24 +494,17 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Fear Handling Section - World Class Design */}
-      <section className="py-10 lg:py-20 px-4 bg-white relative overflow-hidden">
+      <section id="peace-of-mind" className="py-10 lg:py-20 px-4 bg-white relative overflow-hidden">
         {/* Decorative Background Elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-50 -z-10"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-yellow-50 rounded-full blur-3xl opacity-50 -z-10"></div>
 
         <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 lg:mb-16"
-          >
+          <div className="text-center mb-8 lg:mb-16">
             <span className="text-amber-600 font-bold uppercase tracking-wider text-sm mb-2 block">Peace of Mind</span>
             <h2 className="text-2xl md:text-5xl font-black text-gray-900 mb-4 lg:mb-6">What if something goes wrong?</h2>
             <p className="text-lg text-gray-600 font-bold">We've already thought about that.</p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
             {[
@@ -507,34 +513,23 @@ const Home = () => {
               { text: 'Support if an issue arises', icon: Shield },
               { text: 'Post-rental follow-ups for peace of mind', icon: Star }
             ].map((item, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -5, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}
                 className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm flex items-center gap-6 group hover:border-amber-200 transition-all duration-300"
               >
                 <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500 transition-colors duration-300">
                   <item.icon className="w-6 h-6 text-amber-600 group-hover:text-white transition-colors duration-300" />
                 </div>
                 <p className="text-lg text-gray-700 font-medium group-hover:text-gray-900 transition-colors">{item.text}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
+          <div className="text-center">
             <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
               Renting should feel safe — not stressful.
             </h3>
-          </motion.div>
+          </div>
         </div>
       </section>
 

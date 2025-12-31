@@ -20,6 +20,8 @@ const AddItem = () => {
     price: '',
     pricing_model: 'per_day',
     location: '',
+    latitude: null as number | null,
+    longitude: null as number | null,
     condition: 'Good',
     contactInfo: '',
     availability: 'Available'
@@ -40,6 +42,34 @@ const AddItem = () => {
     // Check if user can add more items
     if (!canAddListing('item')) {
       setShowPremiumModal(true);
+    }
+
+    // Get user location for tracking
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          setFormData(prev => ({ ...prev, latitude, longitude }));
+
+          // Try to reverse geocode to fill the location field
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+            );
+            const data = await response.json();
+            const city = data.address.city || data.address.town || data.address.village || data.address.state_district;
+            const state = data.address.state;
+            if (city && state) {
+              setFormData(prev => ({ ...prev, location: `${city}, ${state}` }));
+            }
+          } catch (error) {
+            console.error('Error auto-filling location:', error);
+          }
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+        }
+      );
     }
   }, [user, authLoading, navigate, canAddListing]);
 
@@ -159,6 +189,8 @@ const AddItem = () => {
         condition: formData.condition,
         contact_info: formData.contactInfo,
         availability: formData.availability,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
         owner_id: user.id,
         owner_name: profile.full_name || user.email || 'Unknown',
         owner_email: user.email || profile.email || '',

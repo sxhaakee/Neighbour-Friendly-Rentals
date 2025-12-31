@@ -18,11 +18,16 @@ export interface Database {
           category: string
           condition: string
           location: string
+          latitude: number | null
+          longitude: number | null
           images: string[]
           owner_id: string
           owner_name: string
           contact_info: string
           availability: string
+          featured: boolean
+          status: string
+          rejection_reason: string | null
           created_at: string
           updated_at: string
         }
@@ -34,11 +39,16 @@ export interface Database {
           category: string
           condition: string
           location: string
+          latitude?: number | null
+          longitude?: number | null
           images: string[]
           owner_id: string
           owner_name: string
           contact_info: string
           availability?: string
+          featured?: boolean
+          status?: string
+          rejection_reason?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -50,11 +60,16 @@ export interface Database {
           category?: string
           condition?: string
           location?: string
+          latitude?: number | null
+          longitude?: number | null
           images?: string[]
           owner_id?: string
           owner_name?: string
           contact_info?: string
           availability?: string
+          featured?: boolean
+          status?: string
+          rejection_reason?: string | null
           created_at?: string
           updated_at?: string
         }
