@@ -546,7 +546,7 @@ const Home = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  onClick={() => navigate(`/ item / ${item.id} `)}
+                  onClick={() => navigate(`/item/${item.id}`)}
                   className="group cursor-pointer"
                 >
                   <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col relative">
@@ -641,7 +641,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    onClick={() => navigate(`/ services / ${service.id} `)}
+                    onClick={() => navigate(`/services/${service.id}`)}
                     className="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
                   >
                     <div className="relative aspect-video overflow-hidden">
@@ -727,7 +727,7 @@ const Home = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     viewport={{ once: true }}
-                    onClick={() => navigate(`/ properties / ${property.id} `)}
+                    onClick={() => navigate(`/properties/${property.id}`)}
                     className="group cursor-pointer"
                   >
                     <div className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col">
@@ -760,7 +760,7 @@ const Home = () => {
                           </span>
                         </div>
                         <Link
-                          to={`/ properties / ${property.id} `}
+                          to={`/properties/${property.id}`}
                           className="mt-auto w-full py-3 rounded-xl border border-gray-100 group-hover:border-amber-500 group-hover:bg-amber-50 transition-all text-center font-bold text-gray-900"
                         >
                           Discover Details
