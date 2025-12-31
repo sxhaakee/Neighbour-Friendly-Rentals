@@ -75,10 +75,15 @@ const Login = () => {
         }
       }
       else if (mode === 'forgot') {
+        console.log('🔐 Attempting password reset for:', formData.email);
         const { error } = await resetPassword(formData.email);
-        if (error) setError(error.message);
-        else {
-          showToast.success('Password reset link sent to your email!');
+
+        if (error) {
+          console.error('❌ Password reset error:', error);
+          setError(error.message);
+        } else {
+          console.log('✅ Password reset email sent successfully');
+          showToast.success('Password reset link sent! Check your email (and spam folder).');
           setMode('login');
         }
       }
@@ -207,21 +212,13 @@ const Login = () => {
       {/* Right Side - Form */}
       <div className="w-full lg:w-[40%] relative flex flex-col items-center justify-center p-6 lg:p-12 bg-gray-50 overflow-y-auto">
         <div className="w-full max-w-md bg-white p-8 lg:p-10 rounded-[2.5rem] shadow-2xl border border-gray-100">
-          {/* Mobile Header - Visible only on small screens */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center text-2xl">🏡</div>
-            </div>
-            <h1 className="text-2xl font-black text-gray-900">NeighbourFriendly</h1>
-          </div>
-
           <div className="space-y-8">
             <div className="text-center">
               <h2 className="text-3xl font-black text-gray-900 mb-2">
-                {mode === 'login' ? 'Welcome Back' : mode === 'signup' ? 'New here?' : 'Reset Password'}
+                {mode === 'login' ? 'Enter your neighbourhood' : mode === 'signup' ? 'Join your neighbourhood' : 'Reset Password'}
               </h2>
               <p className="text-gray-500">
-                {mode === 'login' ? 'Sign in to continue your journey.' : mode === 'signup' ? 'Join the community today.' : 'Enter your email to reset password.'}
+                {mode === 'login' ? 'Sign in to continue your journey.' : mode === 'signup' ? 'Create an account to get started.' : 'Enter your email to reset password.'}
               </p>
             </div>
 
