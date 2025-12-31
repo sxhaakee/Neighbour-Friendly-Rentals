@@ -298,7 +298,7 @@ const Home = () => {
                   animate={{ opacity: 1, rotateZ: 2, y: 0 }}
                   transition={{ duration: 1, type: "spring" }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
-                  className="absolute top-10 right-4 lg:right-10 w-[280px] md:w-[400px] h-[350px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
+                  className="absolute top-4 left-1/2 -translate-x-[55%] lg:translate-x-0 lg:left-auto lg:top-10 lg:right-10 w-[260px] md:w-[400px] h-[320px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
                 >
                   <img
                     src="/images/hero-community.png"
@@ -323,7 +323,7 @@ const Home = () => {
                   animate={{ opacity: 1, rotateZ: -2, y: 10 }}
                   transition={{ duration: 1.2, delay: 0.2 }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
-                  className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"
+                  className="absolute top-12 left-1/2 -translate-x-[45%] lg:translate-x-0 lg:left-auto lg:top-14 lg:right-6 w-[260px] md:w-[400px] h-[320px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"
                 >
                   <img
                     src="/images/hero-stack-s3.png"
