@@ -21,7 +21,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [isPremium, setIsPremium] = useState(false);
   const [userCity, setUserCity] = useState<string | undefined>(undefined);
-  const [locationLoading, setLocationLoading] = useState(false);
 
 
 
@@ -37,7 +36,6 @@ const Home = () => {
   const getUserLocation = () => {
     if (!navigator.geolocation) return;
 
-    setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
@@ -53,13 +51,10 @@ const Home = () => {
           }
         } catch (error) {
           console.error('Error getting location name:', error);
-        } finally {
-          setLocationLoading(false);
         }
       },
       (error) => {
         console.error('Error getting location:', error);
-        setLocationLoading(false);
       }
     );
   };
@@ -177,9 +172,7 @@ const Home = () => {
                   transition={{ duration: 0.6 }}
                   className="inline-block bg-white/80 backdrop-blur-sm border border-yellow-200 px-4 py-1.5 rounded-full mb-6 shadow-sm"
                 >
-                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">
-                    {locationLoading ? '📍 Finding your location...' : `✨ The #1 Neighbourhood Marketplace ${userCity ? `in ${userCity}` : ''}`}
-                  </span>
+                  <span className="text-amber-600 font-bold text-sm tracking-wide uppercase">✨ The #1 Neighbourhood Marketplace in India</span>
                 </motion.div>
 
                 <motion.h1
