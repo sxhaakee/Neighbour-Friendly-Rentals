@@ -50,7 +50,7 @@ serve(async (req) => {
       console.error('Error creating user:', createError)
       const status = createError.message.includes('already registered') ? 400 : 500
       return new Response(
-        JSON.stringify({ error: createError.message }),
+        JSON.stringify({ error: `Step 1 Failed: ${createError.message}` }),
         { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -71,7 +71,7 @@ serve(async (req) => {
     if (linkError) {
       console.error('Error generating link:', linkError)
       return new Response(
-        JSON.stringify({ error: 'Account created but failed to generate verification link' }),
+        JSON.stringify({ error: `Step 2 Failed (Generate Link): ${linkError.message}` }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -80,7 +80,7 @@ serve(async (req) => {
     if (!verificationUrl) {
        console.error('Verification URL not found in response', linkData)
        return new Response(
-        JSON.stringify({ error: 'Failed to retrieve verification URL' }),
+        JSON.stringify({ error: 'Step 2 Failed: Verification URL missing from response' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -108,20 +108,18 @@ serve(async (req) => {
       if (!sendEmailResponse.ok) {
           const errorText = await sendEmailResponse.text()
           console.error('Failed to send email. Status:', sendEmailResponse.status, 'Response:', errorText)
-          // Don't fail the signup completely if email fails, but warn.
-          // Actually we MUST fail or tell user, otherwise they can't verify.
           return new Response(
-              JSON.stringify({ error: 'Account created but failed to send verification email.' }),
+              JSON.stringify({ error: `Step 3 Failed (Send Email): ${sendEmailResponse.status} - ${errorText}` }),
               { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           )
       }
       
       console.log('Email sent successfully via send-email function')
       
-    } catch (fetchError) {
+    } catch (fetchError: any) {
       console.error('Exception calling send-email:', fetchError)
       return new Response(
-          JSON.stringify({ error: 'Internal error sending verification email' }),
+          JSON.stringify({ error: `Step 3 Exception: ${fetchError.message}` }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -136,10 +134,10 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Unexpected error in handle-signup:', error)
     return new Response(
-      JSON.stringify({ error: error.message || 'Unknown internal error' }),
+      JSON.stringify({ error: `Unexpected Error: ${error.message || 'Unknown'}` }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
