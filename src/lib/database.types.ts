@@ -247,6 +247,92 @@ export interface Database {
           created_at?: string
         }
       }
+      rental_agreements: {
+        Row: {
+          id: string
+          booking_id: string
+          listing_id: string
+          renter_id: string
+          owner_id: string
+          renter_name: string
+          renter_email: string
+          renter_phone: string
+          owner_name: string
+          owner_email: string
+          owner_phone: string
+          item_title: string
+          item_description: string | null
+          start_date: string
+          end_date: string
+          total_days: number
+          total_price: number
+          security_deposit: number | null
+          agreement_data: Json
+          pdf_url: string | null
+          status: string
+          agreed_at: string
+          completed_at: string | null
+          created_at: string
+          updated_at: string
+          deleted_at: string | null
+        }
+        Insert: {
+          id?: string
+          booking_id: string
+          listing_id: string
+          renter_id: string
+          owner_id: string
+          renter_name: string
+          renter_email: string
+          renter_phone: string
+          owner_name: string
+          owner_email: string
+          owner_phone: string
+          item_title: string
+          item_description?: string | null
+          start_date: string
+          end_date: string
+          total_days: number
+          total_price: number
+          security_deposit?: number | null
+          agreement_data: Json
+          pdf_url?: string | null
+          status?: string
+          agreed_at?: string
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+        Update: {
+          id?: string
+          booking_id?: string
+          listing_id?: string
+          renter_id?: string
+          owner_id?: string
+          renter_name?: string
+          renter_email?: string
+          renter_phone?: string
+          owner_name?: string
+          owner_email?: string
+          owner_phone?: string
+          item_title?: string
+          item_description?: string | null
+          start_date?: string
+          end_date?: string
+          total_days?: number
+          total_price?: number
+          security_deposit?: number | null
+          agreement_data?: Json
+          pdf_url?: string | null
+          status?: string
+          agreed_at?: string
+          completed_at?: string | null
+          created_at?: string
+          updated_at?: string
+          deleted_at?: string | null
+        }
+      }
       service_providers: {
         Row: {
           id: string
@@ -261,6 +347,28 @@ export interface Database {
           status: string
           featured: boolean
           created_at: string
+          email: string
+          phone: string
+          contact_person: string
+          whatsapp: string | null
+          website: string | null
+          logo_url: string | null
+          images: string[]
+          portfolio_images: string[]
+          rating: number
+          total_bookings: number
+          completed_bookings: number
+          views_count: number
+          verified: boolean
+          base_price: number | null
+          price_range_min: number | null
+          price_range_max: number | null
+          pricing_model: string
+          subcategories: string[]
+          services: string[]
+          service_areas: string[]
+          equipment_owned: string[]
+          certifications: string[]
         }
         Insert: {
           id?: string
@@ -275,6 +383,28 @@ export interface Database {
           status?: string
           featured?: boolean
           created_at?: string
+          email: string
+          phone: string
+          contact_person: string
+          whatsapp?: string | null
+          website?: string | null
+          logo_url?: string | null
+          images?: string[]
+          portfolio_images?: string[]
+          rating?: number
+          total_bookings?: number
+          completed_bookings?: number
+          views_count?: number
+          verified?: boolean
+          base_price?: number | null
+          price_range_min?: number | null
+          price_range_max?: number | null
+          pricing_model?: string
+          subcategories?: string[]
+          services?: string[]
+          service_areas?: string[]
+          equipment_owned?: string[]
+          certifications?: string[]
         }
         Update: {
           id?: string
@@ -289,6 +419,28 @@ export interface Database {
           status?: string
           featured?: boolean
           created_at?: string
+          email?: string
+          phone?: string
+          contact_person?: string
+          whatsapp?: string | null
+          website?: string | null
+          logo_url?: string | null
+          images?: string[]
+          portfolio_images?: string[]
+          rating?: number
+          total_bookings?: number
+          completed_bookings?: number
+          views_count?: number
+          verified?: boolean
+          base_price?: number | null
+          price_range_min?: number | null
+          price_range_max?: number | null
+          pricing_model?: string
+          subcategories?: string[]
+          services?: string[]
+          service_areas?: string[]
+          equipment_owned?: string[]
+          certifications?: string[]
         }
       }
       conversations: {

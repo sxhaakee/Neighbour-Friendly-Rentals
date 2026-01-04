@@ -76,13 +76,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(session?.user ?? null);
 
       // Send welcome email ONLY when user confirms their email (not on regular login)
-      // Check if this is a new user by looking at created_at timestamp
+      // Check if this is a new user by looking at created_at OR confirmed_at timestamp
       if (event === 'SIGNED_IN' && session?.user) {
         const userId = session.user.id;
-        const userCreatedAt = new Date(session.user.created_at);
-        const now = new Date();
-        const timeSinceCreation = now.getTime() - userCreatedAt.getTime();
-        const isNewUser = timeSinceCreation < 60000; // Less than 1 minute old = new user
+        const userCreatedAt = new Date(session.user.created_at).getTime();
+        const userConfirmedAt = session.user.confirmed_at
+          ? new Date(session.user.confirmed_at).getTime()
+          : 0;
+        const now = new Date().getTime();
+
+        // Considered "new" if account created recently (social login)
+        // OR confirmed recently (email/password signup)
+        // Window: 2 minutes to allow for redirects etc.
+        const isNewUser = (now - userCreatedAt < 120000) || (userConfirmedAt > 0 && now - userConfirmedAt < 120000);
 
         // Check if we already sent welcome email to this user
         const alreadySent = welcomeEmailSentRef.current.has(userId);
@@ -197,18 +203,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName: string) => {
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/login`,
-          data: {
-            full_name: fullName,
-          },
-        },
+      console.log('🔄 Requesting signup via Edge Function...');
+
+      const { data, error } = await supabase.functions.invoke('handle-signup', {
+        body: {
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/login`,
+            data: {
+              full_name: fullName,
+            },
+          }
+        }
       });
 
-      if (error) return { error };
+      if (error) {
+        // Handle Edge Function invocation errors specifically
+        console.error('Signup Edge Function error:', error);
+        return { error: error as AuthError };
+      }
+
+      // If use already exists or other logical errors from the function
+      if (data?.error) {
+        console.error('Signup Logic error:', data.error);
+        return { error: { message: data.error } as AuthError };
+      }
+
+      console.log('✅ Signup initiated via Edge Function');
 
       // Note: Welcome email will be sent automatically when user confirms their email
       // via the onAuthStateChange listener (SIGNED_IN event)
@@ -217,6 +239,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // If trigger fails, profile will be created on first login
       return { error: null };
     } catch (error) {
+      console.error('Signup exception:', error);
       return { error: error as AuthError };
     }
   };

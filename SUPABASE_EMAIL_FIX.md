@@ -110,9 +110,22 @@ Sender Name: NeighbourFriendly Rentals
 1. Authentication → Settings
 2. **Toggle OFF** "Enable email confirmations"
 3. Users can sign in immediately
-4. Still get welcome email from Resend after first login
+
+### Step 1.5: Configure Redirect URLs (CRITICAL)
+
+**Important:** After users click the link in the email, where should they go?
+
+1. **Navigate to Authentication -> URL Configuration**
+2. **Site URL:** Set this to your homepage (e.g., `https://neighbourfriendly.in` or `http://localhost:5173`)
+3. **Redirect URLs:** Add any specific landing pages if needed (e.g., `https://neighbourfriendly.in/dashboard`).
+   - For Invite User flow, it will default to Site URL unless a specific redirect is provided in the code.
+   - **Recommended:** Ensure `https://neighbourfriendly.in` is listed here.
+
+**How it works:**  
+User clicks `{{ .ConfirmationURL }}` → Supabase Verifies Token → Redirects to **Site URL**.
 
 ---
+
 
 ### Step 3: Update Email Templates (Optional)
 
@@ -202,58 +215,98 @@ Sender Name: NeighbourFriendly Rentals
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You have been invited</title>
+  <title>You've Been Invited</title>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #374151;">
+<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1f2937;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f3f4f6;">
     <tr>
       <td align="center" style="padding: 40px 0;">
-        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 40px; text-align: center;">
+        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); overflow: hidden; text-align: center;">
           
-          <!-- Header/Logo -->
+          <!-- Premium Gold Header Stripe -->
           <tr>
-            <td align="center" style="padding-bottom: 24px;">
-              <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #d97706;">NeighbourFriendly</h1>
+            <td style="background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%); height: 8px; width: 100%;"></td>
+          </tr>
+
+          <!-- Logo Section -->
+          <tr>
+            <td align="center" style="padding: 40px 0 24px;">
+              <h1 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.025em; color: #1f2937;">Neighbour<span style="color: #d97706;">Friendly</span></h1>
             </td>
           </tr>
 
-          <!-- Greeting -->
+          <!-- Hero Image / Icon equivalent -->
           <tr>
-            <td align="center">
-              <h2 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 600; color: #111827;">You've Been Invited! 💌</h2>
-              <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #4b5563;">
-                 Someone thinks you'd be a great addition to our neighbourhood. You have been invited to join <strong>{{ .SiteURL }}</strong>.
+            <td align="center" style="padding-bottom: 24px;">
+              <div style="background-color: #fffbeb; width: 80px; height: 80px; border-radius: 50%; display: table; margin: 0 auto;">
+                <span style="display: table-cell; vertical-align: middle; font-size: 40px;">🔑</span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Main Headline -->
+          <tr>
+            <td align="center" style="padding: 0 48px;">
+              <h2 style="margin: 0 0 16px 0; font-size: 26px; font-weight: 800; color: #111827; line-height: 1.2;">
+                You've Been Selected to Join the Neighbourhood.
+              </h2>
+            </td>
+          </tr>
+
+          <!-- Persuasive Copy -->
+          <tr>
+            <td align="center" style="padding: 0 48px 32px;">
+              <p style="margin: 0 0 24px 0; font-size: 18px; line-height: 1.6; color: #4b5563;">
+                 Congratulations! Someone who trusts you thinks you belong here.
+              </p>
+              <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #4b5563; text-align: left;">
+                <strong>NeighbourFriendly</strong> isn't just another marketplace. It's an exclusive community where you can:
+              </p>
+              <ul style="text-align: left; padding: 0 0 0 20px; margin: 0 0 24px 0; color: #4b5563; font-size: 16px; line-height: 1.8; list-style-type: none;">
+                <li style="margin-bottom: 8px;">✅ <strong>Rent Luxury Gear</strong> for a fraction of the cost</li>
+                <li style="margin-bottom: 8px;">🤝 <strong>Connect with Verified Neighbors</strong> you can trust</li>
+                <li style="margin: 0;">💰 <strong>Turn Your Own Items into Income</strong> effortlessly</li>
+              </ul>
+              <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #4b5563;">
+                Your private invitation is waiting. Don't let your spot go to someone else.
               </p>
             </td>
           </tr>
 
-          <!-- Button -->
+          <!-- CTA Button -->
           <tr>
-            <td align="center" style="padding-bottom: 32px;">
-              <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 14px 32px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: #d97706; text-decoration: none; border-radius: 8px; transition: background-color 0.2s;">
-                Accept Invitation
-              </a>
+            <td align="center" style="padding-bottom: 40px;">
+              <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center" style="border-radius: 12px; background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);">
+                    <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 16px 48px; font-size: 18px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 12px; font-family: sans-serif; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                      Claim My Invite &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
-          <!-- Link fallback -->
+          <!-- Fallback Link -->
           <tr>
-            <td align="center" style="padding-bottom: 32px; border-bottom: 1px solid #e5e7eb;">
-              <p style="margin: 0; font-size: 14px; color: #6b7280;">
-                Or paste this link into your browser:<br>
-                <a href="{{ .ConfirmationURL }}" style="color: #d97706; text-decoration: underline;">{{ .ConfirmationURL }}</a>
+            <td align="center" style="padding: 0 48px 40px; border-bottom: 1px solid #f3f4f6;">
+              <p style="margin: 0; font-size: 14px; color: #9ca3af;">
+                Or copy this secure link:<br>
+                <a href="{{ .ConfirmationURL }}" style="color: #d97706; text-decoration: none;">{{ .ConfirmationURL }}</a>
               </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td align="center" style="padding-top: 32px;">
-              <p style="margin: 0 0 8px 0; font-size: 14px; color: #9ca3af;">
-                Cheers,<br>The NeighbourFriendly Team
+            <td align="center" style="padding: 32px 48px;">
+              <p style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: #6b7280;">
+                NeighbourFriendly Rentals
               </p>
-              <p style="margin: 0; font-size: 12px; color: #d1d5db;">
-                If you didn't request this email, you can safely ignore it.
+              <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                Premium Community Rental Platform<br>
+                Sent with ❤️ from your local neighbourhood.
               </p>
             </td>
           </tr>

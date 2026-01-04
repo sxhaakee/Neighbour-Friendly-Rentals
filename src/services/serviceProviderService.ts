@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { emailService } from './emailService';
 
 export interface ServiceProvider {
   id: string;
@@ -223,6 +224,17 @@ class ServiceProviderService {
         .single();
 
       if (error) throw error;
+
+      // Send confirmation email
+      emailService.sendListingConfirmation({
+        email: provider.email,
+        userName: provider.contact_person,
+        itemType: 'Service',
+        itemTitle: provider.business_name,
+        price: provider.base_price || 0,
+        listingUrl: `${window.location.origin}/services/${data.id}`
+      });
+
       return data;
     } catch (error) {
       console.error('Error creating service provider:', error);

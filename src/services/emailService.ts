@@ -411,6 +411,72 @@ export const emailService = {
   },
 
   /**
+   * Send rental agreement email
+   */
+  async sendRentalAgreement(agreementData: any) {
+    try {
+      console.log('📧 Sending Rental Agreement to:', agreementData.renterEmail, 'and', agreementData.ownerEmail);
+      
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: agreementData.renterEmail, // Send to renter first (ideally we should send to both)
+          type: 'rentalAgreement',
+          data: agreementData
+        }
+      });
+      
+      // Send copy to owner as well (sequential for now to ensure delivery)
+      await supabase.functions.invoke('send-email', {
+        body: {
+          email: agreementData.ownerEmail,
+          type: 'rentalAgreement',
+          data: agreementData
+        }
+      });
+
+      if (error) {
+        console.error('Error sending rental agreement:', error);
+        return { success: false, error };
+      }
+
+      console.log('✅ Rental agreement emails sent successfully');
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error sending rental agreement:', error);
+      return { success: false, error };
+    }
+  },
+
+  /**
+   * Send listing confirmation email to owner
+   */
+  async sendListingConfirmation(listingData: any) {
+    try {
+      console.log('📧 Sending Listing Confirmation to:', listingData.email);
+      
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: listingData.email,
+          type: 'listingCreated',
+          data: listingData
+        }
+      });
+
+      if (error) {
+        console.error('Error sending listing confirmation:', error);
+        return { success: false, error };
+      }
+
+      console.log('✅ Listing confirmation email sent successfully');
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error sending listing confirmation:', error);
+      return { success: false, error };
+    }
+  },
+
+  /**
    * Get email template HTML (for manual sending)
    */
   getEmailTemplate(type: string, data: any) {

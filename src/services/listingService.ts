@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { emailService } from './emailService';
 import { Database } from '../lib/database.types';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
@@ -75,6 +76,24 @@ export const listingService = {
       .single();
 
     if (error) throw error;
+
+    // Send confirmation email
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && user.email) {
+        emailService.sendListingConfirmation({
+          email: user.email,
+          userName: user.user_metadata?.full_name || 'Neighbor',
+          itemType: 'Item',
+          itemTitle: listing.title,
+          price: listing.daily_price,
+          listingUrl: `${window.location.origin}/items/${data.id}`
+        });
+      }
+    } catch (err) {
+      console.error('Failed to send listing confirmation email:', err);
+    }
+
     return data as Listing;
   },
 

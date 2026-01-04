@@ -8,65 +8,120 @@ const BREVO_API_KEY = Deno.env.get('BREVO_API_KEY')
 const getEmailTemplate = (type: string, data: any) => {
   const templates: Record<string, any> = {
     welcome: {
-      subject: '🎉 Welcome to NeighbourFriendly Rentals - Start Earning & Saving Today!',
+      subject: '🎉 Welcome to NeighbourFriendly Rentals - Your Quick Start Guide',
       html: `
         <!DOCTYPE html>
         <html>
         <head>
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #14b8a6 0%, #f59e0b 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .highlight-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f59e0b; }
-            .money-stat { font-size: 32px; font-weight: bold; color: #059669; text-align: center; margin: 10px 0; }
-            .button { display: inline-block; background: #14b8a6; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; margin: 15px 0; font-weight: bold; }
-            .feature { padding: 15px; margin: 10px 0; background: white; border-radius: 8px; border-left: 4px solid #14b8a6; }
+            .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .welcome-card { background: #f0f9ff; border-left: 4px solid #0284c7; padding: 20px; margin: 25px 0; border-radius: 4px; }
+            .step-grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 30px 0; }
+            .step-item { background: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
+            .step-title { color: #111827; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; }
+            .step-icon { background: #000; color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px; }
+            .divider { height: 1px; background: #e5e7eb; margin: 30px 0; }
+            .section-title { color: #111827; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+            .info-box { background: #fffbeb; border: 1px solid #fcd34d; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+            .button { display: inline-block; background: #2563eb; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; text-align: center; }
+            .button-container { text-align: center; margin-top: 30px; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <h1>🎉 Welcome to NFRR!</h1>
-              <p style="font-size: 18px; margin-top: 10px;">Your Journey to Smart Savings Starts Now</p>
+              <h1 style="margin: 0; font-size: 28px;">Welcome to the Neighborhood! 🏡</h1>
+              <p style="margin: 10px 0 0; opacity: 0.9;">You've joined India's smartest rental community.</p>
             </div>
             
             <div class="content">
               <p>Hi ${data.userName},</p>
-              <p><strong>Congratulations!</strong> You've just joined India's fastest-growing rental community where neighbors help neighbors save money and earn extra income!</p>
+              <p>We're thrilled to have you! NFRR isn't just a marketplace; it's a community where you can <strong>earn from things you own</strong> and <strong>save on things you need</strong>.</p>
 
-              <div class="highlight-box">
-                <h2 style="margin-top: 0; color: #92400e;">💰 Did You Know?</h2>
-                <p class="money-stat">₹15,000+</p>
-                <p style="text-align: center; font-size: 16px;">Average annual savings for our active users!</p>
-                <p style="text-align: center; margin-top: 15px;">Why buy when you can rent for 90% less?</p>
-              </div>
-
-              <h3>🚀 Start Making Money in 3 Simple Steps:</h3>
-              <div class="feature">
-                <strong>1. List Your Idle Items</strong><br>
-                That camera gathering dust? List it for ₹500/day and earn ₹15,000/month!
-              </div>
-              <div class="feature">
-                <strong>2. Rent What You Need</strong><br>
-                Need a drill for 1 day? Pay ₹100 instead of buying for ₹5,000!
-              </div>
-              <div class="feature">
-                <strong>3. Build Your Reputation</strong><br>
-                Get verified, earn reviews, and watch your earnings grow!
+              <div class="welcome-card">
+                <h3 style="margin: 0 0 10px 0; color: #0369a1;">🚀 Get Started in 2 Minutes</h3>
+                <p style="margin: 0; font-size: 14px; color: #0c4a6e;">
+                  Complete your profile and verify your ID to unlock full access to renting and listing. Verified users get 5x more responses!
+                </p>
               </div>
 
-              <div style="background: #fee2e2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ef4444;">
-                <h3 style="margin-top: 0; color: #991b1b;">⚡ Limited Time Offer!</h3>
-                <p><strong>List your first 3 items FREE!</strong> No commission for the first month. But hurry - this offer won't last!</p>
+              <div class="divider"></div>
+
+              <div class="section-title">✨ How It Works</div>
+              
+              <div class="step-grid">
+                <div class="step-item">
+                  <div class="step-title"><span class="step-icon">1</span> List & Earn</div>
+                  <p style="font-size: 14px; margin: 0; color: #4b5563;">
+                    Post your idle items (cameras, tools, gear). Set your price and terms. It's free to list!
+                  </p>
+                </div>
+                <div class="step-item">
+                  <div class="step-title"><span class="step-icon">2</span> Secure Agreements</div>
+                  <p style="font-size: 14px; margin: 0; color: #4b5563;">
+                    Every booking automatically generates a <strong>Rental Agreement</strong> protecting both parties. No paperwork headaches.
+                  </p>
+                </div>
+                <div class="step-item">
+                  <div class="step-title"><span class="step-icon">3</span> Safe Payments</div>
+                  <p style="font-size: 14px; margin: 0; color: #4b5563;">
+                    We hold payments securely until the item is handed over. Payouts are instant upon completion.
+                  </p>
+                </div>
               </div>
 
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${data.dashboardUrl}" class="button">Start Listing Now →</a>
+              <div class="info-box">
+                <strong>💡 Your Dashboard Control Center</strong><br>
+                <span style="font-size: 14px; color: #b45309;">
+                  Visit your <strong>Dashboard</strong> to track earnings, manage listings, view messages, and download agreement PDFs anytime.
+                </span>
               </div>
 
-              <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
-                <strong>Pro Tip:</strong> Users who list items in their first week earn 3x more than those who wait!
+              <div class="button-container">
+                <a href="${data.dashboardUrl}" class="button">Go to My Dashboard</a>
+              </div>
+              
+              <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 30px;">
+                Need help? Reply to this email or visit our Help Center.
+              </p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    },
+    verification: {
+      subject: 'Verify your email for NeighbourFriendly Rentals',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #111827; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .button { display: inline-block; background: #2563eb; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Verify Your Email 📧</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${data.userName || 'Neighbor'},</p>
+              <p>Thanks for joining NeighbourFriendly Rentals! Please click the button below to verify your email address and activate your account.</p>
+              
+              <div style="text-align: center;">
+                <a href="${data.url}" class="button">Verify Email Address</a>
+              </div>
+              
+              <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
+                If you didn't create an account, you can safely ignore this email.
               </p>
             </div>
           </div>
@@ -235,6 +290,131 @@ const getEmailTemplate = (type: string, data: any) => {
               <p>Please upload a clear, valid ID document and try again.</p>
               <div style="text-align: center; margin: 30px 0;">
                 <a href="${data.verifyUrl || data.dashboardUrl}" class="button">Upload Again</a>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    }),
+
+    rentalAgreement: (data: any) => ({
+      subject: `Rental Agreement - ${data.itemTitle}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #111827; color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .agreement-box { background: #f3f4f6; border: 1px solid #d1d5db; padding: 20px; border-radius: 8px; margin: 20px 0; font-family: monospace; font-size: 14px; color: #374151; }
+            .button { display: inline-block; background: #000000; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; }
+            .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            .details-table td { padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+            .label { font-weight: 600; color: #6b7280; width: 40%; }
+            .value { font-weight: 500; color: #111827; text-align: right; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Rental Agreement</h1>
+              <p style="margin: 10px 0 0; opacity: 0.8; font-size: 14px;">Official Contract Document</p>
+            </div>
+            <div class="content">
+              <p>Dear ${data.renterName} & ${data.ownerName},</p>
+              <p>This email confirms that a rental agreement has been successfully created for <strong>${data.itemTitle}</strong>.</p>
+              
+              <div class="agreement-box">
+                <strong>Agreement ID:</strong> ${data.agreementId}<br>
+                <strong>Date:</strong> ${new Date().toLocaleDateString()}<br>
+                <strong>Status:</strong> ACTIVE
+              </div>
+
+              <h3>📝 Key Terms</h3>
+              <table class="details-table">
+                <tr><td class="label">Item</td><td class="value">${data.itemTitle}</td></tr>
+                <tr><td class="label">Start Date</td><td class="value">${data.startDate}</td></tr>
+                <tr><td class="label">End Date</td><td class="value">${data.endDate}</td></tr>
+                <tr><td class="label">Total Value</td><td class="value">₹${data.totalPrice}</td></tr>
+              </table>
+
+              <p style="font-size: 14px; color: #4b5563;">
+                By proceeding with this rental, both parties agree to the NeighbourFriendly terms of service. The renter agrees to return the item in the same condition as received.
+              </p>
+
+              <div style="text-align: center;">
+                <a href="${data.dashboardUrl}" class="button">View Full Agreement</a>
+              </div>
+              
+              <p style="margin-top: 30px; font-size: 12px; color: #9ca3af; text-align: center;">
+                Please keep this email for your records. In case of disputes, this agreement will serve as the primary reference.
+              </p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    }),
+
+    listingCreated: (data: any) => ({
+      subject: `Your Listing is Live! 🚀 - ${data.itemTitle}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .tip-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 25px 0; border-radius: 4px; }
+            .button { display: inline-block; background: #4f46e5; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+            .stat-grid { display: flex; margin: 20px 0; gap: 10px; }
+            .stat-card { flex: 1; background: #f9fafb; padding: 15px; text-align: center; border-radius: 8px; border: 1px solid #e5e7eb; }
+            .stat-val { font-size: 24px; font-weight: 800; color: #111827; }
+            .stat-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 28px;">You're in Business! 🚀</h1>
+              <p style="margin: 10px 0 0; opacity: 0.9; font-size: 16px;">Your listing is now visible to thousands of neighbors.</p>
+            </div>
+            <div class="content">
+              <p>Hi ${data.userName},</p>
+              <p>Great news! Your <strong>${data.itemType}</strong> listing for "<strong>${data.itemTitle}</strong>" has been successfully created.</p>
+
+              <div class="stat-grid">
+                <div class="stat-card">
+                  <div class="stat-val">₹${data.price}</div>
+                  <div class="stat-label">Daily Earnings</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-val">0%</div>
+                  <div class="stat-label">Commission (Limited Time)</div>
+                </div>
+              </div>
+
+              <div class="tip-box">
+                <h3 style="margin: 0 0 10px 0; color: #1e40af;">💡 Pro Tip for Fast Rentals</h3>
+                <p style="margin: 0; font-size: 14px; color: #1e3a8a;">
+                  Listings with clear photos and detailed descriptions get booked <strong>3x faster</strong>. Consider adding a quick video walkthrough!
+                </p>
+              </div>
+
+              <h3>What happens next?</h3>
+              <ul style="padding-left: 20px; color: #4b5563;">
+                <li style="margin-bottom: 10px;">Neighbors will see your listing in search results.</li>
+                <li style="margin-bottom: 10px;">You'll get a notification when someone requests to book.</li>
+                <li style="margin-bottom: 10px;">Chat with them, approve the request, and get paid!</li>
+              </ul>
+
+              <div style="text-align: center; margin-top: 30px;">
+                <a href="${data.listingUrl}" class="button">View My Listing</a>
               </div>
             </div>
           </div>

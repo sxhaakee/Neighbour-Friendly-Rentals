@@ -32,6 +32,8 @@ export interface RentalAgreement extends RentalAgreementData {
   deleted_at?: string;
 }
 
+import { emailService } from './emailService';
+
 export const rentalAgreementService = {
   /**
    * Create a new rental agreement
@@ -50,6 +52,20 @@ export const rentalAgreementService = {
       console.error('Error creating rental agreement:', error);
       throw error;
     }
+
+    // Send agreement email asynchronously
+    emailService.sendRentalAgreement({
+      agreementId: agreement.id,
+      renterName: data.renter_name,
+      renterEmail: data.renter_email,
+      ownerName: data.owner_name,
+      ownerEmail: data.owner_email,
+      itemTitle: data.item_title,
+      startDate: data.start_date,
+      endDate: data.end_date,
+      totalPrice: data.total_price,
+      dashboardUrl: `${window.location.origin}/dashboard`
+    });
 
     return agreement;
   },

@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { emailService } from './emailService';
 
 export interface Property {
   id: string;
@@ -199,6 +200,17 @@ class PropertyService {
         .single();
 
       if (error) throw error;
+
+      // Send confirmation email
+      emailService.sendListingConfirmation({
+        email: property.owner_email,
+        userName: property.owner_name,
+        itemType: 'Property',
+        itemTitle: property.title,
+        price: property.rent_amount,
+        listingUrl: `${window.location.origin}/properties/${data.id}`
+      });
+
       return data;
     } catch (error) {
       console.error('Error creating property:', error);
