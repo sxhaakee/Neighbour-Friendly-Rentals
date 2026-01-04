@@ -306,15 +306,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const resendVerificationEmail = async (email: string) => {
     try {
-      const { error } = await supabase.auth.resend({
-        type: 'signup',
-        email: email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/login`,
-        },
+      console.log('🔄 Requesting resend via Edge Function...');
+
+      const { data, error } = await supabase.functions.invoke('handle-signup', {
+        body: {
+          email,
+          resend: true // Special flag to skip creation and just send email
+        }
       });
-      return { error };
+
+      if (error) {
+        console.error('Resend Edge Function error:', error);
+        return { error: error as AuthError };
+      }
+
+      if (data?.error) {
+        console.error('Resend Logic error:', data.error);
+        return { error: { message: data.error } as AuthError };
+      }
+
+      console.log('✅ Resend successful via Edge Function');
+      return { error: null };
     } catch (error) {
+      console.error('Resend exception:', error);
       return { error: error as AuthError };
     }
   };

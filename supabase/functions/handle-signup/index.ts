@@ -14,14 +14,14 @@ serve(async (req) => {
 
   try {
     console.log('--- handle-signup processing request ---')
-    const { email, password, options } = await req.json()
+    const { email, password, options, resend } = await req.json()
     const { emailRedirectTo, data } = options || {}
     const fullName = data?.full_name || 'User'
 
-    if (!email || !password) {
-      console.error('Missing email or password')
+    if (!email) {
+      console.error('Missing email')
       return new Response(
-        JSON.stringify({ error: 'Email and password are required' }),
+        JSON.stringify({ error: 'Email is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -37,32 +37,59 @@ serve(async (req) => {
     // Initialize Supabase Admin client
     const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
-    // 1. Create User
-    console.log(`Step 1: Creating user: ${email}`)
-    const { data: userData, error: createError } = await supabaseAdmin.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: false, 
-      user_metadata: { full_name: fullName }
-    })
+    let userId = '';
+    let userData: any = undefined;
 
-    if (createError) {
-      console.error('Error creating user:', createError)
-      const status = createError.message.includes('already registered') ? 400 : 500
-      return new Response(
-        JSON.stringify({ error: `Step 1 Failed: ${createError.message}` }),
-        { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    if (resend) {
+      console.log(`Processing RESEND verification for: ${email}`)
+      // For resend, we just need the email. We can get the user ID if needed, 
+      // but generateLink works with email too.
+      // However, to be safe and consistent with previous logs, let's just proceed to generate link.
+    } else {
+      if (!password) {
+        return new Response(
+          JSON.stringify({ error: 'Password is required for signup' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+
+      // 1. Create User
+      console.log(`Step 1: Creating user: ${email}`)
+      const { data, error: createError } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: false, 
+        user_metadata: { full_name: fullName }
+      })
+      userData = data;
+
+      if (createError) {
+        console.error('Error creating user:', createError)
+        // Check if user already exists
+        if (createError.message.includes('already registered')) {
+           // If user exists, we SHOULD fail signup, frontend handles 'User exists'.
+           // Frontend can then offer 'Resend Verification' button which calls this func with resend: true
+           return new Response(
+            JSON.stringify({ error: `Step 1 Failed: ${createError.message}` }),
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          )
+        }
+        
+        return new Response(
+          JSON.stringify({ error: `Step 1 Failed: ${createError.message}` }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+      userId = userData.user.id
     }
 
-    const user = userData.user
-
     // 2. Generate Email Verification Link
-    console.log(`Step 2: Generating verification link for: ${user.id}`)
+    // Use type 'signup' which is for email verification of new users
+    console.log(`Step 2: Generating verification link for: ${email}`)
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email,
-      password: password,
+      password: password, // Password not strictly needed for link generation by admin usually, but good practice if updating
       options: {
         redirectTo: emailRedirectTo
       }
@@ -128,8 +155,9 @@ serve(async (req) => {
     console.log('Signup process completed successfully')
     return new Response(
       JSON.stringify({ 
-        user: userData.user, 
-        session: null 
+        success: true,
+        message: 'Verification email sent',
+        user: typeof userData !== 'undefined' ? userData.user : { email } // Return explicit user only if we have it
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
