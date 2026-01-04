@@ -250,12 +250,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const resetPassword = async (email: string) => {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+      console.log('🔄 Requesting password reset via Edge Function...');
+      const { data, error } = await supabase.functions.invoke('send-reset-password', {
+        body: {
+          email,
+          redirectTo: `${window.location.origin}/reset-password`,
+        }
       });
-      return { error };
-    } catch (error) {
-      return { error: error as AuthError };
+
+      if (error) throw error;
+
+      console.log('✅ Password reset email sent via Edge Function');
+      return { error: null };
+    } catch (error: any) {
+      console.error('Error sending reset password email:', error);
+      // Fallback to default if needed, or just return error
+      return { error: { message: error.message || 'Failed to send reset email' } as AuthError };
     }
   };
 

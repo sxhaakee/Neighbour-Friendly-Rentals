@@ -1,16 +1,7 @@
 import { supabase } from '../lib/supabase';
 
-// NOTE: Resend is a SERVER-SIDE API and cannot be called from the browser
-// It causes CORS errors when called from frontend
-// Solution: Use Supabase Edge Functions to send emails
-// For now, we'll log emails to console instead of sending them
-
-const getResendClient = () => {
-  // Always return null in browser environment
-  // Emails will be logged to console instead
-  console.log('📧 Email service running in browser mode (logging only)');
-  return null;
-};
+// Email service using Supabase Edge Functions (via Brevo)
+// NOTE: All emails are sent via server-side Edge Functions to avoid CORS and expose API keys
 
 // Email templates with FOMO and money-saving messaging
 const EMAIL_TEMPLATES = {
