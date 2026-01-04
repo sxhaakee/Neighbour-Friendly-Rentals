@@ -66,9 +66,14 @@ const Login = () => {
         } else if (formData.password.length < 6) {
           setError('Password must be at least 6 characters');
         } else {
+          console.log('📝 Attempting signup for:', formData.email);
           const { error } = await signUp(formData.email, formData.password, formData.name);
-          if (error) setError(error.message);
-          else {
+
+          if (error) {
+            console.error('❌ Signup error:', error);
+            setError(error.message);
+          } else {
+            console.log('✅ Signup successful');
             showToast.success('✅ Account created! Check your email to verify.');
             setMode('login');
           }
