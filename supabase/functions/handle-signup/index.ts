@@ -47,9 +47,11 @@ serve(async (req) => {
 
     if (createError) {
       console.error('Error creating user:', createError)
+      // Return 400 for user existing, 500 for others
+      const status = createError.message.includes('already registered') ? 400 : 500
       return new Response(
         JSON.stringify({ error: createError.message }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 

@@ -4,6 +4,7 @@ import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
+import { supabase } from '../lib/supabase';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
 
@@ -61,8 +62,6 @@ const Login = () => {
         if (error) {
           if (error.message.includes("Email not confirmed")) {
             setError("Email not verified. Please check your inbox.");
-            // Optionally we could add a button here to resend, but for now just invalidating is enough
-            // or we can auto-resend? No, let user ask for it.
             showToast.error(
               <div>
                 Email not verified.
@@ -97,8 +96,18 @@ const Login = () => {
             setError(error.message);
           } else {
             console.log('✅ Signup successful');
-            showToast.success('✅ Account created! Check your email to verify.');
-            setMode('login');
+
+            // Check if we have an active session (Email Confirmation Disabled)
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+              showToast.success('✅ Account created! Welcome to the neighbourhood!');
+              navigate('/dashboard');
+            } else {
+              // Email Confirmation Enabled
+              showToast.success('✅ Account created! Please check your email to verify.');
+              setMode('login');
+            }
           }
         }
       }

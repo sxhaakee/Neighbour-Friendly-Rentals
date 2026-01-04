@@ -219,12 +219,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (error) {
-        // Handle Edge Function invocation errors specifically
         console.error('Signup Edge Function error:', error);
+
+        // Handle specific http errors slightly better
+        if (error instanceof Error && error.message.includes('Edge Function returned a non-2xx status code')) {
+          // We can't easily parse the JSON body from the error object thrown by supabase-js here, 
+          // but often the message is generic. The function logs better info.
+          // However, if we know it's a 400, it's likely user exists.
+          // Let's assume generic error for now, but UI should handle it.
+          return { error: { message: 'Signup failed. User may already exist or system error.' } as AuthError }
+        }
+
         return { error: error as AuthError };
       }
 
-      // If use already exists or other logical errors from the function
+      // Supabase Edge Functions invoke returns { data: response_json, error: null } if 200 OK
+      // If we returned { error: 'msg' } inside the 200 response (bad practice but possible), check it.
+      // But we are returning http status codes effectively now.
+
       if (data?.error) {
         console.error('Signup Logic error:', data.error);
         return { error: { message: data.error } as AuthError };
