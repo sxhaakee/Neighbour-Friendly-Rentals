@@ -9,11 +9,12 @@ export const showToast = {
     });
   },
   
-  error: (message: string) => {
-    toast.error(message, {
+  error: (message: string | React.ReactNode, options?: any) => {
+    toast.error(message as any, {
       style: {
         border: '1px solid #ef4444',
       },
+      ...options
     });
   },
   

@@ -109,9 +109,74 @@ Sender Name: NeighbourFriendly Rentals
 3. Edit template:
 
 ```html
-<h2>Confirm your signup</h2>
-<p>Follow this link to confirm your account:</p>
-<p><a href="{{ .ConfirmationURL }}">Confirm your email</a></p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Your Signup</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #374151;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f3f4f6;">
+    <tr>
+      <td align="center" style="padding: 40px 0;">
+        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); padding: 40px; text-align: center;">
+          
+          <!-- Header/Logo -->
+          <tr>
+            <td align="center" style="padding-bottom: 24px;">
+              <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #d97706;">NeighbourFriendly</h1>
+            </td>
+          </tr>
+
+          <!-- Greeting -->
+          <tr>
+            <td align="center">
+              <h2 style="margin: 0 0 16px 0; font-size: 24px; font-weight: 600; color: #111827;">Welcome to the Neighbourhood! 🏡</h2>
+              <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #4b5563;">
+                We're thrilled to have you join us! You're just one step away from connecting with your community. 
+                Please confirm your email address to get started.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Button -->
+          <tr>
+            <td align="center" style="padding-bottom: 32px;">
+              <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 14px 32px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: #d97706; text-decoration: none; border-radius: 8px; transition: background-color 0.2s;">
+                Confirm My Account
+              </a>
+            </td>
+          </tr>
+
+          <!-- Link fallback -->
+          <tr>
+            <td align="center" style="padding-bottom: 32px; border-bottom: 1px solid #e5e7eb;">
+              <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                Or paste this link into your browser:<br>
+                <a href="{{ .ConfirmationURL }}" style="color: #d97706; text-decoration: underline;">{{ .ConfirmationURL }}</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top: 32px;">
+              <p style="margin: 0 0 8px 0; font-size: 14px; color: #9ca3af;">
+                Cheers,<br>The NeighbourFriendly Team
+              </p>
+              <p style="margin: 0; font-size: 12px; color: #d1d5db;">
+                If you didn't request this email, you can safely ignore it.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
 ```
 
 **Variables available:**

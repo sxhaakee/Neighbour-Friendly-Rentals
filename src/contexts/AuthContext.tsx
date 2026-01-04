@@ -21,6 +21,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signInWithGoogle: () => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
+  resendVerificationEmail: (email: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   isAdmin: boolean;
@@ -258,6 +259,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const resendVerificationEmail = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login`,
+        },
+      });
+      return { error };
+    } catch (error) {
+      return { error: error as AuthError };
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -282,6 +298,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signInWithGoogle,
     resetPassword,
+    resendVerificationEmail,
     signOut,
     refreshProfile,
     isAdmin,

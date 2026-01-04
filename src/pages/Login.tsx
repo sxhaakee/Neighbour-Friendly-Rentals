@@ -13,7 +13,8 @@ const Login = () => {
     signIn,
     signUp,
     signInWithGoogle,
-    resetPassword
+    resetPassword,
+    resendVerificationEmail,
   } = useAuth();
 
   const [mode, setMode] = useState<AuthMode>('login');
@@ -57,7 +58,29 @@ const Login = () => {
     try {
       if (mode === 'login') {
         const { error } = await signIn(formData.email, formData.password);
-        if (error) setError(error.message);
+        if (error) {
+          if (error.message.includes("Email not confirmed")) {
+            setError("Email not verified. Please check your inbox.");
+            // Optionally we could add a button here to resend, but for now just invalidating is enough
+            // or we can auto-resend? No, let user ask for it.
+            showToast.error(
+              <div>
+                Email not verified.
+                <button
+                  onClick={() => {
+                    resendVerificationEmail(formData.email);
+                    showToast.success("Verification email resent!");
+                  }}
+                  className="underline ml-2 font-bold"
+                >
+                  Resend Link
+                </button>
+              </div>
+              , { autoClose: 10000 });
+          } else {
+            setError(error.message);
+          }
+        }
         else navigate('/dashboard');
       }
       else if (mode === 'signup') {
