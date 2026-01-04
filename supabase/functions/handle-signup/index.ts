@@ -1,6 +1,6 @@
 // supabase/functions/handle-signup/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.21.0"
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0"
 import { corsHeaders } from "../_shared/cors.ts"
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')
@@ -13,11 +13,13 @@ serve(async (req) => {
   }
 
   try {
+    console.log('--- handle-signup processing request ---')
     const { email, password, options } = await req.json()
     const { emailRedirectTo, data } = options || {}
     const fullName = data?.full_name || 'User'
 
     if (!email || !password) {
+      console.error('Missing email or password')
       return new Response(
         JSON.stringify({ error: 'Email and password are required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -25,6 +27,7 @@ serve(async (req) => {
     }
 
     if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Missing configuration: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
       return new Response(
         JSON.stringify({ error: 'Server configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -34,20 +37,17 @@ serve(async (req) => {
     // Initialize Supabase Admin client
     const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
-    // 1. Create User (without sending default email)
-    // Note: 'email_confirm: false' is default, and automatic email sending usually only happens
-    // if calling auth.api.signUp, but admin.createUser does NOT send emails by default.
-    console.log(`Creating user: ${email}`)
+    // 1. Create User
+    console.log(`Step 1: Creating user: ${email}`)
     const { data: userData, error: createError } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      email_confirm: false, // User is NOT confirmed yet
+      email_confirm: false, 
       user_metadata: { full_name: fullName }
     })
 
     if (createError) {
       console.error('Error creating user:', createError)
-      // Return 400 for user existing, 500 for others
       const status = createError.message.includes('already registered') ? 400 : 500
       return new Response(
         JSON.stringify({ error: createError.message }),
@@ -58,7 +58,7 @@ serve(async (req) => {
     const user = userData.user
 
     // 2. Generate Email Verification Link
-    console.log(`Generating verification link for: ${user.id}`)
+    console.log(`Step 2: Generating verification link for: ${user.id}`)
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email,
@@ -70,62 +70,76 @@ serve(async (req) => {
 
     if (linkError) {
       console.error('Error generating link:', linkError)
-      // Rollback? No, user is created. We can just return error and let user retry "resend".
       return new Response(
         JSON.stringify({ error: 'Account created but failed to generate verification link' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
-    const verificationUrl = linkData.properties?.action_link
+    const verificationUrl = linkData.user?.action_link || linkData.properties?.action_link
     if (!verificationUrl) {
-      return new Response(
+       console.error('Verification URL not found in response', linkData)
+       return new Response(
         JSON.stringify({ error: 'Failed to retrieve verification URL' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
 
     // 3. Send Email via send-email Function
-    // We call our own send-email function to handle the actual delivery via Brevo
-    console.log(`Sending email to: ${email}`)
-    const sendEmailResponse = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
-      },
-      body: JSON.stringify({
-        email: email,
-        type: 'verification',
-        data: {
-          userName: fullName,
-          url: verificationUrl
-        }
+    console.log(`Step 3: Invoking send-email function from ${SUPABASE_URL}/functions/v1/send-email`)
+    
+    try {
+      const sendEmailResponse = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
+        },
+        body: JSON.stringify({
+          email: email,
+          type: 'verification',
+          data: {
+            userName: fullName,
+            url: verificationUrl
+          }
+        })
       })
-    })
 
-    if (!sendEmailResponse.ok) {
-        const errorText = await sendEmailResponse.text()
-        console.error('Failed to send email:', errorText)
-        return new Response(
-            JSON.stringify({ error: 'Account created but failed to send verification email' }),
-            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
+      if (!sendEmailResponse.ok) {
+          const errorText = await sendEmailResponse.text()
+          console.error('Failed to send email. Status:', sendEmailResponse.status, 'Response:', errorText)
+          // Don't fail the signup completely if email fails, but warn.
+          // Actually we MUST fail or tell user, otherwise they can't verify.
+          return new Response(
+              JSON.stringify({ error: 'Account created but failed to send verification email.' }),
+              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          )
+      }
+      
+      console.log('Email sent successfully via send-email function')
+      
+    } catch (fetchError) {
+      console.error('Exception calling send-email:', fetchError)
+      return new Response(
+          JSON.stringify({ error: 'Internal error sending verification email' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
     // Return success
+    console.log('Signup process completed successfully')
     return new Response(
       JSON.stringify({ 
         user: userData.user, 
-        session: null // No session created for unverified user
+        session: null 
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
   } catch (error) {
-    console.error('Unexpected error:', error)
+    console.error('Unexpected error in handle-signup:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || 'Unknown internal error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
