@@ -45,7 +45,7 @@ export const emailAutomationService = {
       { 
         delay: 3, 
         template: 'success-stories',
-        subject: 'See how others are earning with NFRR 💰'
+        subject: 'See how others are earning with NFR 💰'
       },
       { 
         delay: 5, 
@@ -422,7 +422,7 @@ export const emailAutomationService = {
         <body>
           <div class="container">
             <div class="header">
-              <h1>🆕 What's New on NFRR!</h1>
+              <h1>🆕 What's New on NFR!</h1>
               <p>Hi ${name}, we've been busy improving!</p>
             </div>
             

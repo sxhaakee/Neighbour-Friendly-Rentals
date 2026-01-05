@@ -38,8 +38,8 @@ const getEmailTemplate = (type: string, data: any) => {
             </div>
             
             <div class="content">
-              <p>Hi ${data.userName},</p>
-              <p>We're thrilled to have you! NFRR isn't just a marketplace; it's a community where you can <strong>earn from things you own</strong> and <strong>save on things you need</strong>.</p>
+              <p>Hi \${data.userName},</p>
+              <p>We're thrilled to have you! NFR isn't just a marketplace; it's a community where you can <strong>earn from things you own</strong> and <strong>save on things you need</strong>.</p>
 
               <div class="welcome-card">
                 <h3 style="margin: 0 0 10px 0; color: #0369a1;">🚀 Get Started in 2 Minutes</h3>
@@ -81,7 +81,7 @@ const getEmailTemplate = (type: string, data: any) => {
               </div>
 
               <div class="button-container">
-                <a href="${data.dashboardUrl}" class="button">Go to My Dashboard</a>
+                <a href="\${data.dashboardUrl}" class="button">Go to My Dashboard</a>
               </div>
               
               <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 30px;">
@@ -113,11 +113,11 @@ const getEmailTemplate = (type: string, data: any) => {
               <h1 style="margin: 0; font-size: 24px;">Verify Your Email 📧</h1>
             </div>
             <div class="content">
-              <p>Hi ${data.userName || 'Neighbor'},</p>
+              <p>Hi \${data.userName || 'Neighbor'},</p>
               <p>Thanks for joining NeighbourFriendly Rentals! Please click the button below to verify your email address and activate your account.</p>
               
               <div style="text-align: center;">
-                <a href="${data.url}" class="button">Verify Email Address</a>
+                <a href="\${data.url}" class="button">Verify Email Address</a>
               </div>
               
               <p style="font-size: 14px; color: #6b7280; margin-top: 20px;">
@@ -130,8 +130,8 @@ const getEmailTemplate = (type: string, data: any) => {
       `
     },
     bookingConfirmation: {
-      subject: `Booking Confirmation - ${data.itemTitle}`,
-      html: `
+      subject: \`Booking Confirmation - \${data.itemTitle}\`,
+      html: \`
         <!DOCTYPE html>
         <html>
         <head>
@@ -155,29 +155,29 @@ const getEmailTemplate = (type: string, data: any) => {
           <div class="container">
             <div class="header">
               <h1>🎉 Booking Confirmed!</h1>
-              <p>Order ID: ${data.orderId}</p>
+              <p>Order ID: \${data.orderId}</p>
             </div>
             
             <div class="content">
               <div class="section">
                 <h2>📦 Item Details</h2>
                 <table>
-                  <tr><td class="label">Item:</td><td class="value">${data.itemTitle}</td></tr>
-                  <tr><td class="label">Start Date:</td><td class="value">${data.startDate}</td></tr>
-                  <tr><td class="label">End Date:</td><td class="value">${data.endDate}</td></tr>
-                  <tr><td class="label">Duration:</td><td class="value">${data.totalDays} days</td></tr>
+                  <tr><td class="label">Item:</td><td class="value">\${data.itemTitle}</td></tr>
+                  <tr><td class="label">Start Date:</td><td class="value">\${data.startDate}</td></tr>
+                  <tr><td class="label">End Date:</td><td class="value">\${data.endDate}</td></tr>
+                  <tr><td class="label">Duration:</td><td class="value">\${data.totalDays} days</td></tr>
                 </table>
               </div>
 
               <div class="section">
                 <h2>💰 Payment Details</h2>
                 <table>
-                  <tr><td class="label">Item Price:</td><td class="value">₹${data.itemPrice}</td></tr>
-                  <tr><td class="label">Service Charge (10%):</td><td class="value">₹${data.serviceCharge}</td></tr>
-                  ${data.deliveryCharge > 0 ? `<tr><td class="label">Delivery & Pickup:</td><td class="value">₹${data.deliveryCharge}</td></tr>` : ''}
-                  <tr><td class="label">Security Deposit (20%):</td><td class="value">₹${data.securityDeposit}</td></tr>
+                  <tr><td class="label">Item Price:</td><td class="value">₹\${data.itemPrice}</td></tr>
+                  <tr><td class="label">Service Charge (10%):</td><td class="value">₹\${data.serviceCharge}</td></tr>
+                  \${data.deliveryCharge > 0 ? \`<tr><td class="label">Delivery & Pickup:</td><td class="value">₹\${data.deliveryCharge}</td></tr>\` : ''}
+                  <tr><td class="label">Security Deposit (20%):</td><td class="value">₹\${data.securityDeposit}</td></tr>
                   <tr style="font-weight: bold; font-size: 18px; color: #14b8a6;">
-                    <td class="label">TOTAL:</td><td class="value">₹${data.totalPrice}</td>
+                    <td class="label">TOTAL:</td><td class="value">₹\${data.totalPrice}</td>
                   </tr>
                 </table>
                 <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
@@ -188,8 +188,8 @@ const getEmailTemplate = (type: string, data: any) => {
 
               <div class="highlight">
                 <h3>💳 Payment Method</h3>
-                <p><strong>${data.paymentMethod === 'cash' ? 'Cash' : 'UPI'} on Delivery</strong></p>
-                <p>Please pay ₹${data.totalPrice} to the owner when you receive the item.</p>
+                <p><strong>\${data.paymentMethod === 'cash' ? 'Cash' : 'UPI'} on Delivery</strong></p>
+                <p>Please pay ₹\${data.totalPrice} to the owner when you receive the item.</p>
               </div>
 
               <div class="warning">
@@ -203,35 +203,35 @@ const getEmailTemplate = (type: string, data: any) => {
               </div>
 
               <div class="section">
-                <h2>👤 ${data.isRenter ? 'Owner' : 'Renter'} Contact</h2>
+                <h2>👤 \${data.isRenter ? 'Owner' : 'Renter'} Contact</h2>
                 <table>
-                  <tr><td class="label">Name:</td><td class="value">${data.contactName}</td></tr>
-                  <tr><td class="label">Phone:</td><td class="value">${data.contactPhone}</td></tr>
-                  <tr><td class="label">Address:</td><td class="value">${data.contactAddress}</td></tr>
+                  <tr><td class="label">Name:</td><td class="value">\${data.contactName}</td></tr>
+                  <tr><td class="label">Phone:</td><td class="value">\${data.contactPhone}</td></tr>
+                  <tr><td class="label">Address:</td><td class="value">\${data.contactAddress}</td></tr>
                 </table>
               </div>
 
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${data.dashboardUrl}" class="button">View Booking Details</a>
+                <a href="\${data.dashboardUrl}" class="button">View Booking Details</a>
               </div>
             </div>
 
             <div class="footer">
               <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
                 <p style="margin: 0; font-weight: bold; color: #92400e;">💡 Smart Saver Tip</p>
-                <p style="margin: 5px 0; color: #78350f;">You just saved ₹${Math.round(data.totalPrice * 10)} by renting instead of buying!</p>
+                <p style="margin: 5px 0; color: #78350f;">You just saved ₹\${Math.round(data.totalPrice * 10)} by renting instead of buying!</p>
               </div>
               <p>© 2025 Neighbour Friendly Rentals. All rights reserved.</p>
-              <p>Questions? Contact us at support@nfrr.com</p>
+              <p>Questions? Contact us at support@neighbourfriendly.in</p>
             </div>
           </div>
         </body>
         </html>
-      `
+      \`
     },
     idVerificationApproved: (data: any) => ({
       subject: '✅ ID Verification Approved',
-      html: `
+      html: \`
         <!DOCTYPE html>
         <html>
         <head>
@@ -249,21 +249,21 @@ const getEmailTemplate = (type: string, data: any) => {
               <h1>✅ ID Verified!</h1>
             </div>
             <div class="content">
-              <p>Hi ${data.userName},</p>
+              <p>Hi \${data.userName},</p>
               <p>Great news! Your ID has been verified successfully.</p>
               <p>You can now book items on Neighbour Friendly Rentals.</p>
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${data.dashboardUrl}" class="button">Start Booking</a>
+                <a href="\${data.dashboardUrl}" class="button">Start Booking</a>
               </div>
             </div>
           </div>
         </body>
         </html>
-      `
+      \`
     }),
     idVerificationRejected: (data: any) => ({
       subject: '❌ ID Verification Rejected',
-      html: `
+      html: \`
         <!DOCTYPE html>
         <html>
         <head>
@@ -282,25 +282,25 @@ const getEmailTemplate = (type: string, data: any) => {
               <h1>❌ ID Verification Rejected</h1>
             </div>
             <div class="content">
-              <p>Hi ${data.userName},</p>
+              <p>Hi \${data.userName},</p>
               <p>Unfortunately, your ID verification was rejected.</p>
               <div class="reason">
-                <strong>Reason:</strong> ${data.reason}
+                <strong>Reason:</strong> \${data.reason}
               </div>
               <p>Please upload a clear, valid ID document and try again.</p>
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${data.verifyUrl || data.dashboardUrl}" class="button">Upload Again</a>
+                <a href="\${data.verifyUrl || data.dashboardUrl}" class="button">Upload Again</a>
               </div>
             </div>
           </div>
         </body>
         </html>
-      `
+      \`
     }),
 
     rentalAgreement: (data: any) => ({
-      subject: `Rental Agreement - ${data.itemTitle}`,
-      html: `
+      subject: \`Rental Agreement - \${data.itemTitle}\`,
+      html: \`
         <!DOCTYPE html>
         <html>
         <head>
@@ -324,21 +324,21 @@ const getEmailTemplate = (type: string, data: any) => {
               <p style="margin: 10px 0 0; opacity: 0.8; font-size: 14px;">Official Contract Document</p>
             </div>
             <div class="content">
-              <p>Dear ${data.renterName} & ${data.ownerName},</p>
-              <p>This email confirms that a rental agreement has been successfully created for <strong>${data.itemTitle}</strong>.</p>
+              <p>Dear \${data.renterName} & \${data.ownerName},</p>
+              <p>This email confirms that a rental agreement has been successfully created for <strong>\${data.itemTitle}</strong>.</p>
               
               <div class="agreement-box">
-                <strong>Agreement ID:</strong> ${data.agreementId}<br>
-                <strong>Date:</strong> ${new Date().toLocaleDateString()}<br>
+                <strong>Agreement ID:</strong> \${data.agreementId}<br>
+                <strong>Date:</strong> \${new Date().toLocaleDateString()}<br>
                 <strong>Status:</strong> ACTIVE
               </div>
 
               <h3>📝 Key Terms</h3>
               <table class="details-table">
-                <tr><td class="label">Item</td><td class="value">${data.itemTitle}</td></tr>
-                <tr><td class="label">Start Date</td><td class="value">${data.startDate}</td></tr>
-                <tr><td class="label">End Date</td><td class="value">${data.endDate}</td></tr>
-                <tr><td class="label">Total Value</td><td class="value">₹${data.totalPrice}</td></tr>
+                <tr><td class="label">Item</td><td class="value">\${data.itemTitle}</td></tr>
+                <tr><td class="label">Start Date</td><td class="value">\${data.startDate}</td></tr>
+                <tr><td class="label">End Date</td><td class="value">\${data.endDate}</td></tr>
+                <tr><td class="label">Total Value</td><td class="value">₹\${data.totalPrice}</td></tr>
               </table>
 
               <p style="font-size: 14px; color: #4b5563;">
@@ -346,7 +346,7 @@ const getEmailTemplate = (type: string, data: any) => {
               </p>
 
               <div style="text-align: center;">
-                <a href="${data.dashboardUrl}" class="button">View Full Agreement</a>
+                <a href="\${data.dashboardUrl}" class="button">View Full Agreement</a>
               </div>
               
               <p style="margin-top: 30px; font-size: 12px; color: #9ca3af; text-align: center;">
@@ -356,12 +356,12 @@ const getEmailTemplate = (type: string, data: any) => {
           </div>
         </body>
         </html>
-      `
+      \`
     }),
 
     listingCreated: (data: any) => ({
-      subject: `Your Listing is Live! 🚀 - ${data.itemTitle}`,
-      html: `
+      subject: \`Your Listing is Live! 🚀 - \${data.itemTitle}\`,
+      html: \`
         <!DOCTYPE html>
         <html>
         <head>
@@ -385,12 +385,12 @@ const getEmailTemplate = (type: string, data: any) => {
               <p style="margin: 10px 0 0; opacity: 0.9; font-size: 16px;">Your listing is now visible to thousands of neighbors.</p>
             </div>
             <div class="content">
-              <p>Hi ${data.userName},</p>
-              <p>Great news! Your <strong>${data.itemType}</strong> listing for "<strong>${data.itemTitle}</strong>" has been successfully created.</p>
+              <p>Hi \${data.userName},</p>
+              <p>Great news! Your <strong>\${data.itemType}</strong> listing for "<strong>\${data.itemTitle}</strong>" has been successfully created.</p>
 
               <div class="stat-grid">
                 <div class="stat-card">
-                  <div class="stat-val">₹${data.price}</div>
+                  <div class="stat-val">₹\${data.price}</div>
                   <div class="stat-label">Daily Earnings</div>
                 </div>
                 <div class="stat-card">
@@ -414,17 +414,21 @@ const getEmailTemplate = (type: string, data: any) => {
               </ul>
 
               <div style="text-align: center; margin-top: 30px;">
-                <a href="${data.listingUrl}" class="button">View My Listing</a>
+                <a href="\${data.listingUrl}" class="button">View My Listing</a>
               </div>
             </div>
           </div>
         </body>
         </html>
-      `
+      \`
     })
   }
   
-  return templates[type] || templates.welcome
+  const template = templates[type] || templates.welcome;
+  if (typeof template === 'function') {
+    return template(data);
+  }
+  return template;
 }
 
 serve(async (req) => {
@@ -508,7 +512,7 @@ serve(async (req) => {
       JSON.stringify({ success: true, id: result.messageId || 'sent' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending email:', error)
     return new Response(
       JSON.stringify({ error: error.message }),

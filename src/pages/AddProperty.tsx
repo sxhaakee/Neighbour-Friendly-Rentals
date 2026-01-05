@@ -39,7 +39,7 @@ const AddProperty = () => {
 
           try {
             // Reverse geocode to get city/state
-            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1`);
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10&addressdetails=1&accept-language=en`);
             const data = await response.json();
 
             if (data.address) {

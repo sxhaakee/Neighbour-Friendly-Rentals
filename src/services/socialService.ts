@@ -308,7 +308,7 @@ export const socialService = {
       }
 
       // Generate new referral code
-      const code = `NFRR${userId.substring(0, 8).toUpperCase()}`;
+      const code = `NFR${userId.substring(0, 8).toUpperCase()}`;
       
       await supabase
         .from('profiles')

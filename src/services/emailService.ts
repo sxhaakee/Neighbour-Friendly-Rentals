@@ -25,7 +25,7 @@ const EMAIL_TEMPLATES = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🎉 Welcome to NFRR!</h1>
+            <h1>🎉 Welcome to NFR!</h1>
             <p style="font-size: 18px; margin-top: 10px;">Your Journey to Smart Savings Starts Now</p>
           </div>
           
@@ -167,7 +167,7 @@ const EMAIL_TEMPLATES = {
               <p style="margin: 5px 0; color: #78350f;">You just saved ₹${Math.round(data.totalPrice * 10)} by renting instead of buying!</p>
             </div>
             <p>© 2025 Neighbour Friendly Rentals. All rights reserved.</p>
-            <p>Questions? Contact us at support@nfrr.com</p>
+            <p>Questions? Contact us at support@neighbourfriendly.in</p>
           </div>
         </div>
       </body>

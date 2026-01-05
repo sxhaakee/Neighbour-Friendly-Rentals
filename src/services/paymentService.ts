@@ -84,7 +84,7 @@ export const paymentService = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
-      name: 'NFRR - Neighbour Rentals',
+      name: 'NFR - Neighbour Rentals',
       description: 'Rental Payment',
       order_id: order.orderId,
       handler: (response: RazorpayResponse) => {

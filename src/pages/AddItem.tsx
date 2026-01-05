@@ -54,7 +54,7 @@ const AddItem = () => {
           // Try to reverse geocode to fill the location field
           try {
             const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`
             );
             const data = await response.json();
             const city = data.address.city || data.address.town || data.address.village || data.address.state_district;

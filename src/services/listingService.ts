@@ -86,7 +86,7 @@ export const listingService = {
           userName: user.user_metadata?.full_name || 'Neighbor',
           itemType: 'Item',
           itemTitle: listing.title,
-          price: listing.daily_price,
+          price: listing.price,
           listingUrl: `${window.location.origin}/items/${data.id}`
         });
       }
