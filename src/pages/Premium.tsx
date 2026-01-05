@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  Crown, 
-  Check, 
-  Zap, 
-  TrendingUp, 
-  Shield, 
+import {
+  Crown,
+  Check,
+  Zap,
+  TrendingUp,
+  Shield,
   Star,
   ArrowRight,
   Sparkles
 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { showToast } from '../utils/toast';
 
 const Premium = () => {
@@ -51,7 +50,7 @@ const Premium = () => {
     {
       icon: <Star className="w-6 h-6" />,
       title: 'Reduced Service Fee',
-      description: 'Pay only 8% instead of 10% on all bookings'
+      description: 'Pay only 15% instead of 20% on all bookings'
     },
     {
       icon: <Shield className="w-6 h-6" />,
@@ -95,14 +94,14 @@ const Premium = () => {
       if (result.success) {
         // Refresh profile multiple times to ensure update
         await refreshProfile();
-        
+
         // Wait a bit and refresh again to ensure database has updated
         setTimeout(async () => {
           await refreshProfile();
         }, 1000);
-        
+
         showToast.success('🎉 Welcome to Premium! Enjoy unlimited listings!');
-        
+
         // Navigate to dashboard and force a page reload to ensure fresh data
         setTimeout(() => {
           navigate('/dashboard');
@@ -175,9 +174,8 @@ const Premium = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className={`relative bg-white rounded-2xl shadow-lg p-8 cursor-pointer transition-all ${
-              selectedPlan === 'monthly' ? 'ring-4 ring-purple-500 scale-105' : 'hover:shadow-xl'
-            }`}
+            className={`relative bg-white rounded-2xl shadow-lg p-8 cursor-pointer transition-all ${selectedPlan === 'monthly' ? 'ring-4 ring-purple-500 scale-105' : 'hover:shadow-xl'
+              }`}
             onClick={() => setSelectedPlan('monthly')}
           >
             <div className="text-center mb-6">
@@ -208,9 +206,8 @@ const Premium = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className={`relative bg-gradient-to-br from-purple-600 to-yellow-500 rounded-2xl shadow-xl p-8 cursor-pointer transition-all ${
-              selectedPlan === 'yearly' ? 'ring-4 ring-yellow-400 scale-105' : 'hover:shadow-2xl'
-            }`}
+            className={`relative bg-gradient-to-br from-purple-600 to-yellow-500 rounded-2xl shadow-xl p-8 cursor-pointer transition-all ${selectedPlan === 'yearly' ? 'ring-4 ring-yellow-400 scale-105' : 'hover:shadow-2xl'
+              }`}
             onClick={() => setSelectedPlan('yearly')}
           >
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -307,8 +304,8 @@ const Premium = () => {
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Service Fee</td>
-                  <td className="px-6 py-4 text-center text-gray-600">10%</td>
-                  <td className="px-6 py-4 text-center text-purple-600 font-bold">8%</td>
+                  <td className="px-6 py-4 text-center text-gray-600">20%</td>
+                  <td className="px-6 py-4 text-center text-purple-600 font-bold">15%</td>
                 </tr>
                 <tr>
                   <td className="px-6 py-4 text-gray-900">Featured Placement</td>

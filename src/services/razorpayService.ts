@@ -1,16 +1,15 @@
 import { supabase } from '../lib/supabase';
 
 // Razorpay configuration - Your live key
-const RAZORPAY_KEY_ID = 'rzp_live_RZHNDjla2df5tS';
+// Razorpay configuration - Use env var if available, else fallback to live key (caution)
+const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RZHNDjla2df5tS';
 
 // Validate and log
 if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_HERE') {
   console.error('❌ Razorpay key not configured');
-} else if (!RAZORPAY_KEY_ID.startsWith('rzp_')) {
-  console.error('❌ Invalid Razorpay key format');
 } else {
-  const keyType = RAZORPAY_KEY_ID.includes('test') ? 'TEST' : 'LIVE';
-  console.log(`✅ Razorpay ${keyType} key loaded: ${RAZORPAY_KEY_ID.substring(0, 15)}...`);
+  const isTest = RAZORPAY_KEY_ID.includes('test');
+  console.log(`✅ Razorpay ${isTest ? 'TEST' : 'LIVE'} key loaded`);
 }
 
 interface RazorpayOptions {
@@ -32,6 +31,8 @@ interface RazorpayOptions {
   modal: {
     ondismiss: () => void;
   };
+  notes?: any;
+  payment_capture?: number | boolean;
 }
 
 interface RazorpayResponse {
@@ -135,9 +136,14 @@ export const razorpayService = {
             theme: {
               color: '#667eea',
             },
+            payment_capture: 1,
+            notes: {
+              info: "Premium Subscription",
+              auto_capture: "true"
+            },
             handler: async (response: RazorpayResponse) => {
               // Payment successful
-              console.log('Payment successful:', response);
+              console.log('✅ Payment successful:', response.razorpay_payment_id);
 
               // Update user to premium
               const expiryDate = new Date();
@@ -183,6 +189,7 @@ export const razorpayService = {
             },
             modal: {
               ondismiss: () => {
+                console.log('⚠️ Payment modal closed by user');
                 resolve({
                   success: false,
                   error: 'Payment cancelled by user',
@@ -260,8 +267,13 @@ export const razorpayService = {
           theme: {
             color: '#667eea',
           },
+          payment_capture: 1,
+          notes: {
+            info: `Featured ${placement}`,
+            auto_capture: "true"
+          },
           handler: async (response: RazorpayResponse) => {
-            console.log('Featured listing payment successful:', response);
+            console.log('✅ Featured listing payment successful:', response.razorpay_payment_id);
 
             try {
               // Calculate featured expiry
@@ -359,8 +371,13 @@ export const razorpayService = {
           theme: {
             color: '#667eea',
           },
+          payment_capture: 1,
+          notes: {
+            info: `Booking: ${itemTitle}`,
+            auto_capture: "true"
+          },
           handler: async (response: RazorpayResponse) => {
-            console.log('Booking payment successful:', response);
+            console.log('✅ Booking payment successful:', response.razorpay_payment_id);
 
             try {
               // Update booking payment status
@@ -374,7 +391,9 @@ export const razorpayService = {
                 .eq('id', bookingId);
 
               // Track revenue (service fee)
-              const serviceFee = amount * 0.1; // 10% service fee
+              const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', userId).single();
+              const commissionRate = profile?.is_premium ? 0.15 : 0.20;
+              const serviceFee = amount * commissionRate;
               await supabase.from('revenue_tracking').insert({
                 revenue_type: 'service_fee',
                 amount: serviceFee,
@@ -421,9 +440,9 @@ export const razorpayService = {
    * Verify payment signature (for server-side verification)
    */
   async verifyPayment(
-    razorpayOrderId: string,
-    razorpayPaymentId: string,
-    razorpaySignature: string
+    _razorpayOrderId: string,
+    _razorpayPaymentId: string,
+    _razorpaySignature: string
   ): Promise<boolean> {
     try {
       // This should be done on server-side for security
@@ -578,6 +597,11 @@ export const razorpayService = {
           theme: {
             color: '#667eea',
           },
+          payment_capture: 1,
+          notes: {
+            info: `Property Booking: ${propertyTitle}`,
+            auto_capture: "true"
+          },
           handler: async (response: RazorpayResponse) => {
             console.log('Property booking payment successful:', response);
 
@@ -593,7 +617,9 @@ export const razorpayService = {
                 .eq('id', bookingId);
 
               // Track revenue (service fee)
-              const serviceFee = amount * 0.1; // 10% service fee
+              const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', userId).single();
+              const commissionRate = profile?.is_premium ? 0.15 : 0.20;
+              const serviceFee = amount * commissionRate;
               await supabase.from('revenue_tracking').insert({
                 revenue_type: 'property_booking',
                 amount: serviceFee,
@@ -673,6 +699,11 @@ export const razorpayService = {
           theme: {
             color: '#667eea',
           },
+          payment_capture: 1,
+          notes: {
+            info: `Service Booking: ${serviceTitle}`,
+            auto_capture: "true"
+          },
           handler: async (response: RazorpayResponse) => {
             console.log('Service booking payment successful:', response);
 
@@ -688,7 +719,9 @@ export const razorpayService = {
                 .eq('id', bookingId);
 
               // Track revenue (service fee)
-              const serviceFee = amount * 0.15; // 15% service fee for services
+              const { data: profile } = await supabase.from('profiles').select('is_premium').eq('id', userId).single();
+              const commissionRate = profile?.is_premium ? 0.15 : 0.20;
+              const serviceFee = amount * commissionRate;
               await supabase.from('revenue_tracking').insert({
                 revenue_type: 'service_booking',
                 amount: serviceFee,
@@ -746,6 +779,7 @@ export const razorpayService = {
 
       if (!profile || !profile.is_premium) return;
 
+      if (!profile?.premium_expires_at) return;
       const expiryDate = new Date(profile.premium_expires_at);
       const now = new Date();
 

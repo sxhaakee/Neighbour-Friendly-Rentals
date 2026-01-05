@@ -43,22 +43,24 @@ export const AnalyticsDashboard = () => {
         usersData,
         listingsData,
         pendingListingsData,
+        revenueData,
       ] = await Promise.all([
         supabase.from('bookings').select('*'),
         supabase.from('profiles').select('id'),
         supabase.from('listings').select('*'),
         supabase.from('listings').select('*').eq('status', 'pending'),
+        supabase.from('revenue_tracking').select('*'),
       ]);
 
       // Calculate total revenue and commission
       const totalRevenue = bookingsData.data?.reduce((sum, booking: any) =>
         sum + (booking.total_price || 0), 0) || 0;
 
-      const platformCommission = bookingsData.data?.reduce((sum, booking: any) =>
-        sum + (booking.platform_commission || 0), 0) || 0;
+      const platformCommission = revenueData.data?.reduce((sum, rev: any) =>
+        sum + (rev.amount || 0), 0) || 0;
 
       // Calculate monthly revenue (last 6 months)
-      const monthlyRevenue = calculateMonthlyRevenue(bookingsData.data || []);
+      const monthlyRevenue = calculateMonthlyRevenue(revenueData.data || []);
 
       // Calculate top items
       const topItems = calculateTopItems(bookingsData.data || [], listingsData.data || []);
@@ -95,7 +97,7 @@ export const AnalyticsDashboard = () => {
           const bookingMonth = new Date(b.created_at).getMonth();
           return bookingMonth === monthIndex;
         })
-        .reduce((sum, b) => sum + (b.platform_commission || 0), 0);
+        .reduce((sum, b) => sum + (b.amount || 0), 0);
 
       monthlyData.push({ month: monthName, revenue });
     }
@@ -217,7 +219,7 @@ export const AnalyticsDashboard = () => {
 
             <div className="mt-12 flex items-center gap-8">
               <div className="flex flex-col">
-                <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Platform Cut (15%)</span>
+                <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Total Platform Earnings</span>
                 <span className="text-2xl font-bold text-white">₹{analytics.platformCommission.toLocaleString()}</span>
               </div>
               <div className="w-px h-10 bg-white/10"></div>

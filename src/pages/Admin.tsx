@@ -13,13 +13,14 @@ import { AgreementsManagement } from '../components/Admin/AgreementsManagement';
 import { PropertiesManagement } from '../components/Admin/PropertiesManagement';
 import { ServicesManagement } from '../components/Admin/ServicesManagement';
 import { AnalyticsDashboard } from '../components/Admin/AnalyticsDashboard';
+import { RevenueManagement } from '../components/Admin/RevenueManagement';
 
 type Listing = Database['public']['Tables']['listings']['Row'];
 
 const Admin = () => {
   const navigate = useNavigate();
   const { user, isAdmin, loading: authLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<'analytics' | 'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements' | 'revenue'>('analytics');
   const [listings, setListings] = useState<Listing[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,7 @@ const Admin = () => {
   useEffect(() => {
     // Wait for auth to load before checking
     if (authLoading) return;
-    
+
     if (!user || !isAdmin) {
       navigate('/', { replace: true });
       return;
@@ -49,15 +50,15 @@ const Admin = () => {
     try {
       setLoading(true);
       let data: Listing[];
-      
+
       if (filter === 'all') {
         data = await listingService.getAllListings();
       } else {
         data = await listingService.getListingsByStatus(filter);
       }
-      
+
       setListings(data);
-      
+
       // Calculate stats
       const allListings = await listingService.getAllListings();
       setStats({
@@ -77,7 +78,7 @@ const Admin = () => {
     try {
       const listing = listings.find(l => l.id === id);
       await listingService.approveListing(id);
-      
+
       // Send notification to owner
       if (listing) {
         await notificationService.notifyListingApproval(
@@ -86,7 +87,7 @@ const Admin = () => {
           listing.id
         );
       }
-      
+
       showToast.success('Listing approved and owner notified');
       fetchListings();
     } catch (error) {
@@ -102,7 +103,7 @@ const Admin = () => {
     try {
       const listing = listings.find(l => l.id === id);
       await listingService.rejectListing(id, reason);
-      
+
       // Send notification to owner
       if (listing) {
         await notificationService.notifyListingRejection(
@@ -111,7 +112,7 @@ const Admin = () => {
           reason
         );
       }
-      
+
       showToast.success('Listing rejected and owner notified');
       setSelectedListing(null);
       fetchListings();
@@ -162,12 +163,12 @@ const Admin = () => {
 
   const handleUpdateCategory = async () => {
     if (!selectedListing || !newCategory) return;
-    
+
     try {
       await listingService.updateListing(selectedListing.id, {
         category: newCategory,
       });
-      
+
       showToast.success('Category updated successfully!');
       setEditingCategory(false);
       setSelectedListing({ ...selectedListing, category: newCategory });
@@ -213,73 +214,75 @@ const Admin = () => {
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setActiveTab('analytics')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'analytics'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'analytics'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               📊 Analytics
             </button>
             <button
               onClick={() => setActiveTab('orders')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'orders'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'orders'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               🛒 Orders
             </button>
             <button
               onClick={() => setActiveTab('listings')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'listings'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'listings'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               📦 Products
             </button>
             <button
               onClick={() => setActiveTab('properties')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'properties'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'properties'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               🏠 Properties
             </button>
             <button
               onClick={() => setActiveTab('services')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'services'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'services'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               🎉 Services
             </button>
             <button
               onClick={() => setActiveTab('verifications')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'verifications'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'verifications'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               🛡️ ID
             </button>
             <button
               onClick={() => setActiveTab('agreements')}
-              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${
-                activeTab === 'agreements'
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'agreements'
                   ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
                   : 'text-gray-600 hover:bg-gray-100'
-              }`}
+                }`}
             >
               📄 Docs
+            </button>
+            <button
+              onClick={() => setActiveTab('revenue')}
+              className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'revenue'
+                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                  : 'text-gray-600 hover:bg-gray-100'
+                }`}
+            >
+              💰 Revenue
             </button>
           </div>
         </div>
@@ -297,6 +300,8 @@ const Admin = () => {
           <IDVerificationDashboard />
         ) : activeTab === 'agreements' ? (
           <AgreementsManagement />
+        ) : activeTab === 'revenue' ? (
+          <RevenueManagement />
         ) : (
           <>
             {/* Stats Grid */}
@@ -361,20 +366,19 @@ const Admin = () => {
                   <button
                     key={status}
                     onClick={() => setFilter(status as any)}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                  filter === status
-                    ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {status.charAt(0).toUpperCase() + status.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
+                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${filter === status
+                        ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                  >
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        {/* Listings Table */}
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            {/* Listings Table */}
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
               {loading ? (
                 <div className="p-8 text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
@@ -387,151 +391,149 @@ const Admin = () => {
                 </div>
               ) : (
                 <div className="overflow-x-auto -mx-4 sm:mx-0">
-              <table className="w-full min-w-[800px]">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Item
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Owner
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {listings.map((listing) => (
-                    <tr key={listing.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <img
-                            src={listing.images[0] || '/placeholder.jpg'}
-                            alt={listing.title}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {listing.title}
+                  <table className="w-full min-w-[800px]">
+                    <thead className="bg-gray-50 border-b border-gray-200">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Item
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Owner
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Category
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {listings.map((listing) => (
+                        <tr key={listing.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <img
+                                src={listing.images[0] || '/placeholder.jpg'}
+                                alt={listing.title}
+                                className="w-12 h-12 rounded-lg object-cover"
+                              />
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {listing.title}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {listing.location}
+                                </div>
+                              </div>
                             </div>
-                            <div className="text-sm text-gray-500">
-                              {listing.location}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{listing.owner_name}</div>
+                            <div className="text-sm text-gray-500">{listing.owner_email}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                {listing.category}
+                              </span>
+                              <button
+                                onClick={() => {
+                                  setSelectedListing(listing);
+                                  setEditingCategory(true);
+                                  setNewCategory(listing.category);
+                                  setCurrentImageIndex(0);
+                                }}
+                                className="text-amber-600 hover:text-amber-700"
+                                title="Edit Category"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{listing.owner_name}</div>
-                        <div className="text-sm text-gray-500">{listing.owner_email}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
-                            {listing.category}
-                          </span>
-                          <button
-                            onClick={() => {
-                              setSelectedListing(listing);
-                              setEditingCategory(true);
-                              setNewCategory(listing.category);
-                              setCurrentImageIndex(0);
-                            }}
-                            className="text-amber-600 hover:text-amber-700"
-                            title="Edit Category"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        ₹{listing.price}/day
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            listing.status === 'approved'
-                              ? 'bg-amber-100 text-amber-800'
-                              : listing.status === 'rejected'
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}
-                        >
-                          {listing.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setSelectedListing(listing);
-                              setCurrentImageIndex(0);
-                            }}
-                            className="text-blue-600 hover:text-blue-900"
-                            title="View Details"
-                          >
-                            <Eye className="w-5 h-5" />
-                          </button>
-                          {listing.status === 'pending' && (
-                            <>
-                              <button
-                                onClick={() => handleApprove(listing.id)}
-                                className="text-amber-600 hover:text-amber-900"
-                                title="Approve"
-                              >
-                                <CheckCircle className="w-5 h-5" />
-                              </button>
-                              <button
-                                onClick={() => handleReject(listing.id)}
-                                className="text-red-600 hover:text-red-900"
-                                title="Reject"
-                              >
-                                <XCircle className="w-5 h-5" />
-                              </button>
-                            </>
-                          )}
-                          {listing.status === 'approved' && (
-                            <button
-                              onClick={() => handleToggleFeatured(listing.id, (listing as any).featured || false)}
-                              className={`${
-                                (listing as any).featured
-                                  ? 'text-yellow-600 hover:text-yellow-900'
-                                  : 'text-gray-400 hover:text-yellow-600'
-                              }`}
-                              title={(listing as any).featured ? 'Remove from featured' : 'Mark as featured'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ₹{listing.price}/day
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span
+                              className={`px-2 py-1 text-xs font-medium rounded-full ${listing.status === 'approved'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : listing.status === 'rejected'
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-yellow-100 text-yellow-800'
+                                }`}
                             >
-                              ⭐
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleDelete(listing.id)}
-                            className="text-red-600 hover:text-red-900"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </button>
-                        </div>
-                        {listing.status === 'rejected' && listing.rejection_reason && (
-                          <p className="text-xs text-red-600 mt-1">{listing.rejection_reason}</p>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                              {listing.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => {
+                                  setSelectedListing(listing);
+                                  setCurrentImageIndex(0);
+                                }}
+                                className="text-blue-600 hover:text-blue-900"
+                                title="View Details"
+                              >
+                                <Eye className="w-5 h-5" />
+                              </button>
+                              {listing.status === 'pending' && (
+                                <>
+                                  <button
+                                    onClick={() => handleApprove(listing.id)}
+                                    className="text-amber-600 hover:text-amber-900"
+                                    title="Approve"
+                                  >
+                                    <CheckCircle className="w-5 h-5" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleReject(listing.id)}
+                                    className="text-red-600 hover:text-red-900"
+                                    title="Reject"
+                                  >
+                                    <XCircle className="w-5 h-5" />
+                                  </button>
+                                </>
+                              )}
+                              {listing.status === 'approved' && (
+                                <button
+                                  onClick={() => handleToggleFeatured(listing.id, (listing as any).featured || false)}
+                                  className={`${(listing as any).featured
+                                      ? 'text-yellow-600 hover:text-yellow-900'
+                                      : 'text-gray-400 hover:text-yellow-600'
+                                    }`}
+                                  title={(listing as any).featured ? 'Remove from featured' : 'Mark as featured'}
+                                >
+                                  ⭐
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleDelete(listing.id)}
+                                className="text-red-600 hover:text-red-900"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-5 h-5" />
+                              </button>
+                            </div>
+                            {listing.status === 'rejected' && listing.rejection_reason && (
+                              <p className="text-xs text-red-600 mt-1">{listing.rejection_reason}</p>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        </>
+          </>
         )}
 
         {/* Listing Details Modal */}
@@ -601,9 +603,8 @@ const Admin = () => {
                               src={img}
                               alt={`Thumbnail ${idx + 1}`}
                               onClick={() => setCurrentImageIndex(idx)}
-                              className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${
-                                idx === currentImageIndex ? 'border-primary' : 'border-transparent'
-                              }`}
+                              className={`w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${idx === currentImageIndex ? 'border-primary' : 'border-transparent'
+                                }`}
                               onError={(e) => {
                                 e.currentTarget.style.display = 'none';
                               }}
@@ -699,13 +700,12 @@ const Admin = () => {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Status</p>
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        selectedListing.status === 'approved'
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${selectedListing.status === 'approved'
                           ? 'bg-amber-100 text-amber-800'
                           : selectedListing.status === 'rejected'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}>
                         {selectedListing.status}
                       </span>
                     </div>

@@ -95,14 +95,14 @@ export const PremiumHero = () => {
           <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
             🇮🇳 Join 50,000+ Indians Earning Together
           </h2>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Placeholder for community photos - replace with actual images */}
             {[
               { emoji: '📸', title: 'Camera Rentals', location: 'Mumbai' },
               { emoji: '🏠', title: 'Property Sharing', location: 'Bangalore' },
               { emoji: '🎸', title: 'Music Equipment', location: 'Delhi' },
-              { emoji: '🚗', title: 'Vehicle Rentals', location: 'Pune' },
+              { emoji: '🛠️', title: 'Power Tools', location: 'Pune' },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -125,38 +125,31 @@ export const PremiumHero = () => {
           </div>
         </motion.div>
 
-        {/* Success Stories */}
+        {/* Premium Tips Section */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
           className="mt-12 bg-gradient-to-r from-amber-100 to-yellow-100 rounded-3xl p-8 border-2 border-yellow-300"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
             <Sparkles className="w-6 h-6 text-amber-600" />
-            <h3 className="text-2xl font-bold text-gray-900">Premium Success Stories</h3>
+            <h3 className="text-2xl font-bold text-gray-900">Maximize Your Premium Earnings</h3>
             <Sparkles className="w-6 h-6 text-amber-600" />
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { name: 'Rajesh Kumar', city: 'Mumbai', earning: '₹45,000/mo', item: 'Camera Equipment' },
-              { name: 'Priya Sharma', city: 'Bangalore', earning: '₹32,000/mo', item: 'Party Supplies' },
-              { name: 'Amit Patel', city: 'Delhi', earning: '₹28,000/mo', item: 'Tools & Equipment' },
-            ].map((story, index) => (
-              <div key={index} className="bg-white rounded-xl p-4 shadow-md">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-lg">
-                    {story.name.charAt(0)}
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900">{story.name}</div>
-                    <div className="text-sm text-gray-600">{story.city}</div>
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-amber-600 mb-1">{story.earning}</div>
-                <div className="text-sm text-gray-600">from {story.item}</div>
-              </div>
-            ))}
+            <div className="bg-white rounded-xl p-6 shadow-md border border-yellow-100">
+              <div className="text-amber-600 font-bold text-lg mb-2">📸 High Quality Photos</div>
+              <p className="text-gray-600 text-sm">Listings with 5+ bright, clear photos get 3x more bookings. Use all your premium upload slots!</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-md border border-yellow-100">
+              <div className="text-amber-600 font-bold text-lg mb-2">🏷️ Strategic Pricing</div>
+              <p className="text-gray-600 text-sm">Check similar items in your area. Use our Featured Placement to stay ahead of the competition.</p>
+            </div>
+            <div className="bg-white rounded-xl p-6 shadow-md border border-yellow-100">
+              <div className="text-amber-600 font-bold text-lg mb-2">⚡ Quick Responses</div>
+              <p className="text-gray-600 text-sm">Priority Support is here for you, but responding to renters quickly is the best way to build trust.</p>
+            </div>
           </div>
         </motion.div>
       </div>

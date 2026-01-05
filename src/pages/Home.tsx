@@ -309,7 +309,7 @@ const Home = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
                   <div className="absolute bottom-6 left-6 right-6">
                     <div className="bg-white/95 backdrop-blur-md p-4 rounded-xl shadow-lg">
-                      <p className="text-gray-900 font-bold text-sm">"Met my best friend through NFR!"</p>
+                      <p className="text-gray-900 font-bold text-sm">"Saved over ₹5,000 this month by renting local!"</p>
                       <div className="flex items-center gap-2 mt-2">
                         <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                         <p className="text-xs text-gray-500">Verified Rental • 2 days ago</p>
