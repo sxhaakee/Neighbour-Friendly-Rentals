@@ -38,6 +38,8 @@ import { logPageView } from './utils/analytics';
 import { analyticsService } from './services/analyticsService';
 import { Analytics } from '@vercel/analytics/react';
 
+import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+
 function AppContent() {
   const location = useLocation();
 
@@ -95,6 +97,7 @@ function AppContent() {
       <AIChatbot />
       <ToastContainer />
       <Analytics />
+      <PWAInstallPrompt />
     </div>
   );
 }
