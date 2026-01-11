@@ -235,6 +235,11 @@ class ServiceProviderService {
         listingUrl: `${window.location.origin}/services/${data.id}`
       });
 
+      // Send witty notification
+      import('../utils/notificationUtils').then(({ sendWittyEventNotification }) => {
+        sendWittyEventNotification('listing');
+      });
+
       return data;
     } catch (error) {
       console.error('Error creating service provider:', error);

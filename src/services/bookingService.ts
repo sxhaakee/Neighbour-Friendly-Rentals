@@ -62,7 +62,14 @@ export const bookingService = {
       throw error;
     }
     
+    
     console.log('Booking created successfully:', data);
+
+    // Send witty notification
+    import('../utils/notificationUtils').then(({ sendWittyEventNotification }) => {
+      sendWittyEventNotification('booking');
+    });
+
     return data;
   },
 

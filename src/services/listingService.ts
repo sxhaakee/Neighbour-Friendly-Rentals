@@ -89,6 +89,11 @@ export const listingService = {
           price: listing.price,
           listingUrl: `${window.location.origin}/items/${data.id}`
         });
+
+        // Send witty notification
+        import('../utils/notificationUtils').then(({ sendWittyEventNotification }) => {
+          sendWittyEventNotification('listing');
+        });
       }
     } catch (err) {
       console.error('Failed to send listing confirmation email:', err);

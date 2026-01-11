@@ -212,6 +212,11 @@ class PropertyService {
         listingUrl: `${window.location.origin}/properties/${data.id}`
       });
 
+      // Send witty notification
+      import('../utils/notificationUtils').then(({ sendWittyEventNotification }) => {
+        sendWittyEventNotification('listing');
+      });
+
       return data as unknown as Property;
     } catch (error) {
       console.error('Error creating property:', error);
