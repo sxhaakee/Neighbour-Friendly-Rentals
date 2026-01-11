@@ -96,7 +96,7 @@ const DashboardNew = () => {
       else await serviceProviderService.deleteProvider(id);
 
       showToast.success(`${type} deleted successfully`);
-      
+
       // Refresh counts and data
       await refreshListingCounts();
       await fetchData();
@@ -164,7 +164,7 @@ const DashboardNew = () => {
             backgroundSize: '40px 40px'
           }} />
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -187,10 +187,22 @@ const DashboardNew = () => {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="flex items-center gap-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-bold shadow-lg"
+                className="flex flex-col items-end gap-1"
               >
-                <Crown className="w-5 h-5" />
-                <span>Premium Member</span>
+                <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 px-4 py-2 rounded-full font-bold shadow-lg">
+                  <Crown className="w-5 h-5" />
+                  <span>Premium Member</span>
+                </div>
+                {profile?.premium_expires_at && (
+                  <div className="flex items-center gap-1 text-xs font-semibold text-amber-700 bg-amber-100/50 px-3 py-1 rounded-full border border-amber-200">
+                    <Calendar className="w-3 h-3" />
+                    Expires: {new Date(profile.premium_expires_at).toLocaleDateString('en-IN', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    })}
+                  </div>
+                )}
               </motion.div>
             )}
           </motion.div>
@@ -235,17 +247,15 @@ const DashboardNew = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all ${
-                  activeTab === tab.id
+                className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-4 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all ${activeTab === tab.id
                     ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
                     : 'text-gray-600 hover:bg-gray-100'
-                }`}
+                  }`}
               >
                 <tab.icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="whitespace-nowrap">{tab.label}</span>
-                <span className={`px-1 py-0.5 rounded-full text-xs font-bold ${
-                  activeTab === tab.id ? 'bg-white/30' : 'bg-gray-200'
-                }`}>
+                <span className={`px-1 py-0.5 rounded-full text-xs font-bold ${activeTab === tab.id ? 'bg-white/30' : 'bg-gray-200'
+                  }`}>
                   {tab.count}
                 </span>
               </button>
@@ -523,7 +533,7 @@ const DashboardNew = () => {
             {activeTab === 'favorites' && (
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900">My Favorites</h2>
-                
+
                 {favorites.length === 0 ? (
                   <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
                     <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -572,7 +582,7 @@ const DashboardNew = () => {
             {activeTab === 'bookings' && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
-                
+
                 {myBookings.length === 0 ? (
                   <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
                     <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -646,7 +656,7 @@ const DashboardNew = () => {
             {activeTab === 'rentals' && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold text-gray-900">Incoming Rentals</h2>
-                
+
                 {ownerBookings.length === 0 ? (
                   <div className="bg-white rounded-2xl p-12 text-center shadow-lg">
                     <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -792,8 +802,8 @@ const DashboardNew = () => {
         listingType={premiumModalType}
         currentCount={
           premiumModalType === 'item' ? listingCounts.items :
-          premiumModalType === 'property' ? listingCounts.properties :
-          listingCounts.services
+            premiumModalType === 'property' ? listingCounts.properties :
+              listingCounts.services
         }
         limit={premiumModalType === 'item' ? 3 : 2}
       />

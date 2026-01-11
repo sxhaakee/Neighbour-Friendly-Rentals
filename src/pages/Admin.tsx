@@ -22,7 +22,7 @@ const Admin = () => {
   const { user, isAdmin, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<'analytics' | 'listings' | 'properties' | 'services' | 'verifications' | 'orders' | 'agreements' | 'revenue'>('analytics');
   const [listings, setListings] = useState<Listing[]>([]);
-  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'hidden'>('pending');
   const [loading, setLoading] = useState(true);
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -215,8 +215,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('analytics')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'analytics'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               📊 Analytics
@@ -224,8 +224,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('orders')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'orders'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               🛒 Orders
@@ -233,8 +233,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('listings')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'listings'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               📦 Products
@@ -242,8 +242,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('properties')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'properties'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               🏠 Properties
@@ -251,8 +251,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('services')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'services'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               🎉 Services
@@ -260,8 +260,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('verifications')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'verifications'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               🛡️ ID
@@ -269,8 +269,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('agreements')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'agreements'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               📄 Docs
@@ -278,8 +278,8 @@ const Admin = () => {
             <button
               onClick={() => setActiveTab('revenue')}
               className={`flex-1 px-3 sm:px-6 py-2 sm:py-3 rounded-lg text-sm sm:text-base font-semibold transition-colors whitespace-nowrap ${activeTab === 'revenue'
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
                 }`}
             >
               💰 Revenue
@@ -362,13 +362,13 @@ const Admin = () => {
             {/* Filters */}
             <div className="bg-white rounded-xl shadow-md p-3 sm:p-4 mb-4 sm:mb-6 overflow-x-auto">
               <div className="flex gap-2 min-w-max">
-                {['all', 'pending', 'approved', 'rejected'].map((status) => (
+                {['all', 'pending', 'approved', 'rejected', 'hidden'].map((status) => (
                   <button
                     key={status}
                     onClick={() => setFilter(status as any)}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${filter === status
-                        ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                   >
                     {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -463,10 +463,10 @@ const Admin = () => {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
                               className={`px-2 py-1 text-xs font-medium rounded-full ${listing.status === 'approved'
-                                  ? 'bg-amber-100 text-amber-800'
-                                  : listing.status === 'rejected'
-                                    ? 'bg-red-100 text-red-800'
-                                    : 'bg-yellow-100 text-yellow-800'
+                                ? 'bg-amber-100 text-amber-800'
+                                : listing.status === 'rejected'
+                                  ? 'bg-red-100 text-red-800'
+                                  : 'bg-yellow-100 text-yellow-800'
                                 }`}
                             >
                               {listing.status}
@@ -506,8 +506,8 @@ const Admin = () => {
                                 <button
                                   onClick={() => handleToggleFeatured(listing.id, (listing as any).featured || false)}
                                   className={`${(listing as any).featured
-                                      ? 'text-yellow-600 hover:text-yellow-900'
-                                      : 'text-gray-400 hover:text-yellow-600'
+                                    ? 'text-yellow-600 hover:text-yellow-900'
+                                    : 'text-gray-400 hover:text-yellow-600'
                                     }`}
                                   title={(listing as any).featured ? 'Remove from featured' : 'Mark as featured'}
                                 >
@@ -701,10 +701,10 @@ const Admin = () => {
                     <div>
                       <p className="text-sm text-gray-600">Status</p>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${selectedListing.status === 'approved'
-                          ? 'bg-amber-100 text-amber-800'
-                          : selectedListing.status === 'rejected'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-amber-100 text-amber-800'
+                        : selectedListing.status === 'rejected'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
                         }`}>
                         {selectedListing.status}
                       </span>

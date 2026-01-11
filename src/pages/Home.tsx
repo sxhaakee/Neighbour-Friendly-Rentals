@@ -22,6 +22,11 @@ const Home = () => {
   const [isPremium, setIsPremium] = useState(false);
   const [userCity, setUserCity] = useState<string | undefined>(undefined);
 
+  const { scrollY } = useScroll();
+  const heroImageY = useTransform(scrollY, [0, 500], [0, -30]);
+  const heroStackY = useTransform(scrollY, [0, 500], [0, -50]);
+  const heroStackRotate = useTransform(scrollY, [0, 500], [-2, -5]);
+
 
 
   useEffect(() => {
@@ -298,7 +303,7 @@ const Home = () => {
                   animate={{ opacity: 1, rotateY: 0, rotateZ: 2, y: 0 }}
                   transition={{ duration: 1, type: "spring" }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
-                  style={{ y: useTransform(useScroll().scrollY, [0, 500], [0, -30]) }}
+                  style={{ y: heroImageY }}
                   className="absolute top-10 right-4 lg:right-10 w-[280px] md:w-[400px] h-[350px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
                 >
                   <img
@@ -324,8 +329,8 @@ const Home = () => {
                   animate={{ opacity: 1, rotateZ: -2, y: 10 }}
                   transition={{ duration: 1.2, delay: 0.2 }}
                   style={{
-                    y: useTransform(useScroll().scrollY, [0, 500], [0, -50]),
-                    rotateZ: useTransform(useScroll().scrollY, [0, 500], [-2, -5])
+                    y: heroStackY,
+                    rotateZ: heroStackRotate
                   }}
                   whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
                   className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"

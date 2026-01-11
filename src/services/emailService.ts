@@ -274,6 +274,27 @@ const EMAIL_TEMPLATES = {
       </html>
     `,
   }),
+ 
+  premiumPaymentSuccess: (data: any) => ({
+    subject: '🌟 Premium Membership Activated!',
+    html: `
+      <p>Included in Edge Function</p>
+    `,
+  }),
+ 
+  premiumExpiryReminder: (data: any) => ({
+    subject: '⏰ Action Required: Your Premium Membership Expires Soon',
+    html: `
+      <p>Included in Edge Function</p>
+    `,
+  }),
+ 
+  premiumExpired: (data: any) => ({
+    subject: 'Your Premium Membership Has Expired 🛑',
+    html: `
+      <p>Included in Edge Function</p>
+    `,
+  }),
 };
 
 export const emailService = {
@@ -485,6 +506,83 @@ export const emailService = {
       return templates[type](data);
     }
     throw new Error(`Template ${type} not found`);
+  },
+ 
+  /**
+   * Send premium payment success email
+   */
+  async sendPremiumPaymentSuccess(userData: any) {
+    try {
+      console.log('📧 Sending Premium Success Email to:', userData.email);
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: userData.email,
+          type: 'premiumPaymentSuccess',
+          data: {
+            userName: userData.userName || userData.full_name,
+            expiryDate: userData.expiryDate,
+            dashboardUrl: `${window.location.origin}/dashboard`
+          }
+        }
+      });
+ 
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error sending premium success email:', error);
+      return { success: false, error };
+    }
+  },
+ 
+  /**
+   * Send premium expiry reminder (3 days before)
+   */
+  async sendPremiumExpiryReminder(userData: any) {
+    try {
+      console.log('📧 Sending Premium Expiry Reminder to:', userData.email);
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: userData.email,
+          type: 'premiumExpiryReminder',
+          data: {
+            userName: userData.userName || userData.full_name,
+            expiryDate: userData.expiryDate,
+            premiumUrl: `${window.location.origin}/premium`
+          }
+        }
+      });
+ 
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error sending premium expiry reminder:', error);
+      return { success: false, error };
+    }
+  },
+ 
+  /**
+   * Send premium expired email
+   */
+  async sendPremiumExpiredNotification(userData: any) {
+    try {
+      console.log('📧 Sending Premium Expired Notification to:', userData.email);
+      const { data, error } = await supabase.functions.invoke('send-email', {
+        body: {
+          email: userData.email,
+          type: 'premiumExpired',
+          data: {
+            userName: userData.userName || userData.full_name,
+            premiumUrl: `${window.location.origin}/premium`
+          }
+        }
+      });
+ 
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      console.error('Error sending premium expired notification:', error);
+      return { success: false, error };
+    }
   },
 };
 

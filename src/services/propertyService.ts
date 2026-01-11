@@ -17,6 +17,7 @@ export interface Property {
   deposit_amount: number;
   maintenance_charges: number;
   negotiable: boolean;
+  pricing_model?: 'per_day' | 'per_week' | 'per_month' | 'per_year' | 'sale';
   bedrooms?: number;
   bathrooms?: number;
   balconies?: number;
@@ -99,7 +100,7 @@ class PropertyService {
       const { data, error } = await query;
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching all properties:', error);
       return [];
@@ -143,7 +144,7 @@ class PropertyService {
       const { data, error } = await query;
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching properties:', error);
       throw error;
@@ -166,7 +167,7 @@ class PropertyService {
         await this.incrementViews(id);
       }
 
-      return data;
+      return data as unknown as Property;
     } catch (error) {
       console.error('Error fetching property:', error);
       throw error;
@@ -183,7 +184,7 @@ class PropertyService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching owner properties:', error);
       throw error;
@@ -211,7 +212,7 @@ class PropertyService {
         listingUrl: `${window.location.origin}/properties/${data.id}`
       });
 
-      return data;
+      return data as unknown as Property;
     } catch (error) {
       console.error('Error creating property:', error);
       throw error;
@@ -229,7 +230,7 @@ class PropertyService {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as unknown as Property;
     } catch (error) {
       console.error('Error updating property:', error);
       throw error;
@@ -241,13 +242,13 @@ class PropertyService {
     try {
       const { data, error } = await supabase
         .from('properties')
-        .update({ featured })
+        .update({ featured } as any)
         .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
-      return data;
+      return data as unknown as Property;
     } catch (error) {
       console.error('Error toggling featured status:', error);
       throw error;
@@ -306,7 +307,7 @@ class PropertyService {
       if (property) {
         await supabase
           .from('properties')
-          .update({ views_count: (property.views_count || 0) + 1 })
+          .update({ views_count: (property.views_count || 0) + 1 } as any)
           .eq('id', id);
       }
     } catch (error) {
@@ -333,7 +334,7 @@ class PropertyService {
         .limit(limit);
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching featured properties:', error);
       throw error;
@@ -344,7 +345,7 @@ class PropertyService {
   async searchByLocation(latitude: number, longitude: number, radiusKm: number = 10): Promise<Property[]> {
     try {
       // Using Haversine formula for distance calculation
-      const { data, error } = await supabase.rpc('search_properties_by_location', {
+      const { data, error } = await supabase.rpc('search_properties_by_location' as any, {
         lat: latitude,
         lng: longitude,
         radius_km: radiusKm
@@ -365,7 +366,7 @@ class PropertyService {
         });
       }
 
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error searching by location:', error);
       throw error;
@@ -400,7 +401,7 @@ class PropertyService {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching properties by city:', error);
       throw error;
@@ -419,7 +420,7 @@ class PropertyService {
         .limit(limit);
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as Property[];
     } catch (error) {
       console.error('Error fetching trending properties:', error);
       throw error;

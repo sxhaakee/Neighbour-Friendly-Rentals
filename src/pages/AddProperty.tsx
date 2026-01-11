@@ -98,6 +98,7 @@ const AddProperty = () => {
     minimum_stay_months: '11',
     latitude: null as number | null,
     longitude: null as number | null,
+    pricing_model: 'per_month',
   });
 
   const propertyTypes = [
@@ -248,9 +249,10 @@ const AddProperty = () => {
         latitude: formData.latitude ?? undefined,
         longitude: formData.longitude ?? undefined,
         rent_amount: parseInt(formData.rent_amount),
-        deposit_amount: parseInt(formData.deposit_amount),
-        maintenance_charges: parseInt(formData.maintenance_charges),
+        deposit_amount: formData.deposit_amount ? parseInt(formData.deposit_amount) : 0,
+        maintenance_charges: formData.maintenance_charges ? parseInt(formData.maintenance_charges) : 0,
         negotiable: formData.negotiable,
+        pricing_model: formData.pricing_model as any,
         bedrooms: formData.bedrooms ? parseInt(formData.bedrooms) : undefined,
         bathrooms: formData.bathrooms ? parseInt(formData.bathrooms) : undefined,
         balconies: parseInt(formData.balconies),
@@ -368,20 +370,70 @@ const AddProperty = () => {
           {/* Pricing */}
           <div className="bg-white rounded-xl p-4 md:p-6 shadow-sm">
             <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Pricing</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Monthly Rent (₹) *</label>
-                <input type="number" name="rent_amount" value={formData.rent_amount} onChange={handleInputChange} placeholder="25000" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pricing Model *</label>
+                <select
+                  name="pricing_model"
+                  value={formData.pricing_model}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="per_month">Per Month (Rent)</option>
+                  <option value="per_day">Per Day (Daily Rent)</option>
+                  <option value="per_week">Per Week</option>
+                  <option value="per_year">Per Year</option>
+                  <option value="sale">For Sale (One-time Price)</option>
+                </select>
               </div>
+
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Deposit (₹) *</label>
-                <input type="number" name="deposit_amount" value={formData.deposit_amount} onChange={handleInputChange} placeholder="50000" required className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Maintenance (₹)</label>
-                <input type="number" name="maintenance_charges" value={formData.maintenance_charges} onChange={handleInputChange} placeholder="2000" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  {formData.pricing_model === 'sale' ? 'Total Price' :
+                    formData.pricing_model === 'per_day' ? 'Daily Rent' :
+                      formData.pricing_model === 'per_week' ? 'Weekly Rent' :
+                        formData.pricing_model === 'per_year' ? 'Yearly Rent' : 'Monthly Rent'} (₹) *
+                </label>
+                <input
+                  type="number"
+                  name="rent_amount"
+                  value={formData.rent_amount}
+                  onChange={handleInputChange}
+                  placeholder={formData.pricing_model === 'sale' ? "5000000" : "25000"}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
               </div>
             </div>
+
+            {/* Optional Deposit & Maintenance - Show only for relevant models or if user wants to add them */}
+            {(formData.pricing_model === 'per_month' || formData.pricing_model === 'per_year') && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Deposit (₹)</label>
+                  <input
+                    type="number"
+                    name="deposit_amount"
+                    value={formData.deposit_amount}
+                    onChange={handleInputChange}
+                    placeholder="50000"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Maintenance (₹)</label>
+                  <input
+                    type="number"
+                    name="maintenance_charges"
+                    value={formData.maintenance_charges}
+                    onChange={handleInputChange}
+                    placeholder="2000"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+              </div>
+            )}
+
             <label className="flex items-center gap-2 mt-4">
               <input type="checkbox" name="negotiable" checked={formData.negotiable} onChange={handleInputChange} className="w-4 h-4 text-amber-600 rounded focus:ring-primary" />
               <span className="text-sm text-gray-700">Price is negotiable</span>

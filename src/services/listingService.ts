@@ -32,7 +32,7 @@ export const listingService = {
   },
 
   // Get listings by status
-  async getListingsByStatus(status: 'pending' | 'approved' | 'rejected') {
+  async getListingsByStatus(status: 'pending' | 'approved' | 'rejected' | 'hidden') {
     const { data, error } = await supabase
       .from('listings')
       .select('*')

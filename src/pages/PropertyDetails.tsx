@@ -23,7 +23,7 @@ const PropertyDetails = () => {
     if (id) {
       fetchProperty();
     }
-    
+
     // Reset meta tags when component unmounts
     return () => {
       resetMetaTags();
@@ -35,7 +35,7 @@ const PropertyDetails = () => {
       setLoading(true);
       const data = await propertyService.getPropertyById(id!);
       setProperty(data);
-      
+
       // Update meta tags for social media sharing
       if (data) {
         updateMetaTags({
@@ -184,9 +184,8 @@ const PropertyDetails = () => {
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                        selectedImage === index ? 'border-primary' : 'border-gray-200'
-                      }`}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${selectedImage === index ? 'border-primary' : 'border-gray-200'
+                        }`}
                     >
                       <img src={image} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
                     </button>
@@ -206,7 +205,7 @@ const PropertyDetails = () => {
                   className="flex-shrink-0"
                 />
               </div>
-              
+
               <div className="flex items-center gap-2 text-gray-600 mb-6">
                 <MapPin className="w-5 h-5" />
                 <span>
@@ -324,7 +323,12 @@ const PropertyDetails = () => {
                   <div className="flex items-center gap-2 text-3xl font-bold text-amber-600 mb-2">
                     <IndianRupee className="w-7 h-7" />
                     {property.rent_amount.toLocaleString('en-IN')}
-                    <span className="text-lg text-gray-500 font-normal">/month</span>
+                    <span className="text-lg text-gray-500 font-normal">
+                      {property.pricing_model === 'sale' ? '' :
+                        property.pricing_model === 'per_day' ? '/day' :
+                          property.pricing_model === 'per_week' ? '/week' :
+                            property.pricing_model === 'per_year' ? '/year' : '/month'}
+                    </span>
                   </div>
                   {property.negotiable && (
                     <span className="text-sm text-amber-600 font-semibold">Negotiable</span>

@@ -387,7 +387,7 @@ const getEmailTemplate = (type: string, data: any) => {
             <div class="content">
               <p>Hi ${data.userName},</p>
               <p>Great news! Your <strong>${data.itemType}</strong> listing for "<strong>${data.itemTitle}</strong>" has been successfully created.</p>
-
+ 
               <div class="stat-grid">
                 <div class="stat-card">
                   <div class="stat-val">₹${data.price}</div>
@@ -398,23 +398,152 @@ const getEmailTemplate = (type: string, data: any) => {
                   <div class="stat-label">Commission (Limited Time)</div>
                 </div>
               </div>
-
+ 
               <div class="tip-box">
                 <h3 style="margin: 0 0 10px 0; color: #1e40af;">💡 Pro Tip for Fast Rentals</h3>
                 <p style="margin: 0; font-size: 14px; color: #1e3a8a;">
                   Listings with clear photos and detailed descriptions get booked <strong>3x faster</strong>. Consider adding a quick video walkthrough!
                 </p>
               </div>
-
+ 
               <h3>What happens next?</h3>
               <ul style="padding-left: 20px; color: #4b5563;">
                 <li style="margin-bottom: 10px;">Neighbors will see your listing in search results.</li>
                 <li style="margin-bottom: 10px;">You'll get a notification when someone requests to book.</li>
                 <li style="margin-bottom: 10px;">Chat with them, approve the request, and get paid!</li>
               </ul>
-
+ 
               <div style="text-align: center; margin-top: 30px;">
                 <a href="${data.listingUrl}" class="button">View My Listing</a>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    }),
+ 
+    premiumPaymentSuccess: (data: any) => ({
+      subject: '🌟 Premium Membership Activated!',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .benefit-card { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px; }
+            .button { display: inline-block; background: #d97706; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 28px;">You're Now Premium! 👑</h1>
+              <p style="margin: 10px 0 0; opacity: 0.9;">Welcome to the elite neighborhood circle.</p>
+            </div>
+            <div class="content">
+              <p>Hi ${data.userName},</p>
+              <p>Your premium membership has been successfully activated. You've officially unlocked the full power of NeighbourFriendly Rentals!</p>
+ 
+              <div class="benefit-card">
+                <h3 style="margin: 0 0 10px 0; color: #92400e;">🚀 Your New Superpowers:</h3>
+                <ul style="padding-left: 20px; color: #92400e;">
+                  <li><strong>Unlimited Listings:</strong> Post as many items, properties, and services as you want!</li>
+                  <li><strong>Lower Commission:</strong> Keep more of your earnings with reduced platform fees.</li>
+                  <li><strong>Premium Badge:</strong> Stand out to renters with your gold crown badge.</li>
+                  <li><strong>Priority Support:</strong> Your queries go to the front of the queue.</li>
+                </ul>
+              </div>
+ 
+              <p><strong>Expiry Date:</strong> ${data.expiryDate}</p>
+ 
+              <div style="text-align: center; margin-top: 30px;">
+                <a href="${data.dashboardUrl}" class="button">Go to Dashboard</a>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    }),
+ 
+    premiumExpiryReminder: (data: any) => ({
+      subject: '⏰ Action Required: Your Premium Membership Expires Soon',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #1e293b; color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .warning-box { background: #fff7ed; border: 1px solid #fdba74; padding: 20px; margin: 20px 0; border-radius: 8px; color: #9a3412; }
+            .button { display: inline-block; background: #f59e0b; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Don't Lose Your Benefits! ⏰</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${data.userName},</p>
+              <p>Your premium membership is set to expire in <strong>3 days</strong> on <strong>${data.expiryDate}</strong>.</p>
+ 
+              <div class="warning-box">
+                <h3 style="margin-top: 0;">⚠️ What happens if it expires?</h3>
+                <p>If your membership lapses, any active listings beyond the free limit (3) will be automatically hidden from the public.</p>
+              </div>
+ 
+              <p>Renew now to keep your unlimited listings and priority status active without any interruption.</p>
+ 
+              <div style="text-align: center; margin-top: 30px;">
+                <a href="${data.premiumUrl}" class="button">Renew Now</a>
+              </div>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    }),
+ 
+    premiumExpired: (data: any) => ({
+      subject: 'Your Premium Membership Has Expired 🛑',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #ef4444; color: white; padding: 40px; text-align: center; border-radius: 12px 12px 0 0; }
+            .content { background: #ffffff; padding: 40px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; }
+            .limit-box { background: #fef2f2; border: 1px solid #fecaca; padding: 20px; margin: 20px 0; border-radius: 8px; color: #b91c1c; }
+            .button { display: inline-block; background: #111827; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 24px;">Membership Expired</h1>
+            </div>
+            <div class="content">
+              <p>Hi ${data.userName},</p>
+              <p>Your premium membership has expired. As a result, your account has been reverted to the free plan.</p>
+ 
+              <div class="limit-box">
+                <h3 style="margin-top: 0;">📉 Listing Update</h3>
+                <p>You currently have more than 3 active listings. To comply with the free plan limits, some of your listings have been <strong>hidden</strong>. They will not be visible to other users until you renew or remove other listings.</p>
+              </div>
+ 
+              <p>Don't worry! All your data is safe. Renew your premium membership today to restore all your listings instantly.</p>
+ 
+              <div style="text-align: center; margin-top: 30px;">
+                <a href="${data.premiumUrl}" class="button">Renew Premium Now</a>
               </div>
             </div>
           </div>

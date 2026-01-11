@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { emailService } from './emailService';
 
 // Razorpay configuration - Your live key
 // Razorpay configuration - Use env var if available, else fallback to live key (caution)
@@ -174,6 +175,29 @@ export const razorpayService = {
                   payment_status: 'completed',
                   description: `Premium ${plan} subscription - Payment ID: ${response.razorpay_payment_id}`,
                 });
+
+                // Restore hidden listings across all tables
+                try {
+                  await Promise.all([
+                    supabase.from('listings').update({ status: 'approved' }).eq('owner_id', userId).eq('status', 'hidden'),
+                    supabase.from('properties').update({ status: 'approved' }).eq('owner_id', userId).eq('status', 'hidden'),
+                    supabase.from('service_providers').update({ status: 'approved' }).eq('owner_id', userId).eq('status', 'hidden')
+                  ]);
+                  console.log('✅ Restored hidden listings for user:', userId);
+                } catch (restoreError) {
+                  console.error('Error restoring hidden listings:', restoreError);
+                }
+
+                // Send success email
+                emailService.sendPremiumPaymentSuccess({
+                  email: userEmail,
+                  full_name: userName,
+                  expiryDate: expiryDate.toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                  })
+                }).catch(err => console.error('Error sending premium success email:', err));
 
                 resolve({
                   success: true,

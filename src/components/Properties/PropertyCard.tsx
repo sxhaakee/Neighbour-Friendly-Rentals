@@ -49,7 +49,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
-        
+
         {/* Badges */}
         <div className="absolute top-2 left-2 flex gap-2">
           <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-2 py-1 rounded text-xs font-semibold capitalize">
@@ -133,17 +133,24 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
               <IndianRupee className="w-5 h-5" />
               <span>{property.rent_amount.toLocaleString('en-IN')}</span>
             </div>
-            <span className="text-xs text-gray-500">per month</span>
+            <span className="text-xs text-gray-500">
+              {property.pricing_model === 'sale' ? '(Total)' :
+                property.pricing_model === 'per_day' ? '/day' :
+                  property.pricing_model === 'per_week' ? '/week' :
+                    property.pricing_model === 'per_year' ? '/year' : '/month'}
+            </span>
           </div>
           <button className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
             View Details
           </button>
         </div>
 
-        {/* Deposit Info */}
-        <div className="mt-2 text-xs text-gray-500">
-          Deposit: ₹{property.deposit_amount.toLocaleString('en-IN')}
-        </div>
+        {/* Deposit Info - Show only if > 0 */}
+        {property.deposit_amount > 0 && (
+          <div className="mt-2 text-xs text-gray-500">
+            Deposit: ₹{property.deposit_amount.toLocaleString('en-IN')}
+          </div>
+        )}
       </div>
     </motion.div>
   );
