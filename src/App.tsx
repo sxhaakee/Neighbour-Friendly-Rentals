@@ -35,10 +35,10 @@ import { AIChatbot } from './components/AIChatbot';
 import Chat from './pages/Chat';
 import Messages from './pages/Messages';
 import { logPageView } from './utils/analytics';
+import { PWAInstallPrompt } from './components/PWAInstallPrompt';
+import { NotificationManager } from './components/NotificationManager';
 import { analyticsService } from './services/analyticsService';
 import { Analytics } from '@vercel/analytics/react';
-
-import { PWAInstallPrompt } from './components/PWAInstallPrompt';
 
 function AppContent() {
   const location = useLocation();
@@ -98,6 +98,7 @@ function AppContent() {
       <ToastContainer />
       <Analytics />
       <PWAInstallPrompt />
+      <NotificationManager />
     </div>
   );
 }
