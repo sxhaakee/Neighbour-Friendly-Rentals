@@ -30,36 +30,6 @@ export type Database = {
         }
         Relationships: []
       },
-      activity_feed: {
-        Row: {
-          action: string
-          created_at: string | null
-          id: string
-          target_id: string | null
-          target_title: string | null
-          type: string
-          user_id: string
-        }
-        Insert: {
-          action: string
-          created_at?: string | null
-          id?: string
-          target_id?: string | null
-          target_title?: string | null
-          type: string
-          user_id: string
-        }
-        Update: {
-          action?: string
-          created_at?: string | null
-          id?: string
-          target_id?: string | null
-          target_title?: string | null
-          type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       reviews: {
         Row: {
           id: string
@@ -714,6 +684,13 @@ export type Database = {
           id_document_url: string | null
           id_verified_at: string | null
           id_rejection_reason: string | null
+          bio: string | null
+          followers_count: number | null
+          following_count: number | null
+          listings_count: number | null
+          reviews_count: number | null
+          bookings_count: number | null
+          referral_code: string | null
           created_at: string | null
           updated_at: string | null
         }
@@ -738,6 +715,13 @@ export type Database = {
           id_document_url?: string | null
           id_verified_at?: string | null
           id_rejection_reason?: string | null
+          bio?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          listings_count?: number | null
+          reviews_count?: number | null
+          bookings_count?: number | null
+          referral_code?: string | null
           created_at?: string | null
           updated_at?: string | null
         }
@@ -762,6 +746,13 @@ export type Database = {
           id_document_url?: string | null
           id_verified_at?: string | null
           id_rejection_reason?: string | null
+          bio?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          listings_count?: number | null
+          reviews_count?: number | null
+          bookings_count?: number | null
+          referral_code?: string | null
           created_at?: string | null
           updated_at?: string | null
         }
@@ -1223,6 +1214,119 @@ export type Database = {
           created_at?: string
         }
         Relationships: []
+      },
+      user_follows: {
+        Row: {
+          id: string
+          follower_id: string
+          following_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          follower_id: string
+          following_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          follower_id?: string
+          following_id?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      },
+      activity_feed: {
+        Row: {
+          id: string
+          user_id: string
+          type: "listing" | "booking" | "review" | "follow"
+          action: string
+          target_id: string | null
+          target_title: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: "listing" | "booking" | "review" | "follow"
+          action: string
+          target_id?: string | null
+          target_title?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: "listing" | "booking" | "review" | "follow"
+          action?: string
+          target_id?: string | null
+          target_title?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_feed_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
+      },
+      referrals: {
+        Row: {
+          id: string
+          referrer_id: string
+          referred_id: string
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          referrer_id: string
+          referred_id: string
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          referrer_id?: string
+          referred_id?: string
+          status?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referred_id_fkey"
+            columns: ["referred_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -1236,6 +1340,62 @@ export type Database = {
           p_user2_id: string
         }
         Returns: string
+      }
+      verify_user: {
+        Args: {
+          p_user_id: string
+          p_admin_id: string
+        }
+        Returns: string
+      }
+      create_notification: {
+        Args: {
+          p_user_id: string
+          p_title: string
+          p_message: string
+          p_type: string
+        }
+        Returns: string
+      }
+      reject_user_verification: {
+        Args: {
+          p_user_id: string
+          p_admin_id: string
+          p_reason: string
+        }
+        Returns: string
+      }
+      search_properties_by_location: {
+        Args: {
+          p_city: string
+          p_state: string
+        }
+        Returns: {
+          id: string
+          owner_id: string
+          title: string
+          description: string
+          type: string
+          rent_amount: number
+          deposit_amount: number
+          maintenance_charges: number
+          negotiable: boolean
+          bedrooms: number
+          bathrooms: number
+          balconies: number
+          area_sqft: number
+          furnishing_status: string
+          images: string[]
+          status: string
+          created_at: string
+          updated_at: string
+          address: string
+          city: string
+          state: string
+          pincode: string
+          pricing_model: string
+          views_count: number
+        }[]
       }
     }
     Enums: {

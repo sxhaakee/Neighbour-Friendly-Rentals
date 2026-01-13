@@ -2,12 +2,12 @@ import { supabase } from '../lib/supabase';
 
 export interface UserProfile {
   id: string;
-  full_name: string;
-  avatar_url?: string;
-  bio?: string;
-  followers_count: number;
-  following_count: number;
-  listings_count: number;
+  full_name: string | null;
+  avatar_url?: string | null;
+  bio?: string | null;
+  followers_count?: number | null;
+  following_count?: number | null;
+  listings_count?: number | null;
   is_following?: boolean;
 }
 
@@ -16,16 +16,20 @@ export interface ActivityFeed {
   user_id: string;
   type: 'listing' | 'booking' | 'review' | 'follow';
   action: string;
-  target_id?: string;
-  target_title?: string;
+  target_id: string | null;
+  target_title: string | null;
   created_at: string;
-  user?: UserProfile;
+  user?: {
+    id: string;
+    full_name: string | null;
+    avatar_url: string | null;
+  };
 }
 
 export interface LeaderboardEntry {
   user_id: string;
-  full_name: string;
-  avatar_url?: string;
+  full_name: string | null;
+  avatar_url?: string | null;
   score: number;
   rank: number;
   badge?: string;
@@ -262,7 +266,7 @@ export const socialService = {
 
   // Generate Share Link (Edge Function)
   generateShareLink(type: 'listing' | 'service' | 'property', id: string): string {
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     return `${supabaseUrl}/functions/v1/share?type=${type}&id=${id}`;
   },
 

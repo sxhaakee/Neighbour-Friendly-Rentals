@@ -14,7 +14,7 @@ export const sendSystemNotification = (title: string, body: string, icon = '/log
               dateOfArrival: Date.now(),
               primaryKey: 1
             }
-          });
+          } as any);
         });
       } else {
         new Notification(title, {
