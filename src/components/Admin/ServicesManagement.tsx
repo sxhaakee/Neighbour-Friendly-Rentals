@@ -36,7 +36,7 @@ export const ServicesManagement = () => {
     try {
       const service = services.find(s => s.id === id);
       await serviceProviderService.updateProvider(id, { status: 'approved' });
-      
+
       // Send notification to owner
       if (service) {
         await notificationService.notifyServiceApproval(
@@ -45,7 +45,7 @@ export const ServicesManagement = () => {
           service.id
         );
       }
-      
+
       showToast.success('Service approved and owner notified');
       fetchServices();
     } catch (error) {
@@ -61,7 +61,7 @@ export const ServicesManagement = () => {
     try {
       const service = services.find(s => s.id === id);
       await serviceProviderService.updateProvider(id, { status: 'rejected', rejection_reason: reason });
-      
+
       // Send notification to owner
       if (service) {
         await notificationService.notifyServiceRejection(
@@ -70,7 +70,7 @@ export const ServicesManagement = () => {
           reason
         );
       }
-      
+
       showToast.success('Service rejected and owner notified');
       fetchServices();
     } catch (error) {
@@ -165,11 +165,10 @@ export const ServicesManagement = () => {
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-colors ${
-                filter === status
+              className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition-colors ${filter === status
                   ? 'bg-orange-500 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
+                }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
@@ -193,7 +192,7 @@ export const ServicesManagement = () => {
             <div key={service.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
               {/* Image */}
               <div className="relative h-48 bg-gradient-to-br from-orange-100 to-pink-100">
-                {(service.portfolio_images?.length > 0 || service.images?.length > 0) ? (
+                {((service.portfolio_images?.length ?? 0) > 0 || (service.images?.length ?? 0) > 0) ? (
                   <img
                     src={service.portfolio_images?.[0] || service.images?.[0]}
                     alt={service.business_name}
@@ -204,17 +203,16 @@ export const ServicesManagement = () => {
                     <PartyPopper className="w-16 h-16 text-orange-300" />
                   </div>
                 )}
-                
+
                 {/* Status Badge */}
                 <div className="absolute top-3 right-3">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      service.status === 'approved'
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${service.status === 'approved'
                         ? 'bg-amber-500 text-white'
                         : service.status === 'pending'
-                        ? 'bg-yellow-500 text-white'
-                        : 'bg-red-500 text-white'
-                    }`}
+                          ? 'bg-yellow-500 text-white'
+                          : 'bg-red-500 text-white'
+                      }`}
                   >
                     {service.status}
                   </span>
@@ -233,7 +231,7 @@ export const ServicesManagement = () => {
               {/* Content */}
               <div className="p-4">
                 <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-1">{service.business_name}</h3>
-                
+
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
                   <MapPin className="w-4 h-4" />
                   <span className="line-clamp-1">{service.city}, {service.state}</span>
@@ -265,7 +263,7 @@ export const ServicesManagement = () => {
                     <Eye className="w-4 h-4" />
                     View
                   </button>
-                  
+
                   {service.status === 'pending' && (
                     <>
                       <button
@@ -284,22 +282,21 @@ export const ServicesManagement = () => {
                       </button>
                     </>
                   )}
-                  
+
                   {service.status === 'approved' && (
                     <button
                       onClick={() => handleToggleFeatured(service.id, service.featured || false)}
-                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors ${
-                        service.featured
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors ${service.featured
                           ? 'bg-yellow-500 text-white hover:bg-yellow-600'
                           : 'bg-gray-200 text-gray-700 hover:bg-yellow-100'
-                      }`}
+                        }`}
                       title={service.featured ? 'Remove from featured' : 'Mark as featured'}
                     >
                       <Star className={`w-4 h-4 ${service.featured ? 'fill-current' : ''}`} />
                       {service.featured ? 'Featured' : 'Feature'}
                     </button>
                   )}
-                  
+
                   <button
                     onClick={() => handleDelete(service.id)}
                     className="px-3 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"

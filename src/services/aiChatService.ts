@@ -16,7 +16,7 @@ interface ChatResponse {
 // Note: Direct API calls to Hugging Face are blocked by CORS in browsers
 // This implementation uses a real fetch call with intelligent fallback
 const HUGGINGFACE_API_URL = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2';
-const API_KEY = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY;
 
 const SYSTEM_PROMPT = `You are a helpful, friendly AI assistant for "NeighbourFriendly", India's premier P2P rental marketplace.
 Your goal is to help users navigate the platform, find items/properties/services, and understand how renting works.

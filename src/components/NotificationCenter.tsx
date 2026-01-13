@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { Bell, X, Trash2, CheckCheck } from 'lucide-react';
 import { notificationService, Notification } from '../services/notificationService';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const NotificationCenter = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -82,7 +82,7 @@ export const NotificationCenter = () => {
       }
 
       if (notification.link) {
-        navigate(notification.link);
+        router.push(notification.link);
         setIsOpen(false);
       }
     } catch (error) {
@@ -258,7 +258,7 @@ export const NotificationCenter = () => {
                             </div>
                             <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
                             <p className="text-xs text-gray-400 mt-2">
-                              {new Date(notification.created_at).toLocaleString()}
+                              {notification.created_at ? new Date(notification.created_at).toLocaleString() : ''}
                             </p>
                           </div>
                           {!notification.read && (

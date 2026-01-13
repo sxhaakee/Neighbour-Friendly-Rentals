@@ -12,24 +12,24 @@ export interface RentalAgreementData {
   owner_email: string;
   owner_phone: string;
   item_title: string;
-  item_description?: string;
+  item_description?: string | null;
   start_date: string;
   end_date: string;
   total_days: number;
   total_price: number;
-  security_deposit?: number;
+  security_deposit?: number | null;
   agreement_data: any; // Full agreement details as JSON
-  pdf_url?: string;
+  pdf_url?: string | null;
 }
 
 export interface RentalAgreement extends RentalAgreementData {
   id: string;
   status: 'active' | 'completed' | 'cancelled' | 'disputed';
   agreed_at: string;
-  completed_at?: string;
+  completed_at?: string | null;
   created_at: string;
   updated_at: string;
-  deleted_at?: string;
+  deleted_at?: string | null;
 }
 
 import { emailService } from './emailService';

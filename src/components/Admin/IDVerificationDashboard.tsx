@@ -8,11 +8,13 @@ import { useAuth } from '../../contexts/AuthContext';
 interface PendingVerification {
   id: string;
   email: string;
-  full_name: string;
-  id_document_type: string;
-  id_document_number: string;
-  id_document_url: string;
-  created_at: string;
+  full_name: string | null;
+  id_document_type: string | null;
+  id_document_number: string | null;
+  id_document_url: string | null;
+  created_at: string | null;
+  id_verified_at?: string | null;
+  id_rejection_reason?: string | null;
 }
 
 export const IDVerificationDashboard = () => {
@@ -32,7 +34,7 @@ export const IDVerificationDashboard = () => {
     try {
       setLoading(true);
       console.log(`Fetching ${activeTab} verifications...`);
-      
+
       let data;
       if (activeTab === 'pending') {
         data = await verificationService.getPendingVerifications();
@@ -41,7 +43,7 @@ export const IDVerificationDashboard = () => {
       } else {
         data = await verificationService.getRejectedVerifications();
       }
-      
+
       console.log(`Received ${activeTab} verifications:`, data);
       setVerifications(data || []);
     } catch (error) {
@@ -57,7 +59,7 @@ export const IDVerificationDashboard = () => {
       showToast.error('Admin user not found');
       return;
     }
-    
+
     setProcessing(true);
     try {
       console.log('Starting approval process for user:', userId, 'by admin:', user.id);
@@ -102,7 +104,8 @@ export const IDVerificationDashboard = () => {
     }
   };
 
-  const getDocumentTypeLabel = (type: string) => {
+  const getDocumentTypeLabel = (type: string | null) => {
+    if (!type) return 'Unknown';
     const labels: any = {
       aadhar: 'Aadhar Card',
       pan: 'PAN Card',
@@ -136,31 +139,28 @@ export const IDVerificationDashboard = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setActiveTab('pending')}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
-              activeTab === 'pending'
-                ? 'bg-yellow-500 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'pending'
+              ? 'bg-yellow-500 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
             ⏳ Pending
           </button>
           <button
             onClick={() => setActiveTab('verified')}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
-              activeTab === 'verified'
-                ? 'bg-amber-500 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'verified'
+              ? 'bg-amber-500 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
             ✅ Verified
           </button>
           <button
             onClick={() => setActiveTab('rejected')}
-            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${
-              activeTab === 'rejected'
-                ? 'bg-red-500 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
-            }`}
+            className={`flex-1 px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'rejected'
+              ? 'bg-red-500 text-white'
+              : 'text-gray-600 hover:bg-gray-100'
+              }`}
           >
             ❌ Rejected
           </button>
@@ -208,7 +208,7 @@ export const IDVerificationDashboard = () => {
                       {verification.id_document_number}
                     </p>
                     <p className="text-sm text-gray-500">
-                      Submitted: {new Date(verification.created_at).toLocaleDateString()}
+                      Submitted: {verification.created_at ? new Date(verification.created_at).toLocaleDateString() : 'N/A'}
                     </p>
                   </div>
                 </div>
@@ -319,7 +319,7 @@ export const IDVerificationDashboard = () => {
                   />
                 </div>
               )}
-              
+
               {/* Show rejection reason for rejected verifications */}
               {activeTab === 'rejected' && (selectedVerification as any).id_rejection_reason && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -341,7 +341,7 @@ export const IDVerificationDashboard = () => {
               >
                 {activeTab === 'pending' ? 'Cancel' : 'Close'}
               </button>
-              
+
               {/* Only show approve/reject for pending */}
               {activeTab === 'pending' && (
                 <>

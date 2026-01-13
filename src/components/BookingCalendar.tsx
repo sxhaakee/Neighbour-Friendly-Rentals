@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Calendar, Clock, IndianRupee, AlertCircle, AlertTriangle } from 'lucide-react';
 import { bookingService, BookingInsert } from '../services/bookingService';
 import { useAuth } from '../contexts/AuthContext';
@@ -17,7 +17,7 @@ interface BookingCalendarProps {
 
 export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCalendarProps) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const isVerified = false; // Set to false to always show verification note - replace with actual check later
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -89,20 +89,24 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
     try {
       setSubmitting(true);
       const bookingData: BookingInsert = {
+        listing_id: id,
         renter_id: user.id,
         owner_id: ownerId,
         start_date: startDate,
         end_date: endDate,
+        total_days: calculateDays(),
         start_time: startTime || undefined,
         end_time: endTime || undefined,
         total_price: totalPrice,
+        renter_name: user.user_metadata?.full_name || user.email || 'Guest',
+        renter_email: user.email || '',
         notes: notes.trim() || undefined,
         special_requests: specialRequests.trim() || undefined,
+        status: 'pending'
       };
 
-      if (type === 'item') bookingData.listing_id = id;
-      else if (type === 'property') bookingData.property_id = id;
-      else bookingData.service_id = id;
+      if (type === 'property') bookingData.property_id = id;
+      else if (type === 'service') bookingData.service_id = id;
 
       // Store booking data and show agreement
       setPendingBookingData(bookingData);
@@ -121,9 +125,9 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
     try {
       setSubmitting(true);
       await bookingService.createBooking(pendingBookingData);
-      
+
       showToast.success('Booking confirmed! Redirecting to My Bookings...');
-      
+
       // Reset form
       setStartDate('');
       setEndDate('');
@@ -134,10 +138,10 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
       setAvailable(null);
       setShowAgreement(false);
       setPendingBookingData(null);
-      
+
       // Redirect to My Bookings page
       setTimeout(() => {
-        navigate('/dashboard');
+        router.push('/dashboard');
       }, 1500);
     } catch (error: any) {
       console.error('Error confirming booking:', error);
@@ -287,9 +291,8 @@ export const BookingCalendar = ({ type, id, ownerId, price, title }: BookingCale
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`flex items-center gap-2 p-3 rounded-lg mb-4 ${
-            available ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-red-800'
-          }`}
+          className={`flex items-center gap-2 p-3 rounded-lg mb-4 ${available ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-red-800'
+            }`}
         >
           <AlertCircle className="w-5 h-5" />
           <p className="text-sm font-semibold">

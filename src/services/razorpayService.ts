@@ -3,7 +3,7 @@ import { emailService } from './emailService';
 
 // Razorpay configuration - Your live key
 // Razorpay configuration - Use env var if available, else fallback to live key (caution)
-const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RZHNDjla2df5tS';
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_RZHNDjla2df5tS';
 
 // Validate and log
 if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_HERE') {
@@ -312,7 +312,7 @@ export const razorpayService = {
               await supabase
                 .from('listings')
                 .update({
-                  is_featured: true,
+                  featured: true as any,
                   featured_until: featuredUntil.toISOString(),
                   featured_placement: placement,
                 })

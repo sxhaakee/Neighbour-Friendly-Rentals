@@ -41,8 +41,8 @@ export interface PerformanceMetrics {
 export const analyticsService = {
   // Google Analytics
   initialize() {
-    const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-    if (measurementId && import.meta.env.PROD) {
+    const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+    if (measurementId && process.env.NODE_ENV === 'production') {
       ReactGA.initialize(measurementId);
     }
   },
@@ -164,7 +164,7 @@ export const analyticsService = {
       const { data: listings } = await supabase
         .from('listings')
         .select('id, title')
-        .eq('user_id', userId);
+        .eq('owner_id', userId);
 
       if (!listings) return [];
 
@@ -231,7 +231,7 @@ export const analyticsService = {
         };
       }
 
-      const renterIds = [...new Set(bookings.map(b => b.renter_id))];
+      const renterIds = Array.from(new Set(bookings.map(b => b.renter_id)));
 
       // Get renter profiles
       const { data: profiles } = await supabase
@@ -298,9 +298,9 @@ export const analyticsService = {
 
       // Calculate response time (hours)
       const responseTimes = bookings
-        .filter(b => b.confirmed_at)
+        .filter(b => b.confirmed_at && b.created_at)
         .map(b => {
-          const created = new Date(b.created_at).getTime();
+          const created = new Date(b.created_at!).getTime();
           const confirmed = new Date(b.confirmed_at!).getTime();
           return (confirmed - created) / (1000 * 60 * 60); // hours
         });
@@ -349,7 +349,7 @@ export const analyticsService = {
     const { data } = await supabase
       .from('listings')
       .select('id')
-      .eq('user_id', userId);
+      .eq('owner_id', userId);
 
     return data?.map(l => l.id) || [];
   },
@@ -379,7 +379,7 @@ export const analyticsService = {
 
         csv = 'Date,Item,Status,Amount,Renter\n';
         bookings?.forEach(b => {
-          csv += `${new Date(b.created_at).toLocaleDateString()},${b.listing_id},${b.status},₹${b.total_price || 0},${b.renter_id}\n`;
+          csv += `${b.created_at ? new Date(b.created_at).toLocaleDateString() : 'N/A'},${b.listing_id},${b.status},₹${b.total_price || 0},${b.renter_id}\n`;
         });
       } else if (type === 'items') {
         const items = await this.getPopularItems(userId, 100);

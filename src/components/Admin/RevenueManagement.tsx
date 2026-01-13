@@ -8,15 +8,15 @@ interface RevenueRecord {
     id: string;
     amount: number;
     revenue_type: string;
-    description: string;
-    created_at: string;
-    payment_status: string;
-    payment_id: string;
-    user_id: string;
+    description: string | null;
+    created_at: string | null;
+    payment_status: string | null;
+    payment_id: string | null;
+    user_id: string | null;
     profiles: {
-        full_name: string;
+        full_name: string | null;
         email: string;
-    };
+    } | null;
 }
 
 export const RevenueManagement = () => {
@@ -135,8 +135,8 @@ export const RevenueManagement = () => {
                             key={t}
                             onClick={() => setFilter(t)}
                             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${filter === t
-                                    ? 'bg-amber-500 text-white shadow-lg shadow-amber-200'
-                                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                                ? 'bg-amber-500 text-white shadow-lg shadow-amber-200'
+                                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                                 }`}
                         >
                             {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -221,8 +221,8 @@ export const RevenueManagement = () => {
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col items-end text-right">
-                                                <span className="text-xs font-bold text-gray-900">{new Date(record.created_at).toLocaleDateString()}</span>
-                                                <span className="text-[10px] font-medium text-gray-400">{new Date(record.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                <span className="text-xs font-bold text-gray-900">{record.created_at ? new Date(record.created_at).toLocaleDateString() : 'N/A'}</span>
+                                                <span className="text-[10px] font-medium text-gray-400">{record.created_at ? new Date(record.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}</span>
                                             </div>
                                         </td>
                                     </tr>

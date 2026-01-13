@@ -1,10 +1,12 @@
+'use client';
+
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Plus, Package, Home, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FAB = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
 
   const menuItems = [
@@ -27,7 +29,7 @@ const FAB = () => {
                 exit={{ opacity: 0, y: 20, scale: 0.8 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={() => {
-                  navigate(item.path);
+                  router.push(item.path);
                   setShowMenu(false);
                 }}
                 className={`${item.color} text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 group`}

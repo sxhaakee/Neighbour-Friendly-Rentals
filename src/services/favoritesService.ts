@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 export interface Favorite {
   id: string;
   user_id: string;
-  type: 'item' | 'property' | 'service';
+  type: string;
   item_id: string;
   created_at: string;
 }

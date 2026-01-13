@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle, Crown, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
@@ -8,8 +11,8 @@ import { NotificationCenter } from '../NotificationCenter';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
   const { user, profile, signOut, isAdmin, isPremium } = useAuth();
 
   const navigationItems = [
@@ -20,12 +23,12 @@ const Header = () => {
     { path: '/about', label: 'About', icon: Info }
   ].filter(item => !item.authRequired || user);
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   const handleSignOut = async () => {
     await signOut();
     setShowUserMenu(false);
-    navigate('/');
+    router.push('/');
   };
 
   return (
@@ -33,10 +36,10 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <img 
-              src="/LOGOOO.jpg" 
-              alt="NeighbourFriendly Rentals" 
+          <Link href="/" className="flex items-center space-x-2">
+            <img
+              src="/LOGOOO.jpg"
+              alt="NeighbourFriendly Rentals"
               className="w-12 h-12 object-contain rounded-lg"
             />
             <span className="font-bold text-xl text-gray-900">
@@ -49,25 +52,24 @@ const Header = () => {
             {navigationItems.map(({ path, label, icon: Icon }) => (
               <Link
                 key={path}
-                to={path}
-                className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 ${
-                  isActive(path)
-                    ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-md'
-                    : 'text-gray-600 hover:text-amber-600 hover:bg-amber-50'
-                }`}
+                href={path}
+                className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 ${isActive(path)
+                  ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-white shadow-md'
+                  : 'text-gray-600 hover:text-amber-600 hover:bg-amber-50'
+                  }`}
               >
                 <Icon className="w-4 h-4" />
                 <span className="font-medium">{label}</span>
               </Link>
             ))}
-            
+
             {user ? (
               <div className="flex items-center space-x-3 ml-4">
                 {/* Notification Center - Desktop */}
                 <div className="relative flex-shrink-0">
                   <NotificationCenter />
                 </div>
-                
+
                 {/* Combined User Menu with Profile Button */}
                 <div className="relative flex-shrink-0">
                   <button
@@ -80,7 +82,7 @@ const Header = () => {
                     <span className="font-medium text-sm text-gray-900 whitespace-nowrap">My Profile</span>
                     {isPremium && <Crown className="w-4 h-4 text-yellow-500 flex-shrink-0" />}
                   </button>
-                
+
                   {showUserMenu && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
                       {/* User Info Header */}
@@ -106,7 +108,7 @@ const Header = () => {
                       <div className="py-1">
                         {isAdmin && (
                           <Link
-                            to="/admin"
+                            href="/admin"
                             onClick={() => setShowUserMenu(false)}
                             className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                           >
@@ -115,7 +117,7 @@ const Header = () => {
                           </Link>
                         )}
                         <Link
-                          to="/dashboard"
+                          href="/dashboard"
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                         >
@@ -123,19 +125,19 @@ const Header = () => {
                           <span className="font-medium">Dashboard</span>
                         </Link>
                         <Link
-                          to="/profile"
+                          href="/profile"
                           onClick={() => setShowUserMenu(false)}
                           className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                         >
                           <User className="w-4 h-4 text-amber-600" />
                           <span className="font-medium">Edit Profile</span>
                         </Link>
-                        
+
                         {!isPremium && (
                           <>
                             <div className="border-t border-gray-100 my-1"></div>
                             <Link
-                              to="/premium"
+                              href="/premium"
                               onClick={() => setShowUserMenu(false)}
                               className="flex items-center space-x-3 px-4 py-2.5 bg-gradient-to-r from-yellow-50 to-yellow-100 hover:from-yellow-100 hover:to-yellow-200 transition-colors mx-2 rounded-lg"
                             >
@@ -147,7 +149,7 @@ const Header = () => {
                             </Link>
                           </>
                         )}
-                        
+
                         <div className="border-t border-gray-100 my-1"></div>
                         <button
                           onClick={handleSignOut}
@@ -163,7 +165,7 @@ const Header = () => {
               </div>
             ) : (
               <Link
-                to="/login"
+                href="/login"
                 className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200"
               >
                 Sign In
@@ -201,35 +203,34 @@ const Header = () => {
               {navigationItems.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
-                  to={path}
+                  href={path}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-3 rounded-lg transition-colors ${
-                    isActive(path)
-                      ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                      : 'text-gray-600 hover:text-amber-600 hover:bg-primary/10'
-                  }`}
+                  className={`flex items-center space-x-2 px-3 py-3 rounded-lg transition-colors ${isActive(path)
+                    ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                    : 'text-gray-600 hover:text-amber-600 hover:bg-primary/10'
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span className="font-medium">{label}</span>
                 </Link>
               ))}
-              
+
               {user ? (
                 <>
                   {/* Profile Link - Mobile */}
                   <Link
-                    to="/profile"
+                    href="/profile"
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-amber-600 hover:bg-primary/10 border-t border-gray-200"
                   >
                     <User className="w-4 h-4" />
                     <span className="font-medium">My Profile</span>
                   </Link>
-                  
+
                   {/* Premium Button - Mobile */}
                   {!isPremium && (
                     <Link
-                      to="/premium"
+                      href="/premium"
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center justify-center space-x-2 px-3 py-3 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-600 text-white font-semibold shadow-md"
                     >
@@ -238,10 +239,10 @@ const Header = () => {
                       <Sparkles className="w-4 h-4" />
                     </Link>
                   )}
-                  
+
                   {isAdmin && (
                     <Link
-                      to="/admin"
+                      href="/admin"
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-amber-600 hover:bg-primary/10"
                     >
@@ -262,7 +263,7 @@ const Header = () => {
                 </>
               ) : (
                 <Link
-                  to="/login"
+                  href="/login"
                   onClick={() => setIsMenuOpen(false)}
                   className="block bg-secondary text-gray-900 px-3 py-3 rounded-lg font-semibold text-center mt-4"
                 >

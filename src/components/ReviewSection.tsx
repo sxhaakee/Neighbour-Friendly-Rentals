@@ -141,9 +141,8 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className={`w-5 h-5 ${
-                    star <= averageRating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                  }`}
+                  className={`w-5 h-5 ${star <= averageRating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                    }`}
                 />
               ))}
             </div>
@@ -184,9 +183,8 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
                     className="focus:outline-none"
                   >
                     <Star
-                      className={`w-8 h-8 cursor-pointer transition-colors ${
-                        star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 hover:text-yellow-200'
-                      }`}
+                      className={`w-8 h-8 cursor-pointer transition-colors ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300 hover:text-yellow-200'
+                        }`}
                     />
                   </button>
                 ))}
@@ -252,14 +250,13 @@ export const ReviewSection = ({ type, id, ownerId }: ReviewSectionProps) => {
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
-                            className={`w-4 h-4 ${
-                              star <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-                            }`}
+                            className={`w-4 h-4 ${star <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+                              }`}
                           />
                         ))}
                       </div>
                       <span className="text-sm text-gray-500">
-                        {new Date(review.created_at).toLocaleDateString()}
+                        {review.created_at ? new Date(review.created_at).toLocaleDateString() : 'N/A'}
                       </span>
                       {review.verified_rental && (
                         <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-semibold">

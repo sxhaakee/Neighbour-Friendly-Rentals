@@ -5,7 +5,7 @@ import { supabase } from '../lib/supabase';
 // Solution: Use Supabase Edge Functions to send emails
 // For now, we'll log emails to console instead of sending them
 
-const getResendClient = () => {
+const getResendClient = (): any => {
   // Always return null in browser environment
   // Emails will be logged to console instead
   console.log('📧 Email automation service running in browser mode (logging only)');
@@ -122,7 +122,7 @@ export const emailAutomationService = {
         from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: user.email,
         subject: '🏠 New items near you this week!',
-        html: this.generateWeeklyDigestHTML(user.full_name, nearbyItems || [])
+        html: this.generateWeeklyDigestHTML(user.full_name || 'User', nearbyItems || [])
       });
 
       console.log(`✅ Weekly digest sent to ${user.email}`);
@@ -191,7 +191,7 @@ export const emailAutomationService = {
         .select(`
           *,
           renter:profiles!bookings_renter_id_fkey(full_name, email),
-          listing:listings(title, daily_rate)
+          listing:listings(title, price)
         `)
         .eq('id', bookingId)
         .single();
@@ -227,7 +227,7 @@ export const emailAutomationService = {
         .select(`
           *,
           renter:profiles!bookings_renter_id_fkey(full_name, email),
-          listing:listings(title, pickup_location)
+          listing:listings(title, location)
         `)
         .eq('id', bookingId)
         .single();
@@ -306,7 +306,7 @@ export const emailAutomationService = {
         from: 'NeighbourFriendly Rentals <noreply@neighbourfriendly.in>',
         to: user.email,
         subject: '🚀 Unlock unlimited listings with Premium!',
-        html: this.generatePremiumUpgradeHTML(user.full_name)
+        html: this.generatePremiumUpgradeHTML(user.full_name || 'User')
       });
 
       console.log(`✅ Premium upgrade email sent to ${user.email}`);
@@ -352,7 +352,7 @@ export const emailAutomationService = {
               ${items.map(item => `
                 <div class="item">
                   <h3>${item.title}</h3>
-                  <p>₹${item.daily_rate}/day</p>
+                  <p>₹${item.price}/day</p>
                   <a href="https://neighbourfriendly.vercel.app/listing/${item.id}" class="button">View Details</a>
                 </div>
               `).join('')}
@@ -562,7 +562,7 @@ export const emailAutomationService = {
             
             <div class="reminder">
               <h2>${booking.listing.title}</h2>
-              <p><strong>Pickup Location:</strong> ${booking.listing.pickup_location}</p>
+              <p><strong>Pickup Location:</strong> ${booking.listing.location}</p>
               <p><strong>Date:</strong> ${new Date(booking.start_date).toLocaleDateString()}</p>
               <p><strong>Contact:</strong> ${booking.renter_phone}</p>
             </div>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -207,8 +209,8 @@ export const AIChatbot = () => {
                   )}
                   <div
                     className={`max-w-[80%] sm:max-w-[75%] rounded-2xl px-3 sm:px-4 py-2 ${message.sender === 'user'
-                        ? 'bg-amber-500 text-white rounded-br-none'
-                        : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
+                      ? 'bg-amber-500 text-white rounded-br-none'
+                      : 'bg-white text-gray-800 rounded-bl-none shadow-sm'
                       }`}
                   >
                     <p className="text-xs sm:text-sm whitespace-pre-line leading-relaxed">{message.text}</p>

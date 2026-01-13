@@ -2,17 +2,24 @@ import { supabase } from '../lib/supabase';
 
 export interface Review {
   id: string;
-  listing_id: string;
+  listing_id: string | null;
+  service_id?: string | null;
+  property_id?: string | null;
   user_id: string;
   user_name: string;
   rating: number;
-  comment?: string;
-  created_at: string;
-  updated_at: string;
+  comment: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  owner_response?: string | null;
+  owner_response_date?: string | null;
+  reported?: boolean | null;
+  verified_rental?: boolean;
+  helpful_count?: number;
   user?: {
     id: string;
-    full_name: string;
-    avatar_url?: string;
+    full_name: string | null;
+    avatar_url?: string | null;
   };
 }
 
@@ -21,7 +28,7 @@ export interface ReviewInsert {
   user_id: string;
   user_name: string;
   rating: number;
-  comment?: string;
+  comment?: string | null;
 }
 
 export const reviewService = {

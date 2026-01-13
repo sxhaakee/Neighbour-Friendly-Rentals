@@ -11,26 +11,26 @@ interface Booking {
   renter_id: string;
   renter_name: string;
   renter_email: string;
-  renter_phone: string;
+  renter_phone: string | null;
   owner_id: string;
   start_date: string;
   end_date: string;
   total_days: number;
   total_price: number;
-  item_price: number;
-  platform_commission: number;
-  delivery_charge: number;
-  security_deposit: number;
-  status: string;
-  payment_status: string;
-  payment_method: string;
-  created_at: string;
-  rejection_reason?: string;
-  approved_at?: string;
-  rejected_at?: string;
+  item_price: number | null;
+  platform_commission: number | null;
+  delivery_charge?: number | null;
+  security_deposit?: number | null;
+  status: string | null;
+  payment_status: string | null;
+  payment_method: string | null;
+  created_at: string | null;
+  rejection_reason?: string | null;
+  approved_at?: string | null;
+  rejected_at?: string | null;
   listings: {
     title: string;
-    images: string[];
+    images: string[] | null;
     owner_name: string;
     contact_info: string;
     location: string;
@@ -51,7 +51,7 @@ export const OrdersManagement = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      
+
       // First, get current user to verify admin status
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -95,7 +95,7 @@ export const OrdersManagement = () => {
         setBookings([]);
         return;
       }
-      
+
       console.log('Admin fetched bookings:', data);
       setBookings(data || []);
     } catch (error) {
@@ -110,11 +110,11 @@ export const OrdersManagement = () => {
     setProcessing(booking.id);
     try {
       console.log('Approving booking:', booking.id);
-      
+
       // Update booking status
       const { error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           status: 'confirmed',
           approved_at: new Date().toISOString()
         } as any)
@@ -124,7 +124,7 @@ export const OrdersManagement = () => {
         console.error('Database error:', error);
         throw error;
       }
-      
+
       console.log('Booking approved in database');
 
       // Send email notification
@@ -202,7 +202,7 @@ export const OrdersManagement = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           status: 'rejected',
           rejection_reason: reason
         } as any)
@@ -233,7 +233,7 @@ export const OrdersManagement = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           status: 'cancelled',
           rejection_reason: reason
         } as any)
@@ -256,10 +256,10 @@ export const OrdersManagement = () => {
     setProcessing(booking.id);
     try {
       console.log('Updating payment status for booking:', booking.id, 'to:', newStatus);
-      
+
       const { data, error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           payment_status: newStatus
         })
         .eq('id', booking.id)
@@ -272,10 +272,10 @@ export const OrdersManagement = () => {
 
       console.log('Payment status updated successfully:', data);
       showToast.success(`Payment status updated to ${newStatus.toUpperCase()}`);
-      
+
       // Refresh the bookings list
       await fetchBookings();
-      
+
       // Update the selected booking to show new status
       if (selectedBooking && selectedBooking.id === booking.id) {
         setSelectedBooking({ ...selectedBooking, payment_status: newStatus });
@@ -328,11 +328,10 @@ export const OrdersManagement = () => {
             <button
               key={status}
               onClick={() => setFilter(status as any)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                filter === status
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${filter === status
+                ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </button>
@@ -406,7 +405,7 @@ export const OrdersManagement = () => {
               <div className="flex gap-4">
                 {/* Item Image */}
                 <img
-                  src={booking.listings.images[0] || '/placeholder.jpg'}
+                  src={(booking.listings.images && booking.listings.images[0]) || '/placeholder.jpg'}
                   alt={booking.listings.title}
                   className="w-24 h-24 rounded-lg object-cover"
                 />
@@ -418,8 +417,8 @@ export const OrdersManagement = () => {
                       <h3 className="font-bold text-lg text-gray-900">{booking.listings.title}</h3>
                       <p className="text-sm text-gray-600">Order ID: {booking.id.slice(0, 8)}</p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusBadge(booking.status)}`}>
-                      {booking.status.toUpperCase()}
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusBadge(booking.status || 'pending')}`}>
+                      {(booking.status || 'pending').toUpperCase()}
                     </span>
                   </div>
 
@@ -449,7 +448,7 @@ export const OrdersManagement = () => {
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="w-4 h-4" />
-                      {new Date(booking.created_at).toLocaleString()}
+                      {booking.created_at ? new Date(booking.created_at).toLocaleString() : 'N/A'}
                     </div>
                   </div>
 
@@ -523,15 +522,15 @@ export const OrdersManagement = () => {
                 <h3 className="font-semibold text-lg mb-3">Item Information</h3>
                 <div className="flex gap-4">
                   <img
-                    src={selectedBooking.listings.images[0]}
+                    src={(selectedBooking.listings.images && selectedBooking.listings.images[0]) || '/placeholder.jpg'}
                     alt={selectedBooking.listings.title}
                     className="w-32 h-32 rounded-lg object-cover"
                   />
                   <div>
                     <p className="font-bold text-xl">{selectedBooking.listings.title}</p>
                     <p className="text-gray-600 mt-2">Order ID: {selectedBooking.id}</p>
-                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mt-2 ${getStatusBadge(selectedBooking.status)}`}>
-                      {selectedBooking.status.toUpperCase()}
+                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mt-2 ${getStatusBadge(selectedBooking.status || 'pending')}`}>
+                      {(selectedBooking.status || 'pending').toUpperCase()}
                     </span>
                   </div>
                 </div>
@@ -599,7 +598,7 @@ export const OrdersManagement = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Payment Method</p>
-                    <p className="font-semibold">{selectedBooking.payment_method.toUpperCase()}</p>
+                    <p className="font-semibold">{(selectedBooking.payment_method || 'N/A').toUpperCase()}</p>
                   </div>
                 </div>
               </div>
@@ -638,11 +637,10 @@ export const OrdersManagement = () => {
                 <h3 className="font-semibold text-lg mb-3">Payment Status</h3>
                 <div className="flex items-center gap-3">
                   <span className="text-gray-600">Current Status:</span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    selectedBooking.payment_status === 'completed' ? 'bg-amber-100 text-amber-800' :
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${selectedBooking.payment_status === 'completed' ? 'bg-amber-100 text-amber-800' :
                     selectedBooking.payment_status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
+                      'bg-red-100 text-red-800'
+                    }`}>
                     {selectedBooking.payment_status?.toUpperCase() || 'PENDING'}
                   </span>
                 </div>

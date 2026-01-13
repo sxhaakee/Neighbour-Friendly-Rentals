@@ -3,18 +3,18 @@ import { supabase } from '../lib/supabase';
 export interface Notification {
   id: string;
   user_id: string;
-  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder' | 'approval' | 'rejection' | 'verification';
+  type: string;
   title: string;
   message: string;
-  link?: string;
-  read: boolean;
+  link?: string | null;
+  read: boolean | null;
   data?: any;
-  created_at: string;
+  created_at: string | null;
 }
 
 export interface NotificationInsert {
   user_id: string;
-  type: 'booking' | 'message' | 'review' | 'payment' | 'system' | 'reminder' | 'approval' | 'rejection' | 'verification';
+  type: string;
   title: string;
   message: string;
   link?: string;

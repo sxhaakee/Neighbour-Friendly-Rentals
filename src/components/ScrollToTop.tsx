@@ -1,15 +1,21 @@
+'use client';
+
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 export const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   const prevPathRef = useRef<string>('');
 
   useEffect(() => {
     // Check if we're going back (using browser back button or navigation)
     // We detect this by checking if the new path is a parent of the previous path
-    const isGoingBack = prevPathRef.current.startsWith(pathname) && prevPathRef.current !== pathname;
-    
+    // OR if we suspect a back action. Next.js App Router handles scroll restoration,
+    // so this might be redundant, but we verify here.
+
+    // In Next.js, pathname is just the path.
+    const isGoingBack = prevPathRef.current.startsWith(pathname || '') && prevPathRef.current !== pathname;
+
     // Only scroll to top if NOT going back
     if (!isGoingBack) {
       window.scrollTo({
@@ -20,7 +26,7 @@ export const ScrollToTop = () => {
     }
 
     // Update previous path
-    prevPathRef.current = pathname;
+    prevPathRef.current = pathname || '';
   }, [pathname]);
 
   return null;

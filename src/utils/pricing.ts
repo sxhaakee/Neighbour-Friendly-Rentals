@@ -8,7 +8,7 @@
  * @param pricingModel - The pricing model (per_day, per_week, etc.)
  * @returns Formatted string for display
  */
-export const formatPricingModel = (pricingModel?: string): string => {
+export const formatPricingModel = (pricingModel?: string | null): string => {
   if (!pricingModel) return '/day';
   
   const modelMap: Record<string, string> = {

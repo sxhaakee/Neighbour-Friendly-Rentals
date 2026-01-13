@@ -1,15 +1,16 @@
+
 import { supabase } from '../lib/supabase';
 
 // Type definitions for chat tables
 type Conversation = {
   id: string;
-  listing_id: string;
+  listing_id: string | null;
   user1_id: string;
   user2_id: string;
   last_message: string | null;
-  last_message_at: string;
-  created_at: string;
-  updated_at: string;
+  last_message_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 };
 
 type Message = {
@@ -17,8 +18,8 @@ type Message = {
   conversation_id: string;
   sender_id: string;
   content: string;
-  read: boolean;
-  created_at: string;
+  read: boolean | null;
+  created_at: string | null;
 };
 
 export const chatService = {

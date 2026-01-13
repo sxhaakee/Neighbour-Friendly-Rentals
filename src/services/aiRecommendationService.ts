@@ -23,17 +23,18 @@ export const aiRecommendationService = {
       // Get user's booking history
       const { data: bookings } = await supabase
         .from('bookings')
-        .select('listing_id, property_id, service_id')
+        .select('listing_id')
         .eq('renter_id', userId)
         .limit(20);
 
       // Get user's search history
-      const { data: searches } = await supabase
-        .from('recent_searches')
-        .select('query, filters')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(10);
+      // TODO: Uncomment when recent_searches table is created
+      // const { data: searches } = await supabase
+      //   .from('recent_searches')
+      //   .select('query, filters')
+      //   .eq('user_id', userId)
+      //   .order('created_at', { ascending: false })
+      //   .limit(10);
 
       // Extract categories from history
       const categories = new Set<string>();
@@ -56,7 +57,7 @@ export const aiRecommendationService = {
       if (categories.size > 0) {
         const { data: listings } = await supabase
           .from('listings')
-          .select('id, title, category, price_per_day')
+          .select('id, title, category, price')
           .in('category', Array.from(categories))
           .eq('status', 'approved')
           .limit(limit);
@@ -121,18 +122,18 @@ export const aiRecommendationService = {
         .limit(limit);
 
       if (type === 'listing') {
-        query.eq('category', original.category);
+        query.eq('category', (original as any).category);
       } else if (type === 'service') {
-        query.eq('service_type', original.service_type);
+        query.eq('service_type', (original as any).service_type);
       }
 
       const { data: similar } = await query;
 
       if (!similar) return [];
 
-      return similar.map(item => ({
+      return (similar as any[]).map(item => ({
         id: item.id,
-        title: item.title || item.business_name,
+        title: item.title || item.business_name || 'Unknown',
         score: 0.7,
         reason: 'Similar to what you viewed',
         type,
@@ -153,10 +154,10 @@ export const aiRecommendationService = {
       // Get similar items in the same category
       const { data: similar } = await supabase
         .from('listings')
-        .select('price_per_day')
+        .select('price')
         .eq('category', itemData.category)
         .eq('status', 'approved')
-        .not('price_per_day', 'is', null);
+        .not('price', 'is', null);
 
       if (!similar || similar.length === 0) {
         return {
@@ -169,7 +170,7 @@ export const aiRecommendationService = {
       }
 
       // Calculate statistics
-      const prices = similar.map(item => item.price_per_day).filter(p => p > 0);
+      const prices = similar.map(item => item.price).filter(p => p > 0);
       const avg = prices.reduce((a, b) => a + b, 0) / prices.length;
       const sorted = prices.sort((a, b) => a - b);
       const median = sorted[Math.floor(sorted.length / 2)];
@@ -223,8 +224,10 @@ export const aiRecommendationService = {
       const bookingsByDay: Record<string, number> = {};
       if (recentBookings) {
         for (const booking of recentBookings) {
-          const day = new Date(booking.created_at).toLocaleDateString();
-          bookingsByDay[day] = (bookingsByDay[day] || 0) + 1;
+          const day = booking.created_at ? new Date(booking.created_at).toLocaleDateString() : null;
+          if (day) {
+            bookingsByDay[day] = (bookingsByDay[day] || 0) + 1;
+          }
         }
       }
 

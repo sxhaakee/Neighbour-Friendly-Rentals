@@ -81,7 +81,7 @@ export const paymentService = {
     const order = await this.createOrder(amount, bookingId);
 
     const options: RazorpayOptions = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '',
       amount: order.amount,
       currency: order.currency,
       name: 'NFR - Neighbour Rentals',

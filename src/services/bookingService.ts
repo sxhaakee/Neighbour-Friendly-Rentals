@@ -26,19 +26,28 @@ export interface Booking {
 }
 
 export interface BookingInsert {
-  listing_id?: string;
+  listing_id: string;
   property_id?: string;
   service_id?: string;
   renter_id: string;
   owner_id: string;
   start_date: string;
   end_date: string;
+  total_days: number;
   start_time?: string;
   end_time?: string;
-  total_price?: number;
+  total_price: number;
+  renter_name: string;
+  renter_email: string;
   deposit_amount?: number;
   notes?: string;
   special_requests?: string;
+  status?: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
+  created_at?: string;
+  updated_at?: string;
+  confirmed_at?: string;
+  delivery_charge?: number;
+  security_deposit?: number;
 }
 
 export const bookingService = {
@@ -48,7 +57,7 @@ export const bookingService = {
     
     const { data, error } = await supabase
       .from('bookings')
-      .insert(booking)
+      .insert([booking])
       .select()
       .single();
 

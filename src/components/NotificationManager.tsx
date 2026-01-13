@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { getRandomNotification } from '../data/wittyNotifications';
 import { supabase } from '../lib/supabase';

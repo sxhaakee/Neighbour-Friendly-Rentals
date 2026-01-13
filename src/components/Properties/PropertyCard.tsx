@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { MapPin, Bed, Bath, Maximize, IndianRupee, Home, Building2, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Property } from '../../services/propertyService';
@@ -10,7 +10,7 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const getPropertyIcon = (type: string) => {
     switch (type) {
@@ -39,7 +39,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index = 0 }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -5 }}
-      onClick={() => navigate(`/properties/${property.id}`)}
+      onClick={() => router.push(`/properties/${property.id}`)}
       className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer group"
     >
       {/* Image */}

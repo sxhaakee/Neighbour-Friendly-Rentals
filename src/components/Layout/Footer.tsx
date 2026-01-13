@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Home, Mail, Phone, Facebook, Twitter, Instagram } from 'lucide-react';
 
 const Footer = () => {
@@ -42,32 +44,32 @@ const Footer = () => {
             <h3 className="font-semibold text-white mb-4 text-lg">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/listings" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/listings" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Browse Items
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/about" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/privacy" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/terms" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
+                <Link href="/contact" className="text-gray-400 hover:text-yellow-400 transition-colors hover:translate-x-1 inline-block">
                   Contact Us
                 </Link>
               </li>

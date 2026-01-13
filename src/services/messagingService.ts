@@ -7,12 +7,12 @@ export interface Message {
   receiver_id: string;
   content: string;
   image_url?: string;
-  read: boolean;
-  created_at: string;
+  read: boolean | null;
+  created_at: string | null;
   sender?: {
     id: string;
-    full_name: string;
-    avatar_url?: string;
+    full_name: string | null;
+    avatar_url?: string | null;
   };
 }
 
@@ -20,15 +20,15 @@ export interface Conversation {
   id: string;
   user1_id: string;
   user2_id: string;
-  last_message?: string;
-  last_message_at?: string;
-  user1_typing: boolean;
-  user2_typing: boolean;
-  created_at: string;
+  last_message?: string | null;
+  last_message_at?: string | null;
+  user1_typing: boolean | null;
+  user2_typing: boolean | null;
+  created_at: string | null;
   other_user?: {
     id: string;
-    full_name: string;
-    avatar_url?: string;
+    full_name: string | null;
+    avatar_url?: string | null;
   };
 }
 
@@ -85,7 +85,7 @@ export const messagingService = {
       .from('messages')
       .select(`
         *,
-        sender:profiles(id, full_name, avatar_url)
+        sender:profiles!messages_sender_id_fkey(id, full_name, avatar_url)
       `)
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true });

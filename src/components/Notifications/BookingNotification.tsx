@@ -1,10 +1,12 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X, Check, XCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../contexts/AuthContext';
-import { showToast } from '../../utils/toast';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
+import { showToast } from '@/utils/toast';
 
 interface Booking {
   id: string;
@@ -24,7 +26,7 @@ interface Booking {
 
 export const BookingNotification = () => {
   const { user, isAdmin } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [pendingBookings, setPendingBookings] = useState<Booking[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [processing, setProcessing] = useState<string | null>(null);
@@ -32,7 +34,7 @@ export const BookingNotification = () => {
   useEffect(() => {
     if (user) {
       fetchPendingBookings();
-      
+
       // Subscribe to new bookings
       const channel = supabase
         .channel('booking-notifications')
@@ -78,7 +80,7 @@ export const BookingNotification = () => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setPendingBookings(data || []);
+      setPendingBookings((data || []) as Booking[]);
     } catch (error) {
       console.error('Error fetching bookings:', error);
     }
@@ -89,7 +91,7 @@ export const BookingNotification = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           status: 'confirmed',
           payment_status: 'pending'
         } as any)
@@ -115,7 +117,7 @@ export const BookingNotification = () => {
     try {
       const { error } = await supabase
         .from('bookings')
-        .update({ 
+        .update({
           status: 'rejected',
           rejection_reason: reason
         } as any)
@@ -248,7 +250,7 @@ export const BookingNotification = () => {
               <button
                 onClick={() => {
                   setShowNotifications(false);
-                  navigate(isAdmin ? '/admin' : '/dashboard');
+                  router.push(isAdmin ? '/admin' : '/dashboard');
                 }}
                 className="w-full text-center text-amber-600 font-semibold text-sm hover:underline"
               >
