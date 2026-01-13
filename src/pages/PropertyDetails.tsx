@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, Bed, Bath, Maximize, IndianRupee, Calendar, Home, Phone, Mail, Share2, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { propertyService, Property } from '../services/propertyService';
+import { socialService } from '../services/socialService';
 import { showToast } from '../utils/toast';
 import { useAuth } from '../contexts/AuthContext';
 import { ShareButton } from '../components/ShareButton';
@@ -58,14 +59,15 @@ const PropertyDetails = () => {
   };
 
   const handleShare = () => {
+    const shareUrl = property ? socialService.generateShareLink('property', property.id) : window.location.href;
     if (navigator.share) {
       navigator.share({
         title: property?.title,
         text: property?.description,
-        url: window.location.href,
+        url: shareUrl,
       });
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(shareUrl);
       showToast.success('Link copied to clipboard!');
     }
   };
@@ -199,7 +201,7 @@ const PropertyDetails = () => {
               <div className="flex items-start justify-between gap-4 mb-4">
                 <h1 className="text-3xl font-bold text-gray-900">{property.title}</h1>
                 <ShareButton
-                  url={window.location.href}
+                  url={property ? socialService.generateShareLink('property', property.id) : window.location.href}
                   title={property.title}
                   description={property.description}
                   className="flex-shrink-0"

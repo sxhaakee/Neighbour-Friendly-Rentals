@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, User, MessageCircle, AlertCircle, ArrowLeft, Star, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { listingService } from '../services/listingService';
+import { socialService } from '../services/socialService';
 import { useAuth } from '../contexts/AuthContext';
 import { showToast } from '../utils/toast';
 import { ShareButton } from '../components/ShareButton';
@@ -381,7 +382,7 @@ const ItemDetails = () => {
                 <div className="flex items-start justify-between gap-4 mb-2">
                   <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{listing.title}</h1>
                   <ShareButton
-                    url={window.location.href}
+                    url={listing ? socialService.generateShareLink('listing', listing.id) : window.location.href}
                     title={listing.title}
                     description={listing.description}
                     className="flex-shrink-0"

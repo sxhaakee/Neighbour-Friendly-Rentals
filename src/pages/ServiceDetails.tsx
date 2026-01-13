@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Phone, Mail, MapPin, Star, Clock, Users, CheckCircle, Instagram, Facebook, Youtube, Linkedin, Twitter, Globe, X, Trash2 } from 'lucide-react';
 import { serviceProviderService, ServiceProvider } from '../services/serviceProviderService';
+import { socialService } from '../services/socialService';
 import { showToast } from '../utils/toast';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ShareButton } from '../components/ShareButton';
@@ -36,7 +37,7 @@ const ServiceDetails = () => {
       fetchReviews();
       fetchAverageRating();
     }
-    
+
     // Reset meta tags when component unmounts
     return () => {
       resetMetaTags();
@@ -55,7 +56,7 @@ const ServiceDetails = () => {
       console.log('Images:', data?.images);
       console.log('Portfolio images:', data?.portfolio_images);
       setService(data);
-      
+
       // Update meta tags for social media sharing
       if (data) {
         const serviceImage = data.portfolio_images?.[0] || data.images?.[0] || 'https://neighbourfriendly.in/og-image.png';
@@ -97,12 +98,12 @@ const ServiceDetails = () => {
           .select('*')
           .eq('service_id', id!)
           .order('created_at', { ascending: false });
-        
+
         if (simpleError) throw simpleError;
         setReviews(simpleData || []);
         return;
       }
-      
+
       setReviews(data || []);
     } catch (error) {
       console.error('Error fetching reviews:', error);
@@ -216,26 +217,26 @@ const ServiceDetails = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Images */}
-            {((service.portfolio_images && service.portfolio_images.length > 0) || 
+            {((service.portfolio_images && service.portfolio_images.length > 0) ||
               (service.images && service.images.length > 0)) && (
-              <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 overflow-hidden">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-2">
-                  {(service.portfolio_images || service.images || []).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${service.business_name} ${index + 1}`}
-                      className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => setSelectedImage(image)}
-                      onError={(e) => {
-                        console.error('Image failed to load:', image);
-                        e.currentTarget.style.display = 'none';
-                      }}
-                    />
-                  ))}
+                <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 overflow-hidden">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-2">
+                    {(service.portfolio_images || service.images || []).map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`${service.business_name} ${index + 1}`}
+                        className="w-full h-48 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => setSelectedImage(image)}
+                        onError={(e) => {
+                          console.error('Image failed to load:', image);
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Image Modal */}
             <AnimatePresence>
@@ -283,7 +284,7 @@ const ServiceDetails = () => {
                     </div>
                   )}
                   <ShareButton
-                    url={window.location.href}
+                    url={service ? socialService.generateShareLink('service', service.id) : window.location.href}
                     title={service.business_name}
                     description={service.description}
                     className="flex-shrink-0"
@@ -436,7 +437,7 @@ const ServiceDetails = () => {
             {/* Contact Card */}
             <div className="bg-gradient-to-br from-white to-amber-50 rounded-xl shadow-lg border border-yellow-100 p-6 sticky top-24">
               <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Information</h2>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-amber-600 mt-1" />
@@ -453,7 +454,7 @@ const ServiceDetails = () => {
                     <Phone className="w-5 h-5 text-amber-600 mt-1" />
                     <div>
                       <p className="text-sm text-gray-600">WhatsApp</p>
-                      <a 
+                      <a
                         href={generateWhatsAppLink(service.whatsapp, 'service', service.business_name)}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -480,7 +481,7 @@ const ServiceDetails = () => {
                   <div>
                     <p className="text-sm text-gray-600">Service Areas</p>
                     <p className="text-gray-900 font-semibold">
-                      {service.service_areas && service.service_areas.length > 0 
+                      {service.service_areas && service.service_areas.length > 0
                         ? `${service.service_areas.join(', ')}, ${service.state}`
                         : `${service.city}, ${service.state}`}
                     </p>
@@ -517,11 +518,10 @@ const ServiceDetails = () => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
-                        className={`w-5 h-5 ${
-                          star <= Math.round(averageRating)
+                        className={`w-5 h-5 ${star <= Math.round(averageRating)
                             ? 'text-yellow-500 fill-current'
                             : 'text-gray-300'
-                        }`}
+                          }`}
                       />
                     ))}
                   </div>
@@ -551,7 +551,7 @@ const ServiceDetails = () => {
               className="mb-6 p-6 bg-white rounded-lg border border-yellow-200 shadow-md"
             >
               <h3 className="text-xl font-bold text-gray-900 mb-4">Share your experience</h3>
-              
+
               {/* Star Rating */}
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-sm font-medium text-gray-700">Your Rating:</span>
@@ -563,11 +563,10 @@ const ServiceDetails = () => {
                       className="focus:outline-none hover:scale-110 transition-transform"
                     >
                       <Star
-                        className={`w-7 h-7 ${
-                          star <= newReview.rating
+                        className={`w-7 h-7 ${star <= newReview.rating
                             ? 'text-yellow-500 fill-current'
                             : 'text-gray-300'
-                        }`}
+                          }`}
                       />
                     </button>
                   ))}
@@ -646,11 +645,10 @@ const ServiceDetails = () => {
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
                                   key={star}
-                                  className={`w-4 h-4 ${
-                                    star <= review.rating
+                                  className={`w-4 h-4 ${star <= review.rating
                                       ? 'text-yellow-500 fill-current'
                                       : 'text-gray-300'
-                                  }`}
+                                    }`}
                                 />
                               ))}
                             </div>

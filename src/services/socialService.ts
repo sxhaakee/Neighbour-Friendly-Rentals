@@ -260,20 +260,18 @@ export const socialService = {
     }
   },
 
-  // Share listing
-  async shareListing(userId: string, listingId: string, platform: string): Promise<string> {
+  // Generate Share Link (Edge Function)
+  generateShareLink(type: 'listing' | 'service' | 'property', id: string): string {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    return `${supabaseUrl}/functions/v1/share?type=${type}&id=${id}`;
+  },
+
+  // Share Content (Generic)
+  async shareContent(userId: string, type: 'listing' | 'service' | 'property', id: string, platform: string, title: string): Promise<string> {
     try {
-      const { data: listing } = await supabase
-        .from('listings')
-        .select('title')
-        .eq('id', listingId)
-        .single();
-
-      if (!listing) return '';
-
-      // Create share URL
-      const shareUrl = `${window.location.origin}/listings/${listingId}`;
-      const text = `Check out this rental: ${listing.title}`;
+      // Create share URL using Edge Function
+      const shareUrl = this.generateShareLink(type, id);
+      const text = `Check out this ${type}: ${title}`;
 
       // Generate share link based on platform
       const shareLinks: Record<string, string> = {
@@ -285,9 +283,27 @@ export const socialService = {
       };
 
       // Track share
-      await this.createActivity(userId, 'listing', 'shared a listing', listingId, listing.title);
+      await this.createActivity(userId, 'listing', `shared a ${type}`, id, title); // 'listing' type used for generic share activity for now
 
       return shareLinks[platform] || shareUrl;
+    } catch (error) {
+      console.error('Error sharing content:', error);
+      return '';
+    }
+  },
+
+  // Share listing
+  async shareListing(userId: string, listingId: string, platform: string): Promise<string> {
+    try {
+      const { data: listing } = await supabase
+        .from('listings')
+        .select('title')
+        .eq('id', listingId)
+        .single();
+
+      if (!listing) return '';
+
+      return this.shareContent(userId, 'listing', listingId, platform, listing.title);
     } catch (error) {
       console.error('Error sharing listing:', error);
       return '';
