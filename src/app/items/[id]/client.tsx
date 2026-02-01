@@ -138,7 +138,7 @@ const ItemDetailsClient = ({ id }: ItemDetailsClientProps) => {
       return;
     }
     // Navigate to chat with this listing
-    router.push(`/chat?listing=${id}`);
+    router.push(`/messages?listing=${id}`);
   };
 
   if (loading) {

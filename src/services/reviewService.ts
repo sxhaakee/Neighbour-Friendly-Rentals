@@ -35,30 +35,14 @@ export const reviewService = {
   // Get reviews for a listing
   async getListingReviews(listingId: string): Promise<Review[]> {
     try {
+      // Fetch reviews without profiles relationship to avoid foreign key errors
       const { data, error } = await supabase
         .from('reviews')
-        .select(`
-          *,
-          user:profiles(id, full_name, avatar_url)
-        `)
+        .select('*')
         .eq('listing_id', listingId)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        // If profiles relationship doesn't work, fetch without it
-        if (error.message.includes('foreign key') || error.message.includes('relationship')) {
-          console.warn('Profiles relationship error, fetching reviews without user data');
-          const { data: simpleData, error: simpleError } = await supabase
-            .from('reviews')
-            .select('*')
-            .eq('listing_id', listingId)
-            .order('created_at', { ascending: false });
-          
-          if (simpleError) throw simpleError;
-          return simpleData || [];
-        }
-        throw error;
-      }
+      if (error) throw error;
       
       return data || [];
     } catch (error) {
