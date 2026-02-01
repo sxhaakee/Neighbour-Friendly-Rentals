@@ -10,6 +10,13 @@ import { formatPricingModel } from '@/utils/pricing';
 
 type Tab = 'items' | 'services' | 'properties';
 
+// Category constants
+const ITEM_CATEGORIES = ['All', 'Books', 'Electronics', 'Clothing', 'Sports Equipment', 'Tools', 'Photography', 'Camping & Outdoor', 'Musical Instruments', 'Party & Events', 'Baby & Kids'];
+
+const SERVICE_CATEGORIES = ['All', 'Photography', 'Catering', 'DJ & Music', 'Makeup Artist', 'Event Planning', 'Cleaning', 'Home Repair', 'Tutoring', 'Fitness Training'];
+
+const PROPERTY_CATEGORIES = ['All', 'Apartment', 'House', 'PG', 'Office Space', 'Shop', 'Warehouse'];
+
 export default function ListingsClient() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -272,6 +279,26 @@ export default function ListingsClient() {
                 <div className="mb-8">
                     <h1 className="text-4xl font-black text-gray-900 mb-2">Browse Listings</h1>
                     <p className="text-gray-600">Find items, services, and properties near you</p>
+                </div>
+
+                {/* Category Chips */}
+                <div className="mb-6">
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                        {(activeTab === 'items' ? ITEM_CATEGORIES :
+                            activeTab === 'services' ? SERVICE_CATEGORIES :
+                                PROPERTY_CATEGORIES).map((cat) => (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setCategory(cat === 'All' ? '' : cat)}
+                                        className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-all ${(cat === 'All' && !category) || category === cat
+                                                ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-md'
+                                                : 'bg-white text-gray-700 border border-gray-200 hover:border-amber-300'
+                                            }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                ))}
+                    </div>
                 </div>
 
                 {/* Search and Filters */}
