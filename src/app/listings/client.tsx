@@ -130,10 +130,10 @@ export default function ListingsClient() {
                                 </span>
                             </div>
                         </div>
-                        <div className="p-5">
+                        <div className="p-4">
                             <h3 className="font-bold text-gray-900 mb-2 line-clamp-1">{item.title}</h3>
-                            <p className="text-sm text-gray-500 mb-4 line-clamp-2">{item.description}</p>
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                            <p className="text-sm text-gray-500 mb-3 line-clamp-2">{item.description}</p>
+                            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                                 <div>
                                     <span className="text-xl font-black text-amber-600">
                                         ₹{item.price}
