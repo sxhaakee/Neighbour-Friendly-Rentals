@@ -62,13 +62,12 @@ export default function NotificationTestPage() {
                     body: 'This notification was sent at ' + new Date().toLocaleTimeString(),
                     icon: '/logo.png',
                     badge: '/logo.png',
-                    vibrate: [200, 100, 200],
                     tag: 'custom-test',
                     actions: [
                         { action: 'open', title: 'View App', icon: '/logo.png' },
                         { action: 'close', title: 'Dismiss', icon: '/logo.png' }
                     ]
-                });
+                } as any);
             });
         } else {
             new Notification('NFR Custom Notification 🎨', {
@@ -102,7 +101,7 @@ export default function NotificationTestPage() {
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-700">Permission Status:</span>
                                 <span className={`font-semibold ${permission === 'granted' ? 'text-green-600' :
-                                        permission === 'denied' ? 'text-red-600' : 'text-yellow-600'
+                                    permission === 'denied' ? 'text-red-600' : 'text-yellow-600'
                                     }`}>
                                     {permission === 'granted' ? '✅ Granted' :
                                         permission === 'denied' ? '❌ Denied' : '⚠️ Not Requested'}
