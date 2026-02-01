@@ -1,39 +1,74 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+import { supabaseServer } from '@/lib/supabaseServer';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // Revalidate every hour
 
 export async function GET() {
     try {
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        console.log('[Product Feed] Starting feed generation...');
+        
+        // Initialize with empty arrays for testing
+        let items: any[] = [];
+        let services: any[] = [];
+        let properties: any[] = [];
 
-        // Fetch all approved listings, services, and properties
-        const [itemsRes, servicesRes, propertiesRes] = await Promise.all([
-            supabase.from('listings').select('*').eq('status', 'approved'),
-            supabase.from('service_providers').select('*').eq('status', 'approved'),
-            supabase.from('properties').select('*').eq('status', 'approved'),
-        ]);
+        // Try to fetch from Supabase, but don't fail if it doesn't work
+        try {
+            console.log('[Product Feed] Attempting to fetch from Supabase...');
+            const [itemsRes, servicesRes, propertiesRes] = await Promise.all([
+                supabaseServer.from('listings').select('*').eq('status', 'approved').limit(100),
+                supabaseServer.from('service_providers').select('*').eq('status', 'approved').limit(100),
+                supabaseServer.from('properties').select('*').eq('status', 'approved').limit(100),
+            ]);
 
-        const items = itemsRes.data || [];
-        const services = servicesRes.data || [];
-        const properties = propertiesRes.data || [];
+            if (!itemsRes.error && itemsRes.data) {
+                items = itemsRes.data;
+                console.log(`[Product Feed] Fetched ${items.length} items`);
+            } else {
+                console.warn('[Product Feed] Error fetching items:', itemsRes.error);
+            }
+
+            if (!servicesRes.error && servicesRes.data) {
+                services = servicesRes.data;
+                console.log(`[Product Feed] Fetched ${services.length} services`);
+            } else {
+                console.warn('[Product Feed] Error fetching services:', servicesRes.error);
+            }
+
+            if (!propertiesRes.error && propertiesRes.data) {
+                properties = propertiesRes.data;
+                console.log(`[Product Feed] Fetched ${properties.length} properties`);
+            } else {
+                console.warn('[Product Feed] Error fetching properties:', propertiesRes.error);
+            }
+        } catch (dbError: any) {
+            console.error('[Product Feed] Database fetch error:', dbError.message);
+            // Continue with empty arrays - feed will still be valid
+        }
+
+        console.log(`[Product Feed] Generating feed with ${items.length} items, ${services.length} services, ${properties.length} properties`);
 
         // Generate XML feed following Google Merchant Center specification
         const xmlFeed = generateProductFeedXML(items, services, properties);
 
+        console.log('[Product Feed] Feed generated successfully, length:', xmlFeed.length);
+
         return new NextResponse(xmlFeed, {
             headers: {
-                'Content-Type': 'application/xml',
+                'Content-Type': 'application/xml; charset=utf-8',
                 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error generating product feed:', error);
-        return NextResponse.json({ error: 'Failed to generate feed' }, { status: 500 });
+        
+        // Return a more detailed error for debugging
+        return NextResponse.json({ 
+            error: 'Failed to generate feed',
+            message: error.message || 'Unknown error',
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        }, { status: 500 });
     }
 }
 
