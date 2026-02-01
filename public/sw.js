@@ -1,5 +1,5 @@
 // Service Worker for NFR - Push Notifications
-const CACHE_NAME = 'nfr-cache-v1';
+const CACHE_NAME = 'nfr-cache-v2';
 const urlsToCache = [
     '/',
     '/logo.png',
@@ -37,18 +37,45 @@ self.addEventListener('activate', (event) => {
     return self.clients.claim();
 });
 
-// Fetch event - serve from cache when possible
+// Fetch event - Network First strategy
 self.addEventListener('fetch', (event) => {
+    // Skip non-GET requests
+    if (event.request.method !== 'GET') return;
+
+    // Skip cross-origin requests (except fonts/images if needed, but keeping simple for now)
+    if (!event.request.url.startsWith(self.location.origin)) return;
+
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then((response) => {
-                // Cache hit - return response
-                if (response) {
+                // Check if valid response
+                if (!response || response.status !== 200 || response.type !== 'basic') {
                     return response;
                 }
-                return fetch(event.request);
-            }
-            )
+
+                // Clone response to cache
+                const responseToCache = response.clone();
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
+
+                return response;
+            })
+            .catch(() => {
+                // If offline, try cache
+                return caches.match(event.request)
+                    .then((response) => {
+                        if (response) {
+                            return response;
+                        }
+                        // Fallback for navigation requests (e.g. show offline page or home)
+                        if (event.request.mode === 'navigate') {
+                            return caches.match('/');
+                        }
+                        return null;
+                    });
+            })
     );
 });
 

@@ -132,7 +132,7 @@ export const listingService = {
   async getFeaturedListings(limit: number = 6, location?: string) {
     let query = supabase
       .from('listings')
-      .select('*')
+      .select('id, title, price, images, category, location, pricing_model, description, owner_id')
       .eq('featured', true)
       .eq('status', 'approved');
 

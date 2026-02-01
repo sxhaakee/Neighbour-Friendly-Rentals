@@ -85,35 +85,52 @@ const HomeClient = () => {
         try {
             setLoading(true);
 
-            // Attempt to fetch with city filter first
-            let [items, services, properties] = await Promise.all([
-                listingService.getFeaturedListings(6, userCity),
-                serviceProviderService.getFeaturedProviders(6, userCity),
-                propertyService.getFeaturedProperties(6, userCity)
-            ]);
+            // Optimize: Fetch everything in parallel if possible to reduce round-trips
+            // Start fetching services and properties immediately
+            const servicesPromise = userCity
+                ? serviceProviderService.getFeaturedProviders(6, userCity).then(res => res.length ? res : serviceProviderService.getFeaturedProviders(6))
+                : serviceProviderService.getFeaturedProviders(6);
 
-            // If no items found in user's city, fall back to all featured items
-            if (userCity && items.length === 0) {
+            const propertiesPromise = userCity
+                ? propertyService.getFeaturedProperties(6, userCity).then(res => res.length ? res : propertyService.getFeaturedProperties(6))
+                : propertyService.getFeaturedProperties(6);
+
+            // Optimized Items Fetch Strategy:
+            // 1. If city is known, fetch City Featured AND Global Featured AND Approved in parallel
+            //    (This seems aggressive but avoids sequential round-trips which are the main bottleneck)
+
+            let items: any[] = [];
+
+            if (userCity) {
+                // Race city vs global featured
+                const [cityFeatured, globalFeatured] = await Promise.all([
+                    listingService.getFeaturedListings(6, userCity),
+                    listingService.getFeaturedListings(6)
+                ]);
+
+                if (cityFeatured && cityFeatured.length > 0) {
+                    items = cityFeatured;
+                } else if (globalFeatured && globalFeatured.length > 0) {
+                    items = globalFeatured;
+                }
+            } else {
                 items = await listingService.getFeaturedListings(6);
             }
 
-            // If still no featured items exist at all, show any approved items
+            // Final fallback: if still no featured items, get latest approved
             if (items.length === 0) {
                 const { data } = await supabase
                     .from('listings')
-                    .select('*')
+                    .select('id, title, price, images, category, location, pricing_model, description, owner_id')
                     .eq('status', 'approved')
                     .order('created_at', { ascending: false })
                     .limit(6);
                 items = (data as any[]) || [];
             }
 
-            // Fallback for services if none in city
-            if (userCity && services.length === 0) {
-                services = await serviceProviderService.getFeaturedProviders(6);
-            }
-
-            // If still no featured services, show any approved services
+            // Await the other promises
+            let services = await servicesPromise;
+            // Fallback for services if still empty (no featured at all)
             if (services.length === 0) {
                 const { data } = await supabase
                     .from('service_providers')
@@ -124,12 +141,8 @@ const HomeClient = () => {
                 services = (data as any[]) || [];
             }
 
-            // Fallback for properties if none in city
-            if (userCity && properties.length === 0) {
-                properties = await propertyService.getFeaturedProperties(6);
-            }
-
-            // If still no featured properties, show any approved properties
+            let properties = await propertiesPromise;
+            // Fallback for properties if still empty
             if (properties.length === 0) {
                 const { data } = await supabase
                     .from('properties')

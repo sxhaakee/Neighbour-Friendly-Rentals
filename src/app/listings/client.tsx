@@ -291,8 +291,8 @@ export default function ListingsClient() {
                                         key={cat}
                                         onClick={() => setCategory(cat === 'All' ? '' : cat)}
                                         className={`px-4 py-2 rounded-full whitespace-nowrap font-medium transition-all ${(cat === 'All' && !category) || category === cat
-                                                ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-md'
-                                                : 'bg-white text-gray-700 border border-gray-200 hover:border-amber-300'
+                                            ? 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-md'
+                                            : 'bg-white text-gray-700 border border-gray-200 hover:border-amber-300'
                                             }`}
                                     >
                                         {cat}
@@ -302,9 +302,9 @@ export default function ListingsClient() {
                 </div>
 
                 {/* Search and Filters */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-8">
                     <form onSubmit={handleSearch} className="space-y-4">
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-3">
                             <div className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 focus-within:bg-white focus-within:ring-2 focus-within:ring-amber-100">
                                 <Search className="text-gray-400 w-5 h-5" />
                                 <input
@@ -315,44 +315,39 @@ export default function ListingsClient() {
                                     className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 focus:outline-none"
                                 />
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => setShowFilters(!showFilters)}
-                                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold flex items-center gap-2 transition-colors"
-                            >
-                                <Filter className="w-5 h-5" />
-                                Filters
-                            </button>
-                            <button
-                                type="submit"
-                                className="px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white rounded-xl font-bold hover:shadow-lg transition-all"
-                            >
-                                Search
-                            </button>
+                            <div className="flex gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className="flex-1 sm:flex-none px-4 sm:px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
+                                >
+                                    <Filter className="w-5 h-5" />
+                                    <span className="hidden sm:inline">Filters</span>
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="flex-1 sm:flex-none px-6 sm:px-8 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 text-white rounded-xl font-bold hover:shadow-lg transition-all"
+                                >
+                                    Search
+                                </button>
+                            </div>
                         </div>
 
                         {showFilters && (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-4 border-t border-gray-100">
                                 <input
                                     type="text"
                                     placeholder="Location"
                                     value={location}
                                     onChange={(e) => setLocation(e.target.value)}
-                                    className="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-100"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Category"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                    className="px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-100"
+                                    className="px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-100 focus:border-amber-500 transition-all text-sm"
                                 />
                                 <button
                                     type="button"
                                     onClick={clearFilters}
-                                    className="px-4 py-3 bg-gray-50 hover:bg-gray-100 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
+                                    className="px-4 py-2.5 border border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-colors font-medium flex items-center justify-center gap-2 text-sm"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <X className="w-4 h-4" />
                                     Clear Filters
                                 </button>
                             </div>

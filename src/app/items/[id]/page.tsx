@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
         title: listing.title,
         description: listing.description,
         images: listing.images && listing.images.length > 0 ? [listing.images[0]] : ['https://neighbourfriendly.in/og-image.png'],
-        url: `https://neighbourfriendly.in/item/${listing.id}`,
+        url: `https://neighbourfriendly.in/items/${listing.id}`,
         type: 'website', // Use 'website' or 'product'
       },
       twitter: {
