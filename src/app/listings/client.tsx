@@ -118,12 +118,12 @@ export default function ListingsClient() {
         }
 
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 {items.map((item: any) => (
                     <div
                         key={item.id}
                         onClick={() => router.push(`/items/${item.id}`)}
-                        className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
+                        className="bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
                     >
                         <div className="relative aspect-[4/3] overflow-hidden">
                             <img
@@ -131,25 +131,25 @@ export default function ListingsClient() {
                                 alt={item.title}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             />
-                            <div className="absolute top-3 left-3">
-                                <span className="bg-white/90 backdrop-blur-sm text-gray-900 px-3 py-1 rounded-full text-xs font-bold uppercase">
+                            <div className="absolute top-2 left-2 md:top-3 md:left-3">
+                                <span className="bg-white/95 backdrop-blur-sm text-gray-900 px-2 py-0.5 md:px-3 md:py-1 rounded-full text-[10px] md:text-xs font-bold uppercase shadow-sm">
                                     {item.category}
                                 </span>
                             </div>
                         </div>
-                        <div className="p-4">
-                            <h3 className="font-bold text-gray-900 mb-2 line-clamp-1">{item.title}</h3>
-                            <p className="text-sm text-gray-500 mb-3 line-clamp-2">{item.description}</p>
-                            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <div className="p-3 md:p-4">
+                            <h3 className="font-bold text-gray-900 mb-1 md:mb-2 line-clamp-1 text-sm md:text-base">{item.title}</h3>
+                            <p className="text-xs md:text-sm text-gray-500 mb-2 md:mb-3 line-clamp-2">{item.description}</p>
+                            <div className="flex items-center justify-between pt-2 md:pt-3 border-t border-gray-100">
                                 <div>
-                                    <span className="text-xl font-black text-amber-600">
+                                    <span className="text-lg md:text-xl font-black text-amber-600">
                                         ₹{item.price}
-                                        <span className="text-xs font-medium text-gray-400">
+                                        <span className="text-[10px] md:text-xs font-medium text-gray-400">
                                             /{formatPricingModel(item.pricing_model)}
                                         </span>
                                     </span>
                                 </div>
-                                <div className="text-xs text-gray-500 flex items-center">
+                                <div className="hidden md:flex text-xs text-gray-500 items-center">
                                     <MapPin className="w-3 h-3 mr-1 text-amber-500" />
                                     {item.location?.split(',')[0]}
                                 </div>

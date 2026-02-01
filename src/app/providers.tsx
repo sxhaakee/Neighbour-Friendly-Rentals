@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 
 import { ScrollToTop } from '@/components/ScrollToTop';
+import dynamic from 'next/dynamic';
+
+const PWAInstallPrompt = dynamic(() => import('@/components/Common/PWAInstallPrompt'), { ssr: false });
 
 export default function ClientProviders({ children }: { children: React.ReactNode }) {
     useEffect(() => {
@@ -22,6 +25,7 @@ export default function ClientProviders({ children }: { children: React.ReactNod
     return (
         <AuthProvider>
             <ScrollToTop />
+            <PWAInstallPrompt />
             {children}
         </AuthProvider>
     );
