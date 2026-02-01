@@ -78,8 +78,8 @@ export const RentalAgreement = ({
 
           {/* Introduction */}
           <p className="text-sm text-gray-700 leading-relaxed">
-            This Rental Agreement is entered between the parties named below. Neighbour Friendly Rentals (the Platform) 
-            acts only as a facilitator and is not a party to the contractual obligations between Lender and Renter except 
+            This Rental Agreement is entered between the parties named below. Neighbour Friendly Rentals (the Platform)
+            acts only as a facilitator and is not a party to the contractual obligations between Lender and Renter except
             where expressly stated.
           </p>
 
@@ -164,8 +164,8 @@ export const RentalAgreement = ({
           <div className="border border-gray-200 rounded-lg p-4 bg-yellow-50">
             <h3 className="font-bold text-gray-900 mb-3">6. Payment Terms</h3>
             <p className="text-sm text-gray-700">
-              Payment of ₹{totalPrice}/- shall be made via <span className="font-semibold">Cash or UPI on Delivery</span>. 
-              The Renter agrees to pay the full rental amount to the Lender at the time of item handover. 
+              Payment of ₹{totalPrice}/- shall be made via <span className="font-semibold">Cash or UPI on Delivery</span>.
+              The Renter agrees to pay the full rental amount to the Lender at the time of item handover.
               No booking is confirmed until payment is received by the Lender.
             </p>
           </div>
@@ -183,7 +183,7 @@ export const RentalAgreement = ({
               <div>
                 <p className="font-semibold text-gray-900 mb-2">Digital Confirmation</p>
                 <p className="text-sm text-gray-700">
-                  By clicking "I Agree" below, you confirm that you have read, understood, and agree to all the terms 
+                  By clicking "I Agree" below, you confirm that you have read, understood, and agree to all the terms
                   and conditions of this Rental Agreement. This constitutes your digital signature and is legally binding.
                 </p>
               </div>
@@ -201,7 +201,7 @@ export const RentalAgreement = ({
           </button>
           <button
             onClick={onAgree}
-            className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
+            className="flex-1 px-6 py-3 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
           >
             <Check className="w-5 h-5" />
             I Agree & Confirm Booking
@@ -225,6 +225,6 @@ function numberToWords(num: number): string {
   if (num < 1000) return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 !== 0 ? ' ' + numberToWords(num % 100) : '');
   if (num < 100000) return numberToWords(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 !== 0 ? ' ' + numberToWords(num % 1000) : '');
   if (num < 10000000) return numberToWords(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 !== 0 ? ' ' + numberToWords(num % 100000) : '');
-  
+
   return num.toString();
 }

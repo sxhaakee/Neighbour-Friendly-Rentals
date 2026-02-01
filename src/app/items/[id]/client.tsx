@@ -131,14 +131,32 @@ const ItemDetailsClient = ({ id }: ItemDetailsClientProps) => {
     }
   };
 
-  const handleContactOwner = () => {
+  const handleContactOwner = async () => {
     if (!user) {
       showToast.error('Please login to contact the owner');
       router.push('/login');
       return;
     }
-    // Navigate to chat with this listing
-    router.push(`/messages?listing=${id}`);
+
+    if (!listing) return;
+
+    try {
+      // Import chatService dynamically
+      const { chatService } = await import('@/services/chatService');
+
+      // Create or get conversation with owner
+      const conversation = await chatService.getOrCreateConversation(
+        listing.id,
+        user.id,
+        listing.owner_id
+      );
+
+      // Navigate to messages with the conversation ID
+      router.push(`/messages?conversation=${conversation.id}`);
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+      showToast.error('Failed to start conversation. Please try again.');
+    }
   };
 
   if (loading) {
