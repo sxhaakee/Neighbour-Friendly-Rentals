@@ -1,48 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getRandomNotification } from '../data/wittyNotifications';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { sendSystemNotification, sendWittyEventNotification } from '../utils/notificationUtils';
-import { registerServiceWorker, requestNotificationPermission } from '../utils/serviceWorkerUtils';
 
 export const NotificationManager = () => {
     const { user } = useAuth();
-    const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
     useEffect(() => {
-        const initializeNotifications = async () => {
-            // Register service worker first
-            const registration = await registerServiceWorker();
-            setSwRegistration(registration);
-
+        const requestPermission = async () => {
             if (!('Notification' in window)) {
                 console.log('This browser does not support desktop notifications');
                 return;
             }
 
-            // Request permission
-            const permission = await requestNotificationPermission();
-
-            if (permission === 'granted') {
+            // Check if permission is already granted
+            if (Notification.permission === 'granted') {
                 // Check if we already welcomed them this session
                 const welcomed = sessionStorage.getItem('nfr_welcomed');
                 if (!welcomed) {
-                    // Send welcome notification
-                    sendSystemNotification(
-                        'Welcome to NFR! 🏠',
-                        'Get ready for some neighborly love (and witty updates).',
-                        '/logo.png'
-                    );
+                    new Notification('Welcome back to NFR! 🏠', {
+                        body: 'We missed you! (And so did your neighbors)',
+                        icon: '/logo.png'
+                    });
                     sessionStorage.setItem('nfr_welcomed', 'true');
                 }
-            } else {
-                console.log('Notification permission denied');
+            } else if (Notification.permission === 'default') {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    console.log('Notification permission granted');
+                    // Send a welcome notification
+                    new Notification('Welcome to NFR! 🏠', {
+                        body: 'Get ready for some neighborly love (and witty updates).',
+                        icon: '/logo.png'
+                    });
+                    sessionStorage.setItem('nfr_welcomed', 'true');
+                }
             }
         };
 
-        initializeNotifications();
+        requestPermission();
 
         // Realtime Subscription for Messages
         let subscription: any = null;
@@ -59,15 +58,15 @@ export const NotificationManager = () => {
                     },
                     (payload) => {
                         console.log('New message received:', payload);
+                        // Only notify if page is hidden or user is not in chat (optional)
+                        // For now, always notify to be "witty"
                         sendWittyEventNotification('message');
                     }
                 )
-                .subscribe((status) => {
-                    console.log('Subscription status:', status);
-                });
+                .subscribe();
         }
 
-        // Set up a random interval to show witty notifications
+        // Set up a random interval to show notifications (for demo purposes)
         const interval = setInterval(() => {
             if (Notification.permission === 'granted' && document.hidden) {
                 if (Math.random() > 0.7) {
@@ -77,7 +76,7 @@ export const NotificationManager = () => {
             }
         }, 60 * 60 * 1000); // Check every hour
 
-        // Also trigger one after 15 seconds of first load
+        // Also trigger one after 10 seconds of first load
         const initialTimer = setTimeout(() => {
             if (Notification.permission === 'granted') {
                 const note = getRandomNotification();
@@ -88,9 +87,7 @@ export const NotificationManager = () => {
         return () => {
             clearInterval(interval);
             clearTimeout(initialTimer);
-            if (subscription) {
-                subscription.unsubscribe();
-            }
+            if (subscription) supabase.removeChannel(subscription);
         };
     }, [user]);
 

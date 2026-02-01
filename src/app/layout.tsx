@@ -40,12 +40,8 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#f59e0b" />
-                <meta name="apple-mobile-web-app-capable" content="yes" />
-                <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-                <meta name="apple-mobile-web-app-title" content="NFR" />
-                <link rel="apple-touch-icon" href="/logo.png" />
+                {/* Emergency: Force unregister broken service workers */}
+                <script src="/sw-unregister.js" />
             </head>
             <body className={inter.className}>
                 <div className="min-h-screen bg-gradient-to-br from-amber-50/30 via-white to-yellow-50/30">

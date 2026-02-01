@@ -97,47 +97,14 @@ const HomeClient = () => {
                 items = await listingService.getFeaturedListings(6);
             }
 
-            // If still no featured items exist at all, show any approved items
-            if (items.length === 0) {
-                const { data } = await supabase
-                    .from('listings')
-                    .select('*')
-                    .eq('status', 'approved')
-                    .order('created_at', { ascending: false })
-                    .limit(6);
-                items = data || [];
-            }
-
             // Fallback for services if none in city
             if (userCity && services.length === 0) {
                 services = await serviceProviderService.getFeaturedProviders(6);
             }
 
-            // If still no featured services, show any approved services
-            if (services.length === 0) {
-                const { data } = await supabase
-                    .from('service_providers')
-                    .select('*')
-                    .eq('status', 'approved')
-                    .order('created_at', { ascending: false })
-                    .limit(6);
-                services = data || [];
-            }
-
             // Fallback for properties if none in city
             if (userCity && properties.length === 0) {
                 properties = await propertyService.getFeaturedProperties(6);
-            }
-
-            // If still no featured properties, show any approved properties
-            if (properties.length === 0) {
-                const { data } = await supabase
-                    .from('properties')
-                    .select('*')
-                    .eq('status', 'approved')
-                    .order('created_at', { ascending: false })
-                    .limit(6);
-                properties = data || [];
             }
 
             setFeaturedListings(items);
