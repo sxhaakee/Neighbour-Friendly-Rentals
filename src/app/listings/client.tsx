@@ -377,7 +377,7 @@ export default function ListingsClient() {
                 </div>
 
                 {/* Content */}
-                <div>
+                <div className="w-full">
                     {activeTab === 'items' && renderItems()}
                     {activeTab === 'services' && renderServices()}
                     {activeTab === 'properties' && renderProperties()}
