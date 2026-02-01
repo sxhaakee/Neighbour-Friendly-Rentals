@@ -3,6 +3,7 @@
     "short_name": "NFR",
     "description": "India's #1 P2P Rental Marketplace - Borrow, Rent & Share with Verified Neighbours",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#f59e0b",
