@@ -273,7 +273,7 @@ export default function ListingsClient() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 pt-24 pb-12 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-yellow-50 pt-24 pb-12 px-4 w-full overflow-x-hidden">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-8">
@@ -356,7 +356,7 @@ export default function ListingsClient() {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-4 mb-8 border-b border-gray-200">
+                <div className="flex gap-4 mb-8 border-b border-gray-200 overflow-x-auto scrollbar-hide">
                     {[
                         { key: 'items', label: 'Items', icon: Package },
                         { key: 'services', label: 'Services', icon: Briefcase },
