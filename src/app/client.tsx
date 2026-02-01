@@ -105,7 +105,7 @@ const HomeClient = () => {
                     .eq('status', 'approved')
                     .order('created_at', { ascending: false })
                     .limit(6);
-                items = data || [];
+                items = (data as any[]) || [];
             }
 
             // Fallback for services if none in city
@@ -121,7 +121,7 @@ const HomeClient = () => {
                     .eq('status', 'approved')
                     .order('created_at', { ascending: false })
                     .limit(6);
-                services = data || [];
+                services = (data as any[]) || [];
             }
 
             // Fallback for properties if none in city
@@ -137,7 +137,7 @@ const HomeClient = () => {
                     .eq('status', 'approved')
                     .order('created_at', { ascending: false })
                     .limit(6);
-                properties = data || [];
+                properties = (data as any[]) || [];
             }
 
             setFeaturedListings(items);
