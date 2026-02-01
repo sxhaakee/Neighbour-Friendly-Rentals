@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { sendSystemNotification, sendWittyEventNotification } from '@/utils/notificationUtils';
 import { registerServiceWorker, requestNotificationPermission } from '@/utils/serviceWorkerUtils';
 
+// Force dynamic rendering to avoid SSR issues with browser APIs
+export const dynamic = 'force-dynamic';
+
 export default function NotificationTestPage() {
     const [permission, setPermission] = useState<NotificationPermission>('default');
     const [swRegistered, setSwRegistered] = useState(false);
@@ -95,7 +98,7 @@ export default function NotificationTestPage() {
                             <div className="flex items-center justify-between">
                                 <span className="text-gray-700">Browser Support:</span>
                                 <span className={`font-semibold ${typeof window !== 'undefined' && 'Notification' in window ? 'text-green-600' : 'text-red-600'}`}>
-                                    {'Notification' in window ? '✅ Supported' : '❌ Not Supported'}
+                                    {typeof window !== 'undefined' && 'Notification' in window ? '✅ Supported' : '❌ Not Supported'}
                                 </span>
                             </div>
                             <div className="flex items-center justify-between">
