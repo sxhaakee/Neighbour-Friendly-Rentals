@@ -63,10 +63,12 @@ export default function ListingsClient() {
 
     const filterData = (data: any[]) => {
         return data.filter(item => {
+            // Enhanced search: match title, business name, description, OR category
             const matchesSearch = !searchQuery ||
                 item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 item.business_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                item.description?.toLowerCase().includes(searchQuery.toLowerCase());
+                item.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                item.category?.toLowerCase().includes(searchQuery.toLowerCase());
 
             const matchesCategory = !category || item.category === category;
 

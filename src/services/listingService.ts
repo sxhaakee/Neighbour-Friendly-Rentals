@@ -253,7 +253,8 @@ export const listingService = {
       .eq('status', 'approved');
 
     if (query) {
-      queryBuilder = queryBuilder.or(`title.ilike.%${query}%,description.ilike.%${query}%`);
+      // Enhanced search: match in title, description, OR category
+      queryBuilder = queryBuilder.or(`title.ilike.%${query}%,description.ilike.%${query}%,category.ilike.%${query}%`);
     }
 
     if (category && category !== 'All') {
