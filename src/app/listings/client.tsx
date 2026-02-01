@@ -181,12 +181,12 @@ export default function ListingsClient() {
         }
 
         return (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {services.map((service: any) => (
                     <div
                         key={service.id}
                         onClick={() => router.push(`/services/${service.id}`)}
-                        className="bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
+                        className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
                     >
                         <div className="relative aspect-video overflow-hidden">
                             <img
@@ -195,16 +195,16 @@ export default function ListingsClient() {
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             />
                         </div>
-                        <div className="p-3 md:p-6">
-                            <div className="mb-2 md:mb-3">
-                                <span className="text-[10px] md:text-xs font-bold uppercase text-amber-600 bg-amber-50 px-2 py-1 rounded">
+                        <div className="p-6">
+                            <div className="mb-3">
+                                <span className="text-xs font-bold uppercase text-amber-600 bg-amber-50 px-2 py-1 rounded">
                                     {service.category}
                                 </span>
                             </div>
-                            <h3 className="font-bold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 line-clamp-1">
+                            <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-1">
                                 {service.business_name}
                             </h3>
-                            <p className="text-xs md:text-sm text-gray-500 mb-2 md:mb-4 line-clamp-2">{service.description}</p>
+                            <p className="text-sm text-gray-500 mb-4 line-clamp-2">{service.description}</p>
                             <div className="flex items-center text-xs text-gray-500">
                                 <MapPin className="w-3 h-3 mr-1 text-amber-500" />
                                 {service.city}
@@ -236,12 +236,12 @@ export default function ListingsClient() {
         }
 
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {properties.map((property: any) => (
                     <div
                         key={property.id}
                         onClick={() => router.push(`/properties/${property.id}`)}
-                        className="bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
+                        className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 group"
                     >
                         <div className="relative aspect-[16/10] overflow-hidden">
                             <img
@@ -249,22 +249,22 @@ export default function ListingsClient() {
                                 alt={property.title}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             />
-                            <div className="absolute bottom-3 left-3 right-3 md:bottom-4 md:left-4 md:right-4">
-                                <div className="bg-white/95 backdrop-blur-sm p-2 md:p-3 rounded-xl border border-white/50 shadow-sm">
-                                    <span className="text-lg md:text-2xl font-black text-gray-900">
+                            <div className="absolute bottom-4 left-4 right-4">
+                                <div className="bg-white/95 backdrop-blur-sm p-3 rounded-xl">
+                                    <span className="text-2xl font-black text-gray-900">
                                         ₹{property.rent_amount}
-                                        <span className="text-[10px] md:text-xs font-normal text-gray-500 ml-1">/mo</span>
+                                        <span className="text-xs font-normal text-gray-500">/mo</span>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div className="p-4 md:p-6">
-                            <h3 className="font-bold text-base md:text-lg text-gray-900 mb-1 md:mb-2 line-clamp-1">{property.title}</h3>
-                            <div className="flex items-center text-xs md:text-sm text-gray-500 mb-2">
-                                <MapPin className="w-3 h-3 md:w-4 md:h-4 mr-1 text-amber-500" />
+                        <div className="p-6">
+                            <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-1">{property.title}</h3>
+                            <div className="flex items-center text-sm text-gray-500 mb-2">
+                                <MapPin className="w-4 h-4 mr-1 text-amber-500" />
                                 {property.city}
                             </div>
-                            <span className="text-[10px] md:text-xs text-gray-400 uppercase font-semibold">{property.property_type}</span>
+                            <span className="text-xs text-gray-400 uppercase">{property.property_type}</span>
                         </div>
                     </div>
                 ))}
