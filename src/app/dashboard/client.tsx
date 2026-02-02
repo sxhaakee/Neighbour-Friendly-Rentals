@@ -333,7 +333,7 @@ const DashboardClient = () => {
                                                     </div>
                                                     <div className="flex gap-2">
                                                         <button
-                                                            onClick={() => router.push(`/item/${item.id}`)}
+                                                            onClick={() => router.push(`/items/${item.id}`)}
                                                             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-1"
                                                         >
                                                             <Eye className="w-4 h-4" />
@@ -565,7 +565,7 @@ const DashboardClient = () => {
                                                     </div>
                                                     <button
                                                         onClick={() => {
-                                                            const routes = { item: '/item/', property: '/properties/', service: '/services/' };
+                                                            const routes = { item: '/items/', property: '/properties/', service: '/services/' };
                                                             router.push(`${routes[fav.type as keyof typeof routes]}${fav.item_id}`);
                                                         }}
                                                         className="text-amber-600 hover:text-amber-600/80 font-semibold text-sm"
@@ -640,7 +640,7 @@ const DashboardClient = () => {
                                                             </button>
                                                         )}
                                                         <button
-                                                            onClick={() => router.push(`/item/${booking.listing_id}`)}
+                                                            onClick={() => router.push(`/items/${booking.listing_id}`)}
                                                             className="text-amber-600 hover:text-amber-600/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
                                                         >
                                                             View Item
@@ -715,7 +715,7 @@ const DashboardClient = () => {
                                                             </button>
                                                         )}
                                                         <button
-                                                            onClick={() => router.push(`/item/${booking.listing_id}`)}
+                                                            onClick={() => router.push(`/items/${booking.listing_id}`)}
                                                             className="text-amber-600 hover:text-amber-600/80 font-semibold text-xs md:text-sm w-full sm:w-auto text-center sm:text-left"
                                                         >
                                                             View Item
