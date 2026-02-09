@@ -49,6 +49,34 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default function ItemDetailsPage({ params }: { params: { id: string } }) {
-  return <ItemDetailsClient id={params.id} />;
+export default async function ItemDetailsPage({ params }: { params: { id: string } }) {
+  const listing = await listingService.getListingById(params.id);
+
+  if (!listing) {
+    return <ItemDetailsClient id={params.id} />;
+  }
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: listing.title,
+    description: listing.description,
+    image: listing.images,
+    offers: {
+      '@type': 'Offer',
+      price: listing.price,
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ItemDetailsClient id={params.id} />
+    </>
+  );
 }

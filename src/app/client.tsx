@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Star, Shield, Users, MapPin, Search, Package, Book, MessageCircle, FileCheck, RefreshCw, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { listingService } from '@/services/listingService';
@@ -325,7 +326,7 @@ const HomeClient = () => {
                                                 transition={{ delay: 0.8 + (i * 0.1) }}
                                                 className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm"
                                             >
-                                                <img src={`/images/avatar-${i}.png`} alt="Verified User" className="w-full h-full object-cover" />
+                                                <Image src={`/images/avatar-${i}.png`} alt="Verified User" width={40} height={40} className="w-full h-full object-cover" />
                                             </motion.div>
                                         ))}
                                         <motion.div
@@ -352,10 +353,13 @@ const HomeClient = () => {
                                     style={{ y: heroImageY }}
                                     className="absolute top-10 right-4 lg:right-10 w-[280px] md:w-[400px] h-[350px] md:h-[500px] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white z-10 relative group hover:shadow-[0_0_50px_rgba(255,193,7,0.4)] transition-all cursor-pointer"
                                 >
-                                    <img
+                                    <Image
                                         src="/images/hero-community.png"
                                         alt="Happy Indian Community"
-                                        className="w-full h-full object-cover"
+                                        fill
+                                        sizes="(max-width: 768px) 280px, 400px"
+                                        priority
+                                        className="object-cover"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60"></div>
                                     <div className="absolute bottom-6 left-6 right-6">
@@ -381,10 +385,13 @@ const HomeClient = () => {
                                     whileHover={{ scale: 1.05, zIndex: 50, transition: { duration: 0.3 } }}
                                     className="absolute top-14 right-6 w-[280px] md:w-[400px] h-[350px] md:h-[500px] bg-amber-100 rounded-[2rem] shadow-xl border-4 border-white/50 overflow-hidden cursor-pointer group"
                                 >
-                                    <img
+                                    <Image
                                         src="/images/hero-stack-s3.png"
                                         alt="Happy neighbours sharing"
-                                        className="w-full h-full object-cover opacity-90"
+                                        fill
+                                        sizes="(max-width: 768px) 280px, 400px"
+                                        priority
+                                        className="object-cover opacity-90"
                                     />
 
                                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-20">
@@ -629,10 +636,12 @@ const HomeClient = () => {
                                 >
                                     <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 h-full flex flex-col relative">
                                         <div className="relative aspect-[4/3] overflow-hidden">
-                                            <img
+                                            <Image
                                                 src={item.images[0] || '/placeholder.jpg'}
                                                 alt={item.title}
-                                                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                                className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                                             />
                                             <div className="absolute top-3 left-3 flex gap-2">
                                                 <span className="bg-white/90 backdrop-blur-md text-gray-900 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border border-gray-100">
@@ -725,10 +734,12 @@ const HomeClient = () => {
                                         className="group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
                                     >
                                         <div className="relative aspect-video overflow-hidden">
-                                            <img
+                                            <Image
                                                 src={service.images?.[0] || '/placeholder.jpg'}
                                                 alt={service.business_name}
-                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                                fill
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             <div className="absolute top-3 right-3">

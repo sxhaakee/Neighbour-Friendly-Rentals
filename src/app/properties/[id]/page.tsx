@@ -49,6 +49,44 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     }
 }
 
-export default function PropertyDetailsPage({ params }: { params: { id: string } }) {
-    return <PropertyDetailsClient id={params.id} />;
+export default async function PropertyDetailsPage({ params }: { params: { id: string } }) {
+    const property = await propertyService.getPropertyById(params.id);
+
+    if (!property) {
+        return <PropertyDetailsClient id={params.id} />;
+    }
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'RealEstateListing',
+        name: property.title,
+        description: property.description,
+        image: property.images,
+        offers: {
+            '@type': 'Offer',
+            price: property.rent_amount,
+            priceCurrency: 'INR',
+            availability: 'https://schema.org/InStock',
+            priceSpecification: {
+                '@type': 'UnitPriceSpecification',
+                price: property.rent_amount,
+                priceCurrency: 'INR',
+                referenceQuantity: {
+                    '@type': 'QuantitativeValue',
+                    value: '1',
+                    unitCode: 'MON', // Assuming monthly rent
+                },
+            },
+        },
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <PropertyDetailsClient id={params.id} />
+        </>
+    );
 }

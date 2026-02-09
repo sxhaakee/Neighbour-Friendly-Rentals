@@ -5,10 +5,14 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { ToastContainer } from '@/components/Common/Toast';
 import Header from '@/components/Layout/Header';
 import Footer from '@/components/Layout/Footer';
-import { AIChatbot } from '@/components/AIChatbot';
 import FAB from '@/components/Common/FAB';
 import { NotificationManager } from '@/components/NotificationManager';
 import { Analytics } from '@vercel/analytics/react';
+import dynamic from 'next/dynamic';
+
+const AIChatbot = dynamic(() => import('@/components/AIChatbot').then(mod => mod.AIChatbot), {
+    ssr: false,
+});
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -76,8 +80,6 @@ export default function RootLayout({
 // We will move this to a separate file `src/app/providers.tsx` ideally, 
 // but for inline simplicity:
 import { ReactNode } from 'react';
-import dynamic from 'next/dynamic';
-
 // Dynamic import for client components if they cause SSR issues, 
 // but AuthProvider is context so it should be fine if it has "use client"
 import ClientProviders from './providers';
