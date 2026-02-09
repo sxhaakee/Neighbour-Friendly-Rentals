@@ -5,6 +5,8 @@ import { MessageCircle, X, Send, Bot, User, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { aiChatService } from '../services/aiChatService';
 
+import { useAuth } from '@/contexts/AuthContext';
+
 interface Message {
   id: string;
   text: string;
@@ -18,6 +20,7 @@ interface QuickAction {
 }
 
 export const AIChatbot = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -71,8 +74,8 @@ export const AIChatbot = () => {
     setIsTyping(true);
 
     try {
-      // Call real AI service
-      const response = await aiChatService.sendMessage(messageText);
+      // Call real AI service with user ID if available
+      const response = await aiChatService.sendMessage(messageText, user?.id);
 
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),

@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase Admin Client (Service Role for secure data access)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!; // Fallback to anon if service key missing (read-only is fine for now)
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // Comprehensive platform context
 const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriendly Rentals" (NFR), India's premier peer-to-peer rental marketplace.
@@ -10,12 +16,19 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 3. Never provide general knowledge, math, coding help, or other non-platform information
 4. Always maintain a friendly, helpful tone with appropriate emojis
 
+## THE NFR STORY (Context for specific questions):
+- **Origin Story:** "It started with a drill." Founder Mohammed Shakeeb needed a power drill for a quick weekend project. Walking through his neighborhood in Mangalore, he realized dozens of drills were likely sitting unused in closets nearby. Yet, there was no trusted way to ask. This realization—"Why buy what you'll only use once?"—sparked NFR.
+- **Mission:** To bring neighborhoods back to life by connecting people, reducing waste, and building trust through sharing.
+- **Founders:**
+  - **Mohammed Shakeeb (Founder):** The visionary leader turning neighborly trust into a global movement. High-energy, passionate about community.
+  - **Muhammad Haashid (Co-Founder):** The Tech Architect building the digital bridges that connect communities safely.
+  - **Mohammed Sinan (Co-Founder):** The Operations Strategist ensuring every rental experience is seamless and secure.
+
 ## PLATFORM DETAILS:
 
 ### What is NeighbourFriendly?
 - India's most trusted P2P rental marketplace
 - Users can rent out or rent Items, Services, and Properties
-- Mission: Share resources, save money, reduce waste
 - Currently serving: Bangalore, Moodabidri, Mangalore, and expanding
 
 ### Three Main Categories:
@@ -48,35 +61,25 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 - **Direct Communication**: WhatsApp or platform chat
 - **Premium Subscription**: ₹499/month for featured listings, unlimited posts, verified badge
 
-### User Journey:
-**To Rent Something:**
-1. Browse /listings, /properties, or /services
-2. Contact owner via chat or WhatsApp
-3. Coordinate pickup/handover
-4. Enjoy your rental!
+### Pricing & Earnings (Full Control):
+- **You Set the Price**: Owners determine the fee for all Items, Services, and Properties.
+- **Flexible Rates (Items)**: Set pricing based on duration:
+  - Per hour
+  - Per day 🗓️
+  - Per week
+  - Per month
+  - Per event (perfect for party supplies)
+- **Zero Commission**: (Check current policy, but generally peer-to-peer)
 
-**To List Something:**
-1. Go to /add-item, /add-service, or /add-property
-2. Upload clear photos, set pricing
-3. Listing reviewed and approved within 24 hours
-4. Start earning! Average: ₹5,000/month
+### How to List:
+1. **Items**: Go to /add-item (Cameras, tools, gear)
+2. **Services**: Go to /add-service (Photography, events)
+3. **Properties**: Go to /add-property (Flats, shops)
+4. Upload photos, set your own flexible rates, and go live!
 
-### Important Pages:
-- Home: /
-- Browse All: /listings
-- About: /about
-- Contact: /contact
-- Premium: /premium
-- Dashboard: /dashboard
-- Messages: /messages
-
-### Support:
-- Email: support@neighbourfriendly.in
-- Website: neighbourfriendly.in
-
-### Pricing:
-- **For Renters**: Pay the price listed by owners
-- **For Listers**: Free to list, or ₹499/month Premium for featured placement
+### Pricing for Renters:
+- Pay the price listed by owners
+- Transparent pricing with no hidden platform fees for browsing
 
 Remember: Be concise, use emojis, and ONLY discuss NeighbourFriendly platform topics!`;
 
@@ -84,19 +87,9 @@ Remember: Be concise, use emojis, and ONLY discuss NeighbourFriendly platform to
 const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
-// Initialize model outside request handler if possible for reuse, 
-// but inside handler is safer for serverless cold starts with env vars
-const getModel = () => {
-  if (!genAI) return null;
-  return genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    systemInstruction: PLATFORM_CONTEXT
-  });
-};
-
 export async function POST(request: Request) {
   try {
-    const { message } = await request.json();
+    const { message, userId } = await request.json();
 
     if (!message) {
       return NextResponse.json(
@@ -119,9 +112,60 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: offTopicResponse });
     }
 
+    // Dynamic User Context Fetching
+    let userContext = "";
+    if (userId) {
+      try {
+        // Fetch User Profile
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, verification_status')
+          .eq('id', userId)
+          .single();
+
+        // Fetch Recent Listings
+        const { data: listings } = await supabase
+          .from('items')
+          .select('title, status')
+          .eq('owner_id', userId)
+          .limit(3);
+
+        // Fetch Active Bookings (simulated logic as bookings table might vary)
+        // For verify purpose, checking if 'bookings' table exists or just using placeholder
+        // Assuming a standard 'bookings' table structure
+        /* 
+        const { data: bookingData } = await supabase
+          .from('bookings')
+          .select('item_id, status, start_date')
+          .eq('renter_id', userId)
+          .eq('status', 'approved')
+          .limit(2);
+        */
+
+        if (profile) {
+          userContext += `\n\n## CURRENT USER CONTEXT (The user you are chatting with):\n- Name: ${profile.full_name}\n- Verified: ${profile.verification_status ? 'Yes' : 'No'}`;
+          
+          if (listings && listings.length > 0) {
+             userContext += `\n- Their Listings: ${listings.map((l: any) => l.title + ' (' + l.status + ')').join(', ')}`;
+          } else {
+             userContext += `\n- Their Listings: None yet. Encourage them to list!`;
+          }
+          
+          // Add booking context if available
+           userContext += `\n- Note: Use this personal info to give specific, helpful answers (e.g., "dictating" their listings status).`;
+        }
+
+      } catch (dbError) {
+        console.warn("Failed to fetch user context", dbError);
+        // Continue without user context if DB fails
+      }
+    }
+
     try {
-      const model = getModel();
-      if (!model) throw new Error("Failed to initialize model");
+      const model = genAI.getGenerativeModel({
+        model: "gemini-flash-latest",
+        systemInstruction: PLATFORM_CONTEXT + userContext
+      });
 
       const chat = model.startChat({
         history: [],
@@ -162,9 +206,9 @@ function isOffTopic(message: string): string | null {
   const offTopicPatterns = [
     /what is \d+\s*[\+\-\*\/]/,  // Math
     /write (a |an )?code/,  // Coding
-    /who (is|was|are) (the )?(?!neighbourfriendly)/,  // General knowledge
+    /who (is|was|are) (the )?(?!neighbourfriendly|shakeeb|haashid|sinan|founder)/,  // General knowledge (allow founder questions)
     /what (is|are) (the )?(capital|president|prime minister)/,  // Geography/Politics
-    /tell me about (?!(nfr|neighbourfriendly|rent|platform))/,  // General topics
+    /tell me about (?!(nfr|neighbourfriendly|rent|platform|shakeeb|drill))/,  // General topics
     /translate|weather|recipe|joke/,  // Other topics
   ];
 
@@ -182,6 +226,10 @@ function getFallbackResponse(message: string): string {
 
   if (lower.match(/^(hi|hello|hey|good morning|good afternoon)/)) {
     return "Hi! 👋 I'm your NeighbourFriendly assistant. I can help you browse items, list your own, or find properties and services. What can I help you with today?";
+  }
+
+  if (lower.includes('shakeeb') || lower.includes('founder') || lower.includes('drill')) {
+      return "NFR was founded by Mohammed Shakeeb after he couldn't find a simple drill to borrow in his neighborhood! He realized we own too much and share too little. Co-founders Muhammad Haashid and Mohammed Sinan joined him to build this platform.";
   }
 
   if (lower.includes('camera') || lower.includes('photography')) {

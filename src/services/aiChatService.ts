@@ -9,14 +9,17 @@ interface ChatResponse {
 }
 
 class AIChatService {
-  async sendMessage(userMessage: string): Promise<ChatResponse> {
+  async sendMessage(userMessage: string, userId?: string): Promise<ChatResponse> {
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ 
+          message: userMessage,
+          userId: userId 
+        }),
       });
 
       const data = await response.json();
