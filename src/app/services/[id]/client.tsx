@@ -476,7 +476,7 @@ const ServiceDetailsClient = ({ id }: ServiceDetailsClientProps) => {
 
                             <button
                                 onClick={() => window.open(generateWhatsAppLink(service.whatsapp || service.phone, 'service', service.business_name), '_blank')}
-                                className="w-full mt-6 bg-gradient-to-r from-primary to-accent text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all"
+                                className="w-full mt-6 bg-gradient-to-r from-amber-500 to-orange-600 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all"
                             >
                                 Contact on WhatsApp
                             </button>
@@ -512,7 +512,7 @@ const ServiceDetailsClient = ({ id }: ServiceDetailsClientProps) => {
                         {user && (
                             <button
                                 onClick={() => setShowReviewForm(!showReviewForm)}
-                                className="px-6 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-semibold hover:shadow-lg transition-all flex items-center gap-2"
+                                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all flex items-center gap-2"
                             >
                                 <Star className="w-5 h-5" />
                                 Write a Review
@@ -566,7 +566,7 @@ const ServiceDetailsClient = ({ id }: ServiceDetailsClientProps) => {
                             <div className="flex gap-3 mt-4">
                                 <button
                                     onClick={handleSubmitReview}
-                                    className="px-6 py-2 bg-gradient-to-r from-primary to-accent text-white rounded-lg font-semibold hover:shadow-lg transition-all"
+                                    className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all"
                                 >
                                     Submit Review
                                 </button>

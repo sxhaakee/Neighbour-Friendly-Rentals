@@ -69,5 +69,49 @@ export const blogPosts: BlogPost[] = [
         </a>
       </div>
     `
+  },
+  {
+    id: '2',
+    slug: 'top-5-high-demand-rental-items-bangalore-2026',
+    title: 'Top 5 High-Demand Rental Items in Bangalore for 2026',
+    excerpt: 'Want to make extra cash? Here are the most searched-for rental items in Bangalore right now, from party gear to travel essentials.',
+    author: 'NFR Team',
+    date: 'February 15, 2026',
+    readTime: '4 min read',
+    image: '/blog/rental-items-bangalore.png', // You might need to generate or add this image
+    tags: ['Trends', 'Side Income', 'Bangalore'],
+    content: `
+      <p class="lead text-xl text-gray-600 mb-8">Bangalore is a city that never stops moving. Whether it's weekend treks to Skandagiri, terrace parties in Indiranagar, or DIY home improvement projects in Whitefield, the demand for short-term rentals is exploding. But what exactly are people looking for?</p>
+
+      <p>We analyzed search data from thousands of NFR users to bring you the definitive list of high-demand items for 2026. If you have any of these gathering dust, you're sitting on a goldmine.</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">1. Action Cameras (GoPro / Insta360)</h2>
+      <p><strong>Why:</strong> The travel bug has bitten hard. Everyone wants to document their trips to Bali or their bike rides to Nandi Hills, but buying a ₹40,000 camera for one trip doesn't make sense.</p>
+      <p><strong>Potential Earnings:</strong> ₹500 - ₹800 per day.</p>
+      
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">2. Party Speakers (JBL PartyBox / Sony)</h2>
+      <p><strong>Why:</strong> House parties are the new clubbing. A powerful Bluetooth speaker with lights can transform a living room into a dance floor.</p>
+      <p><strong>Potential Earnings:</strong> ₹1,000 - ₹2,000 per weekend.</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">3. Trekking Gear (Tents & Rucksacks)</h2>
+      <p><strong>Why:</strong> Decathlon is great, but renting is better for one-off trips. 4-person tents and high-capacity rucksacks are always in short supply during long weekends.</p>
+      <p><strong>Potential Earnings:</strong> ₹300 - ₹600 per day.</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">4. Projectors</h2>
+      <p><strong>Why:</strong> IPL season, movie nights, or romantic rooftop dates. A projector is a "nice to have" that people love to rent for special occasions.</p>
+      <p><strong>Potential Earnings:</strong> ₹800 - ₹1,500 per day.</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">5. Power Tools (Drills & Sanders)</h2>
+      <p><strong>Why:</strong> Influenced by Pinterest, many Bangaloreans are taking up DIY furniture projects. They need heavy-duty tools for a day or two, not a lifetime.</p>
+      <p><strong>Potential Earnings:</strong> ₹200 - ₹500 per day.</p>
+
+      <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-lg mt-8">
+        <h3 class="font-bold text-amber-900 text-lg mb-2">Own any of these?</h3>
+        <p class="text-amber-800 mb-4">List them on NFR today and start earning by the weekend. It's safe, secure, and helps your neighbors.</p>
+        <a href="/add-item" class="inline-block bg-amber-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-700 transition-colors">
+          List Your Item Now
+        </a>
+      </div>
+    `
   }
 ];
