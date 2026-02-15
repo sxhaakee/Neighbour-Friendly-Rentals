@@ -2,8 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { blogPosts } from '@/data/blogPosts';
-import Header from '@/components/Layout/Header';
-import Footer from '@/components/Layout/Footer';
+
 
 interface Props {
     params: {
@@ -40,7 +39,7 @@ export default function BlogPost({ params }: Props) {
 
     return (
         <div className="min-h-screen flex flex-col bg-white">
-            <Header />
+
 
             <main className="flex-grow">
                 {/* Article Header */}
@@ -105,7 +104,7 @@ export default function BlogPost({ params }: Props) {
                 </section>
             </main>
 
-            <Footer />
+
         </div>
     );
 }

@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { blogPosts } from '@/data/blogPosts';
-import Header from '@/components/Layout/Header';
-import Footer from '@/components/Layout/Footer';
+
 
 export const metadata = {
     title: 'NFR Blog | Turn Clutter into Cash in Bangalore',
@@ -12,7 +11,7 @@ export const metadata = {
 export default function BlogIndex() {
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
+
 
             <main className="flex-grow">
                 {/* Hero Section */}
@@ -91,7 +90,7 @@ export default function BlogIndex() {
                 </section>
             </main>
 
-            <Footer />
+
         </div>
     );
 }
