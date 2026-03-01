@@ -13,10 +13,17 @@ export const formatPricingModel = (pricingModel?: string | null): string => {
   
   const modelMap: Record<string, string> = {
     'per_day': '/day',
+    'per-day': '/day',
     'per_week': '/week',
+    'per-week': '/week',
     'per_month': '/month',
+    'per-month': '/month',
     'per_event': '/event',
+    'per-event': '/event',
     'per_hour': '/hour',
+    'per-hour': '/hour',
+    'package': ' (Package)',
+    'custom': ' (Custom)',
   };
   
   return modelMap[pricingModel] || '/day';
@@ -32,10 +39,17 @@ export const getPricingModelLabel = (pricingModel?: string): string => {
   
   const labelMap: Record<string, string> = {
     'per_day': 'Per Day',
+    'per-day': 'Per Day',
     'per_week': 'Per Week',
+    'per-week': 'Per Week',
     'per_month': 'Per Month',
+    'per-month': 'Per Month',
     'per_event': 'Per Event',
+    'per-event': 'Per Event',
     'per_hour': 'Per Hour',
+    'per-hour': 'Per Hour',
+    'package': 'Package',
+    'custom': 'Custom Quote',
   };
   
   return labelMap[pricingModel] || 'Per Day';
