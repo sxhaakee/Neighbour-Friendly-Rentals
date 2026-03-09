@@ -143,13 +143,34 @@ export const AIChatbot = () => {
       .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.rate = 1.05; // Slightly faster for conversational feel
 
-    // Try to pick a good voice
+    // Humanize the speed and tone
+    utterance.rate = 1.0; // Normal conversational speed
+    utterance.pitch = 1.0; // Natural pitch (1.0 is default, 1.1 can add energy)
+
+    // Try to pick a high-quality human-like neural voice
     const voices = window.speechSynthesis.getVoices();
-    const indianVoice = voices.find(v => v.lang.includes('IN') || v.name.includes('India'));
-    if (indianVoice) {
-      utterance.voice = indianVoice;
+
+    // 1. Look for high-quality Indian English voices
+    const premiumIndianVoice = voices.find(v =>
+      (v.lang.includes('IN') || v.name.includes('India')) &&
+      (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Online'))
+    );
+
+    // 2. Look for ANY high-quality English voice (often Google US / UK / Microsoft Azure neural)
+    const premiumEnglishVoice = voices.find(v =>
+      v.lang.startsWith('en') &&
+      (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Online'))
+    );
+
+    // 3. Fallbacks
+    const standardIndianVoice = voices.find(v => v.lang.includes('IN') || v.name.includes('India'));
+    const standardEnglishVoice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB'));
+
+    const selectedVoice = premiumIndianVoice || premiumEnglishVoice || standardIndianVoice || standardEnglishVoice || voices[0];
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
     }
 
     window.speechSynthesis.speak(utterance);
