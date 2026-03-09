@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-// Removed GoogleGenerativeAI import
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase Admin Client (Service Role for secure data access)
@@ -14,7 +14,8 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 1. ONLY answer questions about the NeighbourFriendly platform, rental marketplace, and related topics
 2. For ANY question unrelated to NFR, rentals, or the sharing economy, politely decline and redirect to platform topics
 3. Never provide general knowledge, math, coding help, or other non-platform information
-4. Always maintain a friendly, helpful tone with appropriate emojis
+4. Always maintain a friendly, helpful tone
+5. ABSOLUTELY NO EMOJIS, NO ASTERISKS, NO MARKDOWN, NO BRACKETS. You are speaking through a Text-to-Speech voice engine. Any special characters will sound robotic. Use plain English text only.
 
 ## THE NFR STORY (Context for specific questions):
 - **Origin Story:** "It started with a drill." Founder Mohammed Shakeeb needed a power drill for a quick weekend project. Walking through his neighborhood in Mangalore, he realized dozens of drills were likely sitting unused in closets nearby. Yet, there was no trusted way to ask. This realization—"Why buy what you'll only use once?"—sparked NFR.
@@ -38,7 +39,7 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
    - Browse: /listings or /items
    - List your item: /add-item
    - Pricing: Owners set rates (per hour/day/week/month/event)
-   - Popular: Cameras (₹500-2000/day), Camping gear, Power tools
+   - Popular: Cameras, Camping gear, Power tools
 
 2. **SERVICES** (hire professionals for events)
    - Categories: Photography, Catering, DJ & Music, Makeup Artist, Event Planning, Cleaning, Home Repair, Tutoring, Fitness Training
@@ -59,16 +60,16 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 - **Location-based Discovery**: Find items near you
 - **Google Login**: Easy authentication
 - **Direct Communication**: WhatsApp or platform chat
-- **Premium Subscription**: ₹499/month for featured listings, unlimited posts, verified badge
+- **Premium Subscription**: Premium for featured listings, unlimited posts, verified badge
 
 ### Pricing & Earnings (Full Control):
 - **You Set the Price**: Owners determine the fee for all Items, Services, and Properties.
 - **Flexible Rates (Items)**: Set pricing based on duration:
   - Per hour
-  - Per day 🗓️
+  - Per day
   - Per week
   - Per month
-  - Per event (perfect for party supplies)
+  - Per event
 - **Zero Commission**: (Check current policy, but generally peer-to-peer)
 
 ### How to List:
@@ -81,10 +82,10 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 - Pay the price listed by owners
 - Transparent pricing with no hidden platform fees for browsing
 
-Remember: Be concise, use emojis, and ONLY discuss NeighbourFriendly platform topics!`;
+Remember: Be concise and ONLY discuss NeighbourFriendly platform topics! Plain text only!`;
 
-// Initialize Mistral API
-const mistralApiKey = process.env.MISTRAL_API_KEY;
+// Initialize Gemini API
+const geminiApiKey = process.env.GEMINI_API_KEY;
 
 export async function POST(request: Request) {
   try {
@@ -97,10 +98,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!mistralApiKey) {
-      console.error('Mistral API key is missing on server');
+    if (!geminiApiKey) {
+      console.error('Gemini API key is missing on server');
       return NextResponse.json({
-        message: "🤖 Hi! I'm the NFR assistant. I can help you find items to rent, list your own stuff, or answer questions about our platform! Try asking about 'how to rent a camera' or 'listing my bike'! (Mistral Key missing)",
+        message: "Hi! I am the NFR assistant. I can help you find items to rent, list your own stuff, or answer questions about our platform! Try asking about how to rent a camera or listing my bike! Gemini Key missing",
         error: 'NO_API_KEY'
       });
     }
@@ -129,18 +130,6 @@ export async function POST(request: Request) {
           .eq('owner_id', userId)
           .limit(3);
 
-        // Fetch Active Bookings (simulated logic as bookings table might vary)
-        // For verify purpose, checking if 'bookings' table exists or just using placeholder
-        // Assuming a standard 'bookings' table structure
-        /* 
-        const { data: bookingData } = await supabase
-          .from('bookings')
-          .select('item_id, status, start_date')
-          .eq('renter_id', userId)
-          .eq('status', 'approved')
-          .limit(2);
-        */
-
         if (profile) {
           userContext += `\n\n## CURRENT USER CONTEXT (The user you are chatting with):\n- Name: ${profile.full_name}\n- Verified: ${profile.verification_status ? 'Yes' : 'No'}`;
           
@@ -161,33 +150,21 @@ export async function POST(request: Request) {
     }
 
     try {
-      const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${mistralApiKey}`
-        },
-        body: JSON.stringify({
-          model: "mistral-large-latest",
-          messages: [
-            { role: "system", content: PLATFORM_CONTEXT + userContext + "\\n\\nIMPORTANT: If the user speaks in a regional language (like Hindi, Kannada, etc.), MUST reply in THAT language. Keep responses short and conversational, ready for Text-to-Speech." },
-            { role: "user", content: message }
-          ],
-          temperature: 0.7,
-          max_tokens: 500
-        })
-      });
+      const genAI = new GoogleGenerativeAI(geminiApiKey);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      if (!mistralResponse.ok) {
-        throw new Error(`Mistral API Error Status: ${mistralResponse.status}`);
-      }
+      const prompt = `${PLATFORM_CONTEXT}${userContext}\n\nIMPORTANT: If the user speaks in a regional language (like Hindi, Kannada, etc.), MUST reply in THAT language. Keep responses short and conversational, ready for Text-to-Speech. DO NOT USE EMOJIS.\n\nUser: ${message}`;
 
-      const data = await mistralResponse.json();
-      const text = data.choices[0].message.content;
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      let text = response.text();
+      
+      // Final sanitation just in case Gemini disobeys and includes markdown
+      text = text.replace(/\\*\\*/g, "").replace(/\\*/g, "").replace(/#/g, "").trim();
 
       return NextResponse.json({ message: text });
     } catch (apiError: any) {
-      console.error('Mistral API Error:', apiError);
+      console.error('Gemini API Error:', apiError);
       const fallback = getFallbackResponse(message);
       return NextResponse.json({ 
         message: fallback, 
@@ -199,7 +176,7 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Chat API Error:', error);
     return NextResponse.json(
-      { error: 'Internal Server Error', message: "I'm having a little trouble connecting right now. Please try again!" },
+      { error: 'Internal Server Error', message: "I am having a little trouble connecting right now. Please try again!" },
       { status: 500 }
     );
   }
@@ -220,7 +197,7 @@ function isOffTopic(message: string): string | null {
 
   for (const pattern of offTopicPatterns) {
     if (pattern.test(lower)) {
-      return "I'm specifically designed to help with NeighbourFriendly platform questions! 🏠 \n\nI can assist with:\n• Finding items/services/properties to rent\n• Listing your own items\n• Understanding how our platform works\n\nWhat would you like to know about NFR?";
+      return "I am specifically designed to help with NeighbourFriendly platform questions. I can assist with finding items or services to rent, listing your own items, or understanding how our platform works. What would you like to know about NFR?";
     }
   }
 
@@ -231,36 +208,36 @@ function getFallbackResponse(message: string): string {
   const lower = message.toLowerCase();
 
   if (lower.match(/^(hi|hello|hey|good morning|good afternoon)/)) {
-    return "Hi! 👋 I'm your NeighbourFriendly assistant. I can help you browse items, list your own, or find properties and services. What can I help you with today?";
+    return "Hi, I am your NeighbourFriendly assistant. I can help you browse items, list your own, or find properties and services. What can I help you with today?";
   }
 
   if (lower.includes('shakeeb') || lower.includes('founder') || lower.includes('drill')) {
-      return "NFR was founded by Mohammed Shakeeb after he couldn't find a simple drill to borrow in his neighborhood! He realized we own too much and share too little. Co-founders Muhammad Haashid and Mohammed Sinan joined him to build this platform.";
+      return "NFR was founded by Mohammed Shakeeb after he couldn't find a simple drill to borrow in his neighborhood. He realized we own too much and share too little. Co-founders Muhammad Haashid and Mohammed Sinan joined him to build this platform.";
   }
 
   if (lower.includes('camera') || lower.includes('photography')) {
-    return "Looking for cameras? 📷 Check out our photography equipment at /listings! We have DSLRs, GoPros, and lenses available for rent. Most are ₹500-2000/day.";
+    return "Looking for cameras? Check out our photography equipment at slash listings. We have DSLRs, GoPros, and lenses available for rent.";
   }
 
   if (lower.includes('property') || lower.includes('flat') || lower.includes('apartment')) {
-    return "Looking for a property? 🏠 Visit /properties to browse flats, houses, and PG accommodations. Filter by price, location, and amenities!";
+    return "Looking for a property? Visit slash properties to browse flats, houses, and PG accommodations. Filter by price, location, and amenities.";
   }
 
   if (lower.includes('service') || lower.includes('event')) {
-    return "Need service providers? 🎉 Visit /services to find photographers, caterers, DJs, and more for your events!";
+    return "Need service providers? Visit slash services to find photographers, caterers, DJs, and more for your events.";
   }
 
   if (lower.includes('list') || lower.includes('add') || lower.includes('earn')) {
-    return "Want to list something? 📝 Go to /add-item to list items, /add-service for services, or /add-property for properties. Start earning today!";
+    return "Want to list something? Go to slash add item to list items, slash add service for services, or slash add property for properties. Start earning today.";
   }
 
   if (lower.includes('premium') || lower.includes('subscription')) {
-    return "Go Premium for ₹499/month! 👑 Get featured listings, unlimited posts, and a verified badge. Check it out at /premium.";
+    return "Go Premium for 499 rupees per month. Get featured listings, unlimited posts, and a verified badge. Check it out at slash premium.";
   }
 
   if (lower.includes('contact') || lower.includes('support') || lower.includes('help')) {
-    return "Need help? 📞 Contact our support team at support@neighbourfriendly.in or visit /contact!";
+    return "Need help? Contact our support team at support at neighbourfriendly.in or visit slash contact.";
   }
 
-  return "I'm here to help with NeighbourFriendly! 🏠 Ask me about renting items, listing your stuff, finding properties, or how our platform works!";
+  return "I am here to help with NeighbourFriendly. Ask me about renting items, listing your stuff, finding properties, or how our platform works.";
 }

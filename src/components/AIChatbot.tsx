@@ -38,6 +38,7 @@ export const AIChatbot = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const recognitionRef = useRef<any>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -124,56 +125,52 @@ export const AIChatbot = () => {
     }
   };
 
-  const speakText = (text: string) => {
-    if (!voiceEnabled || !window.speechSynthesis) return;
+  const speakText = async (text: string) => {
+    if (!voiceEnabled) return;
 
     // Stop any ongoing speech
-    window.speechSynthesis.cancel();
-
-    // Strip emojis for cleaner reading
-    // Strip markdown, URLs, brackets, emojis, and special formatting for natural speech
-    const cleanText = text
-      .replace(/\\*\\*(.*?)\\*\\*/g, '$1') // Remove bold asterisks but keep text
-      .replace(/\\*(.*?)\\*/g, '$1')       // Remove italic asterisks but keep text
-      .replace(/#(.*?)\\n/g, '$1\\n')      // Remove header hashes
-      .replace(/\\[(.*?)\\]\\(.*?\\)/g, '$1') // Remove markdown links but keep the anchor text
-      .replace(/<[^>]*>?/gm, '')         // Remove HTML tags
-      .replace(/([\\u2700-\\u27BF]|[\\uE000-\\uF8FF]|\\uD83C[\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDFFF]|[\\u2011-\\u26FF]|\\uD83E[\\uDD10-\\uDDFF])/g, '') // Strip emojis
-      .replace(/[\\*_~`>\\[\\]()]/g, '')     // Strip miscellaneous markdown/syntax characters
-      .trim();
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-
-    // Humanize the speed and tone
-    utterance.rate = 1.0; // Normal conversational speed
-    utterance.pitch = 1.0; // Natural pitch (1.0 is default, 1.1 can add energy)
-
-    // Try to pick a high-quality human-like neural voice
-    const voices = window.speechSynthesis.getVoices();
-
-    // 1. Look for high-quality Indian English voices
-    const premiumIndianVoice = voices.find(v =>
-      (v.lang.includes('IN') || v.name.includes('India')) &&
-      (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Online'))
-    );
-
-    // 2. Look for ANY high-quality English voice (often Google US / UK / Microsoft Azure neural)
-    const premiumEnglishVoice = voices.find(v =>
-      v.lang.startsWith('en') &&
-      (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural') || v.name.includes('Online'))
-    );
-
-    // 3. Fallbacks
-    const standardIndianVoice = voices.find(v => v.lang.includes('IN') || v.name.includes('India'));
-    const standardEnglishVoice = voices.find(v => v.lang.startsWith('en-US') || v.lang.startsWith('en-GB'));
-
-    const selectedVoice = premiumIndianVoice || premiumEnglishVoice || standardIndianVoice || standardEnglishVoice || voices[0];
-
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
 
-    window.speechSynthesis.speak(utterance);
+    // Attempt to play Premium Cloud TTS
+    try {
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text })
+      });
+
+      if (!response.ok) {
+        throw new Error('Premium TTS API failed');
+      }
+
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      const audio = new Audio(audioUrl);
+
+      audioRef.current = audio;
+      audio.play();
+
+      audio.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+      };
+    } catch (error) {
+      console.error('Failed to play premium TTS:', error);
+
+      // Fallback to basic browser TTS if the API fails or key is missing
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+
+        // Strip out some aggressive markdown for the fallback
+        const cleanFallbackText = text.replace(/[*#]/g, '').trim();
+        const utterance = new SpeechSynthesisUtterance(cleanFallbackText);
+        window.speechSynthesis.speak(utterance);
+      }
+    }
   };
 
   const handleSendMessage = async (overrideText?: string) => {
