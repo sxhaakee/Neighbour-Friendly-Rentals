@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
-
 export async function POST(request: Request) {
+  const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
+
   try {
     const { text } = await request.json();
 
