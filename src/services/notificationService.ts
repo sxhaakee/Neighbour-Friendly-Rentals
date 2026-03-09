@@ -307,7 +307,7 @@ export const notificationService = {
           type: 'system',
           title: '📦 New Listing for Approval',
           message: `${ownerName} listed "${listingTitle}" - Pending approval`,
-          link: `/admin?tab=listings&filter=pending`,
+          link: `/nfr-control?tab=listings&filter=pending`,
         });
       }
     } catch (error) {
@@ -333,7 +333,7 @@ export const notificationService = {
           type: 'system',
           title: '🎉 New Service for Approval',
           message: `${ownerName} listed "${serviceName}" - Pending approval`,
-          link: `/admin?tab=services&filter=pending`,
+          link: `/nfr-control?tab=services&filter=pending`,
         });
       }
     } catch (error) {
@@ -359,7 +359,7 @@ export const notificationService = {
           type: 'system',
           title: '🏠 New Property for Approval',
           message: `${ownerName} listed "${propertyTitle}" - Pending approval`,
-          link: `/admin?tab=properties&filter=pending`,
+          link: `/nfr-control?tab=properties&filter=pending`,
         });
       }
     } catch (error) {

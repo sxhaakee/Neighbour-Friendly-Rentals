@@ -113,7 +113,7 @@ const Header = () => {
                       <div className="py-1">
                         {isAdmin && (
                           <Link
-                            href="/admin"
+                            href="/nfr-control"
                             onClick={() => setShowUserMenu(false)}
                             className="flex items-center space-x-3 px-4 py-2.5 text-gray-700 hover:bg-gray-50 transition-colors"
                           >
@@ -250,7 +250,7 @@ const Header = () => {
 
                   {isAdmin && (
                     <Link
-                      href="/admin"
+                      href="/nfr-control"
                       onClick={() => setIsMenuOpen(false)}
                       className="flex items-center space-x-2 px-3 py-3 rounded-lg text-gray-600 hover:text-amber-600 hover:bg-primary/10"
                     >

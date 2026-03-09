@@ -3,9 +3,15 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase Admin Client (Service Role for secure data access)
+// NEVER use anon key as fallback — it must be the real service role key
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!; // Fallback to anon if service key missing (read-only is fine for now)
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseServiceKey) {
+  console.warn('[Chat API] SUPABASE_SERVICE_ROLE_KEY not set — user context will be unavailable');
+}
+
+const supabase = supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : null;
 
 // Comprehensive platform context
 const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriendly Rentals" (NFR), India's premier peer-to-peer rental marketplace.
@@ -111,7 +117,7 @@ export async function POST(request: Request) {
 
     // Dynamic User Context Fetching
     let userContext = "";
-    if (userId) {
+    if (userId && supabase) {
       try {
         // Fetch User Profile
         const { data: profile } = await supabase

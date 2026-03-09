@@ -250,7 +250,7 @@ export const BookingNotification = () => {
               <button
                 onClick={() => {
                   setShowNotifications(false);
-                  router.push(isAdmin ? '/admin' : '/dashboard');
+                  router.push(isAdmin ? '/nfr-control' : '/dashboard');
                 }}
                 className="w-full text-center text-amber-600 font-semibold text-sm hover:underline"
               >
