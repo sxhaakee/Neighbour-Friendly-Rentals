@@ -84,10 +84,10 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 
 Remember: Be concise and ONLY discuss NeighbourFriendly platform topics! Plain text only!`;
 
-// Initialize Gemini API
-const geminiApiKey = process.env.GEMINI_API_KEY;
-
 export async function POST(request: Request) {
+  // Always fetch the key dynamically on request so it catches new env variables
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  
   try {
     const { message, userId } = await request.json();
 
