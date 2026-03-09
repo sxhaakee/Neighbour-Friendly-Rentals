@@ -106,11 +106,8 @@ export async function POST(request: Request) {
       });
     }
 
-    // Check for off-topic content (Server-side check)
-    const offTopicResponse = isOffTopic(message);
-    if (offTopicResponse) {
-      return NextResponse.json({ message: offTopicResponse });
-    }
+    // We trust the PLATFORM_CONTEXT prompt to instruct Gemini to reject off-topic questions intelligently.
+    // Removed the aggressive regex isOffTopic matcher which was blocking valid "who" / "how" platform questions.
 
     // Dynamic User Context Fetching
     let userContext = "";
@@ -165,9 +162,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: text });
     } catch (apiError: any) {
       console.error('Gemini API Error:', apiError);
-      const fallback = getFallbackResponse(message);
+      
+      let errorMessage = "I am having a little trouble connecting to my AI brain right now. Please try again! ";
+      if (apiError.message && (apiError.message.includes("API key not valid") || apiError.message.includes("403"))) {
+         errorMessage = "My AI brain requires a valid Gemini API key. Please check the key in the settings!";
+      }
+
       return NextResponse.json({ 
-        message: fallback, 
+        message: errorMessage,
         error: apiError.message,
         isFallback: true 
       });
@@ -180,64 +182,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-function isOffTopic(message: string): string | null {
-  const lower = message.toLowerCase();
-  
-  // Detect off-topic questions
-  const offTopicPatterns = [
-    /what is \d+\s*[\+\-\*\/]/,  // Math
-    /write (a |an )?code/,  // Coding
-    /who (is|was|are) (the )?(?!neighbourfriendly|shakeeb|haashid|sinan|founder)/,  // General knowledge (allow founder questions)
-    /what (is|are) (the )?(capital|president|prime minister)/,  // Geography/Politics
-    /tell me about (?!(nfr|neighbourfriendly|rent|platform|shakeeb|drill))/,  // General topics
-    /translate|weather|recipe|joke/,  // Other topics
-  ];
-
-  for (const pattern of offTopicPatterns) {
-    if (pattern.test(lower)) {
-      return "I am specifically designed to help with NeighbourFriendly platform questions. I can assist with finding items or services to rent, listing your own items, or understanding how our platform works. What would you like to know about NFR?";
-    }
-  }
-
-  return null;
-}
-
-function getFallbackResponse(message: string): string {
-  const lower = message.toLowerCase();
-
-  if (lower.match(/^(hi|hello|hey|good morning|good afternoon)/)) {
-    return "Hi, I am your NeighbourFriendly assistant. I can help you browse items, list your own, or find properties and services. What can I help you with today?";
-  }
-
-  if (lower.includes('shakeeb') || lower.includes('founder') || lower.includes('drill')) {
-      return "NFR was founded by Mohammed Shakeeb after he couldn't find a simple drill to borrow in his neighborhood. He realized we own too much and share too little. Co-founders Muhammad Haashid and Mohammed Sinan joined him to build this platform.";
-  }
-
-  if (lower.includes('camera') || lower.includes('photography')) {
-    return "Looking for cameras? Check out our photography equipment at slash listings. We have DSLRs, GoPros, and lenses available for rent.";
-  }
-
-  if (lower.includes('property') || lower.includes('flat') || lower.includes('apartment')) {
-    return "Looking for a property? Visit slash properties to browse flats, houses, and PG accommodations. Filter by price, location, and amenities.";
-  }
-
-  if (lower.includes('service') || lower.includes('event')) {
-    return "Need service providers? Visit slash services to find photographers, caterers, DJs, and more for your events.";
-  }
-
-  if (lower.includes('list') || lower.includes('add') || lower.includes('earn')) {
-    return "Want to list something? Go to slash add item to list items, slash add service for services, or slash add property for properties. Start earning today.";
-  }
-
-  if (lower.includes('premium') || lower.includes('subscription')) {
-    return "Go Premium for 499 rupees per month. Get featured listings, unlimited posts, and a verified badge. Check it out at slash premium.";
-  }
-
-  if (lower.includes('contact') || lower.includes('support') || lower.includes('help')) {
-    return "Need help? Contact our support team at support at neighbourfriendly.in or visit slash contact.";
-  }
-
-  return "I am here to help with NeighbourFriendly. Ask me about renting items, listing your stuff, finding properties, or how our platform works.";
 }
