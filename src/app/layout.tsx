@@ -49,6 +49,19 @@ export default function RootLayout({
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="NFR" />
                 <link rel="apple-touch-icon" href="/logo.png" />
+                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
+                <script type="text/javascript" dangerouslySetInnerHTML={{
+                    __html: `
+                    function googleTranslateElementInit() {
+                      new google.translate.TranslateElement({
+                        pageLanguage: 'en', 
+                        includedLanguages: 'hi,kn,ta,te,mr,bn,gu,en', 
+                        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                        autoDisplay: false
+                      }, 'google_translate_element');
+                    }
+                    `
+                }} />
             </head>
             <body className={inter.className}>
                 <div className="min-h-screen bg-gradient-to-br from-amber-50/30 via-white to-yellow-50/30">

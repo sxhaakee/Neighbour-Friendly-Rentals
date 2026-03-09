@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// Removed GoogleGenerativeAI import
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase Admin Client (Service Role for secure data access)
@@ -83,9 +83,8 @@ const PLATFORM_CONTEXT = `You are the official AI assistant for "NeighbourFriend
 
 Remember: Be concise, use emojis, and ONLY discuss NeighbourFriendly platform topics!`;
 
-// Initialize Gemini API
-const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
+// Initialize Mistral API
+const mistralApiKey = process.env.MISTRAL_API_KEY;
 
 export async function POST(request: Request) {
   try {
@@ -98,10 +97,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!genAI) {
-      console.error('Gemini API key is missing on server');
+    if (!mistralApiKey) {
+      console.error('Mistral API key is missing on server');
       return NextResponse.json({
-        message: "🤖 Hi! I'm the NFR assistant. I can help you find items to rent, list your own stuff, or answer questions about our platform! Try asking about 'how to rent a camera' or 'listing my bike'!",
+        message: "🤖 Hi! I'm the NFR assistant. I can help you find items to rent, list your own stuff, or answer questions about our platform! Try asking about 'how to rent a camera' or 'listing my bike'! (Mistral Key missing)",
         error: 'NO_API_KEY'
       });
     }
@@ -162,26 +161,33 @@ export async function POST(request: Request) {
     }
 
     try {
-      const model = genAI.getGenerativeModel({
-        model: "gemini-flash-latest",
-        systemInstruction: PLATFORM_CONTEXT + userContext
-      });
-
-      const chat = model.startChat({
-        history: [],
-        generationConfig: {
-          maxOutputTokens: 500,
-          temperature: 0.7,
+      const mistralResponse = await fetch("https://api.mistral.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${mistralApiKey}`
         },
+        body: JSON.stringify({
+          model: "mistral-large-latest",
+          messages: [
+            { role: "system", content: PLATFORM_CONTEXT + userContext + "\\n\\nIMPORTANT: If the user speaks in a regional language (like Hindi, Kannada, etc.), MUST reply in THAT language. Keep responses short and conversational, ready for Text-to-Speech." },
+            { role: "user", content: message }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
       });
 
-      const result = await chat.sendMessage(message);
-      const response = await result.response;
-      const text = response.text();
+      if (!mistralResponse.ok) {
+        throw new Error(`Mistral API Error Status: ${mistralResponse.status}`);
+      }
+
+      const data = await mistralResponse.json();
+      const text = data.choices[0].message.content;
 
       return NextResponse.json({ message: text });
     } catch (apiError: any) {
-      console.error('Gemini API Error:', apiError);
+      console.error('Mistral API Error:', apiError);
       const fallback = getFallbackResponse(message);
       return NextResponse.json({ 
         message: fallback, 

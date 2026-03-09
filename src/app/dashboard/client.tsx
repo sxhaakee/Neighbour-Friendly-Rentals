@@ -329,7 +329,9 @@ const DashboardClient = () => {
                                                     <div className="flex items-center gap-1 text-amber-600 font-bold text-lg mb-3">
                                                         <IndianRupee className="w-4 h-4" />
                                                         {item.price}
-                                                        <span className="text-xs text-gray-500 font-normal">/day</span>
+                                                        <span className="text-xs text-gray-500 font-normal">
+                                                            {item.pricing_model === 'per_event' || item.pricing_model === 'per-event' ? '/event' : '/day'}
+                                                        </span>
                                                     </div>
                                                     <div className="flex gap-2">
                                                         <button

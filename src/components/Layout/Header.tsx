@@ -7,6 +7,7 @@ import { Home, List, User, Search, Menu, X, Info, LogOut, Shield, MessageCircle,
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { NotificationCenter } from '../NotificationCenter';
+import { LanguageSwitcher } from '../LanguageSwitcher';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,8 +64,12 @@ const Header = () => {
               </Link>
             ))}
 
+            <div className="relative flex-shrink-0 ml-2">
+              <LanguageSwitcher />
+            </div>
+
             {user ? (
-              <div className="flex items-center space-x-3 ml-4">
+              <div className="flex items-center space-x-3 ml-2">
                 {/* Notification Center - Desktop */}
                 <div className="relative flex-shrink-0">
                   <NotificationCenter />
@@ -175,6 +180,9 @@ const Header = () => {
 
           {/* Mobile: Notification + Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
+            <div className="relative z-50">
+              <LanguageSwitcher />
+            </div>
             {user && (
               <div className="relative">
                 <NotificationCenter />

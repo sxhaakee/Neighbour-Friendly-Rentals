@@ -113,5 +113,65 @@ export const blogPosts: BlogPost[] = [
         </a>
       </div>
     `
+  },
+  {
+    id: '3',
+    slug: 'rent-dslr-camera-safely-in-bangalore',
+    title: 'How to Rent a DSLR Camera Safely in Bangalore (and Earn Passive Income)',
+    excerpt: 'A comprehensive guide to renting professional photography gear safely in Bangalore using strict P2P verification platforms like NeighbourFriendly.',
+    author: 'NFR Photography Team',
+    date: 'March 9, 2026',
+    readTime: '6 min read',
+    image: '/images/blog/dslr-rental-bangalore.png',
+    tags: ['Photography', 'Bangalore', 'Side Hustle', 'Safe Rentals'],
+    content: `
+      <p class="lead text-xl text-gray-600 mb-8">Whether you are shooting a weekend wedding at Palace Grounds or taking a trip to Nandi Hills, you need professional gear. But shelling out ₹1.5 Lakhs for a Canon R6 or Sony A7 III isn't viable for a two-day shoot. Enter the world of safe Peer-to-Peer (P2P) camera rentals in Bangalore.</p>
+
+      <p>Renting a DSLR in Bangalore used to mean leaving original government IDs as deposits at sketchy offline stores in Majestic or Indiranagar. Today, platforms like <strong>NeighbourFriendly Rentals (NFR)</strong> have revolutionized the process, making it hyper-local, completely digital, and—above all—safe.</p>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Why Renting a DSLR Makes Financial Sense</h2>
+      <p>Professional cameras depreciate rapidly. A lens that costs ₹80,000 today might lose 30% of its value in a year. By renting from a neighbor down the street, you:</p>
+      <ul class="list-disc pl-6 space-y-2 mb-6">
+        <li><strong>Save 95% of the cost:</strong> Rent a ₹1 Lakh kit for just ₹1,000/day.</li>
+        <li><strong>Test before you invest:</strong> Not sure if you prefer the Sony ecosystem over Nikon? Rent it for the weekend.</li>
+        <li><strong>Access hyper-local inventory:</strong> Why drive across traffic-choked Silk Board when your upstairs neighbor has a 70-200mm lens sitting idle?</li>
+      </ul>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">How NFR Ensures 100% Safety for Owners</h2>
+      <p>If you own a DSLR, you know it's your baby. Handing it to a stranger triggers massive anxiety. NFR eliminates this through a multi-layered security protocol:</p>
+      
+      <div class="space-y-4 my-6">
+        <div class="flex items-start">
+          <div class="flex-shrink-0 bg-amber-100 p-2 rounded-full mr-4">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <div>
+            <h4 class="font-bold text-lg text-gray-900">Aadhaar & Digital Verification</h4>
+            <p class="text-gray-600">Every renter goes through rigorous digital KYC. No fake accounts, no anonymous borrowers.</p>
+          </div>
+        </div>
+        <div class="flex items-start">
+          <div class="flex-shrink-0 bg-amber-100 p-2 rounded-full mr-4">
+            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div>
+            <h4 class="font-bold text-lg text-gray-900">Smart Rental Contracts</h4>
+            <p class="text-gray-600">Our platform generates legally binding digital agreements detailing the condition of the camera, the exact serial numbers, and the return date.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Turn Your Idle Camera Into ₹15,000/Month</h2>
+      <p>If your camera spends 25 days a month in a dry cabinet in HSR Layout, it's a liability. By listing it on NFR, you can effortlessly turn it into an income-generating asset. Popular kits (Body + 50mm Lens) rent for ₹800 to ₹1,500 per day. Just 10 rental days a month covers your EMI or funds your next big lens upgrade.</p>
+
+      <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 p-6 rounded-r-lg mt-8 shadow-sm">
+        <h3 class="font-bold text-amber-900 text-xl mb-2">Ready to monetize your photography gear?</h3>
+        <p class="text-amber-800 mb-6">Join hundreds of Bangaloreans making passive income by safely renting their DSLRs, Drones, and lenses to verified neighbors.</p>
+        <div class="flex gap-4">
+          <a href="/add-item" class="inline-block bg-amber-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-700 hover:shadow-md transition-all">List Your Camera</a>
+          <a href="/listings" class="inline-block bg-white text-amber-700 border border-amber-200 font-bold py-3 px-6 rounded-lg hover:bg-amber-50 transition-all">Browse Gear</a>
+        </div>
+      </div>
+    `
   }
 ];
