@@ -131,8 +131,16 @@ export const AIChatbot = () => {
     window.speechSynthesis.cancel();
 
     // Strip emojis for cleaner reading
-    const cleanText = text.replace(/([\\u2700-\\u27BF]|[\\uE000-\\uF8FF]|\\uD83C[\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDFFF]|[\\u2011-\\u26FF]|\\uD83E[\\uDD10-\\uDDFF])/g, '');
-
+    // Strip markdown, URLs, brackets, emojis, and special formatting for natural speech
+    const cleanText = text
+      .replace(/\\*\\*(.*?)\\*\\*/g, '$1') // Remove bold asterisks but keep text
+      .replace(/\\*(.*?)\\*/g, '$1')       // Remove italic asterisks but keep text
+      .replace(/#(.*?)\\n/g, '$1\\n')      // Remove header hashes
+      .replace(/\\[(.*?)\\]\\(.*?\\)/g, '$1') // Remove markdown links but keep the anchor text
+      .replace(/<[^>]*>?/gm, '')         // Remove HTML tags
+      .replace(/([\\u2700-\\u27BF]|[\\uE000-\\uF8FF]|\\uD83C[\\uDC00-\\uDFFF]|\\uD83D[\\uDC00-\\uDFFF]|[\\u2011-\\u26FF]|\\uD83E[\\uDD10-\\uDDFF])/g, '') // Strip emojis
+      .replace(/[\\*_~`>\\[\\]()]/g, '')     // Strip miscellaneous markdown/syntax characters
+      .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.rate = 1.05; // Slightly faster for conversational feel
