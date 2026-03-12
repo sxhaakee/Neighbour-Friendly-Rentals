@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { generateAgreementPDF } from '../utils/pdfGenerator';
 
 // Email service using Supabase Edge Functions (via Brevo)
 // NOTE: All emails are sent via server-side Edge Functions to avoid CORS and expose API keys
@@ -438,12 +439,22 @@ export const emailService = {
     try {
       console.log('📧 Sending Rental Agreement to:', agreementData.renterEmail, 'and', agreementData.ownerEmail);
       
+      // Generate PDF Data URI
+      const doc = await generateAgreementPDF(agreementData);
+      const pdfDataUri = doc.output('datauristring');
+      const pdfBase64 = pdfDataUri.split(',')[1];
+      const attachmentName = `Rental_Agreement_${agreementData.itemTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+
       // Call Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('send-email', {
         body: {
           email: agreementData.renterEmail, // Send to renter first (ideally we should send to both)
           type: 'rentalAgreement',
-          data: agreementData
+          data: agreementData,
+          attachment: {
+            content: pdfBase64,
+            name: attachmentName
+          }
         }
       });
       
@@ -452,7 +463,11 @@ export const emailService = {
         body: {
           email: agreementData.ownerEmail,
           type: 'rentalAgreement',
-          data: agreementData
+          data: agreementData,
+          attachment: {
+            content: pdfBase64,
+            name: attachmentName
+          }
         }
       });
 

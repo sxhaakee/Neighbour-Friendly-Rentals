@@ -376,7 +376,7 @@ export const socialService = {
   async getLeaderboard(type: 'listings' | 'bookings' | 'reviews' | 'earnings', limit = 10): Promise<LeaderboardEntry[]> {
     try {
       let query = supabase
-        .from('profiles')
+        .from('public_profiles' as any)
         .select('id, full_name, avatar_url');
 
       // Add score calculation based on type

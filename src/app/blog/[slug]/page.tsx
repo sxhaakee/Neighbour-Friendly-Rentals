@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import DOMPurify from 'isomorphic-dompurify';
 import { blogPosts } from '@/data/blogPosts';
 
 
@@ -83,7 +84,7 @@ export default function BlogPost({ params }: Props) {
                 prose-headings:font-bold prose-headings:text-gray-900 prose-headings:tight
                 prose-p:leading-relaxed prose-img:rounded-xl prose-img:shadow-lg
                 prose-li:marker:text-amber-500"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
                     />
                 </article>
 

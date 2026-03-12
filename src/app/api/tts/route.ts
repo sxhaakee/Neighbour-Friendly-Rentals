@@ -1,9 +1,25 @@
 import { NextResponse } from 'next/server';
+import { rateLimit } from '@/lib/rateLimit';
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 60 seconds
+  uniqueTokenPerInterval: 500,
+});
 
 export async function POST(request: Request) {
   const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
 
   try {
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const { isRateLimited } = limiter.check(10, ip); // 10 requests per minute per IP
+    
+    if (isRateLimited) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded' },
+        { status: 429 }
+      );
+    }
+
     const { text } = await request.json();
 
     if (!text) {

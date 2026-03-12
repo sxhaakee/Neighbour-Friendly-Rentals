@@ -130,7 +130,7 @@ class ServiceProviderService {
     try {
       let query = supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, subcategories, description, tagline, services, pricing_model, base_price, price_range_min, price_range_max, city, state, service_areas, latitude, longitude, contact_person, logo_url, images, portfolio_images, instagram_url, facebook_url, youtube_url, linkedin_url, twitter_url, website_url, video_url, years_experience, team_size, equipment_owned, certifications, rating, total_bookings, completed_bookings, views_count, verified, featured, status, created_at')
         .eq('status', 'approved')
         .order('rating', { ascending: false });
 
@@ -159,7 +159,7 @@ class ServiceProviderService {
       const { data, error } = await query;
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as ServiceProvider[];
     } catch (error) {
       console.error('Error fetching service providers:', error);
       throw error;
@@ -172,7 +172,7 @@ class ServiceProviderService {
       // Add timestamp to bust cache
       const { data, error } = await supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, subcategories, description, tagline, services, pricing_model, base_price, price_range_min, price_range_max, city, state, service_areas, latitude, longitude, owner_id, contact_person, phone, email, whatsapp, website, logo_url, images, portfolio_images, instagram_url, facebook_url, youtube_url, linkedin_url, twitter_url, website_url, video_url, years_experience, team_size, equipment_owned, certifications, rating, total_bookings, completed_bookings, views_count, verified, business_license, gst_number, featured, status, created_at')
         .eq('id', id)
         .single()
         .then(result => {
@@ -190,7 +190,7 @@ class ServiceProviderService {
         await this.incrementViews(id);
       }
 
-      return data;
+      return data as unknown as ServiceProvider;
     } catch (error) {
       console.error('Error fetching service provider:', error);
       throw error;
@@ -353,7 +353,7 @@ class ServiceProviderService {
     try {
       let query = supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, subcategories, description, tagline, services, pricing_model, base_price, price_range_min, price_range_max, city, state, service_areas, latitude, longitude, contact_person, logo_url, images, portfolio_images, instagram_url, facebook_url, youtube_url, linkedin_url, twitter_url, website_url, video_url, years_experience, team_size, equipment_owned, certifications, rating, total_bookings, completed_bookings, views_count, verified, featured, status, created_at')
         .eq('status', 'approved')
         .eq('featured', true);
 
@@ -366,7 +366,7 @@ class ServiceProviderService {
         .limit(limit);
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as ServiceProvider[];
     } catch (error) {
       console.error('Error fetching featured providers:', error);
       throw error;
@@ -378,13 +378,13 @@ class ServiceProviderService {
     try {
       const { data, error } = await supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, subcategories, description, tagline, services, pricing_model, base_price, price_range_min, price_range_max, city, state, service_areas, latitude, longitude, contact_person, logo_url, images, portfolio_images, instagram_url, facebook_url, youtube_url, linkedin_url, twitter_url, website_url, video_url, years_experience, team_size, equipment_owned, certifications, rating, total_bookings, completed_bookings, views_count, verified, featured, status, created_at')
         .eq('status', 'approved')
         .eq('category', category)
         .order('rating', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as unknown as ServiceProvider[];
     } catch (error) {
       console.error('Error fetching providers by category:', error);
       throw error;

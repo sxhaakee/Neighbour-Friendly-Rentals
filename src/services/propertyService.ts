@@ -112,7 +112,7 @@ class PropertyService {
     try {
       let query = supabase
         .from('properties')
-        .select('*')
+        .select('id, type, title, description, address, city, state, pincode, latitude, longitude, locality, rent_amount, deposit_amount, maintenance_charges, negotiable, pricing_model, bedrooms, bathrooms, balconies, area_sqft, floor_number, total_floors, age_years, furnishing, amenities, preferred_tenants, pets_allowed, non_veg_allowed, images, video_url, virtual_tour_url, owner_name, builder_name, available_from, lease_duration, minimum_stay_months, status, verified, featured, views_count, created_at')
         .eq('status', 'approved')
         .order('created_at', { ascending: false });
 
@@ -156,7 +156,7 @@ class PropertyService {
     try {
       const { data, error } = await supabase
         .from('properties')
-        .select('*')
+        .select('id, type, title, description, address, city, state, pincode, latitude, longitude, locality, rent_amount, deposit_amount, maintenance_charges, negotiable, pricing_model, bedrooms, bathrooms, balconies, area_sqft, floor_number, total_floors, age_years, furnishing, amenities, preferred_tenants, pets_allowed, non_veg_allowed, images, video_url, virtual_tour_url, owner_id, owner_name, owner_phone, owner_email, builder_name, available_from, lease_duration, minimum_stay_months, status, verified, featured, views_count, created_at')
         .eq('id', id)
         .single();
 
@@ -326,7 +326,7 @@ class PropertyService {
     try {
       let query = supabase
         .from('properties')
-        .select('*')
+        .select('id, type, title, description, address, city, state, pincode, latitude, longitude, locality, rent_amount, deposit_amount, maintenance_charges, negotiable, pricing_model, bedrooms, bathrooms, balconies, area_sqft, floor_number, total_floors, age_years, furnishing, amenities, preferred_tenants, pets_allowed, non_veg_allowed, images, video_url, virtual_tour_url, owner_name, builder_name, available_from, lease_duration, minimum_stay_months, status, verified, featured, views_count, created_at')
         .eq('status', 'approved')
         .eq('featured', true);
 
@@ -400,7 +400,7 @@ class PropertyService {
     try {
       const { data, error } = await supabase
         .from('properties')
-        .select('*')
+        .select('id, type, title, description, address, city, state, pincode, latitude, longitude, locality, rent_amount, deposit_amount, maintenance_charges, negotiable, pricing_model, bedrooms, bathrooms, balconies, area_sqft, floor_number, total_floors, age_years, furnishing, amenities, preferred_tenants, pets_allowed, non_veg_allowed, images, video_url, virtual_tour_url, owner_name, builder_name, available_from, lease_duration, minimum_stay_months, status, verified, featured, views_count, created_at')
         .eq('status', 'approved')
         .ilike('city', `%${city}%`)
         .order('created_at', { ascending: false });
@@ -418,7 +418,7 @@ class PropertyService {
     try {
       const { data, error } = await supabase
         .from('properties')
-        .select('*')
+        .select('id, type, title, description, address, city, state, pincode, latitude, longitude, locality, rent_amount, deposit_amount, maintenance_charges, negotiable, pricing_model, bedrooms, bathrooms, balconies, area_sqft, floor_number, total_floors, age_years, furnishing, amenities, preferred_tenants, pets_allowed, non_veg_allowed, images, video_url, virtual_tour_url, owner_name, builder_name, available_from, lease_duration, minimum_stay_months, status, verified, featured, views_count, created_at')
         .eq('status', 'approved')
         .ilike('city', `%${city}%`)
         .order('views_count', { ascending: false })

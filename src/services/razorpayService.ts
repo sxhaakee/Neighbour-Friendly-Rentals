@@ -1,16 +1,11 @@
 import { supabase } from '../lib/supabase';
 import { emailService } from './emailService';
 
-// Razorpay configuration - Your live key
-// Razorpay configuration - Use env var if available, else fallback to live key (caution)
-const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_RZHNDjla2df5tS';
+// Razorpay configuration - MUST be set via environment variable
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || '';
 
-// Validate and log
-if (!RAZORPAY_KEY_ID || RAZORPAY_KEY_ID === 'YOUR_RAZORPAY_KEY_HERE') {
-  console.error('❌ Razorpay key not configured');
-} else {
-  const isTest = RAZORPAY_KEY_ID.includes('test');
-  console.log(`✅ Razorpay ${isTest ? 'TEST' : 'LIVE'} key loaded`);
+if (!RAZORPAY_KEY_ID) {
+  console.error('❌ CRITICAL: NEXT_PUBLIC_RAZORPAY_KEY_ID is not set. Payments will not work.');
 }
 
 interface RazorpayOptions {
@@ -461,18 +456,27 @@ export const razorpayService = {
   },
 
   /**
-   * Verify payment signature (for server-side verification)
+   * Verify payment signature via server-side API
+   * This calls /api/verify-payment which uses RAZORPAY_KEY_SECRET (never exposed to client)
    */
   async verifyPayment(
-    _razorpayOrderId: string,
-    _razorpayPaymentId: string,
-    _razorpaySignature: string
+    razorpayOrderId: string,
+    razorpayPaymentId: string,
+    razorpaySignature: string
   ): Promise<boolean> {
     try {
-      // This should be done on server-side for security
-      // For now, we'll trust Razorpay's callback
-      // In production, implement server-side verification
-      return true;
+      const response = await fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razorpay_order_id: razorpayOrderId,
+          razorpay_payment_id: razorpayPaymentId,
+          razorpay_signature: razorpaySignature,
+        }),
+      });
+
+      const data = await response.json();
+      return data.verified === true;
     } catch (error) {
       console.error('Payment verification error:', error);
       return false;

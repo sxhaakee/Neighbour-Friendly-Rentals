@@ -96,7 +96,7 @@ export const chatService = {
         console.log('[chatService] Fetching profile for user:', otherUserId);
         
         const { data: profile, error: profileError } = await supabase
-          .from('profiles')
+          .from('public_profiles' as any)
           .select('full_name, avatar_url')
           .eq('id', otherUserId)
           .single();
@@ -180,7 +180,7 @@ export const chatService = {
     try {
       const { notificationService } = await import('./notificationService');
       const { data: sender } = await supabase
-        .from('profiles')
+        .from('public_profiles' as any)
         .select('full_name')
         .eq('id', senderId)
         .single();

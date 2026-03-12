@@ -12,12 +12,12 @@ export const listingService = {
   async getApprovedListings() {
     const { data, error } = await supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_name')
       .eq('status', 'approved')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data;
+    return (data || []) as unknown as Listing[];
   },
 
   // Get all listings (admin only)
@@ -59,12 +59,12 @@ export const listingService = {
   async getListingById(id: string) {
     const { data, error } = await supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info')
       .eq('id', id)
       .single();
 
     if (error) throw error;
-    return data;
+    return data as unknown as Listing;
   },
 
   // Create listing
@@ -145,7 +145,7 @@ export const listingService = {
       .limit(limit);
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as unknown as Listing[];
   },
 
   // Delete listing
@@ -249,7 +249,7 @@ export const listingService = {
   async searchListings(query: string, category?: string) {
     let queryBuilder = supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_name')
       .eq('status', 'approved');
 
     if (query) {
@@ -264,6 +264,6 @@ export const listingService = {
     const { data, error } = await queryBuilder.order('created_at', { ascending: false });
 
     if (error) throw error;
-    return data;
+    return (data || []) as unknown as Listing[];
   },
 };

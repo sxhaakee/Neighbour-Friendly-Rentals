@@ -1,11 +1,24 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabaseServer';
+import { rateLimit } from '@/lib/rateLimit';
+
+const limiter = rateLimit({
+  interval: 60 * 60 * 1000, // 1 hour
+  uniqueTokenPerInterval: 500,
+});
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600; // Revalidate every hour
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+        const { isRateLimited } = limiter.check(5, ip); // 5 requests per hour since it's cached anyway
+        
+        if (isRateLimited) {
+            return new NextResponse('Rate limit exceeded', { status: 429 });
+        }
+
         console.log('[Product Feed] Starting feed generation...');
         
         // Initialize with empty arrays for testing

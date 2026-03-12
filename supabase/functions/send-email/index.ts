@@ -570,7 +570,7 @@ serve(async (req) => {
     const body = await req.json()
     console.log('Received request:', JSON.stringify(body))
     
-    const { email, type, data } = body
+    const { email, type, data, attachment } = body
     
     // Validate inputs
     if (!email || !type) {
@@ -608,6 +608,20 @@ serve(async (req) => {
     
     // Send email via Brevo
     // API Docs: https://developers.brevo.com/reference/sendtransacemail
+    const brevoPayload: any = {
+      sender: {
+        name: 'NeighbourFriendly Rentals',
+        email: 'noreply@neighbourfriendly.in'
+      },
+      to: [{ email: email, name: data.userName || data.renterName || data.ownerName || 'User' }],
+      subject: template.subject,
+      htmlContent: template.html,
+    }
+
+    if (attachment) {
+      brevoPayload.attachment = [attachment]
+    }
+
     const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
@@ -615,15 +629,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: JSON.stringify({
-        sender: {
-          name: 'NeighbourFriendly Rentals',
-          email: 'noreply@neighbourfriendly.in'
-        },
-        to: [{ email: email, name: data.userName || 'User' }],
-        subject: template.subject,
-        htmlContent: template.html,
-      }),
+      body: JSON.stringify(brevoPayload),
     })
 
     const result = await response.json()

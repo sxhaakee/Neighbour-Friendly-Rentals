@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
+import { rateLimit } from '@/lib/rateLimit';
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 60 seconds
+  uniqueTokenPerInterval: 500,
+});
 
 // Initialize Supabase Admin Client (Service Role for secure data access)
 // NEVER use anon key as fallback — it must be the real service role key
@@ -95,7 +101,33 @@ export async function POST(request: Request) {
   const geminiApiKey = process.env.GEMINI_API_KEY;
   
   try {
-    const { message, userId } = await request.json();
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const { isRateLimited } = limiter.check(10, ip); // 10 requests per minute per IP
+    
+    if (isRateLimited) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded', message: "Whoa there! I need a quick breather. Please try again in a minute." },
+        { status: 429 }
+      );
+    }
+
+    const { message } = await request.json();
+
+    // STRICTLY extract userId from the auth token header.
+    // NEVER trust a client-provided userId in the body to prevent IDOR spoofing.
+    let userId = null;
+    const authHeader = request.headers.get('authorization');
+    if (authHeader?.startsWith('Bearer ') && supabase) {
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        const { data: { user } } = await supabase.auth.getUser(token);
+        if (user) {
+          userId = user.id;
+        }
+      } catch {
+        console.warn('[Chat API] Failed to verify auth token');
+      }
+    }
 
     if (!message) {
       return NextResponse.json(

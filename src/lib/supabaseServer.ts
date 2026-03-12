@@ -3,18 +3,22 @@ import { Database } from './database.types';
 
 // Server-side Supabase client — uses service role key for elevated access
 // NEVER expose SUPABASE_SERVICE_ROLE_KEY to the browser
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// NEVER fall back to anon key — that would silently bypass RLS
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('[Supabase Server] CRITICAL: Missing environment variables. Set SUPABASE_SERVICE_ROLE_KEY in .env.local');
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  console.error('[Supabase Server] CRITICAL: NEXT_PUBLIC_SUPABASE_URL is not set.');
+}
+if (!supabaseServiceKey) {
+  throw new Error('CRITICAL: SUPABASE_SERVICE_ROLE_KEY is not set. Server-side operations cannot proceed securely.');
 }
 
 // Server-side Supabase client (for API routes and server components)
-// No session persistence or browser-specific features
+// Uses a build-time placeholder key if the real key is missing — actual requests will fail safely
 export const supabaseServer = createClient<Database>(
-  supabaseUrl || '',
-  supabaseServiceKey || '',
+  supabaseUrl,
+  supabaseServiceKey || 'build-time-placeholder-key-not-for-production',
   {
     auth: {
       autoRefreshToken: false,

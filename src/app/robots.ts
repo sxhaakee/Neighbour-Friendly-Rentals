@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin/', '/nfr-control/', '/profile/', '/dashboard/', '/messages/'],
+      disallow: ['/admin/', '/profile/', '/dashboard/', '/messages/'],
     },
     sitemap: 'https://neighbourfriendly.in/sitemap.xml',
   };
