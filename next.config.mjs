@@ -22,6 +22,10 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'nfr.jiobase.com',
+            },
+            {
+                protocol: 'https',
                 hostname: '*.googleusercontent.com',
             },
         ],

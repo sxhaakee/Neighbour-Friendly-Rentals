@@ -114,7 +114,7 @@ export async function middleware(req: NextRequest) {
 
     // Redirect unauthenticated users away from protected routes
     if ((isProtected || isAdminRoute) && !isAuthenticated) {
-      const redirectUrl = new URL('/auth', req.url);
+      const redirectUrl = new URL('/login', req.url);
       redirectUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(redirectUrl);
     }

@@ -11,7 +11,7 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   console.error('[Supabase Server] CRITICAL: NEXT_PUBLIC_SUPABASE_URL is not set.');
 }
 if (!supabaseServiceKey) {
-  throw new Error('CRITICAL: SUPABASE_SERVICE_ROLE_KEY is not set. Server-side operations cannot proceed securely.');
+  console.error('[Supabase Server] CRITICAL: SUPABASE_SERVICE_ROLE_KEY is not set. Server-side operations will fail securely.');
 }
 
 // Server-side Supabase client (for API routes and server components)
