@@ -185,10 +185,12 @@ export const chatService = {
         .eq('id', senderId)
         .single();
 
+      const senderName = (sender as any)?.full_name || 'User';
+
       await notificationService.createNotification({
         user_id: receiverId,
         type: 'message',
-        title: `New message from ${sender?.full_name || 'User'}`,
+        title: `New message from ${senderName}`,
         message: message.length > 50 ? message.substring(0, 47) + '...' : message,
         link: `/chat?conversation=${conversationId}`,
         data: { conversation_id: conversationId, sender_id: senderId }
