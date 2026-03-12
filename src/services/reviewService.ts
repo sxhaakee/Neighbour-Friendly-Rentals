@@ -38,7 +38,7 @@ export const reviewService = {
       // Fetch reviews without profiles relationship to avoid foreign key errors
       const { data, error } = await supabase
         .from('reviews')
-        .select('*')
+        .select('id, rating, comment, user_id, user_name, listing_id, created_at, updated_at')
         .eq('listing_id', listingId)
         .order('created_at', { ascending: false });
 

@@ -24,7 +24,7 @@ export const listingService = {
   async getAllListings() {
     const { data, error } = await supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -35,7 +35,7 @@ export const listingService = {
   async getListingsByStatus(status: 'pending' | 'approved' | 'rejected' | 'hidden') {
     const { data, error } = await supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
       .eq('status', status)
       .order('created_at', { ascending: false });
 
@@ -47,7 +47,7 @@ export const listingService = {
   async getUserListings(userId: string) {
     const { data, error } = await supabase
       .from('listings')
-      .select('*')
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
       .eq('owner_id', userId)
       .order('created_at', { ascending: false });
 
@@ -72,7 +72,7 @@ export const listingService = {
     const { data, error } = await supabase
       .from('listings')
       .insert(listing)
-      .select()
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info')
       .single();
 
     if (error) throw error;
@@ -108,7 +108,7 @@ export const listingService = {
       .from('listings')
       .update(updates)
       .eq('id', id)
-      .select()
+      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info')
       .single();
 
     if (error) throw error;
@@ -121,7 +121,7 @@ export const listingService = {
       .from('listings')
       .update({ featured })
       .eq('id', id)
-      .select()
+      .select('id, featured')
       .single();
 
     if (error) throw error;
@@ -184,7 +184,7 @@ export const listingService = {
       .from('listings')
       .update({ status: 'approved', rejection_reason: null })
       .eq('id', id)
-      .select()
+      .select('id, status')
       .single();
 
     if (error) throw error;
@@ -197,7 +197,7 @@ export const listingService = {
       .from('listings')
       .update({ status: 'rejected', rejection_reason: reason })
       .eq('id', id)
-      .select()
+      .select('id, status, rejection_reason')
       .single();
 
     if (error) throw error;

@@ -58,7 +58,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .insert([booking])
-      .select()
+      .select('id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at')
       .single();
 
     if (error) {
@@ -87,7 +87,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
         listings:listing_id (
           title,
           images,
@@ -107,7 +107,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
         listings:listing_id (
           title,
           images,
@@ -127,7 +127,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
         listings:listing_id (
           title,
           images,
@@ -145,15 +145,13 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        *,
+        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at, notes, special_requests,
         listings:listing_id (
           title,
           images,
           category,
           price,
-          owner_name,
-          owner_email,
-          contact_info
+          owner_name
         )
       `)
       .eq('id', id)
@@ -169,7 +167,7 @@ export const bookingService = {
       .from('bookings')
       .update(updates)
       .eq('id', id)
-      .select()
+      .select('id, status, updated_at')
       .single();
 
     if (error) throw error;
@@ -260,7 +258,7 @@ export const bookingService = {
   async checkAvailability(listingId: string, startDate: string, endDate: string) {
     const { data, error } = await supabase
       .from('bookings')
-      .select('*')
+      .select('id, start_date, end_date, status')
       .eq('listing_id', listingId)
       .in('status', ['pending', 'confirmed']);
 

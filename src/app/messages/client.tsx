@@ -389,8 +389,16 @@ const MessagesClient = () => {
                                                         className={`flex mb-4 ${isOwn ? 'justify-end' : 'justify-start'}`}
                                                     >
                                                         {!isOwn && showAvatar && (
-                                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center text-white text-sm font-semibold mr-2 flex-shrink-0">
-                                                                {selectedConversation.profiles?.full_name?.[0]?.toUpperCase() || 'U'}
+                                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-white text-sm font-semibold mr-2 flex-shrink-0 overflow-hidden shadow-sm">
+                                                                {selectedConversation.profiles?.avatar_url ? (
+                                                                    <img
+                                                                        src={selectedConversation.profiles.avatar_url}
+                                                                        alt={selectedConversation.profiles.full_name || 'User'}
+                                                                        className="w-full h-full object-cover"
+                                                                    />
+                                                                ) : (
+                                                                    selectedConversation.profiles?.full_name?.[0]?.toUpperCase() || 'U'
+                                                                )}
                                                             </div>
                                                         )}
                                                         {!isOwn && !showAvatar && <div className="w-8 mr-2" />}

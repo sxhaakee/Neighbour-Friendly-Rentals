@@ -98,7 +98,7 @@ class ServiceProviderService {
     try {
       let query = supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, contact_person, email, phone, status, created_at, verified, featured')
         .order('created_at', { ascending: false });
 
       // Apply filters
@@ -118,7 +118,7 @@ class ServiceProviderService {
       const { data, error } = await query;
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as any;
     } catch (error) {
       console.error('Error fetching all service providers:', error);
       return [];
@@ -202,12 +202,12 @@ class ServiceProviderService {
     try {
       const { data, error } = await supabase
         .from('service_providers')
-        .select('*')
+        .select('id, business_name, category, status, created_at, verified, featured, views_count')
         .eq('owner_id', ownerId)
         .order('created_at', { ascending: false});
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as any;
     } catch (error) {
       console.error('Error fetching owner providers:', error);
       throw error;
@@ -413,12 +413,15 @@ class ServiceProviderService {
     try {
       const { data, error } = await supabase
         .from('service_bookings')
-        .select('*, service_providers(*)')
+        .select(`
+          id, service_provider_id, customer_id, customer_name, event_type, event_date, status, payment_status, created_at,
+          service_provider:service_providers(id, business_name, category, logo_url)
+        `)
         .eq('customer_id', customerId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as any;
     } catch (error) {
       console.error('Error fetching customer bookings:', error);
       throw error;
@@ -430,12 +433,12 @@ class ServiceProviderService {
     try {
       const { data, error } = await supabase
         .from('service_bookings')
-        .select('*')
+        .select('id, service_provider_id, customer_id, customer_name, customer_email, customer_phone, event_type, event_date, event_time, event_location, status, payment_status, created_at, advance_paid')
         .eq('service_provider_id', providerId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data || []) as any;
     } catch (error) {
       console.error('Error fetching provider bookings:', error);
       throw error;

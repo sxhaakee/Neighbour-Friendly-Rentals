@@ -74,12 +74,12 @@ export const rentalAgreementService = {
    * Get agreement by booking ID
    */
   async getAgreementByBooking(bookingId: string): Promise<RentalAgreement | null> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('rental_agreements')
-      .select('*')
+      .select('id, booking_id, listing_id, renter_id, owner_id, renter_name, renter_email, renter_phone, owner_name, owner_email, owner_phone, item_title, start_date, end_date, total_days, total_price, status, agreed_at, pdf_url, created_at, updated_at, agreement_data')
       .eq('booking_id', bookingId)
       .is('deleted_at', null)
-      .single();
+      .single() as any);
 
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching agreement:', error);
@@ -93,12 +93,12 @@ export const rentalAgreementService = {
    * Get all agreements for a user (renter or owner)
    */
   async getUserAgreements(userId: string): Promise<RentalAgreement[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('rental_agreements')
-      .select('*')
+      .select('id, booking_id, listing_id, renter_id, owner_id, renter_name, renter_email, renter_phone, owner_name, owner_email, item_title, start_date, end_date, total_days, total_price, status, created_at, updated_at, agreed_at, agreement_data')
       .or(`renter_id.eq.${userId},owner_id.eq.${userId}`)
       .is('deleted_at', null)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false }) as any);
 
     if (error) {
       console.error('Error fetching user agreements:', error);
@@ -132,7 +132,7 @@ export const rentalAgreementService = {
       // Fetch from rental_agreements table directly
       let query = supabase
         .from('rental_agreements')
-        .select('*')
+        .select('id, booking_id, listing_id, renter_id, owner_id, renter_name, owner_email, owner_phone, owner_name, item_title, status, created_at, pdf_url')
         .order('created_at', { ascending: false });
 
       if (!includeDeleted) {

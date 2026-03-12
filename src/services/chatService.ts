@@ -22,6 +22,12 @@ type Message = {
   created_at: string | null;
 };
 
+type PublicProfile = {
+  id: string;
+  full_name: string | null;
+  avatar_url: string | null;
+};
+
 export const chatService = {
   /**
    * Get or create a conversation for a listing
@@ -45,16 +51,16 @@ export const chatService = {
 
       if (error) throw error;
 
-      // Get the full conversation object
+      // Get the full conversation object with explicit fields
       const { data: conversation, error: fetchError } = await supabase
         .from('conversations')
-        .select('*')
+        .select('id, listing_id, user1_id, user2_id, last_message, last_message_at, created_at, updated_at')
         .eq('id', data)
         .single();
 
       if (fetchError) throw fetchError;
 
-      return conversation;
+      return conversation as Conversation;
     } catch (error) {
       console.error('Error getting/creating conversation:', error);
       throw error;
@@ -69,10 +75,22 @@ export const chatService = {
   async getUserConversations(userId: string): Promise<Conversation[]> {
     console.log('[chatService] Fetching conversations for user:', userId);
     
+    // Fetch conversations with listing info and profiles joined from public_profiles
+    // Note: We use user1_id.eq.${userId} OR user2_id.eq.${userId}
+    // We can't easily join the "other" user profile in a single query with OR in Supabase
+    // So we fetch conversations first, then fetch all unique "other" profiles in one batch
+    
     const { data, error } = await supabase
       .from('conversations')
       .select(`
-        *,
+        id,
+        listing_id,
+        user1_id,
+        user2_id,
+        last_message,
+        last_message_at,
+        created_at,
+        updated_at,
         listings:listing_id (
           title,
           images
@@ -86,36 +104,35 @@ export const chatService = {
       throw error;
     }
 
-    console.log('[chatService] Raw conversations data:', data);
+    if (!data || data.length === 0) return [];
 
-    // Fetch profiles for each conversation
-    const conversationsWithProfiles = await Promise.all(
-      (data || []).map(async (convo) => {
-        const otherUserId = convo.user1_id === userId ? convo.user2_id : convo.user1_id;
-        
-        console.log('[chatService] Fetching profile for user:', otherUserId);
-        
-        const { data: profile, error: profileError } = await supabase
-          .from('public_profiles' as any)
-          .select('full_name, avatar_url')
-          .eq('id', otherUserId)
-          .single();
+    // Get all unique other user IDs
+    const otherUserIds = Array.from(new Set(
+      data.map(convo => convo.user1_id === userId ? convo.user2_id : convo.user1_id)
+    ));
 
-        if (profileError) {
-          console.error('[chatService] Error fetching profile:', profileError);
-        }
+    // Fetch all profiles in one batch
+    const { data: profiles, error: profileError } = await supabase
+      .from('public_profiles' as any)
+      .select('id, full_name, avatar_url')
+      .in('id', otherUserIds);
 
-        console.log('[chatService] Profile data:', profile);
+    if (profileError) {
+      console.error('[chatService] Error fetching batch profiles:', profileError);
+    }
 
-        return {
-          ...convo,
-          profiles: profile,
-        };
-      })
-    );
+    // Map profiles back to conversations
+    const profileMap = new Map((profiles as unknown as PublicProfile[] || []).map(p => [p.id, p]));
 
-    console.log('[chatService] Conversations with profiles:', conversationsWithProfiles);
-    return conversationsWithProfiles;
+    const conversationsWithProfiles = data.map(convo => {
+      const otherUserId = convo.user1_id === userId ? convo.user2_id : convo.user1_id;
+      return {
+        ...convo,
+        profiles: profileMap.get(otherUserId) || null
+      };
+    });
+
+    return conversationsWithProfiles as unknown as Conversation[];
   },
 
   /**
@@ -126,7 +143,7 @@ export const chatService = {
   async getMessages(conversationId: string): Promise<Message[]> {
     const { data, error } = await supabase
       .from('messages')
-      .select('*')
+      .select('id, conversation_id, sender_id, receiver_id, content, read, created_at')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true });
 
@@ -160,7 +177,7 @@ export const chatService = {
         receiver_id: receiverId,
         content: message,
       })
-      .select()
+      .select('id, conversation_id, sender_id, receiver_id, content, read, created_at')
       .single();
 
     if (error) {

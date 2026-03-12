@@ -8,7 +8,6 @@ export interface Notification {
   message: string;
   link?: string | null;
   read: boolean | null;
-  data?: any;
   created_at: string | null;
 }
 
@@ -27,7 +26,7 @@ export const notificationService = {
     try {
       const { data, error } = await supabase
         .from('notifications')
-        .select('*')
+        .select('id, user_id, title, message, type, link, read, created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(limit);

@@ -6,7 +6,6 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
-  image_url?: string;
   read: boolean | null;
   created_at: string | null;
   sender?: {
@@ -38,11 +37,11 @@ export const messagingService = {
     // Check if conversation exists
     const { data: existing, error: fetchError } = await supabase
       .from('conversations')
-      .select('*')
+      .select('id, user1_id, user2_id, last_message, last_message_at, user1_typing, user2_typing, created_at')
       .or(`and(user1_id.eq.${userId1},user2_id.eq.${userId2}),and(user1_id.eq.${userId2},user2_id.eq.${userId1})`)
       .single();
 
-    if (existing) return existing;
+    if (existing) return existing as unknown as Conversation;
 
     // Create new conversation
     const { data, error } = await supabase
@@ -60,38 +59,68 @@ export const messagingService = {
 
   // Get user conversations
   async getUserConversations(userId: string): Promise<Conversation[]> {
-    const { data, error } = await supabase
+    const { data: conversations, error } = await supabase
       .from('conversations')
-      .select(`
-        *,
-        user1:profiles!conversations_user1_id_fkey(id, full_name, avatar_url),
-        user2:profiles!conversations_user2_id_fkey(id, full_name, avatar_url)
-      `)
+      .select('id, user1_id, user2_id, last_message, last_message_at, user1_typing, user2_typing, created_at')
       .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
       .order('last_message_at', { ascending: false, nullsFirst: false });
 
     if (error) throw error;
+    if (!conversations) return [];
+
+    // Fetch profiles for all unique users involved
+    const userIds = Array.from(new Set(
+      conversations.flatMap(c => [c.user1_id, c.user2_id])
+    )).filter(id => id !== userId);
+
+    if (userIds.length === 0) return conversations as unknown as Conversation[];
+
+    const { data: profiles, error: profileError } = await (supabase
+      .from('public_profiles' as any)
+      .select('id, full_name, avatar_url')
+      .in('id', userIds) as any);
+
+    if (profileError) console.error('Error fetching profiles:', profileError);
+
+    const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]));
 
     // Map to include other_user
-    return (data || []).map((conv: any) => ({
-      ...conv,
-      other_user: conv.user1_id === userId ? conv.user2 : conv.user1,
-    }));
+    return conversations.map((conv: any) => {
+      const otherUserId = conv.user1_id === userId ? conv.user2_id : conv.user1_id;
+      return {
+        ...conv,
+        other_user: profileMap.get(otherUserId) || { id: otherUserId, full_name: 'User' },
+      };
+    });
   },
 
   // Get conversation messages
   async getMessages(conversationId: string): Promise<Message[]> {
-    const { data, error } = await supabase
+    const { data: messages, error } = await supabase
       .from('messages')
-      .select(`
-        *,
-        sender:profiles!messages_sender_id_fkey(id, full_name, avatar_url)
-      `)
+      .select('id, conversation_id, sender_id, receiver_id, content, read, created_at')
       .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true });
 
     if (error) throw error;
-    return data || [];
+    if (!messages) return [];
+
+    // Fetch unique sender profiles
+    const senderIds = Array.from(new Set(messages.map(m => m.sender_id)));
+    
+    const { data: profiles, error: profileError } = await supabase
+      .from('public_profiles' as any)
+      .select('id, full_name, avatar_url')
+      .in('id', senderIds);
+
+    if (profileError) console.error('Error fetching sender profiles:', profileError);
+
+    const profileMap = new Map((profiles || []).map((p: any) => [p.id, p]));
+
+    return messages.map((msg: any) => ({
+      ...msg,
+      sender: profileMap.get(msg.sender_id),
+    })) as Message[];
   },
 
   // Send message
@@ -119,7 +148,7 @@ export const messagingService = {
       })
       .eq('id', conversationId);
 
-    return data;
+    return data as unknown as Message;
   },
 
   // Mark messages as read
