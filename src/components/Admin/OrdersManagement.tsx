@@ -147,6 +147,12 @@ export const OrdersManagement = () => {
           contactAddress: booking.listings.location,
           dashboardUrl: `${window.location.origin}/dashboard`,
           email: booking.renter_email,
+          renterName: booking.renter_name,
+          renterPhone: booking.renter_phone,
+          renterAddress: 'Address on file',
+          ownerName: booking.listings.owner_name,
+          ownerPhone: booking.listings.contact_info,
+          ownerAddress: booking.listings.location,
         });
 
         // Also send to owner
@@ -175,6 +181,12 @@ export const OrdersManagement = () => {
             contactAddress: 'Will be shared by admin',
             dashboardUrl: `${window.location.origin}/dashboard`,
             email: ownerProfile.email,
+            renterName: booking.renter_name,
+            renterPhone: booking.renter_phone,
+            renterAddress: 'Address on file',
+            ownerName: booking.listings.owner_name,
+            ownerPhone: booking.listings.contact_info,
+            ownerAddress: booking.listings.location,
           });
         }
 

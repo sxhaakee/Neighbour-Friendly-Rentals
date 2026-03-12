@@ -10,41 +10,57 @@ export const generateAgreementPDF = async (agreementData: any) => {
     
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 14;
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20; // Increased margin for better breathing room
     
-    // Header
-    doc.setFillColor(251, 191, 36); // Amber color
-    doc.rect(0, 0, pageWidth, 35, 'F');
+    // Header - Professional Dark Blue
+    doc.setFillColor(15, 23, 42); 
+    doc.rect(0, 0, pageWidth, 45, 'F');
+    
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
+    doc.setFontSize(24);
     doc.setFont('helvetica', 'bold');
-    doc.text('NEIGHBOURFRIENDLY RENTALS', pageWidth / 2, 18, { align: 'center' });
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text('OFFICIAL RENTAL AGREEMENT', pageWidth / 2, 28, { align: 'center' });
+    doc.text('NeighbourFriendly', margin, 22);
     
-    // Meta Information
-    doc.setTextColor(50, 50, 50);
     doc.setFontSize(10);
-    doc.text(`Agreement Date: ${new Date().toLocaleDateString('en-IN')}`, margin, 45);
-    doc.text(`Order ID: ${agreementData.order_id || agreementData.orderId || 'N/A'}`, pageWidth - margin, 45, { align: 'right' });
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(148, 163, 184); // Slate 400
+    doc.text('Trust & Transparency in Every Rental', margin, 32);
+
+    // Document Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('RENTAL AGREEMENT', pageWidth - margin, 28, { align: 'right' });
+
+    // Meta Information
+    doc.setTextColor(71, 85, 105); // Slate 600
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Agreement Details:', margin, 60);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Date of Issue: ${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin, 68);
+    doc.text(`Order ID: ${agreementData.order_id || agreementData.orderId || 'N/A'}`, margin, 74);
     
     // Intro Text
     doc.setFont('helvetica', 'italic');
     doc.setFontSize(10);
-    const introText = 'This Rental Agreement is entered between the parties named below. NeighbourFriendly Rentals acts only as a facilitator and is not a party to the contractual obligations between Lender and Renter except where expressly stated.';
+    doc.setTextColor(100, 116, 139); // Slate 500
+    const introText = 'This binding Rental Agreement constitutes a formal contract between the Lender and the Renter named below. NeighbourFriendly Rentals serves solely as the digital facilitation platform and is not a direct party to these contractual obligations unless explicitly stated.';
     const splitIntro = doc.splitTextToSize(introText, pageWidth - (margin * 2));
-    doc.text(splitIntro, margin, 55);
+    doc.text(splitIntro, margin, 90);
     doc.setFont('helvetica', 'normal');
 
-    let finalY = 55 + (splitIntro.length * 5) + 5;
+    let finalY = 90 + (splitIntro.length * 5) + 8;
 
-    // Parties Table
+    // Parties Table - Modern grid theme
     autoTable(doc, {
       startY: finalY,
       theme: 'grid',
-      headStyles: { fillColor: [243, 244, 246], textColor: [17, 24, 39], fontStyle: 'bold' },
-      bodyStyles: { textColor: [55, 65, 81] },
+      headStyles: { fillColor: [241, 245, 249], textColor: [15, 23, 42], fontStyle: 'bold', halign: 'center' },
+      bodyStyles: { textColor: [51, 65, 85], valign: 'top' },
+      columnStyles: { 0: { cellWidth: (pageWidth - margin * 2) / 2 }, 1: { cellWidth: (pageWidth - margin * 2) / 2 } },
       head: [['Lender (Owner)', 'Renter (User)']],
       body: [
         [
@@ -54,27 +70,27 @@ export const generateAgreementPDF = async (agreementData: any) => {
       ]
     });
 
-    finalY = (doc as any).lastAutoTable.finalY + 10;
+    finalY = (doc as any).lastAutoTable.finalY + 12;
 
     // Item Details Table
     autoTable(doc, {
       startY: finalY,
       theme: 'grid',
       headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
-      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 60 } },
-      head: [['1. ITEM DETAILS', '']],
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 70, fillColor: [248, 250, 252] } },
+      head: [['1. ITEM & RENTAL DURATION', '']],
       body: [
-        ['Item Name', agreementData.listing?.title || agreementData.itemTitle || 'N/A'],
-        ['Condition at Handover', agreementData.listing?.condition || agreementData.itemCondition || 'Good'],
-        ['Rental Start Date', agreementData.rental_details?.start_date || agreementData.startDate || 'N/A'],
-        ['Rental End Date', agreementData.rental_details?.end_date || agreementData.endDate || 'N/A'],
-        ['Rental Duration', `${agreementData.rental_details?.total_days || agreementData.totalDays || 0} Day(s)`],
-        ['Payment Method', agreementData.rental_details?.payment_method || agreementData.paymentMethod || 'Cash/UPI on Delivery']
+        ['Item Description', agreementData.listing?.title || agreementData.itemTitle || 'N/A'],
+        ['Declared Condition', agreementData.listing?.condition || agreementData.itemCondition || 'Good Working Condition'],
+        ['Rental Period Begins', agreementData.rental_details?.start_date || agreementData.startDate || 'N/A'],
+        ['Rental Period Ends', agreementData.rental_details?.end_date || agreementData.endDate || 'N/A'],
+        ['Total Duration', `${agreementData.rental_details?.total_days || agreementData.totalDays || 0} Day(s)`],
+        ['Agreed Payment Method', agreementData.rental_details?.payment_method || agreementData.paymentMethod || 'Cash/UPI upon Handover']
       ],
       showHead: 'firstPage'
     });
 
-    finalY = (doc as any).lastAutoTable.finalY + 10;
+    finalY = (doc as any).lastAutoTable.finalY + 12;
 
     // Payment Breakdown
     const itemPrice = agreementData.rental_details?.item_price || agreementData.itemPrice || 0;
@@ -84,72 +100,105 @@ export const generateAgreementPDF = async (agreementData: any) => {
     const totalPrice = agreementData.rental_details?.total_price || agreementData.totalPrice || 0;
 
     const paymentBody = [
-      ['Item Price', `Rs. ${itemPrice}`],
-      ['Service Charge (10%)', `Rs. ${serviceCharge}`],
+      ['Base Rental Fee', `Rs. ${itemPrice}`],
+      ['Platform Service Charge', `Rs. ${serviceCharge}`],
     ];
     if (deliveryCharge > 0) {
-      paymentBody.push(['Delivery & Pickup', `Rs. ${deliveryCharge}`]);
+      paymentBody.push(['Delivery & Logistics', `Rs. ${deliveryCharge}`]);
     }
-    paymentBody.push(['Security Deposit (Refundable)', `Rs. ${securityDeposit}`]);
-    paymentBody.push(['TOTAL PAYABLE', `Rs. ${totalPrice}`]);
+    paymentBody.push(['Refundable Security Deposit', `Rs. ${securityDeposit}`]);
+    paymentBody.push(['TOTAL PAYABLE AMOUNT', `Rs. ${totalPrice}`]);
 
     autoTable(doc, {
       startY: finalY,
       theme: 'grid',
       headStyles: { fillColor: [16, 185, 129], textColor: 255, fontStyle: 'bold' },
-      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 100 }, 1: { halign: 'right', fontStyle: 'bold' } },
-      head: [['2. PAYMENT BREAKDOWN', '']],
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 110, fillColor: [248, 250, 252] }, 1: { halign: 'right', fontStyle: 'bold', textColor: [15, 23, 42] } },
+      head: [['2. FINANCIAL CONSIDERATION', '']],
       body: paymentBody,
       willDrawCell: (data) => {
         if (data.row.index === paymentBody.length - 1 && data.section === 'body') {
-          doc.setFillColor(243, 244, 246);
+          doc.setFillColor(226, 232, 240); // Slate 200 for total row
         }
       }
     });
 
-    finalY = (doc as any).lastAutoTable.finalY + 10;
+    finalY = (doc as any).lastAutoTable.finalY + 16;
 
     // Terms and Conditions
     autoTable(doc, {
       startY: finalY,
       theme: 'plain',
-      headStyles: { fontStyle: 'bold', textColor: [17, 24, 39], fontSize: 11 },
-      bodyStyles: { textColor: [55, 65, 81], fontSize: 9 },
-      head: [['3. RESPONSIBILITIES & LEGAL TERMS']],
+      headStyles: { fontStyle: 'bold', textColor: [15, 23, 42], fontSize: 12 },
+      bodyStyles: { textColor: [51, 65, 85], fontSize: 9, cellPadding: { top: 3, right: 0, bottom: 3, left: 0 } },
+      head: [['3. LEGAL RESPONSIBILITIES & COVENANTS']],
       body: [
-        ['1. The Renter shall use the rented item with due care and return it in the same working and physical condition as at handover.'],
-        ['2. The Renter is responsible for loss, theft, damage, or malfunction occurring during the rental period.'],
-        ['3. The Renter shall not sub-rent, loan, or otherwise transfer the item to a third party without written consent.'],
-        ['4. Video Recording: Both parties MUST record clear videos of the item during handover and return. These videos are mandatory for dispute resolution.'],
-        ['5. Legal Recovery: If the item is not returned or charges are not paid, the Lender and/or Platform may pursue recovery including legal remedies under applicable law.']
+        ['3.1. Duty of Care: The Renter shall exercise utmost care in utilizing the rented item and must return it in identical physical and functional condition as documented at handover.'],
+        ['3.2. Liability: The Renter assumes full financial responsibility for any loss, theft, cosmetic damage, or functional malfunction that occurs during the active rental period, ordinary wear and tear excepted.'],
+        ['3.3. Transfer Restriction: The Renter is strictly prohibited from sub-renting, loaning, or transferring possession of the item to any third party under any circumstances.'],
+        ['3.4. Video Verification Protocol: Both parties are REQUIRED to individually record continuous, unedited video footage of the item during both handover and return processes. This visual evidence is mandatory for resolving any subsequent disputes regarding item condition.'],
+        ['3.5. Dispute Resolution & Recovery: In the event of non-return, severe damage, or failure to remit agreed charges, the Lender maintains the right to pursue full financial recovery, including seeking legal remedies and involving law enforcement authorities within the applicable jurisdiction.']
       ]
     });
 
-    finalY = (doc as any).lastAutoTable.finalY + 15;
+    finalY = (doc as any).lastAutoTable.finalY + 24;
 
-    // Digital Confirmation Signature
-    doc.setFontSize(11);
+    // Digital Confirmation Signature Section
+    doc.setDrawColor(203, 213, 225); // Slate 300
+    doc.setLineWidth(0.5);
+    doc.line(margin, finalY, pageWidth - margin, finalY); // Horizontal separator
+
+    finalY += 12;
+    doc.setFontSize(14);
+    doc.setTextColor(15, 23, 42); // Slate 900
     doc.setFont('helvetica', 'bold');
-    doc.text('DIGITAL CONFIRMATION', margin, finalY);
-    finalY += 8;
+    doc.text('ELECTRONIC EXECUTORY SIGNATURE', margin, finalY);
     
+    finalY += 10;
     doc.setFontSize(10);
+    doc.setTextColor(71, 85, 105);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Target Renter: ${agreementData.renterName || agreementData.renter?.name || 'N/A'}`, margin, finalY);
-    finalY += 6;
-    doc.text(`Confirmed On: ${new Date().toLocaleDateString('en-IN')}`, margin, finalY);
-    finalY += 6;
-    doc.setTextColor(16, 185, 129); // Green
+    doc.text('This document constitutes a legally binding agreement under applicable electronic signature laws.', margin, finalY);
+    
+    finalY += 12;
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`Authenticated Renter Identity: `, margin, finalY);
     doc.setFont('helvetica', 'bold');
-    doc.text('Status: Digitally Agreed & Accepted', margin, finalY);
+    doc.text(`${agreementData.renterName || agreementData.renter?.name || 'N/A'}`, margin + 60, finalY);
+    
+    finalY += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Execution Timestamp: `, margin, finalY);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${new Date().toLocaleString('en-IN')}`, margin + 60, finalY);
+    
+    finalY += 12;
+    // Seal / Badge
+    doc.setFillColor(236, 253, 245); // Emerald 50
+    doc.setDrawColor(16, 185, 129); // Emerald 500
+    doc.setLineWidth(1);
+    doc.roundedRect(margin, finalY, 120, 10, 2, 2, 'FD');
+    doc.setTextColor(4, 120, 87); // Emerald 700
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('STATUS: DIGITALLY VERIFIED AND BOUND', margin + 5, finalY + 7);
 
-    // Footer
+    // Footer with pagination
     const pageCount = doc.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
+      
+      // Footer Line
+      doc.setDrawColor(226, 232, 240); // Slate 200
+      doc.setLineWidth(0.5);
+      doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
+      
       doc.setFontSize(8);
-      doc.setTextColor(150);
-      doc.text(`NeighbourFriendly Rentals - Page ${i} of ${pageCount}`, pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+      doc.setTextColor(148, 163, 184); // Slate 400
+      doc.setFont('helvetica', 'normal');
+      doc.text('NeighbourFriendly Rentals - Official Document', margin, pageHeight - 10);
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, pageHeight - 10, { align: 'right' });
     }
 
     return doc;

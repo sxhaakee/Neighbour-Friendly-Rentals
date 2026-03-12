@@ -360,12 +360,22 @@ export const emailService = {
     try {
       console.log('📧 Sending Booking Confirmation to:', bookingData.email);
       
+      // Generate PDF Data URI for the agreement
+      const doc = await generateAgreementPDF(bookingData);
+      const pdfDataUri = doc.output('datauristring');
+      const pdfBase64 = pdfDataUri.split(',')[1];
+      const attachmentName = `Rental_Agreement_${bookingData.itemTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+
       // Call Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('send-email', {
         body: {
           email: bookingData.email,
           type: 'bookingConfirmation',
-          data: bookingData
+          data: bookingData,
+          attachment: {
+            content: pdfBase64,
+            name: attachmentName
+          }
         }
       });
 
