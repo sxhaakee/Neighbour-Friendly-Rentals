@@ -1,13 +1,8 @@
-// Professional PDF Generation utility
-// Note: This requires jsPDF library
-// Install: npm install jspdf
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export const generateAgreementPDF = async (agreementData: any) => {
   try {
-    // Dynamic import to avoid bundling issues
-    const { jsPDF } = await import('jspdf');
-    const { default: autoTable } = await import('jspdf-autotable');
-    
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
