@@ -2,52 +2,73 @@ import { supabase } from '../lib/supabase';
 
 export interface Booking {
   id: string;
-  listing_id?: string;
-  property_id?: string;
-  service_id?: string;
-  renter_id: string;
-  owner_id: string;
-  start_date: string;
-  end_date: string;
-  start_time?: string;
-  end_time?: string;
-  total_price?: number;
-  deposit_amount?: number;
-  notes?: string;
-  special_requests?: string;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
-  cancellation_reason?: string;
-  cancelled_by?: string;
-  cancelled_at?: string;
-  confirmed_at?: string;
-  completed_at?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BookingInsert {
   listing_id: string;
-  property_id?: string;
-  service_id?: string;
   renter_id: string;
   owner_id: string;
   start_date: string;
   end_date: string;
   total_days: number;
-  start_time?: string;
-  end_time?: string;
   total_price: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected' | string | null;
+  payment_status: string | null;
+  payment_id: string | null;
+  razorpay_order_id: string | null;
+  razorpay_payment_id: string | null;
   renter_name: string;
   renter_email: string;
-  deposit_amount?: number;
+  renter_phone: string | null;
+  renter_address: string | null;
+  platform_commission: number | null;
+  item_price: number | null;
+  delivery_charge: number | null;
+  security_deposit: number | null;
+  payment_method: string | null;
+  rejection_reason: string | null;
+  confirmed_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  // UI only / legacy fields
+  start_time?: string;
+  end_time?: string;
   notes?: string;
   special_requests?: string;
-  status?: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
-  created_at?: string;
-  updated_at?: string;
-  confirmed_at?: string;
-  delivery_charge?: number;
-  security_deposit?: number;
+  property_id?: string;
+  service_id?: string;
+}
+
+export interface BookingInsert {
+  id?: string;
+  listing_id: string;
+  renter_id: string;
+  owner_id: string;
+  start_date: string;
+  end_date: string;
+  total_days: number;
+  total_price: number;
+  status?: string | null;
+  payment_status?: string | null;
+  payment_id?: string | null;
+  razorpay_order_id?: string | null;
+  razorpay_payment_id?: string | null;
+  renter_name: string;
+  renter_email: string;
+  renter_phone?: string | null;
+  renter_address?: string | null;
+  platform_commission?: number | null;
+  item_price?: number | null;
+  delivery_charge?: number | null;
+  security_deposit?: number | null;
+  payment_method?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  confirmed_at?: string | null;
+  // UI only / legacy fields
+  start_time?: string;
+  end_time?: string;
+  notes?: string;
+  special_requests?: string;
+  property_id?: string;
+  service_id?: string;
 }
 
 export const bookingService = {
@@ -55,10 +76,16 @@ export const bookingService = {
   async createBooking(booking: BookingInsert) {
     console.log('Creating booking with data:', booking);
     
+    // Sanitize booking data to remove fields not in the database table
+    const { 
+      start_time, end_time, notes, special_requests, property_id, service_id,
+      ...cleanBooking 
+    } = booking as any;
+
     const { data, error } = await supabase
       .from('bookings')
-      .insert([booking])
-      .select('id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at')
+      .insert([cleanBooking])
+      .select('*')
       .single();
 
     if (error) {
@@ -87,7 +114,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
+        *,
         listings:listing_id (
           title,
           images,
@@ -107,7 +134,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
+        *,
         listings:listing_id (
           title,
           images,
@@ -127,7 +154,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at,
+        *,
         listings:listing_id (
           title,
           images,
@@ -145,7 +172,7 @@ export const bookingService = {
     const { data, error } = await supabase
       .from('bookings')
       .select(`
-        id, listing_id, property_id, service_id, renter_id, owner_id, start_date, end_date, total_price, deposit_amount, status, created_at, notes, special_requests,
+        *,
         listings:listing_id (
           title,
           images,

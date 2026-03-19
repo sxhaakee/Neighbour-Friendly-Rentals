@@ -209,16 +209,11 @@ const BookItemClient = () => {
                 total_price: Math.round(grandTotal),
                 item_price: itemPrice,
                 platform_commission: serviceCharge,
-                service_charge: 0,
-                delivery_charge: 0,
-                gst_amount: 0,
                 security_deposit: securityDeposit,
-                delivery_opted: false,
-                pickup_opted: false,
                 payment_method: paymentMethod,
                 status: 'pending',
                 payment_status: 'pending',
-            } as any);
+            });
 
             // Create rental agreement
             try {
