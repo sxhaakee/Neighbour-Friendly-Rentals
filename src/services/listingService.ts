@@ -12,7 +12,7 @@ export const listingService = {
   async getApprovedListings() {
     const { data, error } = await supabase
       .from('listings')
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_name')
+      .select('*')
       .eq('status', 'approved')
       .order('created_at', { ascending: false });
 
@@ -24,7 +24,7 @@ export const listingService = {
   async getAllListings() {
     const { data, error } = await supabase
       .from('listings')
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
+      .select('*')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -35,7 +35,7 @@ export const listingService = {
   async getListingsByStatus(status: 'pending' | 'approved' | 'rejected' | 'hidden') {
     const { data, error } = await supabase
       .from('listings')
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
+      .select('*')
       .eq('status', status)
       .order('created_at', { ascending: false });
 
@@ -47,7 +47,7 @@ export const listingService = {
   async getUserListings(userId: string) {
     const { data, error } = await supabase
       .from('listings')
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info, rejection_reason')
+      .select('*')
       .eq('owner_id', userId)
       .order('created_at', { ascending: false });
 
@@ -72,7 +72,7 @@ export const listingService = {
     const { data, error } = await supabase
       .from('listings')
       .insert(listing)
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info')
+      .select('*')
       .single();
 
     if (error) throw error;
@@ -108,7 +108,7 @@ export const listingService = {
       .from('listings')
       .update(updates)
       .eq('id', id)
-      .select('id, title, description, category, location, condition, availability, price, pricing_model, images, status, featured, created_at, owner_id, owner_name, contact_info')
+      .select('*')
       .single();
 
     if (error) throw error;
