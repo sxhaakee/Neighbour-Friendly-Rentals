@@ -202,6 +202,7 @@ const BookItemClient = () => {
                 renter_name: profile.full_name || profile.email,
                 renter_email: profile.email,
                 renter_phone: renterPhone || profile.phone || '',
+                renter_address: renterAddress,
                 owner_id: typedListing.owner_id,
                 start_date: startDate,
                 end_date: endDate,
