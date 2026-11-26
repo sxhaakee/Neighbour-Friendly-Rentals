@@ -20,3 +20,8 @@ e2e/test-results/
 playwright-report/
 blob-report/
 test-results/
+
+# Build artifacts and editor folders
+*.tsbuildinfo
+.vscode/
+.bolt/
