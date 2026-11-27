@@ -9,14 +9,14 @@ I took NFR from idea to production on my own: product decisions, UX, the full-st
 ## What it does
 
 - **Listings** for items, properties and services, with photos (compressed in the browser before upload), favourites and reviews
-- **Bookings** with an availability calendar, owner approval and booking history
+- **Bookings** with request, confirmation and cancellation states, plus booking history in the dashboard
 - **In-app messaging** between renters and owners
-- **Rental agreements** generated as PDFs from booking details
+- **Rental agreements** recorded for each booking, exportable as PDFs from the admin panel
 - **Payments** through Razorpay, with server-side payment verification
 - **ID verification** and an admin panel for moderating users and listings
-- **AI assistant** (Gemini) that answers questions about listings and suggests items
-- **Email** for sign-up, password reset and booking events (Supabase Edge Functions + Resend)
-- **Premium plans** with automatic expiry handled by a scheduled Edge Function
+- **AI assistant** (Gemini) that answers questions about the platform and the signed-in user's own listings
+- **Email** for sign-up, password reset and booking events, sent from Supabase Edge Functions (Resend and Brevo)
+- **Premium plans**, with an Edge Function that expires lapsed subscriptions
 
 ## Architecture
 
@@ -58,12 +58,12 @@ npm run test:e2e:security
 
 ```bash
 npm install
-cp .env.example .env.local     # Supabase URL and anon key, Razorpay, Gemini, Resend keys
+cp .env.example .env.local     # Supabase URL and anon key, Razorpay and Gemini keys
 npm run dev
 ```
 
 ## Tech stack
 
-Next.js · React · TypeScript · Tailwind CSS · Supabase (Postgres, Auth, Storage, Edge Functions) · Razorpay · Google Gemini · Resend · Playwright · Sentry · Vercel
+Next.js · React · TypeScript · Tailwind CSS · Supabase (Postgres, Auth, Storage, Edge Functions) · Razorpay · Google Gemini · Resend · Brevo · Playwright · Vercel
 
 More detail on notifications: [`docs/notifications.md`](docs/notifications.md)
